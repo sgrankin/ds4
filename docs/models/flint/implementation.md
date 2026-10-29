@@ -47,8 +47,8 @@ not a general loader for arbitrary Flint exports or GGUF. The tokenizer checks
 its format, vocabulary size and required stop tokens. Download verification and
 expected files are described in [Flint on Metal](usage.md).
 
-The engine owns those weight banks, tokenizer, compiled decoder and optional
-steering directions. The GPU driver uses the shared runtime boundary; each
+The engine owns those weight banks, the tokenizer, the compiled decoder and
+optional steering directions. The GPU driver uses the shared runtime boundary; each
 session instead owns its token history, BF16 full-attention KV banks,
 sliding-attention ring, logits, scratch and prefill checkpoint. Full KV grows
 in 65,536-token banks, while the local ring is bounded. The first bank is about

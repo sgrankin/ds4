@@ -119,8 +119,8 @@ python3 speed-bench/ideas/pressure_run.py .workspaces/flint-reference-guard -- $
 The [reference driver](../../../speed-bench/ideas/flint_reference.py) sets
 `MLX_METAL_FAST_SYNCH=1` before import and uses the original engine, sampler
 and empty-tool grammar. It writes two prompt fixtures, three fresh-prefix runs
-per greedy/default mode with 128 generated tokens, and eight optional
-teacher-forced FP32 vocabulary rows. Repeat 0 includes cold pipeline effects;
+for each of the greedy and default sampling modes with 128 generated tokens,
+and eight optional teacher-forced FP32 vocabulary rows. Repeat 0 includes cold pipeline effects;
 the original report compared the two warm repeats. Decode rate is
 `(generated_tokens - 1) / decode_seconds`. This historical three-run procedure
 reproduces that qualification; it is not a new five-sample performance

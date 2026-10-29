@@ -1,7 +1,7 @@
 # Model documentation
 
 Each model has three complementary accounts. Start with its reference manual
-for the model's architecture and input/state contract as established by the
+for the model's architecture and input/state contract, as established by the
 available reference sources. For Qwen and GLM, parts of this account are derived
 from the local conversion and inference contract rather than an independent
 official model specification. The implementation page

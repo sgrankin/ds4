@@ -77,8 +77,9 @@ layers 2, 8, 14 and 20 publish main KV and index keys for their owner groups.
 Ratio one does not mean ordinary full attention: selection and sharing still
 determine which rows are read.
 
-The indexer is a retrieval stage. It scores eligible compressed keys using
-its own query, index keys and learned per-head weights: the reference describes
+The indexer is a retrieval stage. It scores eligible compressed rows using
+its own query, their index keys and learned per-head weights: the reference
+describes
 its score as a weighted sum of `relu(q @ k)` across index heads. It chooses row
 IDs by top-k. Those scores are **not** the final attention probabilities. The
 attention operation subsequently computes its own query/key scores and
@@ -109,8 +110,8 @@ segment to fit inside its coarser segment.
 
 There is another selection level in the validated decoder: layer 20 supplies
 up to 2,048 candidate blocks of eight compressed rows, and later refreshes
-select their top rows within those candidates. The block score is a maximum
-reduction in the reference configuration. This narrows subsequent retrieval;
+select their top rows within those candidates. The [reference scorer](https://github.com/deepseek-ai/DeepInfer/blob/553741557a57df44a46fb3ab72b6aafeaf945337/deepinfer/model_executor/layers/tilelang_ops/candidate_blocks.py)
+starts with the maximum valid row score within each block. This narrows subsequent retrieval;
 it does not turn the candidate block score into an attention weight. These
 specific layer numbers and limits are a deduction from the local profile and
 its source audit, not a general claim about all checkpoints. The released
@@ -140,8 +141,9 @@ normalizes selected routing weights. Expert selection is distinct from the
 attention indexer: one selects feed-forward functions for a token, the other
 selects historical rows for a query.
 
-Engram supplies another input-dependent path before attention mixing and normalization. It hashes token n-grams into
-large learned embedding tables, retrieves sparse rows, projects them and gates
+Engram supplies another input-dependent path before attention mixing and
+normalization. It hashes token n-grams into large learned embedding tables,
+retrieves sparse rows, projects them and gates
 the result with the current hidden state. This is learned model memory, not a
 retrieval database of conversation facts. The local profile places Engram at
 layers 1 and 14; the released [Engram runtime](https://github.com/deepseek-ai/DeepInfer/blob/553741557a57df44a46fb3ab72b6aafeaf945337/deepinfer/model_executor/models/v4_modules/engram.py)

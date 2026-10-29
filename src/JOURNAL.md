@@ -3,12 +3,14 @@
 Read [project direction and current status](../docs/PROJECT.md) first.
 This journal records short milestones, not the active experiment queue.
 
-## 2026-10-28: reader effort in prose
+## 2026-10-28: reader-effort review
 
 Added paper-informed sentence review to the [documentation guide](../docs/writing-guide.md#reader-effort-within-sentences):
 make opaque relationships explicit while retaining familiar technical terms.
-The existing prose reviewer now proposes meaning-preserving edits and explains
-the reading difficulty each addresses. The guide records the paper's limits.
+Made reader effort a distinct independent review role, alongside prose, source
+and explanatory-flow review. Fresh-context Terra reviewers at medium effort
+reviewed all 37 new manuals and shared documents; a separate reviewer checked
+the wording edits for semantic preservation. The guide records the paper's limits.
 
 ## 2026-10-28: full DeepInfer comparison
 

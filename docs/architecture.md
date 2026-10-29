@@ -27,9 +27,9 @@ flowchart TD
 
 The arrows distinguish logical history from checkpoints: history supplies what
 the conversation means, while a checkpoint can accelerate rebuilding the model
-state for that history. The router assigns a job to a slot; its worker
+state for that history. The router assigns a job to a slot; the slot's worker
 orchestrates generation and uses the coordinator to schedule prefill and decode
-on the one generative engine's sessions. The process GPU runtime also arbitrates work
+on sessions of the single generative engine. The process GPU runtime also arbitrates work
 between owners such as that engine and Clef; it is not a multi-model request
 router or an aggregate memory admission policy.
 

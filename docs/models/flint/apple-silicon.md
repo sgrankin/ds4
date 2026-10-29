@@ -71,7 +71,7 @@ sliding layers apply rotary position encoding. See
 Prefill assembles the previous local ring and new chunk in chronological order,
 then compacts the last 513 entries back into the ring. Full attention reads a
 bank directly while it fits, and assembles a contiguous temporary view across a
-bank boundary. A bounded local-ring and logits snapshot records the last prefill
+bank boundary. A bounded snapshot of the local ring and logits records the last prefill
 base; extending a session after decode restores it and recomputes the generated
 tail through prefill. The state is per session; growing it has a memory cost even
 when several conversations share the same immutable weights.
@@ -132,7 +132,7 @@ intermediate handoffs; it depends on the chosen residency envelope.
 
 A greedy resident entry point can advance up to eight tokens, stopping at EOS.
 For supported filtered sampling, one command buffer chains scalar resident
-forwards with GPU sampler and token handoff dispatches. Each sampled token feeds
+forwards with dispatches for GPU sampling and token handoff. Each sampled token feeds
 the next forward sequentially. A packet is therefore a submission and handoff
 optimization, not multi-token prediction or speculative verification by a draft
 model. Unsupported packet sampling settings fall back to scalar evaluation.

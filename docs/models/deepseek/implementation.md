@@ -57,9 +57,9 @@ The server accepts encoded PNG or JPEG data, creates markers and canonical image
 
 During both scalar execution and layer-major prefill, [embedding operations](../../../src/engine/deepseek41/ops.zig) select a visual row when the current position falls in a span and otherwise look up the ordinary token embedding. Image rows use the vision expert-routing bias; Engram text hashing and additions mask or skip them. The language graph advances through the resulting sequence using its ordinary scalar token positions and RoPE. DeepSeek's image layout is not Qwen's three-axis M-RoPE position scheme. See [prefill](../../../src/engine/deepseek41/prefill.zig), [executor](../../../src/engine/deepseek41/executor.zig), and [routing](../../../src/engine/deepseek41/moe.zig).
 
-The session borrows spans during synchronization and remembers each committed image's fingerprint, start and length in its [frontier](../../../src/engine/session_frontier.zig). Live reuse checks both token prefix and image identity; identical placeholders for a different image cannot authorize reuse. The server's [reuse path](../../../src/server/reuse.zig) also checks fingerprints when rebasing a visible continuation, and [multimodal sync](../../../src/server/generation.zig) avoids ending a scheduling chunk inside an image block. A mismatch or unavailable compatible frontier requires evaluation again.
+The session borrows spans during synchronization and remembers each committed image's fingerprint, start and length in its [frontier](../../../src/engine/session_frontier.zig). Live reuse checks both token prefix and image identity; identical placeholders for a different image cannot authorize reuse. The server's [reuse path](../../../src/server/reuse.zig) also checks fingerprints when rebasing a visible continuation, and [multimodal sync](../../../src/server/generation.zig) avoids ending a scheduling chunk inside an image block. If the identity mismatches or no compatible frontier is available, the input must be evaluated again.
 
-Image input is not a qualified durable image continuation. Text-keyed server disk checkpoints and state-cache persistence are gated when the session has vision state; tool checkpoint canonicalization also preserves the live image state instead of replacing it with a text key. See [persistence](../../../src/server/persist.zig).
+Durable continuation from image input is not qualified. Text-keyed server disk checkpoints and state-cache persistence are gated when the session has vision state; tool checkpoint canonicalization also preserves the live image state instead of replacing it with a text key. See [persistence](../../../src/server/persist.zig).
 
 Image-bearing work also has separate optimization restrictions:
 
@@ -83,8 +83,8 @@ Suffix reuse addresses a different case: a middle portion of a conversation chan
 
 Semantic endpoints make useful source checkpoints at message, tool-call and
 result boundaries. The renderer maps ends to completed token positions and
-selection bounds their count and spacing. Consider a changed tool result followed
-by a long unchanged span: the runtime evaluates the changed prefix and the
+the selection policy bounds their count and spacing. Consider a changed tool
+result followed by a long unchanged span: the runtime evaluates the changed prefix and the
 ordered system, developer and user controls and rendered tool declarations.
 Those controls form the admission identity used to find a compatible source.
 Only after evaluating them can it graft an eligible matching span, then evaluate

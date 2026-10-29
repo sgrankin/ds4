@@ -16,7 +16,7 @@ checkpoint selection and setup, see [Qwen setup](usage.md).
 
 ## From a conversation to a prediction
 
-A renderer formats a conversation and tokenizer produces IDs. Each ID selects a
+A renderer formats a conversation and a tokenizer produces IDs. Each ID selects a
 learned embedding; an image span instead supplies projected visual embeddings.
 The trunk transforms these representations in causal order, updating state for
 the next input. Its output is projected over the vocabulary to produce logits;

@@ -155,14 +155,18 @@ For a substantial document, use fresh contexts and distinct roles:
 
 - A clean-context author, scoped to that document, reads the relevant source
   and documentation and writes the explanation.
-- An independent prose and style reviewer checks clarity, readability, examples,
-  diagrams and links. Select a dense paragraph and mark noun relationships the
-  reader must guess, clauses that require reparsing, long dependencies and odd
-  verbs that obscure the action. For each finding, explain the reader effort
-  and propose a clearer rewrite that preserves facts, technical terms, actors,
-  conditions and sequence. Leave familiar, clear wording alone; adding words
-  is useful only when it clarifies. Do not guess AI authorship or assign a
-  style score.
+- An independent prose and style reviewer checks clarity, tone, examples,
+  diagrams and links.
+- An independent reader-effort reviewer checks how sentences ask the reader to
+  infer relationships or hold details in mind before their purpose becomes
+  clear. Look for opaque noun stacks, ambiguous modifiers, long dependencies
+  and unfamiliar verbs that obscure the action. For each finding, identify the
+  parsing burden and propose a clearer rewrite that preserves facts, technical
+  terms, actors, conditions and sequence. Leave familiar, clear wording alone;
+  extra words help only when they clarify. This pass concerns sentence-level
+  comprehension; the explanatory-flow pass below checks the larger explanation.
+  Do not guess AI authorship, assign a style score or require findings where
+  the text is already clear.
 - An independent technical and source reviewer checks claims against the
   implementation and evidence. Also compare the document's scope with the
   model's public capabilities and implementation entry points: an omitted

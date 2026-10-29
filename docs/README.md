@@ -19,6 +19,6 @@ with DeepSeek's implementation. Shared serving, storage and backend topics
 will get their own focused accounts as that documentation is synthesized.
 The [artifact catalogue](MODELS.md) retains download targets and packaged sizes.
 
-Documents receive independent explanatory-flow, source and prose reviews,
+Documents receive independent explanatory-flow, source, prose and reader-effort reviews,
 followed by an editorial read of the related area. Existing experiment records
 remain evidence; they are not the current technical manuals or a work queue.

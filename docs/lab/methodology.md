@@ -45,7 +45,7 @@ Run one heavy model job at a time under the existing
 [pressure guard](../../speed-bench/ideas/pressure_run.py), including commands
 that open a model for diagnostics. The guard rejects a second cooperating
 guarded invocation; it cannot prevent an unguarded job from running. Check for
-other heavy model work before starting. It monitors memory pressure and swap;
+other heavy model work before starting. The guard monitors memory pressure and swap;
 report relevant conditions and interruptions. Large RAM use
 is expected, so judge pressure and swap behavior rather than an arbitrary RAM
 cap. Preserve failed runs, caps, fallbacks and unexpected observations alongside

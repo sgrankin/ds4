@@ -72,7 +72,8 @@ therefore reads missing routed experts from SSD into a bounded expert cache.
 An expert already in that cache can be reused; a miss must be supplied from the
 model file. Engram rows are also read on demand, including when main weights
 are resident. The cache budget is a target constrained by available memory and
-prefill headroom, not a guarantee of allocation or physical SSD bandwidth.
+the headroom needed for prefill, not a guarantee of allocation or physical SSD
+bandwidth.
 See [SSD streaming](../../SSD_STREAMING.md), the
 [expert cache](../../../src/engine/deepseek41/expert_cache.zig) and
 [Metal expert I/O](../../../src/metal/expert_io.zig).
@@ -212,9 +213,9 @@ corresponding buffers.
 
 The scorer takes index queries, head weights and stored index keys and returns
 relevance scores for top-k; it does not gather main KV or perform final
-attention. A straightforward reader can score keys in expanded F32, while a
-packed reader decodes the needed FP4 values as it scores. These readers preserve
-the same retrieval role regardless of physical layout.
+attention. A scoring implementation can read expanded F32 keys directly, while
+a packed implementation decodes the needed FP4 values as it scores. Both perform
+the same retrieval task, regardless of physical layout.
 
 SIMD scoring is a separate dispatch choice from packing: it has both F32 and
 FP4 readers. In decode, when SIMD is enabled and at least 1,024 **index rows**
@@ -291,7 +292,7 @@ for sidecar matching, image identity, state ownership and reuse exclusions.
 ## Continuation and reuse
 
 The live attention history can also be serialized as a disposable checkpoint.
-Packed main and index layouts reduce the state stored as well as the live owner
+Packed main and index layouts reduce the size of both stored state and live graph
 arrays; supported layout conversions allow a checkpoint to load into a graph
 with a different configuration. This SSD checkpoint cache saves inference
 state, whereas the expert cache holds model weights and Engram reads fetch
