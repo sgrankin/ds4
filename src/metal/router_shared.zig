@@ -11,7 +11,7 @@ const Launch = c.ds4_metal_router_shared_launch;
 const View = c.ds4_metal_attention_view;
 const max32 = std.math.maxInt(u32);
 const max64 = std.math.maxInt(u64);
-pub const Mode = enum { store, mid_only, bf16, ext, scalar_rows };
+pub const Mode = enum { store, mid_only, bf16, bf16_mid, ext, scalar_rows };
 pub const Shared = struct {
     gate: ?*Tensor,
     up: ?*Tensor,
@@ -63,13 +63,14 @@ pub fn shared(request: Shared) c_int {
     // their own restrictions (including EXT's width divisibility) are applied.
     if ((r.mode == .ext or r.mode == .scalar_rows) and r.rows == 1) r.mode = .store;
     if (api.init() == 0) return 0;
-    const store = r.mode != .mid_only;
+    const store = r.mode != .mid_only and r.mode != .bf16_mid;
     if (r.mid == null or r.x == null or r.map == null or r.rows == 0 or
         (store and (r.gate == null or r.up == null)) or r.width & 31 != 0 or
         r.width > max32 or r.outputs > max32 or !std.math.isFinite(r.clamp) or r.clamp < 0) return 0;
     switch (r.mode) {
         .store, .mid_only, .bf16 => if (r.rows > 128 or
             (r.mode == .bf16 and (r.outputs == 0 or r.outputs % 2 != 0 or r.outputs > 65536))) return 0,
+        .bf16_mid => if (r.rows > 65535) return 0,
         .ext => {
             if (r.width % 128 != 0 or r.rows > max32) return 0;
             const limit = c.ds4_zig_metal_env_u64("DS4_METAL_Q8_MV_EXT_MAX_TOKENS", 16, 2, 128);
@@ -146,8 +147,12 @@ pub fn shared(request: Shared) c_int {
         plan.threads_y = 2;
         plan.shared_bytes = 0;
     } else {
-        const name: [*:0]const u8 = if (r.mode == .bf16) "kernel_dsv41_shared_gate_up_bf16_q8_0" else if (store) "kernel_dsv4_shared_gate_up_swiglu_q8_0" else "kernel_dsv4_shared_mid_swiglu_q8_0";
+        const name: [*:0]const u8 = if (r.mode == .bf16_mid) (if (r.rows > 1) "kernel_dsv4_shared_mid_swiglu_q8_0_bf16_rows" else "kernel_dsv4_shared_mid_swiglu_q8_0_bf16") else if (r.mode == .bf16) "kernel_dsv41_shared_gate_up_bf16_q8_0" else if (store) "kernel_dsv4_shared_gate_up_swiglu_q8_0" else "kernel_dsv4_shared_mid_swiglu_q8_0";
         plan.pipeline = c.ds4_metal_routed_pipeline(1, name, @intCast(plan.threads_y));
+    }
+    if (r.mode == .bf16_mid and r.rows > 1) {
+        plan.groups_x = r.rows;
+        plan.groups_y = (r.outputs + 1) / 2;
     }
     if (plan.pipeline == null) return 0;
     const label: [*:0]const u8 = switch (r.mode) {

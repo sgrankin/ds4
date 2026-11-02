@@ -75,6 +75,7 @@ pub const Shape = struct {
     iterations: u32 = 0,
     eps: f32 = 0,
     norm_eps: f32 = 0,
+    round_bf16: bool = false,
     pub fn mix(self: Shape) u64 {
         return 2 * @as(u64, self.hc) + @as(u64, self.hc) * self.hc;
     }
@@ -161,6 +162,8 @@ pub fn expandPacket(shape: Shape, rows: u64, split: bool, add: bool) c.ds4_gpu_h
         .nb1 = width_bytes,
         .nb2 = hc_bytes,
         .has_add = @intFromBool(add),
+        .round_bf16 = @intFromBool(shape.round_bf16),
+        .round_block_in = @intFromBool(add and shape.round_bf16),
     };
 }
 pub fn sinkhorn(inputs: Inputs, model: Model, shape: Shape) c_int {
@@ -201,7 +204,7 @@ pub fn weighted(inputs: Inputs, shape: Shape, stride: u64, label: [*:0]const u8)
     if (!buffers.residual.fits(rows * x_values * 4) or !buffers.post.fits(last) or !buffers.out.valid()) return fail("ds4: Metal HC weighted sum received undersized activation buffers");
     var launch = plan(c.DS4_HC_SUM, pipeline(c.DS4_HC_SUM));
     buffers.fill(&launch);
-    launch.sum_args = .{ .n_embd = shape.width, .n_hc = shape.hc, .n_tokens = @intCast(rows), .nb_x0 = 4, .nb_x1 = row_bytes, .nb_x2 = x_values * 4, .nb_w0 = 4, .nb_w1 = stride, .nb0 = 4, .nb1 = row_bytes };
+    launch.sum_args = .{ .n_embd = shape.width, .n_hc = shape.hc, .n_tokens = @intCast(rows), .nb_x0 = 4, .nb_x1 = row_bytes, .nb_x2 = x_values * 4, .nb_w0 = 4, .nb_w1 = stride, .nb0 = 4, .nb1 = row_bytes, .round_bf16 = @intFromBool(shape.round_bf16) };
     const elements = @as(u64, shape.width) * rows;
     launch.tx = linear(elements);
     launch.gx = (elements + launch.tx - 1) / launch.tx;
@@ -311,7 +314,9 @@ pub fn expand(inputs: Inputs, shape: Shape, split: bool, add: bool) c_int {
     const mixing_values = if (split) shape.mix() else @as(u64, shape.hc) * shape.hc;
     if (hc_values == 0 or hc_values > max64 / 4 or mixing_values > max64 / 4 or rows > max64 / block_bytes or rows > max64 / (hc_values * 4) or rows > max64 / (mixing_values * 4)) return fail(if (split) (if (add) "ds4: Metal HC expand add split activation size overflow" else "ds4: Metal HC expand split activation size overflow") else "ds4: Metal HC expand activation size overflow");
     if (!buffers.block.fits(rows * block_bytes) or !buffers.residual.fits(rows * hc_values * 4) or !buffers.out.valid() or (add and !buffers.block_add.fits(rows * block_bytes)) or (split and !buffers.split.fits(rows * mixing_values * 4)) or (!split and (!buffers.post.fits(rows * @as(u64, shape.hc) * 4) or !buffers.comb.fits(rows * mixing_values * 4)))) return fail(if (split) (if (add) "ds4: Metal HC expand add split received undersized activation buffers" else "ds4: Metal HC expand split received undersized activation buffers") else "ds4: Metal HC expand received undersized activation buffers");
-    const pso = pipeline(if (shape.hc == 4) c.DS4_HC_EXPAND4 else c.DS4_HC_EXPAND);
+    const literal = split and add and shape.round_bf16 and shape.hc == 4 and shape.width == 5120 and rows == 1 and !c.ds4_metal_hc_control_tp_two() and c.ds4_metal_v41_on(c.DS4_GPU_V41_LITERAL_SHAPES) != 0;
+    const pso = pipeline(if (literal) c.DS4_HC_EXPAND_SERIAL_BF16 else if (shape.hc == 4) c.DS4_HC_EXPAND4 else c.DS4_HC_EXPAND);
+    if (literal) c.ds4_metal_v41_note("kernel_dsv4_hc_expand4_serial_add_bf16");
     if (pso.handle == null) return if (verbose) fail("ds4: Metal HC expand split pipeline is unavailable") else 0;
     var launch = plan(c.DS4_HC_EXPAND, pso);
     buffers.fill(&launch);

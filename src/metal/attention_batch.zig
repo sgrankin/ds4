@@ -403,7 +403,7 @@ fn dispatch(command: *Command, inputs: Inputs, sinks: View, geometry: Geometry, 
         if (c.ds4_metal_attention_vec(command.token, pipelines.attention, &args, inputs.query.view, kv, mask, sinks, pad, tmp, null, geometry.rows, geometry.heads, geometry.nwg, 32, geometry.nsg, shared) == 0 or !profile.stage(command, "attention_vec")) return false;
         const rows = @as(u64, geometry.rows) * geometry.heads;
         const reduce_args = c.ds4_metal_attention_reduce_args{ .nrows = @bitCast(@as(u32, @truncate(rows))) };
-        return c.ds4_metal_attention_reduce(command.token, pipelines.reduce, &reduce_args, tmp, inputs.heads.view, null, rows, 32 * geometry.nwg) != 0 and profile.stage(command, "attention_reduce");
+        return c.ds4_metal_attention_reduce(command.token, pipelines.reduce, &reduce_args, tmp, inputs.heads.view, null, std.mem.zeroes(View), rows, 32 * geometry.nwg) != 0 and profile.stage(command, "attention_reduce");
     }
     const padded_value = alignUp(geometry.width, 64);
     const shared_elems = @as(u64, geometry.query_block) * (geometry.width + 2 * padded_value + 2 * (2 * geometry.key_block));

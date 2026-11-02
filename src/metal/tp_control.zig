@@ -40,8 +40,12 @@ fn pipeline(name: [*:0]const u8) ?*const c.ds4_metal_hc_pipeline {
 fn slotFor(layer: u32, gate: u32) u32 {
     return layer *% gate_count +% gate;
 }
+pub fn inlineGates() bool {
+    const s = state();
+    return s.flag_gates and s.session_batch_mode == 0 and facts().release.buffer != null;
+}
 fn foldOk(s: *const Policy, f: Facts, slot: u32, bytes: u64) bool {
-    return f.initialized and f.batch and f.service_running and s.session_batch_mode == 0 and s.flag_gates and s.poll_gates and !f.ssd and f.checks and slot < max_slots and s.vector_bytes == bytes and !present("DS4_TP_DISABLE_FLAG_FOLD");
+    return !inlineGates() and f.initialized and f.batch and f.service_running and s.session_batch_mode == 0 and s.flag_gates and s.poll_gates and !f.ssd and f.checks and slot < max_slots and s.vector_bytes == bytes and !present("DS4_TP_DISABLE_FLAG_FOLD");
 }
 fn payloadOffset(s: *const Policy, slot: u32) u64 {
     return s.slab_offset +% s.out_offset +% @as(u64, slot) *% s.vector_bytes;
@@ -118,8 +122,8 @@ pub fn addFold(out: ?*api.Tensor, a: ?*const api.Tensor, b: ?*const api.Tensor, 
     s.prepublished_sequence = s.row_sequence +% 1;
     return true;
 }
-fn enqueue(layer: u32, gate: u32, rows: u32, sequence: u64, poll: bool, event: bool, out: ?*const anyopaque, input: ?*anyopaque, bytes: u64) bool {
-    const request = c.ds4_gpu_tp_request{ .layer = layer, .gate = gate, .rows = rows, .event_arrival = @intFromBool(event), .seq = sequence, .big_out = out, .big_in = input, .big_bytes = bytes, .poll = @intFromBool(poll) };
+fn enqueue(layer: u32, gate: u32, rows: u32, sequence: u64, poll: bool, spin: bool, event: bool, out: ?*const anyopaque, input: ?*anyopaque, bytes: u64) bool {
+    const request = c.ds4_gpu_tp_request{ .layer = layer, .gate = gate, .rows = rows, .event_arrival = @intFromBool(event), .seq = sequence, .big_out = out, .big_in = input, .big_bytes = bytes, .poll = @intFromBool(poll), .spin = @intFromBool(spin) };
     return c.ds4_metal_tp_enqueue(&request);
 }
 fn flag(command: *const Command, s: *const Policy, f: Facts, slot: u32, sequence: u64, checked: bool) bool {
@@ -141,6 +145,37 @@ fn flag(command: *const Command, s: *const Policy, f: Facts, slot: u32, sequence
     Schedule.closeEncoder();
     return true;
 }
+// Publish GPU partials and their arrival flag with coherent stores, then
+// keep this command buffer open while the CPU exchanges the peer partial.
+// The bounded GPU wait latches timeout; the service still releases on failure.
+fn spinGate(s: *const Policy, f: Facts, slot: u32, sequence: u64, which: u32) bool {
+    var command = Command{};
+    defer command.drop();
+    if (!command.acquire() or command.owned != 0) return false;
+    var launch = std.mem.zeroes(Launch);
+    launch.kind = c.DS4_TP_PAYLOAD_PUBLISH;
+    launch.pipeline = pipeline("kernel_dsv4_tp_payload_publish") orelse return false;
+    launch.words = @intCast(s.vector_bytes / 4);
+    launch.payload = at(f.slab, payloadOffset(s, slot));
+    launch.groups = (launch.words + 255) / 256;
+    launch.threads = 256;
+    if (c.ds4_metal_tp_encode(command.token.?, &launch) == 0) return false;
+    launch.kind = c.DS4_TP_FLAG_PUBLISH;
+    launch.pipeline = pipeline("kernel_dsv4_tp_flag_publish") orelse return false;
+    launch.flags = at(f.slab, s.slab_offset + s.flags_offset + @as(u64, slot) * 4);
+    launch.value = @truncate(sequence);
+    launch.groups = 1;
+    launch.threads = 1;
+    launch.end_encoder = true;
+    if (c.ds4_metal_tp_encode(command.token.?, &launch) == 0) return false;
+    Schedule.closeEncoder();
+    if (which < 2) _ = Prefetch.encode(which);
+    launch.kind = c.DS4_TP_RELEASE_WAIT;
+    launch.pipeline = pipeline("kernel_dsv4_tp_release_wait") orelse return false;
+    launch.control = f.release;
+    launch.words = f.spin_max_iters;
+    return c.ds4_metal_tp_encode(command.token.?, &launch) != 0;
+}
 pub fn rowGate(layer: u32, which: u32) bool {
     const s = state();
     const f = facts();
@@ -155,9 +190,13 @@ pub fn rowGate(layer: u32, which: u32) bool {
     s.fold_requested = 0;
     s.row_sequence +%= 1;
     const sequence = s.row_sequence;
-    const event = s.session_batch_mode != 0 or !s.flag_gates;
+    const spin = inlineGates() and !f.ssd and s.vector_bytes != 0;
+    const event = !s.flag_gates or (s.session_batch_mode != 0 and !spin);
     const slot = slotFor(layer, which);
-    if (!event) {
+    if (spin) {
+        if (!spinGate(s, f, slot, sequence, which)) return false;
+        s.prepublished_sequence = 0;
+    } else if (!event) {
         // The payload hazard orders flag publication after its output stores.
         var command = Command{};
         defer command.drop();
@@ -170,7 +209,7 @@ pub fn rowGate(layer: u32, which: u32) bool {
         Schedule.closeEncoder();
         c.ds4_metal_tp_signal(c.DS4_TP_EVENT_ROW, sequence);
     }
-    const poll = !event and s.poll_gates and !f.ssd and slot < max_slots;
+    const poll = !spin and !event and s.poll_gates and !f.ssd and slot < max_slots;
     if (poll) {
         // Flush publishes CPU-visible payload; the next segment starts with the
         // poll. Keep only a bounded runway to avoid firmware scheduling delay.
@@ -194,8 +233,8 @@ pub fn rowGate(layer: u32, which: u32) bool {
         launch.flags = at(next.poll, (sequence % c.DS4_TP_POLL_RING) * c.DS4_TP_POLL_LINES * c.DS4_TP_POLL_LINE_BYTES);
         launch.checks = at(next.poll, @as(u64, c.DS4_TP_POLL_LINES) * c.DS4_TP_POLL_LINE_BYTES * c.DS4_TP_POLL_RING + @as(u64, slot) * 8);
         if (c.ds4_metal_tp_encode(command.token.?, &launch) == 0) return false;
-    } else c.ds4_metal_tp_wait(c.DS4_TP_EVENT_ROW, sequence);
-    return enqueue(layer, which, 0, sequence, poll, event, null, null, 0);
+    } else if (!spin) c.ds4_metal_tp_wait(c.DS4_TP_EVENT_ROW, sequence);
+    return enqueue(layer, which, 0, sequence, poll, spin, event, null, null, 0);
 }
 // Batch gates have a separate sequence/release event: RDMA row receives need
 // consecutive values, and a stale row flag must not satisfy a batch arrival.
@@ -216,7 +255,7 @@ pub fn batch(layer: u32, rows: u32) bool {
         c.ds4_metal_tp_signal(c.DS4_TP_EVENT_BATCH, sequence);
     }
     c.ds4_metal_tp_wait(c.DS4_TP_EVENT_BATCH, sequence);
-    return enqueue(layer, 1, rows, sequence, false, event, null, null, 0);
+    return enqueue(layer, 1, rows, sequence, false, false, event, null, null, 0);
 }
 pub fn bigKick(layer: u32, rows: u32, out: ?*const api.Tensor, input: ?*api.Tensor, bytes: u64) u64 {
     const s = state();
@@ -232,7 +271,7 @@ pub fn bigKick(layer: u32, rows: u32, out: ?*const api.Tensor, input: ?*api.Tens
     const sequence = s.batch_sequence;
     Schedule.closeEncoder();
     c.ds4_metal_tp_signal(c.DS4_TP_EVENT_BATCH, sequence);
-    return if (enqueue(layer, 1, rows, sequence, false, true, source, target, bytes)) sequence else 0;
+    return if (enqueue(layer, 1, rows, sequence, false, false, true, source, target, bytes)) sequence else 0;
 }
 pub fn bigWait(sequence: u64) bool {
     if (!facts().batch or sequence == 0) return false;

@@ -69,7 +69,7 @@ typedef struct {
  * cannot impersonate an image. Full fingerprints still gate live KV reuse. */
 typedef struct {
     size_t count;
-    size_t offsets[16];
+    size_t offsets[SERVER_MAX_IMAGES];
 } visible_image_key;
 
 typedef struct {
@@ -201,6 +201,7 @@ struct server {
     int decode_pending;
     int active_generations;
     int mixed_prefill_quantum;
+    int idle_prefill_quantum; /* Engine prefill cap while no request generates. */
     int last_prefill_slot;
     pthread_mutex_t mu;
     pthread_cond_t cv;

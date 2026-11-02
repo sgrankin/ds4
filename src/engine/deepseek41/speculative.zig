@@ -222,6 +222,15 @@ pub const Cycle = struct {
                 for (0..3) |stage| ready = ready and state.positions[stage][position % c.DS41_DRAFT_WINDOW] == position;
             }
         }
+        if (ready) {
+            if (self.cancel) |cancel| {
+                if (cancel(self.cancel_userdata)) {
+                    _ = c.snprintf(error_text.ptr, error_text.len, "interrupted");
+                    return -1;
+                }
+            }
+            ready = !context.schedulerShouldSkip();
+        }
         if (!ready) {
             if (stats) |counters| counters.no_draft +%= 1;
             return ordinary(context, first_token, accepted, error_text);
@@ -282,6 +291,7 @@ pub const Cycle = struct {
                 counters.no_draft +%= 1;
                 counters.propose_ms += (nowSeconds() - started) * 1000;
             }
+            context.schedulerNote(0, true);
             return ordinary(context, first_token, accepted, error_text);
         }
         if (self.cancel) |cancel| {
@@ -322,6 +332,7 @@ pub const Cycle = struct {
         if (!self.commit(tokens[0..count], keep)) return self.fail(stats, error_text);
         @memcpy(accepted[0..keep], tokens[0..keep]);
         const accepted_drafts = keep - 1;
+        context.schedulerNote(accepted_drafts, false);
         if (stats) |counters| {
             counters.verify_ms += (nowSeconds() - proposed) * 1000;
             counters.accepted_draft_tokens +%= accepted_drafts;

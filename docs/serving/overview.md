@@ -33,7 +33,7 @@ relative runtime files such as Metal kernels can be found.
 
 | Endpoint | Use |
 | --- | --- |
-| `GET /v1/models` | Loaded model information |
+| `GET /v1/models` | Loaded model information, including input/output modalities |
 | `POST /v1/chat/completions` | OpenAI-style chat |
 | `POST /v1/responses` | Responses-style requests and continuations |
 | `POST /v1/completions` | Text completions |
@@ -57,6 +57,15 @@ Chat, Responses, and Anthropic support tools and SSE streaming. Reasoning is
 returned separately from visible text in each API's native form. Standard
 sampling and output-budget fields are supported; explicit request parameters
 take precedence over defaults.
+
+When a Chat Completions client replays an assistant's `reasoning_content` as
+whitespace only, the renderer treats that reasoning as absent. Some clients
+echo a single space for a missing value; retaining it would change the prompt
+and prevent reuse of an otherwise unchanged cached prefix.
+
+The model metadata reports image input only when the loaded engine has vision
+support. Loading a text checkpoint without its required vision sidecar does
+not advertise that capability.
 
 Function tools are executed by the client. Client orchestration can call the
 native decision APIs directly; the server owns model inference and conversation
@@ -100,8 +109,9 @@ fairness, not the aggregate speedup of native batching. Native grouping may
 change floating-point reduction order slightly. V4.1 sessions containing images
 use the ordered fallback.
 
-Long prefills yield to active decoders in bounded intervals, normally 128
-tokens. `--mixed-prefill-quantum N` changes that interval for testing.
+When no request is generating, DeepSeek V4.1 uses its configured prefill
+capacity for each scheduler turn (at least 2048 tokens). Long prefills yield
+to active decoders in bounded intervals, normally 128 tokens. `--mixed-prefill-quantum N` changes that interval for testing.
 Session-batched serving uses ordinary target decoding, except Qwen3.8 on
 Metal, where `--mtp` also batches speculative decoding. Its
 `--mtp-exact-sampling` mode uses ordinary batches for nonzero-temperature
@@ -121,7 +131,7 @@ and model-specific restrictions.
 
 OpenAI chat and Responses accept inline PNG/JPEG data URIs. Anthropic accepts
 base64 image sources. Remote URLs and server-side file paths are rejected.
-Image blocks preserve their order in the request. The limit is 16 images and
+Image blocks preserve their order in the request. The limit is 256 images and
 a 64 MiB HTTP body.
 
 

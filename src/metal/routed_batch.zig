@@ -281,7 +281,8 @@ fn policy(q: *const Request, f: *const Facts, gate_bytes: u64, down_bytes: u64) 
         v41 and
         q.used_experts == 6 and
         q.output_width == 5120 and
-        ((q.gate_type == iq2 and q.down_type == q2) or (q.gate_type == q4 and q.down_type == q4));
+        ((q.gate_type == iq2 and q.down_type == q2) or (q.gate_type == q4 and q.down_type == q4) or
+            (q.gate_type == mx and q.down_type == mx and absent("DS4_METAL_DISABLE_V41_MXFP4_TINY_BATCH")));
     p.tiny_pair =
         !quality and
         (q.rows <= 5 or p.v41_decode or (q.rows == 6 and has(f, c.DS4_ROUTED_M5) and (q.gate_type == iq2 or q.gate_type == q4 or (f.world == 2 and q.gate_type == mx)))) and
@@ -313,11 +314,10 @@ fn policy(q: *const Request, f: *const Facts, gate_bytes: u64, down_bytes: u64) 
     // retains the reference F32 intermediate.
     p.half = !quality and !p.table and !p.selected_addr;
     // Fused gate/up uses the same compact map and accumulation/epilogue as
-    // separate GEMMs. Its kernel has no TP expert-ownership support.
+    // separate GEMMs. Shaders zero unowned experts and rebase rank-local weights.
     p.pair_mm =
         p.mm and
         !(q.gate_type == iq2 and mpp) and
-        f.world != 2 and
         p.half and
         q.used_experts == 6 and
         ((q.gate_type == iq2 and q.down_type == q2) or (q.gate_type == q4 and q.down_type == q4) or (q.gate_type == mx and q.down_type == mx)) and
@@ -327,32 +327,26 @@ fn policy(q: *const Request, f: *const Facts, gate_bytes: u64, down_bytes: u64) 
     // The resident pre-M5 compact tile uses two SIMD groups / 8 KiB, and
     // culls the empty final half-tile while keeping staging/barriers intact.
     // Token-centric scatter emits the established work_count/uint2 trailer.
+    const resident_tile_types = (q.gate_type == mx and q.down_type == mx) or
+        (v41 and q.gate_type == q4 and q.down_type == q4);
     p.compact =
         p.pair_mm and
-        q.gate_type == mx and
-        q.down_type == mx and
-        f.world == 1 and
+        resident_tile_types and
         ((pre and !streaming and q.rows >= 2048 and absent("DS4_METAL_DISABLE_PRE_M5_MXFP4_MOE_MM_ID_PAIR_SWIGLU_COMPACT_TILE")) or f.tests & c.DS4_GPU_TEST_MXFP4_PAIR_COMPACT_TILE != 0);
     p.scatter =
         p.compact and
-        q.gate_type == mx and
-        q.down_type == mx and
+        resident_tile_types and
         q.used_experts == 6 and
         !streaming and
-        f.world == 1 and
         ((pre and q.rows >= 2048 and absent("DS4_METAL_DISABLE_PRE_M5_MXFP4_MOE_MM_ID_MAP_SCATTER")) or f.tests & c.DS4_GPU_TEST_MXFP4_MAP_SCATTER != 0);
     p.pair_tail =
         p.pair_mm and
-        q.gate_type == mx and
-        q.down_type == mx and
-        f.world == 1 and
+        resident_tile_types and
         ((pre and !streaming and q.rows >= 2048 and absent("DS4_METAL_DISABLE_PRE_M5_MXFP4_MOE_MM_ID_PAIR_TAIL_SIMDGROUP_CULL")) or f.tests & c.DS4_GPU_TEST_MXFP4_PAIR_TAIL_CULL != 0);
     p.down_tail =
         p.mm and
         p.half and
-        q.gate_type == mx and
-        q.down_type == mx and
-        f.world == 1 and
+        resident_tile_types and
         ((pre and !streaming and q.rows >= 2048 and absent("DS4_METAL_DISABLE_PRE_M5_MXFP4_MOE_MM_ID_DOWN_TAIL_SIMDGROUP_CULL")) or f.tests & c.DS4_GPU_TEST_MXFP4_DOWN_TAIL_CULL != 0);
     // The half-result dequant table retains exact E8M0/E2M1 results for the
     // guarded resident down projection; it changes no selected experts.
@@ -363,7 +357,6 @@ fn policy(q: *const Request, f: *const Facts, gate_bytes: u64, down_bytes: u64) 
         q.down_type == mx and
         q.used_experts == 6 and
         !streaming and
-        f.world == 1 and
         ((pre and q.rows >= 2048 and absent("DS4_METAL_DISABLE_PRE_M5_MXFP4_MOE_MM_ID_DOWN_HALF_LUT")) or f.tests & c.DS4_GPU_TEST_MXFP4_DOWN_HALF_LUT != 0);
     return p;
 }
@@ -446,7 +439,7 @@ fn programs(q: *const Request, f: *const Facts, p: Policy, gate_mv: *const Pipel
     out.map = dynamic(0, if (p.scatter) "kernel_mul_mm_id_map_scatter_work_ne20_6" else mapName(q.used_experts).?, 0);
     out.gate_mm = mmPipeline(q.gate_type, false);
     out.up_mm = mmPipeline(q.gate_type, false);
-    out.down_mm = if (p.down_lut) dynamic(2, if (p.down_tail) "kernel_mul_mm_id_mxfp4_f16_half_lut_tail_cull" else "kernel_mul_mm_id_mxfp4_f16_half_lut", 0) else if (p.down_tail) dynamic(2, "kernel_mul_mm_id_mxfp4_f16_tail_cull", 0) else mmPipeline(q.down_type, p.half);
+    out.down_mm = if (p.down_lut) dynamic(2, if (p.down_tail) "kernel_mul_mm_id_mxfp4_f16_half_lut_tail_cull" else "kernel_mul_mm_id_mxfp4_f16_half_lut", 0) else if (p.down_tail) dynamic(2, if (q.down_type == q4) "kernel_mul_mm_id_q4_K_f16_tail_cull" else "kernel_mul_mm_id_mxfp4_f16_tail_cull", 0) else mmPipeline(q.down_type, p.half);
     const mpp = has(f, c.DS4_ROUTED_MPP);
     if (mpp and q.gate_type == iq2) {
         if (dynamic(2, "kernel_mul_mm_id_iq2_xxs_f32_mpp", 0)) |pipeline| {
@@ -490,8 +483,8 @@ fn programs(q: *const Request, f: *const Facts, p: Policy, gate_mv: *const Pipel
     }
     if (p.pair_mm) {
         // Exact half-domain MXFP4 scaling keeps the selected accumulation.
-        const half_scale = q.gate_type == mx and has(f, c.DS4_ROUTED_PRE_M5) and absent("DS4_METAL_DISABLE_PRE_M5_MXFP4_MM_ID_PAIR_HALF_SCALE") and !has(f, c.DS4_ROUTED_QUALITY) and !has(f, c.DS4_ROUTED_SSD) and f.world == 1;
-        const name: [*:0]const u8 = if (q.gate_type == q4) "kernel_mul_mm_id_q4_K_pair_swiglu_f16" else if (q.gate_type == mx) (if (p.compact) (if (half_scale) "kernel_mul_mm_id_mxfp4_pair_swiglu_f16_compact_tail_cull_half_scale" else "kernel_mul_mm_id_mxfp4_pair_swiglu_f16_compact_tail_cull") else if (p.pair_tail) (if (half_scale) "kernel_mul_mm_id_mxfp4_pair_swiglu_f16_tail_cull_half_scale" else "kernel_mul_mm_id_mxfp4_pair_swiglu_f16_tail_cull") else (if (half_scale) "kernel_mul_mm_id_mxfp4_pair_swiglu_f16_half_scale" else "kernel_mul_mm_id_mxfp4_pair_swiglu_f16")) else "kernel_mul_mm_id_iq2_xxs_pair_swiglu_f16";
+        const half_scale = q.gate_type == mx and has(f, c.DS4_ROUTED_PRE_M5) and absent("DS4_METAL_DISABLE_PRE_M5_MXFP4_MM_ID_PAIR_HALF_SCALE") and !has(f, c.DS4_ROUTED_QUALITY) and !has(f, c.DS4_ROUTED_SSD);
+        const name: [*:0]const u8 = if (q.gate_type == q4) (if (p.compact) "kernel_mul_mm_id_q4_K_pair_swiglu_f16_compact_tail_cull" else if (p.pair_tail) "kernel_mul_mm_id_q4_K_pair_swiglu_f16_tail_cull" else "kernel_mul_mm_id_q4_K_pair_swiglu_f16") else if (q.gate_type == mx) (if (p.compact) (if (half_scale) "kernel_mul_mm_id_mxfp4_pair_swiglu_f16_compact_tail_cull_half_scale" else "kernel_mul_mm_id_mxfp4_pair_swiglu_f16_compact_tail_cull") else if (p.pair_tail) (if (half_scale) "kernel_mul_mm_id_mxfp4_pair_swiglu_f16_tail_cull_half_scale" else "kernel_mul_mm_id_mxfp4_pair_swiglu_f16_tail_cull") else (if (half_scale) "kernel_mul_mm_id_mxfp4_pair_swiglu_f16_half_scale" else "kernel_mul_mm_id_mxfp4_pair_swiglu_f16")) else "kernel_mul_mm_id_iq2_xxs_pair_swiglu_f16";
         out.pair_mm = dynamic(0, name, 0);
     }
     if (out.map == null or out.gate_mm == null or out.up_mm == null or out.down_mm == null or (p.pair_mm and out.pair_mm == null)) return null;
@@ -675,6 +668,22 @@ pub const Execution = struct {
         const is_sum = kind == c.DS4_ROUTED_DOWN_SUM or kind == c.DS4_ROUTED_ADDR_SUM or kind == c.DS4_ROUTED_TABLE_SUM;
         return self.launch(kind, pipeline, .{ .mv = args }, .{ .x = (@as(u64, @intCast(args.ne01)) + rows_per_group - 1) / rows_per_group, .y = if (is_sum) @intCast(args.nei1) else 1, .z = if (is_sum) 1 else @as(u64, @intCast(args.nei0)) * @as(u64, @intCast(args.nei1)), .simd = nsg, .shared = shared(if (weight == 2) self.q.down_type else self.q.gate_type) }, .{ .weight = weight, .source = source, .destination = destination });
     }
+    // The small-row path and grouped GEMM are mutually exclusive. Reuse the
+    // context-owned map scratch for the 4096-byte GPU plan; command order
+    // protects it until all consumers finish, including across layers.
+    fn dedup(self: *Execution, args: Mv) bool {
+        if (!c.ds4_metal_routed_scratch(self.resource, 1, 4096)) return false;
+        const plan = dynamic(0, "kernel_dsv41_moe_dedup_plan", 0) orelse return false;
+        const pair = dynamic(0, "kernel_mul_mv_id_mxfp4_pair_swiglu_dedup_f32", 0) orelse return false;
+        c.ds4_metal_v41_note("kernel_mul_mv_id_mxfp4_pair_swiglu_dedup_f32");
+        return self.launch(c.DS4_ROUTED_DEDUP_PLAN, plan, .{ .mv = args }, .{ .x = 1 }, .{}) and
+            self.launch(c.DS4_ROUTED_DEDUP_PAIR, pair, .{ .mv = args }, .{
+                .x = (@as(u64, @intCast(args.ne01)) + @as(u64, @intCast(args.nr0)) - 1) / @as(u64, @intCast(args.nr0)),
+                .z = @as(u64, self.q.used_experts) * self.q.rows,
+                .simd = self.q.rows,
+                .shared = shared(self.q.gate_type),
+            }, .{});
+    }
     fn mm(self: *Execution, pipeline: ?*const Pipeline, args: Mm, weight: u32, source: u32, destination: u32, programs_used: Programs) bool {
         if (args.ne00 <= 0 or args.ne0 <= 0) return false;
         const w = work(args) orelse return false;
@@ -787,7 +796,7 @@ pub fn run(request: *const Request) c_int {
     // It owns selected-expert views and exact tensor-ID fallback separately.
     if (single(&q, &facts, gate_bytes, down_bytes)) {
         if (q.mid_is_f16 != null) q.mid_is_f16.* = false;
-        return c.ds4_gpu_routed_moe_one_tensor(q.out, q.gate, q.up, q.mid, q.experts, q.model, q.model_bytes, q.gate_offset, q.up_offset, q.down_offset, q.gate_type, q.down_type, q.gate_expert_bytes, q.gate_row_bytes, q.down_expert_bytes, q.down_row_bytes, q.input_width, q.middle_width, q.output_width, q.selected, q.weights, q.total_experts, q.used_experts, q.clamp, q.x, null, q.layer, q.force_resident);
+        return c.ds4_gpu_routed_moe_one_tensor(q.out, q.gate, q.up, q.mid, q.experts, q.model, q.model_bytes, request.gate_offset, request.up_offset, request.down_offset, q.gate_type, q.down_type, q.gate_expert_bytes, q.gate_row_bytes, q.down_expert_bytes, q.down_row_bytes, q.input_width, q.middle_width, q.output_width, q.selected, q.weights, q.total_experts, q.used_experts, q.clamp, q.x, null, q.layer, q.force_resident);
     }
     const pair_rows = q.rows *% q.used_experts;
     const input_bytes = @as(u64, q.rows) *% q.input_width *% 4;
@@ -908,7 +917,9 @@ pub fn run(request: *const Request) c_int {
         ok = execution.mv(c.DS4_ROUTED_ADDR_MV, cached(&facts, c.DS4_ROUTED_ADDR_IQ2), gate_args, 0, c.DS4_ROUTED_X, c.DS4_ROUTED_GATE, simdgroups(q.gate_type), q.gate_type == q8) and execution.mv(c.DS4_ROUTED_ADDR_MV, cached(&facts, c.DS4_ROUTED_ADDR_IQ2), gate_args, 1, c.DS4_ROUTED_X, c.DS4_ROUTED_UP, simdgroups(q.gate_type), q.gate_type == q8);
     } else if (p.tiny_swi) {
         const pipeline = cached(&facts, if (q.gate_type == iq2) c.DS4_ROUTED_IQ2_SWI else if (q.gate_type == q4) c.DS4_ROUTED_Q4_SWI else if (p.tp_static) c.DS4_ROUTED_MX_TP_SWI else c.DS4_ROUTED_MX_SWI);
-        ok = execution.mv(c.DS4_ROUTED_PAIR_SWI, pipeline, gate_args, 0, c.DS4_ROUTED_X, c.DS4_ROUTED_GATE, if (p.tp_static) 1 else 2, false);
+        const dedup = q.gate_type == mx and q.rows >= 2 and q.rows <= 8 and
+            !p.tp_static and facts.world == 1 and absent("DS4_METAL_DISABLE_V41_MOE_DEDUP");
+        ok = if (dedup) execution.dedup(gate_args) else execution.mv(c.DS4_ROUTED_PAIR_SWI, pipeline, gate_args, 0, c.DS4_ROUTED_X, c.DS4_ROUTED_GATE, if (p.tp_static) 1 else 2, false);
     } else if (p.tiny_pair) {
         ok = execution.mv(c.DS4_ROUTED_PAIR, cached(&facts, if (q.gate_type == iq2) c.DS4_ROUTED_IQ2_PAIR else c.DS4_ROUTED_Q4_PAIR), gate_args, 0, c.DS4_ROUTED_X, c.DS4_ROUTED_GATE, 2, false);
     } else {

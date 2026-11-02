@@ -147,7 +147,7 @@ typedef struct {
 } ds4_metal_attention_facts;
 ds4_metal_attention_facts ds4_metal_attention_get_facts(void);
 enum { DS4_ATTN_PAD_PSO, DS4_ATTN_VEC_PSO, DS4_ATTN_REDUCE_PSO,
-    DS4_ATTN_ROPE_PSO, DS4_ATTN_PACKED_PSO };
+    DS4_ATTN_ROPE_PSO, DS4_ATTN_PACKED_PSO, DS4_ATTN_HEADS_PSO };
 typedef struct {
     const ds4_metal_hc_pipeline *handle;
     uint64_t threads, simd_width;
@@ -169,7 +169,7 @@ int ds4_metal_attention_stage(void *command,
     const ds4_metal_attention_stage_args *, ds4_metal_attention_view raw,
     ds4_metal_attention_view comp, ds4_metal_attention_view dst,
     ds4_metal_attention_view mask, ds4_metal_attention_view pad,
-    uint64_t groups, uint64_t threads);
+    ds4_metal_attention_view ids, uint64_t groups, uint64_t threads);
 int ds4_metal_attention_pad(void *command, ds4_metal_attention_pipeline,
     const ds4_metal_attention_pad_args *, ds4_metal_attention_view kv,
     ds4_metal_attention_view mask, ds4_metal_attention_view pad);
@@ -183,7 +183,7 @@ int ds4_metal_attention_vec(void *command, ds4_metal_attention_pipeline,
 int ds4_metal_attention_reduce(void *command, ds4_metal_attention_pipeline,
     const ds4_metal_attention_reduce_args *, ds4_metal_attention_view tmp,
     ds4_metal_attention_view out, const ds4_metal_attention_rope_args *rope,
-    uint64_t rows, uint64_t threads);
+    ds4_metal_attention_view table, uint64_t rows, uint64_t threads);
 /* Existing Metal-local public actions, previously declared by ds4.c. Keep
  * actual declarations here for the production-linked deferred-RoPE fixture. */
 int ds4_gpu_decode_attn_rope_fuse_available(void);
@@ -197,4 +197,9 @@ typedef struct {
     bool pending, used, warned;
 } ds4_metal_deferred_rope;
 ds4_metal_deferred_rope *ds4_metal_attention_rope_state(void);
+typedef struct {
+    const ds4_gpu_tensor *table;
+    bool compressed, used;
+} ds4_metal_heads_once;
+ds4_metal_heads_once *ds4_metal_attention_heads_state(void);
 #endif

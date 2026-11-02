@@ -13,6 +13,7 @@ const Ext = c.ds4_metal_mv_ext_args;
 const Mm = c.ds4_metal_mm_args;
 const max_u32 = std.math.maxInt(u32);
 const max_u64 = std.math.maxInt(u64);
+const Rounding = enum { none, output, input_output };
 
 pub const Request = struct {
     out: ?*Tensor,
@@ -255,6 +256,10 @@ fn matvec(command: *const Command, request: Request, weights: Weight, mode: Matv
 /// quant dispatcher. Aligned TensorOps prefix + boundary-safe tail preserve the
 /// original schedule; quality mode deliberately keeps one generic dispatch.
 pub fn q8Legacy(request: Request, prefer_decode_mpp: bool, prefill_default: bool) c_int {
+    return q8LegacyMode(request, prefer_decode_mpp, prefill_default, .none);
+}
+
+fn q8LegacyMode(request: Request, prefer_decode_mpp: bool, prefill_default: bool, rounding: Rounding) c_int {
     if (api.init() == 0 or request.width & 31 != 0 or !request.shapesFit()) return 0;
     if (!request.activations(request.rows *% request.width *% 4, request.rows *% request.outputs *% 4, "ds4: Metal Q8_0 tensor matmul received undersized activation buffers")) return 0;
     const row_bytes = (request.width / 32) * 34;
@@ -272,7 +277,13 @@ pub fn q8Legacy(request: Request, prefer_decode_mpp: bool, prefill_default: bool
             }
             c.ds4_metal_dense_warn_mpp();
         }
-        if (!matvec(&command, request, weights, q8Dispatch(request.outputs, facts), true)) return 0;
+        var mode = q8Dispatch(request.outputs, facts);
+        mode.name = switch (rounding) {
+            .none => mode.name,
+            .output => "kernel_mul_mv_q8_0_f32_bf16",
+            .input_output => "kernel_mul_mv_q8_0_f32_bf16io",
+        };
+        if (!matvec(&command, request, weights, mode, true)) return 0;
         return command.finish("Q8_0 tensor matvec");
     }
     const ext_limit = c.ds4_zig_metal_env_u64("DS4_METAL_Q8_MV_EXT_MAX_TOKENS", 16, 2, 128);
@@ -351,6 +362,22 @@ pub fn projectQ8(request: Request, qwen: bool) c_int {
 /// Batched decode keeps the single-row lane walk. BF16 is a shader variant,
 /// not a new reduction schedule. Scalar mode repeats dispatches in ONE encoder.
 pub fn q8Rows(request: Request, bf16: bool, scalar: bool) c_int {
+    return q8RowsMode(request, if (bf16) .output else .none, scalar);
+}
+
+/// Fuse the model's BF16 boundary into a matvec or exact few-row kernel.
+/// Wider matrix schedules keep their existing arithmetic and round afterward.
+pub fn q8Bf16(request: Request, round_input: bool) c_int {
+    if (request.width == 0 or request.outputs == 0 or request.rows == 0 or !request.shapesFit()) return 0;
+    const rounding: Rounding = if (round_input) .input_output else .output;
+    if (request.rows >= 2 and request.rows <= 8 and q8RowsMode(request, rounding, false) != 0) return 1;
+    if (round_input and request.rows != 1 and c.ds4_gpu_dsv41_quantize(@constCast(request.x), @intCast(request.width), @intCast(request.rows), c.DS4_V41_BF16) == 0) return 0;
+    const prefill_default = c.ds4_metal_dense_facts(false) & c.DS4_DENSE_M3_ULTRA != 0;
+    if (q8LegacyMode(request, false, prefill_default, if (request.rows == 1) rounding else .none) == 0) return 0;
+    return if (request.rows == 1) 1 else c.ds4_gpu_dsv41_quantize(request.out, @intCast(request.outputs), @intCast(request.rows), c.DS4_V41_BF16);
+}
+
+fn q8RowsMode(request: Request, rounding: Rounding, scalar: bool) c_int {
     if (scalar and request.rows == 1) return projectQ8(request, false);
     if (api.init() == 0) return 0;
     if (request.out == null or request.x == null or request.map == null or request.rows == 0 or request.rows > std.math.maxInt(i32) or request.width & 31 != 0 or !request.shapesFit()) return 0;
@@ -362,14 +389,28 @@ pub fn q8Rows(request: Request, bf16: bool, scalar: bool) c_int {
     if (request.outputs > max_u64 / row_bytes) return 0;
     const weights = request.weight(request.outputs * row_bytes, if (scalar) "ds4: Metal Q8_0 scalar-row matmul range is outside the mapped model" else null) orelse return 0;
     defer weights.deinit();
-    const mode = q8Dispatch(request.outputs, c.ds4_metal_dense_facts(false));
-    const program = Program{ .kind = c.DS4_DENSE_MV, .name = if (bf16) "kernel_mul_mv_q8_0_bf16_f32" else mode.name, .nsg = mode.nsg };
+    var mode = q8Dispatch(request.outputs, c.ds4_metal_dense_facts(false));
+    const sequential = !scalar and request.rows >= 2 and request.rows <= 8;
+    if (sequential) {
+        mode.rows = 4;
+        mode.shared = 512;
+        mode.name = switch (rounding) {
+            .none => "kernel_mul_mv_q8_0_f32_rows_seq4",
+            .output => "kernel_mul_mv_q8_0_f32_bf16_rows_seq4",
+            .input_output => "kernel_mul_mv_q8_0_f32_bf16io_rows_seq4",
+        };
+    } else mode.name = switch (rounding) {
+        .none => mode.name,
+        .output => "kernel_mul_mv_q8_0_f32_bf16",
+        .input_output => "kernel_mul_mv_q8_0_f32_bf16io",
+    };
+    const program = Program{ .kind = c.DS4_DENSE_MV, .name = mode.name, .nsg = mode.nsg };
     const pipeline = program.pipeline() orelse return 0;
     var command = Command.init() orelse return 0;
     defer command.deinit();
     const nr: u64 = @intCast(mode.rows);
     const args = mvArgs(request.width, request.outputs, if (scalar) 1 else request.rows, true, mode.rows);
-    const grid = Grid{ .x = (request.outputs + nr - 1) / nr, .y = if (scalar) 1 else request.rows, .threads_y = @intCast(mode.nsg), .shared = mode.shared, .repeats = if (scalar) request.rows else 1, .x_step = if (scalar) request.width * 4 else 0, .out_step = if (scalar) request.outputs * 4 else 0 };
+    const grid = Grid{ .x = (request.outputs + nr - 1) / nr, .y = if (scalar or sequential) 1 else request.rows, .threads_y = @intCast(mode.nsg), .shared = mode.shared, .repeats = if (scalar) request.rows else 1, .x_step = if (scalar) request.width * 4 else 0, .out_step = if (scalar) request.outputs * 4 else 0 };
     if (!encode(&command, request, weights, c.DS4_DENSE_MV, pipeline, .{ .mv = args }, grid)) return 0;
     return command.finish(if (scalar) "Q8_0 scalar-row matvecs" else "Q8_0 exact decode-row matvec");
 }
@@ -416,6 +457,14 @@ pub fn q8Pair(pair: Pair, concat: bool) c_int {
 }
 
 pub fn half(request: Request, exact_rows: bool) c_int {
+    return halfMode(request, exact_rows, false);
+}
+
+pub fn halfBf16(request: Request) c_int {
+    return halfMode(request, false, true);
+}
+
+fn halfMode(request: Request, exact_rows: bool, bf16: bool) c_int {
     if (api.init() == 0 or !request.shapesFit()) return 0;
     if (!request.activations(request.rows *% request.width *% 4, request.rows *% request.outputs *% 4, "ds4: Metal F16 tensor matmul received undersized activation buffers")) return 0;
     const row_bytes = request.width * 2;
@@ -437,7 +486,29 @@ pub fn half(request: Request, exact_rows: bool) c_int {
             mode.rows = 1;
             mode.shared = 128;
         }
-        if (!matvec(&command, request, weights, mode, false)) return 0;
+        // Several rows share the weight walk while retaining the scalar lane
+        // reduction. Keep each threadgroup within 32 SIMD groups.
+        const chunk: u64 = if (mode.shared != 0 and request.width % 4 == 0 and mode.nsg >= 1 and mode.nsg <= 16) @intCast(@divTrunc(32, mode.nsg)) else 1;
+        const rows_kernel = request.rows >= 2 and request.rows <= 8 and chunk >= 2;
+        if (rows_kernel) {
+            mode.name = if (bf16) "kernel_mul_mv_f16_f32_4_rows_bf16" else "kernel_mul_mv_f16_f32_4_rows";
+        } else if (bf16) {
+            if (!std.mem.eql(u8, std.mem.span(mode.name), "kernel_mul_mv_f16_f32_4")) return 0;
+            mode.name = "kernel_mul_mv_f16_f32_4_bf16";
+        }
+        if (rows_kernel) {
+            const program = Program{ .kind = c.DS4_DENSE_MV, .name = mode.name, .nsg = mode.nsg };
+            const pipeline = program.pipeline() orelse return 0;
+            var row: u64 = 0;
+            while (row < request.rows) : (row += chunk) {
+                const count = @min(request.rows - row, chunk);
+                var args = mvArgs(request.width, request.outputs, request.rows, false, mode.rows);
+                args.ne11 = narrow(count);
+                args.ne1 = narrow(count);
+                const nr: u64 = @intCast(mode.rows);
+                if (!encode(&command, request, weights, c.DS4_DENSE_MV, pipeline, .{ .mv = args }, .{ .x = (request.outputs + nr - 1) / nr, .threads_y = @as(u64, @intCast(mode.nsg)) * count, .shared = @intCast(mode.shared * count), .x_offset = row * request.width * 4, .out_offset = row * request.outputs * 4 })) return 0;
+            }
+        } else if (!matvec(&command, request, weights, mode, false)) return 0;
         return command.finish("F16 tensor matvec");
     }
     if (request.rows <= 8 and request.width % 128 == 0) {
@@ -484,4 +555,132 @@ pub fn halfPair(pair: Pair) c_int {
     const pipeline = (Program{ .kind = c.DS4_DENSE_MV, .name = "kernel_mul_mv_f16_f32_pair_4", .nsg = mode.nsg }).pipeline() orelse return 0;
     if (!encodePair(&command, pair, weights0, weights1, pipeline, mode, false, false)) return 0;
     return command.finish("F16 paired matvec");
+}
+
+/// Independent q_a/KV output groups share a single encoder and input. Each
+/// group uses the standalone Q8 reduction and rounds its output at the boundary.
+pub fn q8Bf16Pair(pair: Pair) c_int {
+    const request = pair.first;
+    if (api.init() == 0 or request.rows != 1 or request.map == null or request.width == 0 or request.width & 31 != 0 or
+        request.outputs == 0 or pair.outputs1 == 0 or request.outputs > 65536 or pair.outputs1 > 65536 or !request.shapesFit()) return 0;
+    if (!request.activations(request.width * 4, request.outputs * 4, null) or api.tensorHasBuffer(pair.out1) == 0 or api.tensorBytes(pair.out1) < pair.outputs1 * 4) return 0;
+    const row_bytes = request.width / 32 * 34;
+    const weights0 = request.weight(request.outputs * row_bytes, null) orelse return 0;
+    defer weights0.deinit();
+    var second = request;
+    second.offset = pair.offset1;
+    const weights1 = second.weight(pair.outputs1 * row_bytes, null) orelse return 0;
+    defer weights1.deinit();
+    const mode = q8Dispatch(request.outputs, c.ds4_metal_dense_facts(false));
+    const literal = request.width == 5120 and request.outputs == 1280 and pair.outputs1 == 512 and mode.rows == 2 and
+        c.ds4_metal_v41_on(c.DS4_GPU_V41_LITERAL_SHAPES) != 0;
+    const name: [*:0]const u8 = if (literal) "kernel_mul_mv_q8_0_f32_bf16_pair_qa_kv" else "kernel_mul_mv_q8_0_f32_bf16_pair";
+    if (literal) c.ds4_metal_v41_note(name);
+    const pipeline = (Program{ .kind = c.DS4_DENSE_MV, .name = name, .nsg = mode.nsg }).pipeline() orelse return 0;
+    var command = Command.init() orelse return 0;
+    defer command.deinit();
+    const nr: u64 = @intCast(mode.rows);
+    const launch = c.ds4_metal_dense_pair_launch{
+        .args0 = mvArgs(request.width, request.outputs, 1, true, mode.rows),
+        .args1 = mvArgs(request.width, pair.outputs1, 1, true, mode.rows),
+        .two_args = true,
+        .pipeline = pipeline,
+        .weights0 = weights0.buffer,
+        .weights1 = weights1.buffer,
+        .weight_offset0 = weights0.offset,
+        .weight_offset1 = weights1.offset,
+        .x = request.x,
+        .out0 = request.out,
+        .out1 = pair.out1,
+        .groups = (request.outputs + nr - 1) / nr + (pair.outputs1 + nr - 1) / nr,
+        .simdgroups = @intCast(mode.nsg),
+        .shared_bytes = mode.shared,
+    };
+    if (c.ds4_metal_dense_pair_encode(command.token.?, &launch) == 0) return 0;
+    return command.finish("V4.1 paired Q8 matvec");
+}
+
+const K = @import("compressor_ops.zig");
+const Binding = c.ds4_metal_v41_binding;
+fn tensorBinding(index: u32, view: K.View) Binding {
+    return .{ .index = index, .view = view, .bytes = null, .length = 0 };
+}
+fn singleRow(mode: *Matvec, outputs: u64, facts: u32) void {
+    const forced = c.ds4_zig_metal_env_u64("DS4_METAL_PLAIN_MV_NR0", 0, 0, 2);
+    if (forced == 1 or (forced == 0 and outputs <= 1024 and facts & c.DS4_DENSE_M5 != 0)) {
+        mode.rows = 1;
+        mode.shared = 128;
+    }
+}
+
+/// Read exact load-time BF16 or block-scaled E4M3 copies directly. The caller
+/// proves that conversion preserved the original weights; no lossy fallback is
+/// hidden in these kernels. Copies and input/output views survive command wait.
+pub fn narrowWeights(out: ?*Tensor, weights: ?*const Tensor, scales: ?*const Tensor, width: u64, outputs: u64, x: ?*const Tensor, fp8: bool) c_int {
+    if (api.init() == 0 or width < 32 or width % 4 != 0 or width > max_u32 or outputs == 0 or outputs > max_u32) return 0;
+    const facts = c.ds4_metal_dense_facts(false);
+    if (fp8 and (facts & c.DS4_DENSE_QUALITY != 0 or width % 32 != 0 or outputs % 32 != 0)) return 0;
+    const weight_bytes = width * outputs * @as(u64, if (fp8) 1 else 2);
+    if (api.tensorHasBuffer(weights) == 0 or api.tensorBytes(weights) < weight_bytes or api.tensorHasBuffer(x) == 0 or api.tensorBytes(x) < width * 4 or api.tensorHasBuffer(out) == 0 or api.tensorBytes(out) < outputs * 4) return 0;
+    if (fp8 and (api.tensorHasBuffer(scales) == 0 or api.tensorBytes(scales) < (width / 32) * (outputs / 32) * 4)) return 0;
+    var mode = halfDispatch(width);
+    if (fp8 and (outputs == 512 or outputs == 1024) and width >= 4096) {
+        mode.rows = 4;
+        mode.shared = 512;
+    }
+    singleRow(&mode, outputs, facts);
+    const blend = width % 32 == 0 and api.tensorOffset(weights) % 16 == 0 and c.ds4_metal_v41_on(c.DS4_GPU_V41_PLAIN_READERS) != 0;
+    if (fp8) {
+        const owner_groups = (width / 32 + 15) / 16;
+        const owner = blend and mode.rows == 2 and owner_groups <= mode.nsg;
+        if (owner) mode.nsg = @intCast(owner_groups) else if (blend) {
+            mode.rows = 2;
+            mode.shared = 256;
+        }
+        mode.name = if (owner) "kernel_e4m3_blend_owner_r2_bf16" else if (blend) "kernel_e4m3_blend_r2_bf16" else "kernel_mul_mv_e4m3_f32_4_bf16";
+    } else {
+        if (blend) {
+            mode.rows = 1;
+            mode.shared = 128;
+        }
+        mode.name = if (blend) "kernel_router_blend_r1" else "kernel_mul_mv_bf16_f32_4";
+    }
+    var args = mvArgs(width, outputs, 1, false, mode.rows);
+    args.nb00 = if (fp8) 1 else 2;
+    args.nb01 = width * args.nb00;
+    args.nb02 = weight_bytes;
+    args.nb03 = weight_bytes;
+    const w = K.Buffer.tensor(weights);
+    defer w.deinit();
+    const input_buffer = K.Buffer.tensor(x);
+    defer input_buffer.deinit();
+    const output_buffer = K.Buffer.tensor(out);
+    defer output_buffer.deinit();
+    const scale_buffer = K.Buffer.tensor(scales);
+    defer scale_buffer.deinit();
+    const bindings = [_]Binding{
+        .{ .index = 0, .view = std.mem.zeroes(K.View), .bytes = &args, .length = @sizeOf(Mv) },
+        tensorBinding(1, w.view),
+        tensorBinding(2, input_buffer.view),
+        tensorBinding(3, output_buffer.view),
+        tensorBinding(4, scale_buffer.view),
+    };
+    var command = Command.init() orelse return 0;
+    defer command.deinit();
+    const nr: u64 = @intCast(mode.rows);
+    const launch = c.ds4_metal_v41_launch{
+        .kernel = mode.name,
+        .nsg = mode.nsg,
+        .count = if (fp8) 5 else 4,
+        .shared_bytes = mode.shared,
+        .bindings = &bindings,
+        .gx = (outputs + nr - 1) / nr,
+        .gy = 1,
+        .gz = 1,
+        .tx = 32,
+        .ty = @intCast(mode.nsg),
+        .barrier = false,
+    };
+    if (c.ds4_metal_v41_encode(command.token.?, &launch) == 0) return 0;
+    return command.finish(if (fp8) "E4M3 weights matvec" else "BF16 weights matvec");
 }

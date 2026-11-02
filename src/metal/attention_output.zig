@@ -338,10 +338,12 @@ pub const Projection = struct {
         if (ok and full != low_dim) {
             const matrix_rows = if (mpp()) self.rows / 32 * 32 else 0;
             if (matrix_rows != 0) ok = (KSlice{ .out = self.out, .model = self.model, .size = self.size, .offset = self.b, .width = full, .outputs = self.outputs, .first = self.low_offset, .count = low_dim, .input = self.low }).rows(matrix_rows, low_dim, 0);
-            var row = matrix_rows;
-            while (ok and row < self.rows) : (row += 1) {
-                const target = c.ds4_gpu_tensor_view(self.out, @as(u64, row) *% self.outputs *% 4, self.outputs * 4);
-                ok = target != null and (KSlice{ .out = target, .model = self.model, .size = self.size, .offset = self.b, .width = full, .outputs = self.outputs, .first = self.low_offset, .count = low_dim, .input = self.low, .input_offset = @as(u64, row) * low_dim }).scalar();
+            // The exact matvec keeps each row's reduction order, but all tail
+            // rows share one dispatch instead of one CPU encode per token.
+            if (ok and matrix_rows < self.rows) {
+                const rows = self.rows - matrix_rows;
+                const target = c.ds4_gpu_tensor_view(self.out, @as(u64, matrix_rows) * self.outputs * 4, @as(u64, rows) * self.outputs * 4);
+                ok = target != null and (KSlice{ .out = target, .model = self.model, .size = self.size, .offset = self.b, .width = full, .outputs = self.outputs, .first = self.low_offset, .count = low_dim, .input = self.low, .input_offset = @as(u64, matrix_rows) * low_dim }).exactRows(rows);
                 c.ds4_gpu_tensor_free(target);
             }
         } else if (ok and self.round_low and self.rows <= 8) ok = c.ds4_gpu_matmul_q8_0_decode_rows_exact_tensor(self.out, self.model, self.size, self.b, low_dim, self.outputs, self.low, self.rows) != 0 else if (ok) ok = c.ds4_gpu_matmul_q8_0_tensor(self.out, self.model, self.size, self.b, low_dim, self.outputs, self.low, self.rows) != 0;
@@ -424,6 +426,43 @@ pub const Projection = struct {
         const ok = scope.acquire() and direct(&scope.command, lowArgs(self.width, self.rank, self.groups, 1, row, !q4, false), w.view, input, !q4, empty_view);
         return scope.end(ok);
     }
+    /// Decode-sized batches share weights while preserving each row's scalar
+    /// reduction. Heads retain the full group stride; low output is compact.
+    pub fn lowRowsExact(self: Projection, total: u32, first: u32) bool {
+        if (api.init() == 0 or self.low == null or self.heads == null or self.model == null or
+            self.width == 0 or self.rank == 0 or total == 0 or self.groups == 0 or
+            first > total or self.groups > total - first or self.rows == 0 or
+            @as(u64, self.rows) * self.groups > 65535 or self.width % 32 != 0 or
+            self.width > max32 or self.rank > max32) return false;
+        const row_bytes = self.width / 32 * 34;
+        const group_bytes = self.rank * row_bytes;
+        if (first > max64 / group_bytes or self.groups > max64 / group_bytes) return false;
+        const skip = @as(u64, first) * group_bytes;
+        const bytes = @as(u64, self.groups) * group_bytes;
+        if (self.a > max64 - skip or self.a + skip > self.size or bytes > self.size - (self.a + skip)) return false;
+        if (api.tensorBytes(self.heads) < @as(u64, self.rows) * total * self.width * 4 or
+            api.tensorBytes(self.low) < @as(u64, self.rows) * self.groups * self.rank * 4) return false;
+        const w = weight(self.model, self.size, self.a + skip, bytes) orelse return false;
+        defer w.deinit();
+        const input = Inputs.init(self.heads, self.low);
+        defer input.deinit();
+        var scope = Scope.init() orelse return false;
+        defer scope.deinit();
+        if (!scope.acquire()) return scope.end(false);
+
+        const grouped_rows = self.rows >= 2 and self.rows <= 8;
+        const row_groups: u64 = if (grouped_rows) self.rows else 1;
+        var args = lowArgs(self.width, self.rank, self.groups, if (grouped_rows) 1 else self.rows, row_bytes, true, false);
+        args.ne12 = 1;
+        args.nb12 = @as(u64, total) * self.width * 4;
+        const program = pipeline(if (grouped_rows) "kernel_dsv4_attn_out_low_q8_0_f32_rows" else "kernel_dsv4_attn_out_low_q8_0_f32", 1, 4) orelse return scope.end(false);
+        var plan = launch(c.DS4_OUT_LOW_DIRECT, program, .{ .low = args }, w.view, shifted(input.heads.view, @as(u64, first) * self.width * 4), input.low.view);
+        plan.groups_x = (self.rank + 1) / 2;
+        plan.groups_z = @as(u64, self.groups) * @as(u64, @intCast(args.nei1));
+        plan.threads_y = 4 * row_groups;
+        plan.shared_bytes = 256 * row_groups;
+        return scope.end(encode(&scope.command, plan));
+    }
     pub fn tpScalar(self: Projection, total: u32, first: u32) bool {
         if (api.init() == 0 or self.out == null or self.low == null or self.heads == null or self.model == null or self.width == 0 or self.rank == 0 or self.groups == 0 or first +% self.groups > total or self.width % 32 != 0 or self.rank *% self.groups % 32 != 0 or self.width > max32 or self.rank > max32 or self.outputs > max32) return false;
         const row = self.width / 32 * 34;
@@ -456,15 +495,29 @@ pub const KSlice = struct {
     count: u64,
     input: ?*const Tensor,
     input_offset: u64 = 0,
+    round_input: bool = false,
     pub fn scalar(self: KSlice) bool {
-        if (api.init() == 0 or self.width & 31 != 0 or self.first & 31 != 0 or self.count & 31 != 0 or self.count == 0 or self.first +% self.count > self.width or self.width > max32 or self.outputs > max32) return false;
+        return self.exactRows(1);
+    }
+    /// Each compact input row contains only this rank's K window; weights
+    /// retain their full matrix stride. Batching changes dispatch geometry,
+    /// while the per-row K traversal and reduction remain scalar-equivalent.
+    pub fn exactRows(self: KSlice, rows_count: u32) bool {
+        const max_signed = std.math.maxInt(i32);
+        if (api.init() == 0 or self.width & 31 != 0 or self.first & 31 != 0 or self.count & 31 != 0 or
+            rows_count == 0 or rows_count > max_signed or self.count == 0 or self.first > self.width or
+            self.count > self.width - self.first or self.width > max_signed or self.outputs > max_signed or
+            self.input_offset > max64 / 4 - @as(u64, rows_count) * self.count) return false;
+        // This fused input rounding must decline without encoding anything
+        // when the caller needs a different producer or publication kernel.
+        if (self.round_input and (rows_count != 1 or c.ds4_gpu_commands_active() == 0)) return false;
         const x = Buffer.tensor(self.input);
         defer x.deinit();
         const y = Buffer.tensor(self.out);
         defer y.deinit();
-        if (!x.fits((self.input_offset +% self.count) *% 4) or !y.fits(self.outputs * 4)) return errorLine("ds4: Metal Q8_0 kslice matmul received undersized buffers");
+        if (!x.fits((self.input_offset + @as(u64, rows_count) * self.count) * 4) or !y.fits(@as(u64, rows_count) * self.outputs * 4)) return errorLine("ds4: Metal Q8_0 kslice matmul received undersized buffers");
         const row = self.width / 32 * 34;
-        const bytes = self.outputs *% row;
+        const bytes = self.outputs * row;
         if (self.offset > self.size or bytes > self.size - self.offset) return errorLine("ds4: Metal Q8_0 kslice weights are outside the mapped model");
         const w = weight(self.model, self.size, self.offset, bytes) orelse return false;
         defer w.deinit();
@@ -475,32 +528,56 @@ pub const KSlice = struct {
         const fallback: u64 = if (facts & c.DS4_DENSE_TP_TWO != 0) 2 else 4;
         const requested = c.ds4_zig_metal_env_u64("DS4_METAL_Q8_MV_NSG", fallback, 1, 8);
         const nsg: i16 = if (self.outputs > 65536) 8 else @intCast(requested);
-        const fold = if (command.owned == 0) c.ds4_metal_output_fold_take(self.out, self.outputs * 4) else std.mem.zeroes(c.ds4_metal_output_fold);
-        const program = pipeline(if (fold.active) "kernel_dsv4_mul_mv_q8_0_f32_tp_flag_checked" else "kernel_mul_mv_q8_0_f32", 1, nsg) orelse return false;
+        var name: [*:0]const u8 = "kernel_mul_mv_q8_0_f32";
+        var nr0: u64 = 2;
+        var shared: u64 = 256;
+        var row_group: u64 = 1;
+        // M3's exact TP prefill reads eight output rows per threadgroup. The
+        // two-token variant dequantizes each weight block once for both input
+        // rows, preserving each token's accumulation order.
+        if (rows_count >= 32 and self.width == 8192 and self.count == 4096 and self.outputs == 5120 and
+            nsg == 2 and facts & c.DS4_DENSE_TP_TWO != 0 and facts & c.DS4_DENSE_M3_ULTRA != 0 and
+            !present("DS4_METAL_DISABLE_V41_PREFILL_Q8_ROWS8"))
+        {
+            name = "kernel_mul_mv_q8_0_f32_rows8";
+            nr0 = 8;
+            shared = 1024;
+            if (!present("DS4_METAL_DISABLE_V41_TP_KSLICE_TOK2")) {
+                name = "kernel_mul_mv_q8_0_f32_rows8_tok2";
+                row_group = 2;
+            }
+        }
+        const fold = if (rows_count == 1 and command.owned == 0) c.ds4_metal_output_fold_take(self.out, self.outputs * 4) else std.mem.zeroes(c.ds4_metal_output_fold);
+        if (self.round_input and fold.active) {
+            c.ds4_metal_output_fold_restore();
+            return false;
+        }
+        const program = pipeline(if (fold.active) "kernel_dsv4_mul_mv_q8_0_f32_tp_flag_checked" else if (self.round_input) "kernel_mul_mv_q8_0_f32_bf16in" else name, 1, nsg) orelse return false;
         var a = std.mem.zeroes(c.ds4_metal_mv_args);
         a.ne00 = narrow(self.count);
         a.ne01 = narrow(self.outputs);
         a.ne02 = 1;
         a.nb00 = 34;
         a.nb01 = row;
-        a.nb02 = row *% self.outputs;
+        a.nb02 = row * self.outputs;
         a.nb03 = a.nb02;
         a.ne10 = narrow(self.count);
-        a.ne11 = 1;
+        a.ne11 = @intCast(rows_count);
         a.ne12 = 1;
         a.nb10 = 4;
-        a.nb11 = self.width * 4;
-        a.nb12 = a.nb11;
-        a.nb13 = a.nb11;
+        a.nb11 = self.count * 4;
+        a.nb12 = @as(u64, rows_count) * self.count * 4;
+        a.nb13 = a.nb12;
         a.ne0 = narrow(self.outputs);
-        a.ne1 = 1;
-        a.nr0 = 2;
+        a.ne1 = @intCast(rows_count);
+        a.nr0 = @intCast(nr0);
         a.r2 = 1;
         a.r3 = 1;
-        var plan = launch(c.DS4_OUT_KSLICE_MV, program, .{ .vector = a }, shifted(w.view, self.first / 32 * 34), shifted(x.view, self.input_offset *% 4), y.view);
-        plan.groups_x = (self.outputs + 1) / 2;
+        var plan = launch(c.DS4_OUT_KSLICE_MV, program, .{ .vector = a }, shifted(w.view, self.first / 32 * 34), shifted(x.view, self.input_offset * 4), y.view);
+        plan.groups_x = (self.outputs + nr0 - 1) / nr0;
+        plan.groups_y = (@as(u64, rows_count) + row_group - 1) / row_group;
         plan.threads_y = @intCast(nsg);
-        plan.shared_bytes = 256;
+        plan.shared_bytes = shared;
         plan.fold = fold.active;
         plan.fold_slot = fold.slot;
         plan.fold_value = fold.value;

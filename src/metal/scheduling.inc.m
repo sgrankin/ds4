@@ -166,7 +166,7 @@ void ds4_metal_schedule_parallel_down(void *encoder, uint64_t groups) {
     if (p->split) [enc setBuffer:p->ids offset:p->ids_offset atIndex:5];
     [enc setThreadgroupMemoryLength:256u atIndex:0];
     [enc dispatchThreadgroups:MTLSizeMake(groups, 1, 1)
-        threadsPerThreadgroup:MTLSizeMake(32, 4, 1)];
+        threadsPerThreadgroup:MTLSizeMake(32, p->down_nsg, 1)];
 }
 void ds4_metal_schedule_parallel_barrier(void *encoder, void *routed_mid) {
     id<MTLResource> resources[2] = { (__bridge id<MTLBuffer>)routed_mid, g_schedule.parallel.mid_out };

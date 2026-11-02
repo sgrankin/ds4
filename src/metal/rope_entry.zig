@@ -158,3 +158,7 @@ export fn ds4_gpu_dsv41_rope_stride(
 export fn ds4_gpu_dsv41_rope(x: ?*Tensor, width: u32, heads: u32, rows: u32, start: u32, compressed: bool, inverse: bool) c_int {
     return @intFromBool(owner.v41(x, width, heads, rows, start, 1, compressed, inverse));
 }
+
+export fn ds4_gpu_dsv41_rope_bf16(x: ?*Tensor, width: u32, heads: u32, rows: u32, start: u32, compressed: bool, inverse: bool) c_int {
+    return @intFromBool(owner.v41Rounded(x, width, heads, rows, start, 1, compressed, inverse, true));
+}

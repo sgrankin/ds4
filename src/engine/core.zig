@@ -16,6 +16,7 @@ const Support = @import("support_weights.zig");
 const VisionWeights = @import("vision_weights.zig");
 const Scope = @import("metal_scope.zig").Scope(c);
 const RouteServices = @import("deepseek41/route_services.zig");
+const DecodeWeights = @import("deepseek41/decode_weights.zig").Copies;
 
 fn hasText(value: [*c]const u8) bool {
     return value != null and value[0] != 0;
@@ -53,6 +54,7 @@ pub const Core = struct {
         }
         const scope = Scope.enter(state);
         defer scope.leave();
+        c.ds4_gpu_set_model_untracked_default(1);
         if (!options.inspect_only) {
             const supported = state.backend == c.DS4_BACKEND_METAL and
                 options.distributed.role == c.DS4_DISTRIBUTED_NONE and
@@ -175,6 +177,13 @@ pub const Core = struct {
         c.ds4_gpu_set_quality(state.quality);
         c.ds4_gpu_set_glm_model(false);
         c.ds4_gpu_set_ssd_streaming(state.ssd_streaming);
+        if (!state.quality) {
+            if (DecodeWeights.create(&state.model, &state.weights, self.config.shape.n_layer)) |copies| {
+                state.decode_weights = copies;
+                state.memory.decode_weight_bytes = copies.bytes;
+                _ = c.fprintf(c.__stderrp, "ds4: V4.1 exact decode weight copies %.2f MiB\n", @as(f64, @floatFromInt(copies.bytes)) / 1048576.0);
+            }
+        }
         if (!memory.automaticCache(options.context_size, state.prefill_chunk)) return false;
         // These are process-wide compatibility resets, not Engine accessors.
         c.ds4_core_reset_streaming();
@@ -201,6 +210,8 @@ pub const Core = struct {
             state.vision_map_ready = mapModel(&state.vision_model);
             if (!state.vision_map_ready) return fail("ds4: metal failed to map the GLM-5.3 vision encoder\n");
         }
+        if (DecodeWeights.fromOpaque(state.decode_weights)) |copies| copies.prepare(&state.weights, self.config.shape.n_layer);
+        self.warmEngram(options);
         _ = c.fputs("ds4: metal backend initialized for graph diagnostics\n", c.__stderrp);
         c.ds4_core_memory_summary(state, options.context_size);
         return true;
@@ -208,6 +219,35 @@ pub const Core = struct {
 
     fn hasOutput(self: *const Core) bool {
         return self.state.weights.output_norm != null and self.state.weights.output != null;
+    }
+
+    fn warmEngram(self: *const Core, options: *const c.ds4_engine_options) void {
+        const state = self.state;
+        if (state.ssd_streaming or state.engram_warm != null or c.getenv("DS4_DISABLE_V41_ENGRAM_WARM") != null) return;
+        var first: ?*const c.ds4_tensor = null;
+        var last: ?*const c.ds4_tensor = null;
+        for (state.model.tensors[0..@intCast(state.model.n_tensors)]) |*tensor| {
+            if (std.mem.eql(u8, text(tensor.name), "blk.1.engram_embd.weight")) first = tensor;
+            if (std.mem.eql(u8, text(tensor.name), "blk.14.engram_embd.weight")) last = tensor;
+        }
+        const a = first orelse return;
+        const b = last orelse return;
+        const start = @min(a.abs_offset, b.abs_offset);
+        const end = @max(a.abs_offset + a.bytes, b.abs_offset + b.bytes);
+        const context: u32 = if (options.context_size > 0) @intCast(options.context_size) else 4096;
+        const sessions: u64 = @intCast(@max(options.placement_session_count_hint, 1));
+        const graph = Layout.init(&self.config, context, state.prefill_chunk).bytes() *| sessions;
+        const need = state.model.size +| graph +| (end - start) +| (@as(u64, 64) << 30) +| state.memory.decode_weight_bytes;
+        const physical = c.ds4_engram_physical_memory();
+        if (physical == 0 or need > physical) return;
+        state.engram_warm = c.ds4_engram_warm_start(state.model_path, start, end - start);
+        if (state.engram_warm == null) return;
+        _ = c.fputs("ds4: V4.1 Engram fits beside the model; warming reclaimable page-cache rows\n", c.__stderrp);
+        if (c.getenv("DS4_V41_ENGRAM_WARM_WAIT") != null) {
+            var seconds: f64 = 0;
+            const ok = c.ds4_engram_warm_wait(state.engram_warm, &seconds);
+            _ = c.fprintf(c.__stderrp, "ds4: V4.1 Engram warming %s in %.1f s\n", @as([*:0]const u8, if (ok) "finished" else "stopped"), seconds);
+        }
     }
     fn memoryOwner(self: *const Core, options: *const c.ds4_engine_options, shard_bytes: u64) Memory {
         const state = self.state;
@@ -307,6 +347,11 @@ pub fn freeRecord(state: *Record) void {
         c.ds4_host_context_destroy(host_context);
     }
     c.ds4_core_profile_close();
+    c.ds4_engram_warm_stop(state.engram_warm);
+    // Submitted commands may still borrow unretained narrow weight buffers.
+    _ = c.ds4_gpu_synchronize();
+    _ = c.ds4_gpu_weight_residency(null, 0);
+    if (DecodeWeights.fromOpaque(state.decode_weights)) |copies| copies.destroy();
     state.weights = std.mem.zeroes(c.ds4_weights);
     c.ds4_vocab_release(&state.vocab);
     c.ds4_core_threads_shutdown();

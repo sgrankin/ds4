@@ -35,16 +35,19 @@ var timing_accumulated: [4]f64 = @splat(0);
 var timing_calls: u32 = 0;
 
 pub fn run(graph: *Graph, model: *const Model, weights: *const Weights, tokens: []const c_int, output: [*c]f32, all_rows: bool) bool {
+    return runImpl(graph, model, weights, tokens, output, all_rows, false, 0);
+}
+
+/// The session staged the current chunk before starting next-chunk disk I/O.
+pub fn runStaged(graph: *Graph, model: *const Model, weights: *const Weights, tokens: []const c_int, output: [*c]f32, stage_started: f64) bool {
+    return runImpl(graph, model, weights, tokens, output, false, true, stage_started);
+}
+
+fn runImpl(graph: *Graph, model: *const Model, weights: *const Weights, tokens: []const c_int, output: [*c]f32, all_rows: bool, inputs_staged: bool, stage_started: f64) bool {
     const count: u32 = @intCast(tokens.len);
     if (count == 0 or count > graph.cap_tokens or graph.pos + count > graph.ctx_cap or
         (all_rows and count > graph.n_logit_rows)) return false;
     const shape = &graph.config.shape;
-    for (tokens) |token| {
-        if (token < 0 or token >= shape.n_vocab) {
-            _ = c.fprintf(c.__stderrp, "ds4: Qwen3.8 token id %d is outside the vocabulary\n", token);
-            return false;
-        }
-    }
     const position = graph.pos;
     const trunk = dimensions.trunkLayers(&graph.config);
     const hc_width = @as(u64, shape.n_embd) * shape.n_hc;
@@ -62,8 +65,8 @@ pub fn run(graph: *Graph, model: *const Model, weights: *const Weights, tokens: 
         const layer = c.strtoul(raw_flush, &end, 10);
         if (end != raw_flush and end[0] == 0 and layer < trunk) flush_layer = @intCast(layer);
     }
-    const started = if (timing != 0) ops.now() else 0;
-    if (!input.stage(graph, model, weights, tokens)) return false;
+    const started = if (timing != 0) (if (inputs_staged) stage_started else ops.now()) else 0;
+    if (!inputs_staged and !input.stage(graph, model, weights, tokens)) return false;
     const staged = if (timing != 0) ops.now() else 0;
     if (!ops.beginCommands()) return false;
     var profile = Profile{ .enabled = timing == 2 and count > 1, .last = if (timing == 2 and count > 1) ops.now() else 0 };

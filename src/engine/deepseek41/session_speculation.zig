@@ -5,6 +5,7 @@ const c = @import("gguf_c");
 const Coordinator = @import("coordinator.zig").Coordinator;
 const Selection = @import("../session_sampling.zig").Selection;
 const Cycle = @import("speculative.zig").Cycle;
+const Control = @import("../session_control.zig");
 const dspark = @import("dspark.zig");
 const batch_owner = @import("batch_transaction.zig");
 const View = c.ds4_session_batch_view;
@@ -59,6 +60,20 @@ pub const Session = struct {
             .tp = .{ .handle = if (transport.active) transport.ctx else null, .verify_handle = self.verify_transport, .session_id = owner.control.tp_session_id, .rank = transport.rank, .vocab_split = transport.active and transport.vocab_split },
         };
     }
+    pub fn schedulerShouldSkip(self: *const Session) bool {
+        return Control.ds41ShouldSkip(self.coordinator.control, self.statistics);
+    }
+    pub fn schedulerNote(self: *const Session, accepted: u32, no_draft: bool) void {
+        const owner = &self.coordinator;
+        const seed = c.getenv("DS4_DSPARK_SEED_BATCH");
+        const layer = &owner.core.weights.layer[owner.runtime.prefill.executor.ops.config.shape.n_leading_dense];
+        const seeded = if (seed != null and seed[0] != 0) seed[0] != '0' else owner.core.backend == c.DS4_BACKEND_METAL and !owner.core.ssd_streaming and !owner.core.dspark_exact_sampling and
+            c.ds4_gpu_device_is_m5_apple_silicon() != 0 and
+            ((layer.ffn_gate_exps.*.type == c.DS4_TENSOR_IQ2_XXS and layer.ffn_down_exps.*.type == c.DS4_TENSOR_Q2_K) or
+                (owner.transport.active and layer.ffn_gate_exps.*.type == c.DS4_TENSOR_MXFP4 and layer.ffn_down_exps.*.type == c.DS4_TENSOR_MXFP4));
+        Control.ds41Note(owner.control, accepted, no_draft, if (seeded) 32 else 2);
+    }
+
     fn ordinary(self: *const Session, token: c_int, accepted: [*c]c_int, errors: []u8) c_int {
         if (accepted == null) return 0;
         if (self.eval(token, errors) != 0) return -1;

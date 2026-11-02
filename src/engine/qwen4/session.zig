@@ -5,6 +5,8 @@ const std = @import("std");
 const c = @import("gguf_c");
 const resources = @import("resources.zig");
 const forward = @import("forward.zig");
+const input = @import("input.zig");
+const Prefetch = @import("prefetch.zig").Prefetch;
 const snapshots = @import("snapshot.zig");
 const mtp = @import("mtp.zig");
 const ops = @import("ops.zig");
@@ -93,6 +95,8 @@ pub fn sync(runtime: *Runtime, prompt: *const c.ds4_tokens, errors: []u8) c_int 
         graph.vis_span_count = 0;
         graph.dump_prompt_rows = false;
     }
+    var prefetch = Prefetch.init(graph.cap_tokens, graph.config.shape.n_embd, @intCast(prompt.len - start));
+    defer prefetch.deinit();
     index = start;
     while (index < prompt.len) {
         if (runtime.control.*.cancel) |cancel| {
@@ -105,7 +109,20 @@ pub fn sync(runtime: *Runtime, prompt: *const c.ds4_tokens, errors: []u8) c_int 
         const count = @min(@as(u32, @intCast(prompt.len - index)), graph.cap_tokens);
         frontier.*.checkpoint_valid = false;
         const tokens = prompt.v[@intCast(index)..][0..count];
-        if (!forward.run(graph, runtime.model, runtime.weights, tokens, frontier.*.logits, false)) {
+        var ok: bool = undefined;
+        if (prefetch.rows.len != 0) {
+            const started = ops.now();
+            ok = input.stageWithPle(graph, runtime.model, runtime.weights, tokens, if (prefetch.ready) prefetch.rows else null);
+            prefetch.ready = false;
+            const next: usize = @as(usize, @intCast(index)) + count;
+            if (ok and next < @as(usize, @intCast(prompt.len))) {
+                const next_count = @min(@as(usize, @intCast(prompt.len)) - next, graph.cap_tokens);
+                prefetch.start(graph, runtime.model, prompt.v[next..][0..next_count]);
+            }
+            if (ok) ok = forward.runStaged(graph, runtime.model, runtime.weights, tokens, frontier.*.logits, started);
+            prefetch.join(@intCast(next));
+        } else ok = forward.run(graph, runtime.model, runtime.weights, tokens, frontier.*.logits, false);
+        if (!ok) {
             if (errors.len != 0) _ = c.snprintf(errors.ptr, errors.len, "Qwen3.8 prefill failed at token %d", index);
             return 1;
         }

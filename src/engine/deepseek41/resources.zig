@@ -86,9 +86,11 @@ pub const Graph = struct {
             const rows = @as(u64, context) / @as(u64, if (owner < 3) 2 else 1) + 1;
             graph.compressed[owner] = tensorAlloc(rows * plan.mainRowBytes(), false) orelse return error.AllocationFailed;
             graph.index_cache[owner] = tensorAlloc(rows * @as(u64, if (plan.index_fp4) 68 else 512), false) orelse return error.AllocationFailed;
+            if (layout.indexBf16()) graph.index_bf16[owner] = tensorAlloc(rows * 128 * 2, false) orelse return error.AllocationFailed;
             graph.previous_kv[owner] = tensorAlloc(512 * 4, false) orelse return error.AllocationFailed;
             graph.previous_score[owner] = tensorAlloc(512 * 4, false) orelse return error.AllocationFailed;
         }
+        if (layout.indexBf16()) graph.index_bf16_flag = tensorAlloc(4, false) orelse return error.AllocationFailed;
         inline for (comptime std.meta.fieldNames(layout.Scratch)) |name| {
             const managed = comptime std.mem.eql(u8, name, "engram_prefetch") or std.mem.eql(u8, name, "image_text_mask");
             @field(graph.*, name) = tensorAlloc(@max(plan.scratchWidth(@field(layout.Scratch, name)), 1) * 4, managed) orelse return error.AllocationFailed;
@@ -99,6 +101,7 @@ pub const Graph = struct {
         }
         // Apple uses the bounded batch reader directly. The reusable scalar
         // overlap reader belongs to the other backend path and stays NULL.
+        graph.rope_tab = tensorAlloc(64 * 2 * 4, false);
         resetRecord(graph);
         logAllocation(graph, &plan);
         return self;
@@ -226,6 +229,8 @@ pub fn resetRecord(graph: *Record) void {
     graph.pos = 0;
     graph.decoder_replay_floor = 0;
     graph.immutable_cache_end = 0;
+    graph.index_bf16_ok = true;
+    graph.block_list_mask = null;
     graph.valid = !graph.workspace_failed;
     c.ds4_engram_history_reset(&graph.history);
     c.ds4_native_graph_dspark_reset(graph.dspark);
@@ -238,6 +243,10 @@ pub fn freeRecord(graph: *Record) void {
     c.ds4_native_graph_dspark_free(graph.dspark);
     c.ds4_engram_reader_free(graph.engram_reader);
     c.ds4_gpu_tensor_free(graph.tp_logits_half);
+    c.ds4_gpu_tensor_free(graph.selected_half);
+    c.ds4_gpu_tensor_free(graph.route_weights_half);
+    c.ds4_gpu_tensor_free(graph.rope_tab);
+    c.ds4_gpu_tensor_free(graph.index_bf16_flag);
     if (graph.predict_load.active) {
         c.ds4_native_graph_selected_finish(&graph.predict_load);
         _ = c.ds4_gpu_routed_moe_set_selected_override(null, 0);
@@ -256,6 +265,7 @@ pub fn freeRecord(graph: *Record) void {
     for (0..4) |owner| {
         c.ds4_gpu_tensor_free(graph.compressed[owner]);
         c.ds4_gpu_tensor_free(graph.index_cache[owner]);
+        c.ds4_gpu_tensor_free(graph.index_bf16[owner]);
         c.ds4_gpu_tensor_free(graph.previous_kv[owner]);
         c.ds4_gpu_tensor_free(graph.previous_score[owner]);
     }

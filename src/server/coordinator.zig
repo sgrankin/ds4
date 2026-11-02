@@ -117,7 +117,7 @@ pub const Coordinator = struct {
     }
     pub fn quantumFor(self: Coordinator, generation_active: bool) c_int {
         const state = self.state;
-        var budget: c_int = if (generation_active) state.mixed_prefill_quantum else 2048;
+        var budget: c_int = if (generation_active) state.mixed_prefill_quantum else @max(state.idle_prefill_quantum, 2048);
         if (generation_active and budget < 1024 and state.engine != null and c.ds4_engine_is_glm53(state.engine)) budget = 1024;
         return budget;
     }

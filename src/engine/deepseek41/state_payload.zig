@@ -255,6 +255,7 @@ pub const Payload = struct {
         for (0..@min(@as(u32, 3), position)) |index|
             graph.history.tail[index] = @intCast(graph.token_map[@intCast(values[position - 1 - index])]);
         graph.pos = position;
+        @import("attention.zig").restoreIndexViews(graph, position);
         return tokens;
     }
 

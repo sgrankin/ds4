@@ -46,6 +46,7 @@ pub const Scratch = enum {
     block_scores,
     block_selected,
     block_mask,
+    block_list,
     heads,
     low,
     route_logits,
@@ -62,6 +63,7 @@ pub const Scratch = enum {
     shared_mid,
     shared,
     engram_rows,
+    engram_rows_b,
     engram_prefetch,
     engram_kv,
     logits,
@@ -81,6 +83,9 @@ pub fn compressedFp4() bool {
 pub fn indexFp4() bool {
     const value = c.getenv("DS4_V41_INDEX_FP4");
     return value != null and c.strcmp(value, "1") == 0;
+}
+pub fn indexBf16() bool {
+    return !indexFp4() and !present("DS4_METAL_DISABLE_V41_INDEX_BF16");
 }
 pub fn ceiling(context: u32, chunk: u32) u32 {
     // An explicit chunk bounds scratch independently of context. Preserve the
@@ -179,8 +184,10 @@ pub const Layout = struct {
             .index_scores => @as(u64, 32) * self.context,
             .index_packed => c.ds4_gpu_dsv41_indexer_packed_bytes(self.context, self.prefill) / 4,
             .selected_kv => @as(u64, self.shape.n_indexer_top_k) * self.shape.n_head_dim,
-            .block_scores => (@as(u64, self.context) + 7) / 8,
-            .block_selected => 2048,
+            .block_scores => 32 * ((@as(u64, self.context) + 7) / 8),
+            .block_selected => 32 * 2048,
+            .block_list => 2048,
+            .engram_rows_b => c.DS4_ENGRAM_COLS * c.DS4_ENGRAM_DIM,
             .engram_prefetch => @as(u64, if (self.carry != 0) self.carry else self.prefill) * c.DS4_ENGRAM_COLS * c.DS4_ENGRAM_DIM,
             .logits => self.shape.n_vocab,
             else => self.rowWidth(@field(RowField, @tagName(field))),
@@ -201,7 +208,7 @@ pub const Layout = struct {
         var floats: u64 = 40 * 128 * 512;
         for (0..4) |owner| {
             const rows = @as(u64, self.context) / @as(u64, if (owner < 3) 2 else 1) + 1;
-            floats += rows * (self.mainRowBytes() / 4 + @as(u64, if (self.index_fp4) 17 else 128)) + 2 * 512;
+            floats += rows * (self.mainRowBytes() / 4 + @as(u64, if (self.index_fp4) 17 else 128) + @as(u64, if (indexBf16()) 64 else 0)) + 2 * 512;
         }
         floats += @as(u64, 2) * 2 * self.shape.n_embd * self.shape.n_hc;
         inline for (comptime std.meta.fieldNames(Scratch)) |name| floats += self.scratchWidth(@field(Scratch, name));
@@ -217,7 +224,7 @@ pub const Layout = struct {
         // allocations outside this record, but still belong in admission.
         const packed_workspace: u64 = if (self.prefill >= 512) @as(u64, if (self.prefill > 4096) 512 else 256) * 1024 * 1024 else 0;
         const sort = @as(u64, 32) * self.context * 2 * @sizeOf(u32);
-        return floats * 4 + @sizeOf(c.ds41_gpu_graph) + @as(u64, self.shape.n_vocab) * 4 + packed_workspace + sort;
+        return floats * 4 + 64 * 2 * 4 + @sizeOf(c.ds41_gpu_graph) + @as(u64, self.shape.n_vocab) * 4 + packed_workspace + sort;
     }
 
     pub fn memory(self: *const Layout) c.ds4_context_memory {

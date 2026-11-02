@@ -39,11 +39,14 @@ pub fn scoreOne(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, ke
         !fits(weights, @as(u64, heads) * 4) or !fits(keys, @as(u64, rows) *% width *% element))
         return api.reportError("ds4: Metal GLM indexer score received undersized buffers");
     const direct = heads == 32 and width == 128;
-    const threads = if (direct) 32 else rmsThreads(width);
+    const flags = c.ds4_metal_v41_test_flags();
+    const wide = direct and flags & c.DS4_GPU_TEST_INDEX_SCORE_WIDE != 0;
+    const rows4 = direct and !wide and flags & c.DS4_GPU_TEST_INDEX_SCORE_DIRECT == 0 and api.envPresent("DS4_METAL_DISABLE_V41_SCORE_ROWS4") == 0;
+    const threads = if (wide) 256 else if (direct) 32 else rmsThreads(width);
     var args = std.mem.zeroes(c.ds4_metal_index_score_packet);
     args.one = .{ .n_rows = rows, .n_head = heads, .head_dim = width, .cache_f16 = @intFromBool(half), .scale = scale };
     const launch = c.ds4_metal_index_score_launch{
-        .pipeline = c.ds4_metal_index_get_pipeline(if (direct) c.DS4_METAL_INDEX_DIRECT else c.DS4_METAL_INDEX_SCORE),
+        .pipeline = c.ds4_metal_index_get_pipeline(if (wide) c.DS4_METAL_INDEX_WIDE else if (rows4) c.DS4_METAL_INDEX_ROWS4 else if (direct) c.DS4_METAL_INDEX_DIRECT else c.DS4_METAL_INDEX_SCORE),
         .batch = false,
         .args = args,
         .q = q,
@@ -51,11 +54,11 @@ pub fn scoreOne(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, ke
         .keys = keys,
         .candidate_blocks = null,
         .scores = scores,
-        .groups_x = rows,
+        .groups_x = if (wide) (@as(u64, rows) + 255) / 256 else if (rows4) (@as(u64, rows) + 15) / 16 else rows,
         .groups_y = 1,
         .threads_x = threads,
-        .threads_y = if (direct) 4 else 1,
-        .shared_bytes = if (direct) (128 + 4) * 4 else threads * 4,
+        .threads_y = if (direct and !wide) 4 else 1,
+        .shared_bytes = if (wide) (4096 + 32) * 4 else if (rows4) 0 else if (direct) (128 + 4) * 4 else threads * 4,
     };
     return scoreDispatch(&launch, if (direct) "GLM indexer direct score" else "GLM indexer score");
 }
@@ -222,7 +225,10 @@ pub fn scoreBatch(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, 
         !fits(weights, @as(u64, tokens) *% heads *% 4) or !fits(keys, @as(u64, rows) *% width *% element))
         return api.reportError("ds4: Metal GLM indexer batch scores received undersized buffers");
     const tiled = !c.ds4_metal_index_get_facts().quality and tokens >= 8 and heads == 32;
-    const pipeline: u32 = if (tiled) (if (tiled_f32) c.DS4_METAL_INDEX_TILED_F32 else c.DS4_METAL_INDEX_TILED) else c.DS4_METAL_INDEX_BATCH;
+    // V4.1 keeps key fragments in SIMD matrix registers across the head
+    // loop. GLM retains its own half-precision tiled path.
+    const mma = tiled and tiled_f32 and api.envPresent("DS4_METAL_DISABLE_V41_INDEX_MMA") == 0;
+    const pipeline: u32 = if (mma) c.DS4_METAL_INDEX_V41_MMA else if (tiled) (if (tiled_f32) c.DS4_METAL_INDEX_TILED_F32 else c.DS4_METAL_INDEX_TILED) else c.DS4_METAL_INDEX_BATCH;
     var args = std.mem.zeroes(c.ds4_metal_index_score_packet);
     args.batch = .{
         .n_rows = rows,
@@ -258,7 +264,7 @@ pub fn scoreBatch(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, 
         .groups_y = if (tiled) (@as(u64, tokens) + 7) / 8 else tokens,
         .threads_x = if (tiled) 32 else threads,
         .threads_y = if (tiled) 4 else 1,
-        .shared_bytes = if (tiled) tiled_shared else threads * 4,
+        .shared_bytes = if (mma) 0 else if (tiled) tiled_shared else threads * 4,
     };
     return scoreDispatch(&launch, "GLM indexer batch scores");
 }
@@ -421,9 +427,13 @@ pub fn scoreBatchFp4(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tenso
 }
 
 pub fn topk(selected: ?*Tensor, scores: ?*const Tensor, width: u32, rows: u32, k: u32, start: u32, ratio: u32) c_int {
+    return topkDecode(selected, scores, width, rows, k, start, ratio, false);
+}
+pub fn topkDecode(selected: ?*Tensor, scores: ?*const Tensor, width: u32, rows: u32, k: u32, start: u32, ratio: u32, decode: bool) c_int {
+    const decode512 = decode and ratio == 0 and rows == 1 and k == 512 and c.ds4_metal_v41_on(c.DS4_GPU_V41_DECODE_TOPK) != 0;
     if (api.init() == 0 or selected == null or scores == null or width == 0 or rows == 0 or k == 0 or k > width) return 0;
     const sort_kind: u32 = if (ratio == 0) c.DS4_METAL_INDEX_SORT else if (api.envPresent("DS4_METAL_DISABLE_V41_TOPK_SHUFFLE") != 0) c.DS4_METAL_INDEX_SORT_CAUSAL else c.DS4_METAL_INDEX_SORT_SHUFFLE;
-    const merge_kind: u32 = if (ratio == 0) c.DS4_METAL_INDEX_MERGE else if (k == 512 and api.envPresent("DS4_METAL_DISABLE_V41_TOPK_PREFIX") == 0) c.DS4_METAL_INDEX_MERGE_PREFIX else c.DS4_METAL_INDEX_MERGE_CAUSAL;
+    const merge_kind: u32 = if (decode512) c.DS4_METAL_INDEX_MERGE_STAGED else if (ratio == 0) c.DS4_METAL_INDEX_MERGE else if (k == 512 and api.envPresent("DS4_METAL_DISABLE_V41_TOPK_PREFIX") == 0) c.DS4_METAL_INDEX_MERGE_PREFIX else c.DS4_METAL_INDEX_MERGE_CAUSAL;
     const sort = c.ds4_metal_index_get_pipeline(sort_kind);
     const merge = c.ds4_metal_index_get_pipeline(merge_kind);
     if (sort.handle == null or merge.handle == null) return 0;
@@ -474,6 +484,7 @@ pub fn topk(selected: ?*Tensor, scores: ?*const Tensor, width: u32, rows: u32, k
     var launch = c.ds4_metal_index_topk_launch{
         .pipeline = sort,
         .merge = false,
+        .fused = false,
         .to_selected = one_pass,
         .args = args,
         .scores = scores,
@@ -484,7 +495,9 @@ pub fn topk(selected: ?*Tensor, scores: ?*const Tensor, width: u32, rows: u32, k
         .threads = threads,
         .shared_bytes = shared,
     };
+    if (ratio == 0) c.ds4_metal_v41_note("kernel_argsort_f32_i32_desc");
     if (c.ds4_metal_index_topk_encode(command, &launch) == 0) return api.release(command, owned, 0, "indexer top-k");
+    const fused_pipeline = if (decode512 and threads == 1024 and block_k == 512 and width <= 65536 and c.ds4_metal_v41_on(c.DS4_GPU_V41_UNFUSED_TOPK) != 0) c.ds4_metal_index_get_pipeline(c.DS4_METAL_INDEX_MERGE_FUSED) else std.mem.zeroes(c.ds4_metal_index_pipeline);
     var length = block_k;
     while (length < work) {
         const merges = @divTrunc(work +% 2 *% length -% 1, 2 *% length);
@@ -514,6 +527,7 @@ pub fn topk(selected: ?*Tensor, scores: ?*const Tensor, width: u32, rows: u32, k
         launch = .{
             .pipeline = merge,
             .merge = true,
+            .fused = false,
             .to_selected = merges == 1,
             .args = args,
             .scores = scores,
@@ -522,8 +536,22 @@ pub fn topk(selected: ?*Tensor, scores: ?*const Tensor, width: u32, rows: u32, k
             .target_offset = next,
             .groups = unsigned(merges) *% rows,
             .threads = merge_threads,
-            .shared_bytes = 0,
+            .shared_bytes = if (decode512) 8192 else 0,
         };
+        const runs = @divTrunc(work +% length -% 1, length);
+        if (fused_pipeline.handle != null and fused_pipeline.max_threads >= 1024 and merge_threads == 512 and runs <= 10) {
+            args.merge.top_k = bits(k);
+            launch.args = args;
+            launch.pipeline = fused_pipeline;
+            launch.fused = true;
+            launch.to_selected = true;
+            launch.groups = 1;
+            launch.threads = 1024;
+            launch.shared_bytes = (@as(u64, @intCast(runs)) * 512 * 6 + 15) & ~@as(u64, 15);
+            c.ds4_metal_v41_note("kernel_argsort_merge_f32_i32_desc_prefix_fused");
+            if (c.ds4_metal_index_topk_encode(command, &launch) == 0) return api.release(command, owned, 0, "indexer fused top-k");
+            break;
+        }
         if (c.ds4_metal_index_topk_encode(command, &launch) == 0) return api.release(command, owned, 0, "indexer top-k");
         std.mem.swap(u64, &current, &next);
         length *%= 2;
@@ -533,7 +561,7 @@ pub fn topk(selected: ?*Tensor, scores: ?*const Tensor, width: u32, rows: u32, k
 
 pub fn causalTopk(selected: ?*Tensor, scores: ?*const Tensor, width: u32, rows: u32, start: u32, ratio: u32) c_int {
     if ((ratio != 1 and ratio != 2) or rows == 0 or rows > max_u32 - start or width > max_i32 or rows > max_i32 or
-        (start + rows) / ratio > width or (start +% 1) / ratio < 1024) return 0;
+        (start + rows) / ratio > width or (start +% 1) / ratio <= 512) return 0;
     return topk(selected, scores, width, rows, 512, start, ratio);
 }
 fn rowArgs(source_width: u32, target_width: u32, rows: u32) c.ds4_metal_index_rows_args {

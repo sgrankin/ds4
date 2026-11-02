@@ -10,6 +10,8 @@ typedef struct ds4_gpu_tensor ds4_gpu_tensor;
 extern "C" {
 #endif
 
+int ds4_gpu_tp_decode_inline_gates(void);
+
 /* Metal queues each gate on its service thread and orders GPU arrival/release
  * with events or flags. CUDA waits for its local stream and calls the exchange
  * synchronously. Callbacks return nonzero on success; both ranks must issue

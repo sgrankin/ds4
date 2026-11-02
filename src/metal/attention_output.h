@@ -43,4 +43,5 @@ ds4_metal_attention_view ds4_metal_output_scratch(uint32_t kind, uint64_t bytes,
 int ds4_metal_output_encode(void *command, const ds4_metal_output_launch *);
 ds4_metal_output_fold ds4_metal_output_fold_take(const ds4_gpu_tensor *, uint64_t bytes);
 void ds4_metal_output_fold_publish(void);
+void ds4_metal_output_fold_restore(void);
 #endif

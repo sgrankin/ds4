@@ -59,6 +59,23 @@ ds4_metal_attention_facts ds4_metal_attention_get_facts(void) {
         };
     }
 }
+static id<MTLComputePipelineState> ds4_metal_heads_reduce_pipeline(uint32_t width, uint32_t groups) {
+    DS4MetalContext *owner = ds4_metal_context_current();
+    if (owner->heads_reduce_pipeline && owner->heads_reduce_width == width && owner->heads_reduce_groups == groups)
+        return owner->heads_reduce_pipeline;
+    int32_t dv = (int32_t)width, nwg = (int32_t)groups;
+    MTLFunctionConstantValues *values = [MTLFunctionConstantValues new];
+    [values setConstantValue:&dv type:MTLDataTypeInt atIndex:500];
+    [values setConstantValue:&nwg type:MTLDataTypeInt atIndex:501];
+    NSError *error = nil;
+    id<MTLFunction> fn = [g_library newFunctionWithName:@"kernel_dsv41_flash_attn_vec_reduce_heads" constantValues:values error:&error];
+    id<MTLComputePipelineState> pipeline = fn ? [g_device newComputePipelineStateWithFunction:fn error:&error] : nil;
+    if (!pipeline) return nil;
+    owner->heads_reduce_width = width;
+    owner->heads_reduce_groups = groups;
+    owner->heads_reduce_pipeline = pipeline;
+    return pipeline;
+}
 ds4_metal_attention_pipeline ds4_metal_attention_get_pipeline(uint32_t kind,
         uint32_t width, uint32_t nsg, uint32_t nwg, bool pad, bool shared_pad) {
     @autoreleasepool {
@@ -71,6 +88,7 @@ ds4_metal_attention_pipeline ds4_metal_attention_get_pipeline(uint32_t kind,
                     "kernel_dsv4_flash_attn_vec_packed32_reduce_rope_f16_dk512_dv512" :
                     "kernel_flash_attn_ext_vec_f16_dk512_dv512",
                     true, true, false, false, pad, shared_pad, width, width, nsg, nwg); break;
+            case DS4_ATTN_HEADS_PSO: pipeline = ds4_metal_heads_reduce_pipeline(width, nwg); break;
             case DS4_ATTN_REDUCE_PSO: pipeline = ds4_gpu_get_flash_attn_reduce_pipeline(width, nwg); break;
             case DS4_ATTN_ROPE_PSO: pipeline = ds4_gpu_get_flash_attn_reduce_rope_pipeline(width, nwg); break;
             default: break;
@@ -141,15 +159,16 @@ int ds4_metal_attention_fill(void *command, const ds4_metal_attention_unary_args
 int ds4_metal_attention_stage(void *command, const ds4_metal_attention_stage_args *args,
         ds4_metal_attention_view raw, ds4_metal_attention_view comp,
         ds4_metal_attention_view dst, ds4_metal_attention_view mask,
-        ds4_metal_attention_view pad, uint64_t groups, uint64_t threads) {
+        ds4_metal_attention_view pad, ds4_metal_attention_view ids, uint64_t groups, uint64_t threads) {
     @autoreleasepool {
         id<MTLCommandBuffer> cb = (__bridge id<MTLCommandBuffer>)command;
         if (!cb) return 0;
         id<MTLComputeCommandEncoder> enc = ds4_gpu_compute_encoder(cb);
-        [enc setComputePipelineState:g_flash_kv_stage_f16_pipeline];
+        [enc setComputePipelineState:ids.buffer ? ds4_gpu_get_pipeline("kernel_dsv41_flash_kv_stage") : g_flash_kv_stage_f16_pipeline];
         [enc setBytes:args length:sizeof(*args) atIndex:0];
         ds4_metal_attention_view views[] = {raw,comp,dst,mask,pad};
         for (NSUInteger i=0;i<5;i++) [enc setBuffer:(__bridge id<MTLBuffer>)views[i].buffer offset:views[i].offset atIndex:i+1];
+        if (ids.buffer) [enc setBuffer:(__bridge id<MTLBuffer>)ids.buffer offset:ids.offset atIndex:6];
         [enc dispatchThreadgroups:MTLSizeMake(groups,1,1) threadsPerThreadgroup:MTLSizeMake(threads,1,1)];
         ds4_gpu_end_compute_encoder(cb, enc);
         return 1;
@@ -197,7 +216,7 @@ int ds4_metal_attention_vec(void *command, ds4_metal_attention_pipeline pso,
 int ds4_metal_attention_reduce(void *command, ds4_metal_attention_pipeline pso,
         const ds4_metal_attention_reduce_args *args, ds4_metal_attention_view tmp,
         ds4_metal_attention_view out, const ds4_metal_attention_rope_args *rope,
-        uint64_t rows, uint64_t threads) {
+        ds4_metal_attention_view table, uint64_t rows, uint64_t threads) {
     @autoreleasepool {
         id<MTLCommandBuffer> cb = (__bridge id<MTLCommandBuffer>)command;
         if (!cb || !pso.handle) return 0;
@@ -207,8 +226,14 @@ int ds4_metal_attention_reduce(void *command, ds4_metal_attention_pipeline pso,
         [enc setBuffer:(__bridge id<MTLBuffer>)tmp.buffer offset:tmp.offset atIndex:1];
         [enc setBuffer:(__bridge id<MTLBuffer>)out.buffer offset:out.offset atIndex:2];
         if (rope) [enc setBytes:rope length:sizeof(*rope) atIndex:3];
+        if (table.buffer) {
+            [enc setBuffer:(__bridge id<MTLBuffer>)table.buffer offset:table.offset atIndex:3];
+            ds4_metal_v41_note("kernel_dsv41_flash_attn_vec_reduce_heads");
+        }
         [enc dispatchThreadgroups:MTLSizeMake(rows,1,1) threadsPerThreadgroup:MTLSizeMake(threads,1,1)];
         ds4_gpu_end_compute_encoder(cb, enc);
         return 1;
     }
 }
+
+ds4_metal_heads_once *ds4_metal_attention_heads_state(void) { return &ds4_metal_context_current()->heads_once; }

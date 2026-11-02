@@ -411,6 +411,7 @@ pub const Suffix = struct {
         c.ds4_engram_history_reset(&graph.history);
         for (0..@min(@as(u32, 3), end)) |index| graph.history.tail[index] = @intCast(graph.token_map[@intCast(prompt[end - 1 - index])]);
         graph.pos = end;
+        @import("attention.zig").restoreIndexViews(graph, end);
         graph.valid = true;
         result.relocation.reuse = result.reuse;
         return result;

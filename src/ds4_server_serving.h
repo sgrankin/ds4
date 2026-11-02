@@ -30,7 +30,7 @@ void ds4_server_serving_cancel(server *runtime, job *pending);
 void ds4_server_serving_wait(server *runtime, job *pending);
 void ds4_server_serving_stop(server *runtime);
 void ds4_server_serving_models_json(buf *output, const char *id,
-    const char *name, int context, int default_tokens);
+    const char *name, int context, int default_tokens, bool has_vision);
 void ds4_server_serving_client(server *runtime, int fd,
     const volatile sig_atomic_t *stop);
 

@@ -86,20 +86,23 @@ pub fn candidates(
     start: u32,
     ratio: u32,
     filter: bool,
+    requested_stride: u32,
 ) bool {
     if (width == 0 or width > max32 - 7 or rows == 0 or ratio == 0 or rows > max32 - start or (filter and mask_tensor == null)) return false;
     const blocks = (width + 7) / 8;
     const output_width = if (filter) width else blocks;
+    const mask_stride = if (requested_stride == 0) blocks else requested_stride;
+    if (mask_stride < blocks) return false;
     const scores = Buffer.tensor(scores_tensor);
     defer scores.deinit();
     const out = Buffer.tensor(out_tensor);
     defer out.deinit();
     const mask = Buffer.tensor(mask_tensor);
     defer mask.deinit();
-    if (!floats(scores, @as(u64, width) * rows) or !floats(out, @as(u64, output_width) * rows) or (filter and !floats(mask, @as(u64, blocks) * rows))) return false;
+    if (!floats(scores, @as(u64, width) * rows) or !floats(out, @as(u64, output_width) * rows) or (filter and !floats(mask, @as(u64, mask_stride) * (rows - 1) + blocks))) return false;
     if (api.init() == 0) return false;
     var launch = plan(if (filter) c.DS4_TAIL_FILTER else c.DS4_TAIL_BLOCKS, if (filter) "kernel_dsv41_candidate_filter" else "kernel_dsv41_candidate_blocks");
-    launch.args = .{ width, rows, start, ratio, 0 };
+    launch.args = .{ width, rows, start, ratio, mask_stride };
     launch.first = scores.view;
     launch.second = out.view;
     launch.third = if (filter) mask.view else scores.view;

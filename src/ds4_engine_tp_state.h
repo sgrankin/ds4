@@ -22,6 +22,7 @@ typedef struct {
     int rank;
     bool vocab_split;           /* DeepSeek: logits halves cross the wire */
     bool active;
+    bool v41_balanced_route; /* Both ranks agreed on replicated expert maps. */
     /* Lockstep TP drafter: this rank built its DSpark expert halves at open
      * (dspark_split_built); both ranks agreed at bind (dspark_split); repeated
      * state disagreement between the ranks switched it off (dspark_split_off). */

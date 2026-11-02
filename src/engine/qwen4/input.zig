@@ -72,7 +72,26 @@ fn fakeSpans(config: *const Config) []const Span {
     return fake_spans.items;
 }
 
+pub fn validTokens(tokens: []const c_int, vocabulary: u32) bool {
+    for (tokens) |token| {
+        if (token < 0 or token >= vocabulary) {
+            _ = c.fprintf(c.__stderrp, "ds4: Qwen3.8 token id %d is outside the vocabulary\n", token);
+            return false;
+        }
+    }
+    return true;
+}
+
 pub fn stage(graph: *Graph, model: *const Model, weights: *const Weights, tokens: []const c_int) bool {
+    return stageWithPle(graph, model, weights, tokens, null);
+}
+
+/// Prefetched rows replace only disk I/O. Live n-gram and image history still
+/// advance here in order, including speculative rollback snapshots.
+pub fn stageWithPle(graph: *Graph, model: *const Model, weights: *const Weights, tokens: []const c_int, prefetched: ?[]const f32) bool {
+    // Validate the complete chunk before even its first embedding read or any
+    // mutation. The caller may stage before entering the forward executor.
+    if (!validTokens(tokens, graph.config.shape.n_vocab)) return false;
     const config = &graph.config;
     const shape = &config.shape;
     const width: usize = shape.n_embd;
@@ -106,7 +125,7 @@ pub fn stage(graph: *Graph, model: *const Model, weights: *const Weights, tokens
             graph.snap2_ple_prev = graph.ple_prev;
             graph.snap2_pos = graph.pos + 2;
         }
-        if (index % 256 == 255 or index + 1 == tokens.len) {
+        if (prefetched == null and (index % 256 == 255 or index + 1 == tokens.len)) {
             const first = index / 256 * 256;
             const count = index - first + 1;
             if (!ngrams.read(model, ids[0 .. count * heads], rows[first * width ..][0 .. count * width])) {
@@ -115,5 +134,6 @@ pub fn stage(graph: *Graph, model: *const Model, weights: *const Weights, tokens
             }
         }
     }
-    return c.ds4_gpu_tensor_write(graph.ple_emb, 0, rows.ptr, tokens.len * width * @sizeOf(f32)) != 0;
+    const ple_rows = if (prefetched) |values| values.ptr else rows.ptr;
+    return c.ds4_gpu_tensor_write(graph.ple_emb, 0, ple_rows, tokens.len * width * @sizeOf(f32)) != 0;
 }

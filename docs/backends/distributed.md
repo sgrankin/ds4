@@ -1,8 +1,15 @@
-# Inference Across Machines
+# Inference across machines
 
 [Documentation index](../README.md)
 
-**Qualification:** The supported native build is macOS Metal. Network transport and model-specific source paths are retained, but the CUDA and ROCm build targets in older instructions are not in the current Makefile. The configurations below describe historical setups; they are not a new hardware qualification. Use matching revisions and consult the [release QA record](../development/qualification/README.md) before reproducing them.
+The supported native build is macOS Metal. Its two-Mac path includes the
+upstream functionality through `890898cf`, including the DeepSeek V4.1 execution
+described below. The completed port has not been qualified on a physical pair
+of Macs. Local transport and kernel fixtures establish narrower properties;
+they do not establish RDMA correctness or model speed across two machines.
+Use matching revisions and consult the [release QA record](../development/qualification/README.md).
+CUDA and ROCm source paths remain, but their historical build targets are absent
+from the current Makefile; those sections preserve earlier setups.
 
 There are two modes:
 
@@ -18,14 +25,119 @@ artifacts must agree. Update all TP peers together when changing versions.
 
 ## Tensor parallelism between two Macs
 
-This is a 50/50 split with exactly one worker. Do not pass `--layers`.
-Routed experts are sharded; attention partitioning depends on the model. Both
-GPUs work on the same token and exchange partial results. This can reduce generation
-latency, but the gain depends on the model, link, and comparison setup.
+This uses exactly two ranks: a coordinator and one worker. Do not pass `--layers`.
+Both GPUs work on the same token and exchange partial results. Expert storage
+and work assignment depend on the model and available memory; attention
+partitioning is also model-specific. Splitting the work can reduce generation
+latency, but the gain depends on the model, link and workload.
 
 Two 128 GB Macs can run GLM 5.3 Flash Q4 or V4.1 Flash Q2, with disk-only
 Engram tables for V4.1.
 A larger quant may need larger machines even though its tensor layout is supported.
+
+### DeepSeek V4.1: capacity versus balanced work
+
+The capacity-oriented path stores one half of the routed expert bank on each
+Mac. Both ranks select the same experts for a token, then each evaluates only
+the experts it owns. This halves expert storage per machine, but not necessarily
+the token's work: five of six selected experts might belong to one rank, leaving
+the other waiting at the next exchange.
+
+When both Macs can hold the full expert bank, scalar decode instead divides
+the selected list in half. For V4.1 Flash's six selected experts, rank 0 computes
+the first three and rank 1 computes the other three. Each retains the original
+routing weights, and the ranks add their partial outputs. This balances the
+number of experts without substituting approximate experts or changing router
+selection. It trades greater resident memory for less uneven work; floating-point
+summation order can differ from the sharded path.
+
+Each rank makes its admission decision before mapping the weights. The estimate
+includes the full model, sidecars, session graphs, narrow decode-weight copies,
+drafter reserve, prefill headroom and a 2 GiB system reserve. The total must fit
+below both Metal's recommended working-set limit and seven eighths of physical
+RAM. The peers then negotiate: balanced routing activates only if both offered
+full residency. Otherwise both use static expert ownership, even if one rank
+already mapped the full bank. `DS4_METAL_DISABLE_V41_TP_BALANCED_ROUTE=1` disables
+the full-bank offer. This selection applies to resident inference, not the SSD
+expert-streaming path.
+
+The admission policy lives in [memory.zig](../../src/engine/deepseek41/memory.zig),
+the optional-mode agreement in [ds4_tp.c](../../src/ds4_tp.c), and the per-token
+division in [moe.zig](../../src/engine/deepseek41/moe.zig). Required execution modes
+must still match: optional residency can fall back, while incompatible shared
+work or speculative-decoding settings fail the handshake.
+
+### Shared-expert work and overlap
+
+Every token also passes through a shared expert, independently of the routed
+experts. Computing that whole contribution on both ranks duplicates work.
+The default V4.1 scalar path splits a Q8 shared expert along its intermediate
+dimension: each rank computes half of the gate/up activations, followed by the
+corresponding columns of the down projection. The two down-projection partials
+are summed at the FFN exchange. This requires Q8 gate/up/down weights and an
+intermediate width divisible by 64. When that split is unavailable or disabled,
+the existing ownership path assigns the whole shared expert to one rank,
+alternating the owner between layers. Disabling shared ownership restores
+replicated shared computation.
+
+On the eligible resident MXFP4-routed/Q8-shared path, the shared work overlaps
+the routed expert work through the native concurrent FFN scheduler. The two-Mac
+version requires balanced routing and the shared split; the single-Mac version
+also uses the scheduler, without a split. The BF16 boundaries remain explicit:
+gate/up sums are rounded before SwiGLU, and its intermediate is rounded when
+the down projection reads it. Split down projections remain F32 until the two
+ranks combine them. This avoids adding an extra rounding to each partial.
+
+These paths are selected in [moe.zig](../../src/engine/deepseek41/moe.zig) and
+encoded by [parallel_ffn.zig](../../src/metal/parallel_ffn.zig). Diagnostic controls
+are `DS4_METAL_DISABLE_V41_TP_SHARED_SPLIT`,
+`DS4_METAL_DISABLE_V41_TP_SHARED_OWNER`,
+`DS4_METAL_DISABLE_V41_TP_CONCURRENT_FFN` and
+`DS4_METAL_DISABLE_V41_CONCURRENT_FFN`; setting a disable flag restores the
+corresponding simpler path. These are scalar-decode choices, not a claim that
+every prefill or multi-session batch follows the same schedule.
+
+### Exchanges without a command-buffer break at every gate
+
+A gate is the point where the GPU needs the other rank's partial result.
+The default resident scalar path writes partials directly into the shared
+transport slab, publishes the payload and arrival flag with coherent stores,
+then waits on a CPU-written release word. A service thread observes arrival,
+exchanges the partials over the selected transport, and publishes the release
+sequence only after the exchange finishes. The GPU can continue in the same
+command buffer, avoiding a submit/event round trip at each gate. Bounded
+periodic command submission still ensures that queued work reaches the GPU.
+
+The GPU wait has an iteration bound. Exhausting it marks the evaluation as
+failed; it is not permission to return a result computed without the peer's
+partial. The service releases a waiting GPU even after transport failure so
+commands can drain. Session-batched execution uses separate event/sequence
+handling, and ordinary scalar decode can fall back to the earlier poll/event
+path. `DS4_TP_DISABLE_DECODE_POLL_GATES=1` disables the inline decode path;
+`DS4_TP_EVENT_GATES=1` also selects event-based arrival. See the ordering in
+[tp_control.zig](../../src/metal/tp_control.zig) and the service thread in
+[ds4_metal.m](../../src/metal/ds4_metal.m).
+
+Large prefill exchanges allow more time for the peer to arrive: cold kernels
+and host-side Engram reads can delay one rank. The default arrival allowance is
+30 seconds. `DS4_TP_BIG_GATE_ARRIVAL_MS` accepts positive values up to
+600,000 ms; larger overrides are ignored. The selected allowance is clamped
+to at least the normal gate timeout plus two seconds. After the header
+handshake, the normal payload timeout resumes. Scalar decode keeps its shorter
+timeout, and a closed peer connection still fails immediately.
+
+### Optional residency workaround
+
+`DS4_METAL_TP_DETACH_RESIDENCY_SET=1` retains the committed Metal residency set
+but removes its attachment to the command queue. Upstream observed multi-second
+submission stalls when a queue repeatedly requested residency for very large
+model mappings on M3 Ultra pairs. Detaching avoids that queue-level request;
+it does not unload or shrink the model. This remains opt-in because upstream's
+validation used a disabled wired-memory collector, and we have not validated
+the workaround on a physical pair. Leave the default attachment in place unless
+investigating that specific stall. `DS4_TP_STALL_TRACE=200` reports gates with
+more than 200 ms of GPU-arrival wait or 50 ms of exchange time, helping distinguish
+submission delays from transport delays.
 
 ### Link setup
 
@@ -88,11 +200,10 @@ Do not treat repeated handshake or RDMA timeouts as successful QA merely
 because a retry works.
 
 The coordinator can be `ds4`, `ds4-agent`, `ds4-server`, or `ds4-bench`;
-workers run `ds4`. For models with vision support, pass the same `--vision FILE`
-to both for image input.
-For GLM MTP, enable `--mtp` on both. For DeepSeek DSpark, both need the
-matching support model and DSpark options. V4.1 supports vision and matching DSpark in two-rank Metal TP. Put the matching
-encoder or DSpark options on both peers. The [DSpark QA](../development/qualification/deepseek.md#dspark)
+workers run `ds4`. For vision, pass the same `--vision FILE` to both peers;
+for GLM MTP, enable `--mtp` on both; for DeepSeek DSpark, use matching support
+models and options. V4.1 supports vision and DSpark in two-rank Metal TP.
+The [DSpark QA](../development/qualification/deepseek.md#dspark)
 lists the prescribed physical-pair checks; the checklist alone does not
 establish completed qualification at this revision.
 

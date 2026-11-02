@@ -109,3 +109,7 @@ export fn ds4_native_metal_selected_hotlist_close() void {
 export fn ds4_native_metal_selected_trace_close() void {
     diagnostics().closeTrace();
 }
+
+export fn ds4_gpu_test_v41_routed_policy() c_int {
+    return @intFromBool(@import("routed_single_policy.zig").checkV41Selections());
+}

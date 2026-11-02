@@ -53,6 +53,7 @@ pub const SessionResources = struct {
         if (tp.active) {
             record.tp_world = 2;
             record.tp_rank = @bitCast(tp.rank);
+            record.tp_balanced_route = tp.v41_balanced_route;
             record.tp_out = tp.out_views;
             record.tp_in = tp.in_views;
             record.tp_batch_out = tp.batch_out_views;

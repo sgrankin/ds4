@@ -1,7 +1,10 @@
 /* Exercise the C entry points without an Objective-C caller's autorelease pool. */
 #include "ds4_gpu.h"
+#include "ds4_deepseek41_gpu.h"
+#include <mach/mach.h>
 #include <malloc/malloc.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/mman.h>
 
@@ -25,6 +28,50 @@ static int big_exchange(void *ud, uint32_t layer, uint64_t seq,
     return 1;
 }
 
+/* C callers have no outer autorelease pool. Releasing a CPU-touched tensor
+ * must release its Metal allocation too, rather than retaining it until the
+ * thread exits. Heap statistics alone miss these large shared buffers. */
+static int check_tensor_memory(void) {
+    ds4_gpu_tensor *tensor = NULL;
+    const uint64_t bytes = 16u * 1024u * 1024u;
+    uint64_t baseline = 0, footprint = 0;
+    int rc = 1;
+    CHECK(ds4_gpu_init());
+    for (int i = 0; i < 40; i++) {
+        tensor = ds4_gpu_tensor_alloc(bytes);
+        CHECK(tensor);
+        unsigned char *data = ds4_gpu_tensor_contents(tensor);
+        CHECK(data);
+        memset(data, i, (size_t)bytes);
+        const uint32_t value = (uint32_t)i + 1234u;
+        uint32_t readback = 0;
+        CHECK(ds4_gpu_tensor_write(tensor, bytes - sizeof(value), &value, sizeof(value)));
+        CHECK(ds4_gpu_tensor_read(tensor, bytes - sizeof(value), &readback, sizeof(readback)));
+        CHECK(readback == value && data[0] == (unsigned char)i);
+        ds4_gpu_tensor_free(tensor);
+        tensor = NULL;
+        if (i == 7 || i == 39) {
+            task_vm_info_data_t info = {0};
+            mach_msg_type_number_t count = TASK_VM_INFO_COUNT;
+            CHECK(task_info(mach_task_self(), TASK_VM_INFO,
+                            (task_info_t)&info, &count) == KERN_SUCCESS);
+            footprint = info.phys_footprint;
+            if (i == 7) baseline = footprint;
+        }
+    }
+    fprintf(stderr, "Metal CPU-touched buffers: footprint %.3f -> %.3f MiB\n",
+            baseline / 1048576.0, footprint / 1048576.0);
+    /* A leaked buffer per iteration adds 512 MiB; allow bounded driver
+     * bookkeeping without requiring exact allocator reuse. */
+    CHECK(footprint <= baseline + 32u * 1024u * 1024u);
+    puts("Metal CPU-touched buffer lifetime: PASS");
+    rc = 0;
+done:
+    ds4_gpu_tensor_free(tensor);
+    ds4_gpu_cleanup();
+    return rc;
+}
+
 static int check_tp_memory(int mode) {
     ds4_gpu_tensor *a = NULL, *slab = NULL, *out = NULL, *in = NULL;
     uint64_t exchanges = 0;
@@ -39,6 +86,11 @@ static int check_tp_memory(int mode) {
     CHECK(out);
     CHECK(ds4_gpu_tp_init(0, slab, 0, 4096, 1024, exchange, &exchanges));
     if (mode == 1) ds4_gpu_tp_set_session_batch_mode(1);
+    const int expect_inline = mode != 1 && !getenv("DS4_TP_EVENT_GATES") &&
+        !getenv("DS4_TP_DISABLE_DECODE_POLL_GATES");
+    CHECK(ds4_gpu_tp_decode_inline_gates() == expect_inline);
+    fprintf(stderr, "Metal TP mode %d: inline decode gates %s\n", mode,
+            expect_inline ? "enabled" : "disabled");
     ds4_gpu_tp_set_batch_exchange(batch_exchange);
     ds4_gpu_tp_set_big_exchange(big_exchange);
     float input[256], output[256];
@@ -226,6 +278,40 @@ static int check_parallel_scheduling(void) {
     CHECK(ds4_gpu_end_commands());
     CHECK(ds4_gpu_tensor_read(out, 0, actual, sizeof expected_out));
     for (int i = 0; i < D; i++) CHECK(actual[i] == input[i] * 2);
+    /* Compare the new BF16 concurrent path and both TP K slices with their
+     * standalone producers. This executes real barriers and retained buffers
+     * without requiring a model or a second Mac. */
+    for (int part = -1; part < 2; part++) {
+        const uint32_t count = part < 0 ? H : H / 2;
+        const uint32_t lane = part < 0 ? 0 : (uint32_t)part * count;
+        /* BF16-input K-slice is an in-batch fast path: an unsupported call
+         * must decline before encoding so the graph can choose its fallback. */
+        CHECK(ds4_gpu_begin_commands());
+        CHECK(ds4_gpu_dsv41_shared_swiglu(mid, gate, up, model, BYTES,
+            lane * ROW, MATRIX + lane * ROW, D, count, x, 7.0f, 1));
+        if (part < 0) {
+            CHECK(ds4_gpu_matmul_q8_0_bf16io_tensor(out, model, BYTES,
+                2 * MATRIX, H, D, mid, 1));
+        } else {
+            CHECK(ds4_gpu_matmul_q8_0_kslice_bf16in_tensor(out, model, BYTES,
+                2 * MATRIX, H, lane, count, D, mid));
+        }
+        CHECK(ds4_gpu_end_commands());
+        CHECK(ds4_gpu_tensor_read(mid, 0, expected_mid, count * sizeof(float)));
+        CHECK(ds4_gpu_tensor_read(out, 0, expected_out, sizeof expected_out));
+        CHECK(ds4_gpu_begin_commands());
+        CHECK(part < 0 ? ds4_gpu_parallel_ffn_start_bf16(gate, up, mid, out,
+            model, BYTES, 0, MATRIX, 2 * MATRIX, D, H, x, 7.0f) :
+            ds4_gpu_parallel_ffn_start_bf16_kslice(gate, up, mid, out,
+            model, BYTES, 0, MATRIX, 2 * MATRIX, D, H, lane, count, x, 7.0f));
+        CHECK(ds4_gpu_test_parallel_ffn_stages(mid));
+        CHECK(ds4_gpu_parallel_ffn_finish());
+        CHECK(ds4_gpu_end_commands());
+        CHECK(ds4_gpu_tensor_read(mid, 0, actual, count * sizeof(float)));
+        CHECK(!memcmp(actual, expected_mid, count * sizeof(float)));
+        CHECK(ds4_gpu_tensor_read(out, 0, actual, sizeof expected_out));
+        CHECK(!memcmp(actual, expected_out, sizeof expected_out));
+    }
     puts("Metal parallel FFN real stages, abort and incomplete-join reset: PASS");
     rc = 0;
 done:
@@ -324,12 +410,13 @@ int main(int argc, char **argv) {
         return ok ? 0 : 1;
     }
     if (argc == 2) {
+        if (!strcmp(argv[1], "buffers")) return check_tensor_memory();
         const char *modes[] = {"row", "session", "batch", "big"};
         for (int i = 0; i < 4; i++)
             if (!strcmp(argv[1], modes[i])) return check_tp_memory(i);
     }
     if (argc != 1) {
-        fprintf(stderr, "usage: %s [row|session|batch|big|exact-cache-evict|exact-cache-unlimited|parallel-ffn|deferred-kv]\n", argv[0]);
+        fprintf(stderr, "usage: %s [buffers|row|session|batch|big|exact-cache-evict|exact-cache-unlimited|parallel-ffn|deferred-kv]\n", argv[0]);
         return 2;
     }
     ds4_gpu_tensor *a = NULL, *b = NULL;

@@ -61,6 +61,16 @@ pub fn ropeUsed() c_int {
     return @intFromBool(ropeState().used);
 }
 
+pub fn headsArm(table: ?*const Tensor, compressed: bool) void {
+    c.ds4_metal_attention_heads_state().* = .{ .table = if (table != null and api.tensorBytes(table) >= 512) table else null, .compressed = compressed, .used = false };
+}
+pub fn headsTake() c_int {
+    const state: *c.ds4_metal_heads_once = c.ds4_metal_attention_heads_state();
+    const used = state.used;
+    state.table = null;
+    state.used = false;
+    return @intFromBool(used);
+}
 pub const Buffer = struct {
     view: View,
     pub fn tensor(value: ?*const Tensor) Buffer {
@@ -163,11 +173,11 @@ pub fn ringCopy(command: *const Command, raw: View, capacity: u32, start: u32, r
     if (tail != 0 and !copyHalf(command, at(raw, raw_offset), target, false, @intCast(tail_count), facts)) return false;
     return head == 0 or copyHalf(command, raw, at(target, target_offset), false, @intCast(head_count), facts);
 }
-const Stage = struct { raw_cap: u32, raw_start: u32, raw_rows: u32, comp_rows: u32, width: u32, comp_half: bool };
+const Stage = struct { raw_cap: u32, raw_start: u32, raw_rows: u32, comp_rows: u32, width: u32, comp_half: bool, ids: View = std.mem.zeroes(View) };
 fn stage(command: *const Command, request: Stage, raw: View, comp: View, target: View, mask: View, pad: View, fuse_pad: bool, shared_pad: bool, facts: Facts, did_fuse: *bool) bool {
     did_fuse.* = false;
     if (raw.buffer == null or comp.buffer == null or target.buffer == null or request.raw_cap == 0 or request.raw_start >= request.raw_cap or request.raw_rows == 0 or request.raw_rows > request.raw_cap or request.comp_rows == 0 or request.width == 0) return false;
-    const supported = request.comp_half and request.width == 512 and request.raw_cap <= max_u32 / 128;
+    const supported = (request.comp_half or request.ids.buffer != null) and request.width == 512 and request.raw_cap <= max_u32 / 128;
     const comp_count = @as(u64, request.comp_rows) * request.width;
     const comp_offset = @as(u64, request.raw_rows) * request.width * 2;
     if (comp_count > max_u32 or comp_offset > max_u64 - target.offset) return false;
@@ -189,10 +199,11 @@ fn stage(command: *const Command, request: Stage, raw: View, comp: View, target:
         // deferred norm/store task, then acquire the staging encoder afresh.
         if (c.ds4_gpu_kv_norm_task_pending() != 0 and
             (c.ds4_metal_attention_break_encoder(command.token.?) == 0 or c.ds4_gpu_kv_norm_task_flush() == 0)) return false;
-        if (c.ds4_metal_attention_stage(command.token.?, &args, raw, comp, target, if (pad_fusion) mask else target, if (pad_fusion) pad else target, (work + threads - 1) / threads, threads) == 0) return false;
+        if (c.ds4_metal_attention_stage(command.token.?, &args, raw, comp, target, if (pad_fusion) mask else target, if (pad_fusion) pad else target, request.ids, (work + threads - 1) / threads, threads) == 0) return false;
         did_fuse.* = pad_fusion;
         return true;
     }
+    if (request.ids.buffer != null) return false;
     if (!ringCopy(command, raw, request.raw_cap, request.raw_start, request.raw_rows, request.width, target, facts)) return false;
     return copyHalf(command, comp, at(target, comp_offset), request.comp_half, @intCast(comp_count), facts);
 }
@@ -300,6 +311,7 @@ fn pipeline(kind: u32, width: u32, nsg: u32, nwg: u32, padded: bool, shared: boo
 }
 
 pub const Request = struct {
+    ids: ?*const Tensor = null,
     heads: ?*Tensor,
     map: ?*const anyopaque,
     size: u64,
@@ -322,6 +334,8 @@ fn attend(command: *const Command, request: Request, q: View, raw: View, comp: V
     // family additionally accepts only the fixed 512-element head dimension.
     if (request.width != 512) return false;
     const gathered = request.comp_rows != 0;
+    const ids = Buffer.tensor(request.ids);
+    defer ids.deinit();
     const keys = request.raw_rows + request.comp_rows;
     var nwg: u32 = 32;
     if (gathered) {
@@ -373,7 +387,11 @@ fn attend(command: *const Command, request: Request, q: View, raw: View, comp: V
     if (!gathered and has_pad and pad_pso.handle == null) return false;
     const packed_threads: u64 = 8 * 32;
     const packed_shared: u64 = 512 * 2 + 8 * 128 * 2 + (32 * 32 + 2 * 32 + 32) * 4 + 32 * 33 * 4 * 4;
-    const packed_requested = packed_shape and !present("DS4_METAL_DISABLE_M5_FLASH_ATTN_PACKED32_REDUCE");
+    const heads_state: *c.ds4_metal_heads_once = c.ds4_metal_attention_heads_state();
+    const armed_table = heads_state.table;
+    heads_state.table = null;
+    const transform_heads = armed_table != null and request.n_head == 64 and request.width == 512 and nwg == 32;
+    const packed_requested = !transform_heads and packed_shape and !present("DS4_METAL_DISABLE_M5_FLASH_ATTN_PACKED32_REDUCE");
     const packed_pso = if (packed_requested) pipeline(c.DS4_ATTN_PACKED_PSO, request.width, 1, 32, has_pad, shared_pad) else empty_pipeline;
     const use_packed = packed_pso.handle != null and packed_pso.simd_width == 32 and packed_pso.threads >= packed_threads and (facts.max_shared_bytes == 0 or facts.max_shared_bytes >= packed_shared);
     if (packed_requested and present("DS4_METAL_TRACE_M5_FLASH_ATTN_PACKED32_REDUCE")) _ = c.fprintf(c.__stderrp, "ds4: packed FA use=%d max_threads=%lu tew=%lu tgmem=%lu need=%lu\n", @as(c_int, @intFromBool(use_packed)), @as(c_ulong, packed_pso.threads), @as(c_ulong, packed_pso.simd_width), @as(c_ulong, facts.max_shared_bytes), @as(c_ulong, packed_shared));
@@ -384,7 +402,7 @@ fn attend(command: *const Command, request: Request, q: View, raw: View, comp: V
     if (gathered) {
         if (!persistent and !fillZero(command, mask.view, keys, facts)) return false;
         if (request.use_mask != 0 and request.comp_rows != 0 and !copyHalf(command, mask_input, at(mask.view, @as(u64, request.raw_rows) * 2), false, request.comp_rows, facts)) return false;
-        if (!stage(command, .{ .raw_cap = request.raw_cap, .raw_start = request.raw_start, .raw_rows = request.raw_rows, .comp_rows = request.comp_rows, .width = request.width, .comp_half = request.comp_half != 0 }, raw, comp, kv.view, mask.view, pad.view, has_pad, shared_pad, facts, &pad_fused)) return false;
+        if (!stage(command, .{ .raw_cap = request.raw_cap, .raw_start = request.raw_start, .raw_rows = request.raw_rows, .comp_rows = request.comp_rows, .width = request.width, .comp_half = request.comp_half != 0, .ids = ids.view }, raw, comp, kv.view, mask.view, pad.view, has_pad, shared_pad, facts, &pad_fused)) return false;
         if (has_pad and !pad_fused) {
             pad_pso = pipeline(c.DS4_ATTN_PAD_PSO, request.width, nsg, nwg, has_pad, shared_pad);
             if (pad_pso.handle == null) return false;
@@ -406,15 +424,24 @@ fn attend(command: *const Command, request: Request, q: View, raw: View, comp: V
     if (c.ds4_metal_attention_vec(command.token.?, vec_pso, &args, q, kv.view, mask.view, sinks, pad.view, tmp.view, null, 1, request.n_head, nwg, 32, nsg, shared_bytes) == 0) return false;
     // Raw-only never consumes a deferred inverse tail. Gathered consumes at
     // the reduction boundary even if the fused PSO subsequently fails lookup.
-    const fuse_rope = gathered and ropeState().pending;
+    const fuse_rope = !transform_heads and gathered and ropeState().pending;
     if (gathered) ropeState().pending = false;
     if (fuse_rope) {
         ropeState().used = true;
         reduce_pso = pipeline(c.DS4_ATTN_ROPE_PSO, request.width, nsg, nwg, has_pad, shared_pad);
         if (reduce_pso.handle == null) return false;
     }
+    var table = Buffer{ .view = std.mem.zeroes(View) };
+    defer table.deinit();
+    if (transform_heads) {
+        reduce_pso = pipeline(c.DS4_ATTN_HEADS_PSO, request.width, nsg, nwg, has_pad, shared_pad);
+        if (reduce_pso.handle == null) return false;
+        table = Buffer.tensor(armed_table);
+        if (heads_state.compressed) table.view.offset += 256;
+        heads_state.used = true;
+    }
     const reduction = c.ds4_metal_attention_reduce_args{ .nrows = narrow(request.n_head) };
-    return c.ds4_metal_attention_reduce(command.token.?, reduce_pso, &reduction, tmp.view, heads, if (fuse_rope) rope else null, request.n_head, 32 * nwg) != 0;
+    return c.ds4_metal_attention_reduce(command.token.?, reduce_pso, &reduction, tmp.view, heads, if (fuse_rope) rope else null, table.view, request.n_head, 32 * nwg) != 0;
 }
 
 pub fn run(request: Request) c_int {
@@ -454,4 +481,21 @@ pub fn run(request: Request) c_int {
         if (c.ds4_gpu_kv_norm_task_flush() == 0) return 0;
     }
     return command.finish(if (request.comp_rows == 0) "graph raw attention heads" else "graph attention heads");
+}
+pub fn reduceCheck(heads: ?*Tensor, tmp: ?*const Tensor, rows: u32, transform: bool, table_tensor: ?*const Tensor, compressed: bool) c_int {
+    if (api.init() == 0 or rows == 0 or rows > 4096 or (transform and (rows != 64 or table_tensor == null))) return 0;
+    const out = Buffer.tensor(heads);
+    defer out.deinit();
+    const scratch = Buffer.tensor(tmp);
+    defer scratch.deinit();
+    const table = Buffer.tensor(table_tensor);
+    defer table.deinit();
+    if (!out.fits(@as(u64, rows) * 512 * 4) or !scratch.fits(@as(u64, rows) * (512 * 32 + 2 * 32) * 4) or (transform and !table.fits(512))) return 0;
+    const pso = pipeline(if (transform) c.DS4_ATTN_HEADS_PSO else c.DS4_ATTN_REDUCE_PSO, 512, 1, 32, false, false);
+    if (pso.handle == null) return 0;
+    var command = Command.init() orelse return 0;
+    defer command.deinit();
+    const args = c.ds4_metal_attention_reduce_args{ .nrows = @intCast(rows) };
+    if (c.ds4_metal_attention_reduce(command.token.?, pso, &args, scratch.view, out.view, null, if (transform) at(table.view, if (compressed) 256 else 0) else std.mem.zeroes(View), rows, 1024) == 0) return 0;
+    return command.finish("V4.1 decode reduce check");
 }

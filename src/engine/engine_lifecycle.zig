@@ -133,6 +133,7 @@ pub const Lifecycle = struct {
             return false;
         if (!accepted) c.ds4_engine_model_die(&errors);
         c.ds4_core_publish_configuration(self.configuration);
+        c.ds4_gpu_set_model_untracked_default(0);
         if (self.shape().family == c.DS4_MODEL_FAMILY_QWEN4_EXP)
             c.ds4_gpu_qwen4_set_rope(&self.configuration.qwen.rope_freq, self.shape().n_rot / 2, self.configuration.qwen.rope_mscale);
         return true;

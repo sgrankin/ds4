@@ -45,3 +45,22 @@ export fn ds4_gpu_qwen4_q8_pair_tensor(out0: ?*Tensor, out1: ?*Tensor, map: ?*co
 export fn ds4_gpu_matmul_f16_pair_tensor(out0: ?*Tensor, out1: ?*Tensor, map: ?*const anyopaque, size: u64, offset0: u64, offset1: u64, width: u64, outputs: u64, x: ?*const Tensor, rows: u64) c_int {
     return owner.halfPair(.{ .first = request(out0, map, size, offset0, width, outputs, x, rows), .out1 = out1, .offset1 = offset1, .outputs1 = outputs });
 }
+
+export fn ds4_gpu_matmul_q8_0_bf16_tensor(out: ?*Tensor, map: ?*const anyopaque, size: u64, offset: u64, width: u64, outputs: u64, x: ?*const Tensor, rows: u64) c_int {
+    return owner.q8Bf16(request(out, map, size, offset, width, outputs, x, rows), false);
+}
+export fn ds4_gpu_matmul_q8_0_bf16io_tensor(out: ?*Tensor, map: ?*const anyopaque, size: u64, offset: u64, width: u64, outputs: u64, x: ?*Tensor, rows: u64) c_int {
+    return owner.q8Bf16(request(out, map, size, offset, width, outputs, x, rows), true);
+}
+export fn ds4_gpu_dsv41_project_pair_q8(out0: ?*Tensor, out1: ?*Tensor, map: ?*const anyopaque, size: u64, offset0: u64, offset1: u64, width: u32, outputs0: u32, outputs1: u32, x: ?*const Tensor) c_int {
+    return owner.q8Bf16Pair(.{ .first = request(out0, map, size, offset0, width, outputs0, x, 1), .out1 = out1, .offset1 = offset1, .outputs1 = outputs1 });
+}
+export fn ds4_gpu_dsv41_project_f16_bf16(out: ?*Tensor, map: ?*const anyopaque, size: u64, offset: u64, width: u32, outputs: u32, x: ?*const Tensor) c_int {
+    return owner.halfBf16(request(out, map, size, offset, width, outputs, x, 1));
+}
+export fn ds4_gpu_matmul_bf16_weights_tensor(out: ?*Tensor, weights: ?*const Tensor, width: u64, outputs: u64, x: ?*const Tensor) c_int {
+    return owner.narrowWeights(out, weights, null, width, outputs, x, false);
+}
+export fn ds4_gpu_matmul_e4m3_bf16_tensor(out: ?*Tensor, codes: ?*const Tensor, scales: ?*const Tensor, width: u64, outputs: u64, x: ?*const Tensor) c_int {
+    return owner.narrowWeights(out, codes, scales, width, outputs, x, true);
+}

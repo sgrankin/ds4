@@ -239,6 +239,7 @@ pub fn init(view: *View, pool: *Pool, inputs: *const Inputs, context: c_int) boo
             const core = view.core;
             const drafter = if (core.*.dspark and core.*.dspark_weights.v41) &core.*.dspark_weights else null;
             if (!c.ds4_native_session_resources_init41(view.ds41, view.frontier, &core.*.memory, view.memory41, &core.*.model, &core.*.weights, view.config41, core.*.model_path, @intCast(context), core.*.prefill_chunk, core.*.quality, core.*.ssd_streaming, drafter, view.transport)) return false;
+            view.ds41.*.graph.decode_weights = core.*.decode_weights;
             if (ds41Steering(view)) return true;
             // init41 already published its graph and host buffers. A failed
             // vector load must retire that transaction before C frees the shell.

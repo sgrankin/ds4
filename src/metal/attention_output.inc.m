@@ -27,6 +27,7 @@ ds4_metal_output_fold ds4_metal_output_fold_take(const ds4_gpu_tensor *out, uint
     result.active = ds4_gpu_tp_flag_fold_take(out, bytes, &result.slot, &result.value) != 0;
     return result;
 }
+void ds4_metal_output_fold_restore(void) { g_tp_fold_req_active = 1; }
 void ds4_metal_output_fold_publish(void) { g_tp_flag_prepublished_seq = g_tp_seq + 1u; }
 int ds4_metal_output_encode(void *command, const ds4_metal_output_launch *p) {
     @autoreleasepool {

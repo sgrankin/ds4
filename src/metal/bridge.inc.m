@@ -150,7 +150,7 @@ int ds4_zig_metal_norm_encode(void *command, const ds4_metal_norm_launch *launch
             case DS4_METAL_NORM_PLAIN: pipeline = g_rms_norm_plain_pipeline; break;
             case DS4_METAL_NORM_WEIGHTED: pipeline = g_rms_norm_pipeline; break;
             case DS4_METAL_NORM_WEIGHTED_BF16:
-                pipeline = ds4_gpu_get_pipeline("kernel_rms_norm_mul_bf16_f32_4"); break;
+                pipeline = ds4_gpu_get_pipeline("kernel_rms_norm_mul_f32_4_bf16"); break;
             case DS4_METAL_NORM_ADD: pipeline = g_add_rms_norm_pipeline; break;
             case DS4_METAL_NORM_QKV: pipeline = g_dsv4_qkv_rms_norm_pipeline; break;
             default: return 0;
@@ -219,7 +219,9 @@ int ds4_zig_metal_quant_encode(void *command, const ds4_metal_quant_launch *laun
 int ds4_zig_metal_engram_encode(void *command, const ds4_metal_engram_launch *launch) {
     @autoreleasepool {
         id<MTLCommandBuffer> cb = (__bridge id<MTLCommandBuffer>)command;
-        id<MTLComputePipelineState> pipeline = ds4_gpu_get_pipeline("kernel_dsv41_engram_add");
+        const bool parallel = launch->threads == 256;
+        id<MTLComputePipelineState> pipeline = ds4_gpu_get_pipeline(parallel ? "kernel_dsv41_engram_add_tg256" : "kernel_dsv41_engram_add");
+        if (parallel) ds4_metal_v41_note("kernel_dsv41_engram_add_tg256");
         if (!cb || !pipeline) return 0;
         id<MTLComputeCommandEncoder> enc = ds4_gpu_compute_encoder(cb);
         if (!enc) return 0;
@@ -229,6 +231,7 @@ int ds4_zig_metal_engram_encode(void *command, const ds4_metal_engram_launch *la
             launch->q_weight, launch->k_weight, launch->mask};
         for (NSUInteger i = 0; i < 5; ++i)
             [enc setBuffer:ds4_gpu_tensor_buffer(inputs[i]) offset:ds4_gpu_tensor_offset(inputs[i]) atIndex:i + 1];
+        if (parallel) [enc setThreadgroupMemoryLength:128u * sizeof(float) atIndex:0];
         [enc dispatchThreadgroups:MTLSizeMake(launch->groups_x, launch->groups_y, 1)
              threadsPerThreadgroup:MTLSizeMake(launch->threads, 1, 1)];
         ds4_gpu_end_compute_encoder(cb, enc);

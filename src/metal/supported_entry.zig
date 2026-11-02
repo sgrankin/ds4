@@ -39,7 +39,7 @@ export fn ds4_gpu_dsv41_candidate_blocks(
     start: u32,
     ratio: u32,
 ) c_int {
-    return @intFromBool(owner.candidates(blocks, scores, null, width, rows, start, ratio, false));
+    return @intFromBool(owner.candidates(blocks, scores, null, width, rows, start, ratio, false, 0));
 }
 export fn ds4_gpu_dsv41_candidate_filter(
     scores: ?*Tensor,
@@ -48,8 +48,9 @@ export fn ds4_gpu_dsv41_candidate_filter(
     rows: u32,
     start: u32,
     ratio: u32,
+    mask_stride: u32,
 ) c_int {
-    return @intFromBool(owner.candidates(scores, scores, mask, width, rows, start, ratio, true));
+    return @intFromBool(owner.candidates(scores, scores, mask, width, rows, start, ratio, true, mask_stride));
 }
 export fn ds4_gpu_dsv41_tensor_ops_available() c_int {
     return @intFromBool(owner.tensorOpsAvailable());
@@ -65,4 +66,8 @@ export fn ds4_gpu_glm53_matmul_bf16(
     rows: u32,
 ) c_int {
     return @intFromBool(owner.bf16(.{ .out = out, .map = model, .size = size, .offset = offset, .width = width, .outputs = outputs, .x = x, .rows = rows }));
+}
+
+comptime {
+    _ = @import("v41_dispatch.zig");
 }

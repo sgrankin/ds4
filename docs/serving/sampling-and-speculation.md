@@ -40,6 +40,16 @@ Measure speed on your prompts: acceptance and SSD
 cache size both matter. V4.1 DSpark can still be slower than ordinary decoding,
 including in TP mode.
 
+The V4.1 cycle also uses the shared acceptance scheduler. If proposals produce
+few accepted tokens or repeatedly stop before proposing anything, it pauses
+drafting for a bounded number of cycles and then retries. Paused cycles use
+ordinary target decoding. The decision uses acceptance counts, with a default
+four-cycle observation window; it does not use wall-clock timing. This scheduler
+is enabled when DSpark is selected; `DS4_DSPARK_SCHEDULER=0` disables the pause
+policy. The window, minimum average acceptance and retry interval can be changed
+with the corresponding `DS4_DSPARK_SCHEDULER_*` settings in
+[session controls](../../src/engine/session_control.zig).
+
 The maintained native Metal regression fixture is built with
 `./tools/zig-build dspark-native-oracle`; see the
 [DSpark qualification commands](../development/qualification/deepseek.md#dspark). It checks

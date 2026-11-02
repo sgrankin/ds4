@@ -605,6 +605,24 @@ const SpecTrace = struct {
     }
 };
 
+// Match upstream's byte-level diagnostic, including its FNV initial value.
+// This is opt-in and copies the full vocabulary: do not use diagnostic runs
+// as throughput measurements. The buffer is reused for all decode steps.
+fn decodeLogitsDiagnostic(session: *Session, frontier: c_int, step: c_int, values: []f32) bool {
+    const vocab: c_int = @intCast(values.len);
+    if (c.ds4_session_copy_logits(session, values.ptr, vocab) != vocab) return false;
+    var hash: u64 = 1469598103934665603;
+    for (std.mem.sliceAsBytes(values)) |byte| hash = (hash ^ byte) *% 1099511628211;
+    report("ds4-bench: decode-hash frontier=%d step=%d %016llx\n", .{ frontier, step, hash });
+    const path = c.getenv("DS4_BENCH_DECODE_LOGITS_DUMP");
+    if (path != null) {
+        const file = c.fopen(path, "ab") orelse return false;
+        defer _ = c.fclose(file);
+        if (c.fwrite(values.ptr, @sizeOf(f32), values.len, file) != values.len or c.fflush(file) != 0) return false;
+    }
+    return true;
+}
+
 fn showGenerated(engine: *Engine, frontier: c_int, tokens: []const c_int) void {
     if (tokens.len == 0) return;
     report("ds4-bench: gen[ctx=%d] decoded text: \"", .{frontier});
@@ -701,6 +719,12 @@ fn run(cfg: *Options) c_int {
         null;
     defer if (decode_values) |values| allocator.free(values);
     if (decode_values != null) report("ds4-bench: decoder quality dump is untimed; decode timing columns are zero\n", .{});
+    const hash_values: ?[]f32 = if (c.getenv("DS4_BENCH_DECODE_LOGITS_HASH") != null)
+        allocator.alloc(f32, @intCast(c.ds4_engine_vocab_size(engine))) catch return 1
+    else
+        null;
+    defer if (hash_values) |values| allocator.free(values);
+    if (hash_values != null) report("ds4-bench: per-step logits hash/dump is diagnostic and perturbs timing\n", .{});
     var maybe_session: ?*Session = null;
     if (c.ds4_session_create(&maybe_session, engine, cfg.ctx_alloc) != 0) {
         report("ds4-bench: failed to create session\n", .{});
@@ -838,6 +862,14 @@ fn run(cfg: *Options) c_int {
                 }
             }
             const token_end = nowSeconds();
+            if (!speculative) {
+                if (hash_values) |values| {
+                    if (!decodeLogitsDiagnostic(session, frontier, generated_count, values)) {
+                        report("ds4-bench: failed to hash/dump decoder logits at %d step %d\n", .{ frontier, generated_count });
+                        return 1;
+                    }
+                }
+            }
             var cycle_tokens: c_int = 0;
             for (cycle[0..@as(usize, @intCast(count))]) |id| {
                 if (generated_count >= cfg.gen_tokens) break;

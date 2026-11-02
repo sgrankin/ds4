@@ -47,3 +47,7 @@ export fn ds4_gpu_tp_gate_prefetch_plan(gate: u32, map: ?*const anyopaque, size:
 export fn ds4_native_metal_tp_prefetch_encode(gate: u32) c_int {
     return Prefetch.encode(gate);
 }
+
+export fn ds4_gpu_tp_decode_inline_gates() c_int {
+    return @intFromBool(owner.inlineGates());
+}

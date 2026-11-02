@@ -54,6 +54,9 @@ export fn ds4_gpu_attention_output_q8_batch_f16_tensor(out: ?*Tensor, low: ?*Ten
 export fn ds4_gpu_matmul_q8_0_kslice_tensor(out: ?*Tensor, map: ?*const anyopaque, size: u64, offset: u64, width: u64, first: u64, count: u64, outputs: u64, input: ?*const Tensor, input_offset: u64) c_int {
     return @intFromBool((owner.KSlice{ .out = out, .model = map, .size = size, .offset = offset, .width = width, .first = first, .count = count, .outputs = outputs, .input = input, .input_offset = input_offset }).scalar());
 }
+export fn ds4_gpu_matmul_q8_0_kslice_bf16in_tensor(out: ?*Tensor, map: ?*const anyopaque, size: u64, offset: u64, width: u64, first: u64, count: u64, outputs: u64, input: ?*const Tensor) c_int {
+    return @intFromBool((owner.KSlice{ .out = out, .model = map, .size = size, .offset = offset, .width = width, .first = first, .count = count, .outputs = outputs, .input = input, .round_input = true }).scalar());
+}
 export fn ds4_gpu_matmul_q8_0_kslice_rows_tensor(out: ?*Tensor, map: ?*const anyopaque, size: u64, offset: u64, width: u64, outputs: u64, first: u64, count: u64, input: ?*const Tensor, rows: u64) c_int {
     return @intFromBool((owner.KSlice{ .out = out, .model = map, .size = size, .offset = offset, .width = width, .first = first, .count = count, .outputs = outputs, .input = input }).rows(rows, width, first));
 }
@@ -62,6 +65,9 @@ export fn ds4_gpu_attention_output_q8_tp_tensor(out: ?*Tensor, low: ?*Tensor, ma
 }
 export fn ds4_gpu_attention_output_low_q8_tensor(low: ?*Tensor, map: ?*const anyopaque, size: u64, a: u64, width: u64, rank: u64, groups: u32, heads: ?*const Tensor) c_int {
     return @intFromBool(request(null, low, map, size, a, 0, width, rank, groups, 0, heads, 1).lowOnly(false, 0));
+}
+export fn ds4_gpu_attention_output_low_q8_rows_exact_tensor(low: ?*Tensor, map: ?*const anyopaque, size: u64, a: u64, width: u64, rank: u64, total: u32, first: u32, count: u32, heads: ?*const Tensor, rows: u32) c_int {
+    return @intFromBool(request(null, low, map, size, a, 0, width, rank, count, 0, heads, rows).lowRowsExact(total, first));
 }
 export fn ds4_gpu_attention_output_low_q4_K_slice_tensor(low: ?*Tensor, map: ?*const anyopaque, size: u64, a: u64, width: u64, rank: u64, first: u32, count: u32, heads: ?*const Tensor) c_int {
     return @intFromBool(request(null, low, map, size, a, 0, width, rank, count, 0, heads, 1).lowOnly(true, first));

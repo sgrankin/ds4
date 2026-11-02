@@ -22,6 +22,7 @@ typedef struct {
   uint64_t nb_w1;
   uint64_t nb0;
   uint64_t nb1;
+  uint64_t round_bf16;
 } ds4_gpu_hc_weighted_sum_args;
 typedef struct {
   float post_scale;
@@ -79,6 +80,8 @@ typedef struct {
   uint64_t nb1;
   uint64_t nb2;
   int32_t has_add;
+  int32_t round_bf16;
+  int32_t round_block_in;
 } ds4_gpu_hc_expand_args;
 typedef struct {
   int32_t n;
@@ -111,6 +114,7 @@ enum {
   DS4_HC_SHARED_DOWN,
   DS4_HC_MATMUL,
   DS4_HC_EXPAND4,
+  DS4_HC_EXPAND_SERIAL_BF16,
   DS4_HC_NORM_MIX_CLUSTER,
   DS4_HC_OUTPUT_MUL,
   DS4_HC_OUTPUT_ADD,

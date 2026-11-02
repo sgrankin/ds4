@@ -93,9 +93,15 @@ pub fn resetTracking() void {
 }
 
 pub fn alloc(bytes: u64) ?*Tensor {
+    return allocKind(bytes, false);
+}
+pub fn allocWeights(bytes: u64) ?*Tensor {
+    return allocKind(bytes, true);
+}
+fn allocKind(bytes: u64, weights: bool) ?*Tensor {
     // Initialization precedes the zero/oversized check in the original API.
     if (c.ds4_gpu_init() == 0 or bytes == 0 or bytes > max_bytes) return null;
-    const tensor = c.ds4_metal_resource_new(bytes) orelse return null;
+    const tensor = (if (weights) c.ds4_metal_resource_new_weights(bytes) else c.ds4_metal_resource_new(bytes)) orelse return null;
     const tracked = track(tensor, bytes) orelse {
         _ = c.fprintf(c.__stderrp, "ds4: failed to track Metal tensor allocation\n");
         c.ds4_metal_resource_dispose(tensor);

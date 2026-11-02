@@ -64,18 +64,28 @@ pub const SessionBatch = struct {
             heads[index] = c.ds4_gpu_tensor_view(graph.batch.heads, @as(u64, index) * head_bytes, head_bytes);
             ok = queries[index] != null and heads[index] != null;
         }
+        // Workers borrow IDs and host output rows until their join. Start both
+        // sparse reads before GPU layer 0 and join each at its consuming layer.
+        var engram_ids: [max_rows][2][c.DS4_ENGRAM_COLS]u32 = undefined;
+        var reads: [max_rows][2]?*c.ds4_engram_prefetch = @splat(@splat(null));
+        defer for (&reads) |*tables| {
+            for (tables) |read| if (read) |pending| {
+                _ = c.ds4_engram_read_batch_finish(pending);
+            };
+        };
         const initial_pre = [_]f32{ 1, 0, 0, 0 };
         for (graphs, tokens, 0..) |session, token, index| {
             if (!ok) break;
-            var ids: [2][c.DS4_ENGRAM_COLS]u32 = undefined;
+            const ids = &engram_ids[index];
             const continued = index > 0 and index < prefill_rows;
             positions[index] = session.pos + if (continued) @as(u32, @intCast(index)) else 0;
             history[index] = if (continued) history[index - 1] else session.history;
-            ok = c.ds4_engram_hash(&session.engram, &history[index], &token, null, 1, @ptrCast(&ids));
+            ok = c.ds4_engram_hash(&session.engram, &history[index], &token, null, 1, @ptrCast(ids));
             const disk_rows: *DiskRows = if (engram != null and index < prefill_rows) &engram.?[index] else &session.rows;
             for (0..2) |table| {
                 if (!ok) break;
-                ok = c.ds4_engram_read(&session.table[table], &ids[table], c.DS4_ENGRAM_COLS, &disk_rows[table]);
+                reads[index][table] = c.ds4_engram_read_batch_start(&session.table[table], &ids[table], 1, c.DS4_ENGRAM_COLS, &disk_rows[table]);
+                ok = reads[index][table] != null;
             }
             if (ok) ok = c.ds4_gpu_tensor_write(graph.rows_view[index].pre, 0, &initial_pre, @sizeOf(@TypeOf(initial_pre))) != 0 and
                 c.ds4_gpu_embed_token_hc_tensor(graph.rows_view[index].residual, model.map, model.size, weights.token_embd.*.abs_offset, shape.n_vocab, @bitCast(token), shape.n_embd, shape.n_hc) != 0;
@@ -86,6 +96,12 @@ pub const SessionBatch = struct {
             const layer = &weights.layer[layer_index];
             if (executor.ops.config.layerPolicy(layer_index).?.uses_engram) {
                 const table: usize = if (layer_index == 1) 0 else 1;
+                for (0..rows) |index| {
+                    if (reads[index][table]) |pending| {
+                        if (!c.ds4_engram_read_batch_finish(pending)) ok = false;
+                        reads[index][table] = null;
+                    }
+                }
                 for (graphs, 0..) |session, index| {
                     if (!ok) break;
                     const source = if (engram != null and index < prefill_rows) &engram.?[index][table] else &session.rows[table];
@@ -100,6 +116,9 @@ pub const SessionBatch = struct {
             }
             const batch = BatchAttention{ .ops = executor.ops, .graph = graph };
             if (ok) ok = Prefill.beforeBatch(executor, &active.row, layer, layer_index, rows) and batch.project(layer, rows);
+            // Consecutive rows of one prefill share causal publication and
+            // selection. Independent sessions keep their private cache path.
+            if (ok and prefill_only) ok = batch.run(layer, layer_index, rows);
             const batch_output = layer.attn_output_a.*.type == c.DS4_TENSOR_Q8_0 and
                 layer.attn_output_b.*.type == c.DS4_TENSOR_Q8_0 and c.getenv("DS4_DISABLE_V41_BATCH_OUTPUT") == null;
             for (graphs, 0..) |session, index| {
@@ -110,20 +129,29 @@ pub const SessionBatch = struct {
                 row.q = queries[index];
                 row.heads = heads[index];
                 const attention = Attention{ .config = executor.ops.config, .model = model, .graph = &row };
-                ok = attention.run(layer, layer_index, true) and (batch_output or attention.output(layer));
+                ok = (prefill_only or attention.run(layer, layer_index, true)) and (batch_output or attention.output(layer));
             }
-            if (ok and batch_output) ok = (if (graph.tp_world == 2)
+            var expanded = false;
+            if (ok and batch_output and graph.tp_world == 1) {
+                ok = c.ds4_gpu_attention_output_low_q8_rows_exact_tensor(active.row.low, model.map, model.size, layer.attn_output_a.*.abs_offset, 4096, shape.n_lora_o, shape.n_out_group, 0, shape.n_out_group, graph.batch.heads, rows) != 0;
+                if (ok) expanded = Prefill.expandAttentionRows(executor, &active.row, layer, rows);
+            }
+            if (ok and batch_output and !expanded) ok = (if (graph.tp_world == 2)
                 c.ds4_gpu_dsv41_attention_output_tp_batch(active.row.block, active.row.low, model.map, model.size, layer.attn_output_a.*.abs_offset, layer.attn_output_b.*.abs_offset, graph.batch.heads, rows, graph.tp_rank)
             else
                 c.ds4_gpu_dsv41_attention_output_batch(active.row.block, active.row.low, model.map, model.size, layer.attn_output_a.*.abs_offset, layer.attn_output_b.*.abs_offset, graph.batch.heads, rows)) != 0;
-            if (ok) ok = executor.ops.sumPartialBatch(graph, active.row.block, layer_index, c.DS4_TP_GATE_ATTN, rows);
+            if (ok and !expanded) ok = executor.ops.sumPartialBatch(graph, active.row.block, layer_index, c.DS4_TP_GATE_ATTN, rows);
             const moe = executor.moe();
-            if (ok) ok = c.ds4_gpu_dsv41_quantize(active.row.block, shape.n_embd, rows, c.DS4_V41_BF16) != 0 and
-                Prefill.afterBatch(executor, &active.row, layer, layer_index, rows) and moe.batch(layer, layer_index, rows, shared_owner, true) and
-                (if (shared_owner)
-                    c.ds4_gpu_tensor_copy(active.row.block, 0, active.row.routed, 0, @as(u64, rows) * shape.n_embd * 4)
-                else
-                    c.ds4_gpu_add_tensor(active.row.block, active.row.routed, active.row.shared, rows * shape.n_embd)) != 0 and
+            if (ok) ok = (expanded or c.ds4_gpu_dsv41_quantize(active.row.block, shape.n_embd, rows, c.DS4_V41_BF16) != 0) and
+                Prefill.afterBatch(executor, &active.row, layer, layer_index, rows, expanded);
+            const deferred_down = graph.tp_world == 1 and !c.ds4_native_graph_trace_active();
+            graph.defer_shared_down = deferred_down;
+            if (ok) ok = moe.batch(layer, layer_index, rows, shared_owner, true);
+            graph.defer_shared_down = false;
+            if (ok) ok = if (deferred_down) executor.finishMoeRows(&active.row, layer, layer_index, rows) else (if (shared_owner)
+                c.ds4_gpu_tensor_copy(active.row.block, 0, active.row.routed, 0, @as(u64, rows) * shape.n_embd * 4)
+            else
+                c.ds4_gpu_add_tensor(active.row.block, active.row.routed, active.row.shared, rows * shape.n_embd)) != 0 and
                 c.ds4_gpu_dsv41_quantize(active.row.block, shape.n_embd, rows, c.DS4_V41_BF16) != 0 and
                 executor.expand(active.row.residual, active.row.block, active.row.after_attn, active.row.ffn_split, layer_index, rows, true);
             // The second Engram upload reuses the first one's input storage.

@@ -46,7 +46,7 @@ typedef struct {
     uint64_t gate_out_offset, up_out_offset, mid_out_offset, ids_offset;
     ds4_metal_mv_args down_args, gate_args;
     float clamp;
-    uint64_t nsg, nr0, shared_bytes;
+    uint64_t nsg, down_nsg, nr0, shared_bytes;
     int mode, stage; /* mode2: gate/up followed by down */
     bool pending, encoded, split;
     ds4_metal_shared_split_args split_args;
@@ -158,7 +158,7 @@ typedef struct {
     uint32_t model_dim, shared_dim, lane_offset, lane_count;
     const ds4_gpu_tensor *x, *selected;
     float clamp;
-    bool split;
+    bool split, bf16, kslice_f32;
     uint32_t tp_rank, tp_world, experts, used, shift_q16;
 } ds4_metal_parallel_request;
 int ds4_native_metal_parallel_start(const ds4_metal_parallel_request *);

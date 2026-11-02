@@ -95,6 +95,9 @@ pub export fn ds4_gpu_rms_norm_weight_tensor(out: ?*Tensor, x: ?*const Tensor, m
 pub export fn ds4_gpu_rms_norm_weight_rows_tensor(out: ?*Tensor, x: ?*const Tensor, map: ?*const anyopaque, size: u64, offset: u64, width: u32, rows: u32, eps: f32) callconv(.c) c_int {
     return weighted(out, x, map, size, offset, width, rows, eps, false);
 }
+pub export fn ds4_gpu_rms_norm_weight_bf16_tensor(out: ?*Tensor, x: ?*const Tensor, map: ?*const anyopaque, size: u64, offset: u64, width: u32, eps: f32) callconv(.c) c_int {
+    return ds4_gpu_dsv41_rms_norm_weight_bf16_rows(out, x, map, size, offset, width, 1, eps);
+}
 pub export fn ds4_gpu_dsv41_rms_norm_weight_bf16_rows(out: ?*Tensor, x: ?*const Tensor, map: ?*const anyopaque, size: u64, offset: u64, width: u32, rows: u32, eps: f32) callconv(.c) c_int {
     return weighted(out, x, map, size, offset, width, rows, eps, true);
 }

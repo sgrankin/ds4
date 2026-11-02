@@ -426,3 +426,173 @@ export fn ds4_engram_reader_free(maybe_reader: ?*Reader) void {
     _ = c.pthread_mutex_destroy(&reader.mutex);
     c.free(reader);
 }
+
+// One batch runs ahead of command encoding. Inputs and output remain borrowed
+// until finish; joining also transfers the worker's errno to the caller.
+const Prefetch = struct {
+    table: *const Table,
+    rows: [*c]const u32,
+    tokens: usize,
+    stride: usize,
+    out: [*c]f32,
+    thread: c.pthread_t = undefined,
+    threaded: bool = false,
+    ok: bool = false,
+    err: c_int = 0,
+};
+fn readBatchThread(context: ?*anyopaque) callconv(.c) ?*anyopaque {
+    const prefetch: *Prefetch = @ptrCast(@alignCast(context.?));
+    prefetch.ok = ds4_engram_read_batch(prefetch.table, prefetch.rows, prefetch.tokens, prefetch.stride, prefetch.out);
+    if (!prefetch.ok) prefetch.err = if (c.__error().* != 0) c.__error().* else c.EIO;
+    return null;
+}
+export fn ds4_engram_read_batch_start(table: ?*const Table, rows: [*c]const u32, tokens: usize, stride: usize, out: [*c]f32) ?*Prefetch {
+    const source = table orelse {
+        _ = fail(c.EINVAL);
+        return null;
+    };
+    const prefetch = std.heap.c_allocator.create(Prefetch) catch return null;
+    prefetch.* = .{ .table = source, .rows = rows, .tokens = tokens, .stride = stride, .out = out };
+    prefetch.threaded = c.pthread_create(&prefetch.thread, null, readBatchThread, prefetch) == 0;
+    if (!prefetch.threaded) _ = readBatchThread(prefetch);
+    return prefetch;
+}
+export fn ds4_engram_read_batch_finish(maybe_prefetch: ?*Prefetch) bool {
+    const prefetch = maybe_prefetch orelse return false;
+    if (prefetch.threaded and c.pthread_join(prefetch.thread, null) != 0) c.abort();
+    const ok = prefetch.ok;
+    if (!ok) c.__error().* = prefetch.err;
+    std.heap.c_allocator.destroy(prefetch);
+    return ok;
+}
+
+// Sequential reads populate reclaimable kernel pages. There is no retained
+// table allocation: each utility worker owns only one 8 MiB I/O buffer.
+const warm_workers = 4;
+const warm_chunk: u64 = 8 << 20;
+const Warm = struct {
+    fd: c_int,
+    end: u64,
+    next: std.atomic.Value(u64),
+    stop: std.atomic.Value(bool) = .init(false),
+    mutex: c.pthread_mutex_t = undefined,
+    cond: c.pthread_cond_t = undefined,
+    threads: [warm_workers]c.pthread_t = undefined,
+    count: usize = 0,
+    running: usize = 0,
+    done: bool = false,
+    ok: bool = true,
+    started: f64,
+    seconds: f64 = 0,
+};
+fn warmNow() f64 {
+    var timestamp: c.struct_timespec = undefined;
+    _ = c.clock_gettime(c.CLOCK_MONOTONIC, &timestamp);
+    return @as(f64, @floatFromInt(timestamp.tv_sec)) + @as(f64, @floatFromInt(timestamp.tv_nsec)) * 1e-9;
+}
+fn warmPressure() bool {
+    var level: c_int = 0;
+    var size: usize = @sizeOf(c_int);
+    return c.sysctlbyname("kern.memorystatus_vm_pressure_level", &level, &size, null, 0) == 0 and level > 1;
+}
+fn warmThread(context: ?*anyopaque) callconv(.c) ?*anyopaque {
+    const warm: *Warm = @ptrCast(@alignCast(context.?));
+    _ = c.pthread_set_qos_class_self_np(c.QOS_CLASS_UTILITY, 0);
+    const buffer = std.heap.c_allocator.alloc(u8, warm_chunk) catch null;
+    var ok = buffer != null;
+    if (buffer) |bytes| {
+        defer std.heap.c_allocator.free(bytes);
+        var chunks: usize = 0;
+        while (!warm.stop.load(.monotonic)) : (chunks += 1) {
+            const offset = warm.next.fetchAdd(warm_chunk, .monotonic);
+            if (offset >= warm.end) break;
+            if (chunks % 64 == 0 and warmPressure()) {
+                warm.stop.store(true, .monotonic);
+                ok = false;
+                break;
+            }
+            const count: usize = @intCast(@min(warm.end - offset, warm_chunk));
+            var done: usize = 0;
+            while (done < count) {
+                const got = c.pread(warm.fd, bytes[done..].ptr, count - done, @intCast(offset + done));
+                if (got < 0 and c.__error().* == c.EINTR) continue;
+                if (got <= 0 or @as(usize, @intCast(got)) > count - done) {
+                    ok = false;
+                    break;
+                }
+                done += @intCast(got);
+            }
+            if (!ok) break;
+        }
+        // Cancellation is a partial warm, even if every read so far succeeded.
+        if (warm.stop.load(.monotonic)) ok = false;
+    }
+    _ = c.pthread_mutex_lock(&warm.mutex);
+    warm.ok = warm.ok and ok;
+    warm.running -= 1;
+    if (warm.running == 0) {
+        warm.done = true;
+        warm.seconds = warmNow() - warm.started;
+        _ = c.pthread_cond_broadcast(&warm.cond);
+    }
+    _ = c.pthread_mutex_unlock(&warm.mutex);
+    return null;
+}
+export fn ds4_engram_physical_memory() u64 {
+    var bytes: u64 = 0;
+    var size: usize = @sizeOf(u64);
+    return if (c.sysctlbyname("hw.memsize", &bytes, &size, null, 0) == 0) bytes else 0;
+}
+export fn ds4_engram_warm_start(path: [*c]const u8, offset: u64, bytes: u64) ?*Warm {
+    if (path == null or bytes == 0 or offset > std.math.maxInt(i64) or bytes > @as(u64, std.math.maxInt(i64)) - offset) return null;
+    const warm = std.heap.c_allocator.create(Warm) catch return null;
+    const fd = c.open(path, c.O_RDONLY | c.O_CLOEXEC);
+    if (fd < 0) {
+        std.heap.c_allocator.destroy(warm);
+        return null;
+    }
+    warm.* = .{ .fd = fd, .end = offset + bytes, .next = .init(offset), .started = warmNow() };
+    if (c.pthread_mutex_init(&warm.mutex, null) != 0) {
+        _ = c.close(fd);
+        std.heap.c_allocator.destroy(warm);
+        return null;
+    }
+    if (c.pthread_cond_init(&warm.cond, null) != 0) {
+        _ = c.pthread_mutex_destroy(&warm.mutex);
+        _ = c.close(fd);
+        std.heap.c_allocator.destroy(warm);
+        return null;
+    }
+    // Hold completion until all successful creations have been counted. A tiny
+    // span can finish before the next pthread_create otherwise.
+    _ = c.pthread_mutex_lock(&warm.mutex);
+    for (&warm.threads) |*thread| {
+        if (c.pthread_create(thread, null, warmThread, warm) != 0) break;
+        warm.count += 1;
+        warm.running += 1;
+    }
+    _ = c.pthread_mutex_unlock(&warm.mutex);
+    if (warm.count == 0) {
+        ds4_engram_warm_stop(warm);
+        return null;
+    }
+    return warm;
+}
+export fn ds4_engram_warm_wait(maybe_warm: ?*Warm, seconds: [*c]f64) bool {
+    const warm = maybe_warm orelse return false;
+    _ = c.pthread_mutex_lock(&warm.mutex);
+    while (!warm.done) _ = c.pthread_cond_wait(&warm.cond, &warm.mutex);
+    const ok = warm.ok;
+    if (seconds != null) seconds.* = warm.seconds;
+    _ = c.pthread_mutex_unlock(&warm.mutex);
+    return ok;
+}
+export fn ds4_engram_warm_stop(maybe_warm: ?*Warm) void {
+    const warm = maybe_warm orelse return;
+    warm.stop.store(true, .monotonic);
+    for (warm.threads[0..warm.count]) |thread| if (c.pthread_join(thread, null) != 0) c.abort();
+    _ = c.pthread_mutex_destroy(&warm.mutex);
+    _ = c.pthread_cond_destroy(&warm.cond);
+    _ = c.close(warm.fd);
+    std.heap.c_allocator.destroy(warm);
+}

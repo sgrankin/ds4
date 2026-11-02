@@ -17,7 +17,8 @@ typedef struct {
   bool initialized, batch, service_running, ssd, checks, shared_events,
       selected_event;
   uint64_t pending_count;
-  ds4_metal_attention_view slab, checks_buffer, poll;
+  uint32_t spin_max_iters;
+  ds4_metal_attention_view slab, checks_buffer, poll, release;
 } ds4_metal_tp_facts;
 /* The original transport queue item, not another native work queue. */
 typedef struct {
@@ -30,6 +31,7 @@ typedef struct {
   void *big_in;
   uint64_t big_bytes;
   uint32_t poll; /* release through the poll region */
+  uint32_t spin; /* coherent release inside the current command buffer */
 } ds4_gpu_tp_request;
 /* Original transport/gate constants, authoritative for both implementations. */
 #define DS4_TP_BATCH_FLAG_TAG 0x80000000u
@@ -51,6 +53,9 @@ enum {
   DS4_TP_CHECKED_FLAG,
   DS4_TP_POLL,
   DS4_TP_FOLD_ADD,
+  DS4_TP_PAYLOAD_PUBLISH,
+  DS4_TP_FLAG_PUBLISH,
+  DS4_TP_RELEASE_WAIT,
   DS4_TP_EVENT_ROW,
   DS4_TP_EVENT_BATCH,
   DS4_TP_EVENT_SELECTED

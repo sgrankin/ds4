@@ -4,6 +4,9 @@ const Tensor = owner.Tensor;
 export fn ds4_gpu_tensor_alloc(bytes: u64) ?*Tensor {
     return owner.alloc(bytes);
 }
+export fn ds4_gpu_tensor_alloc_weights(bytes: u64) ?*Tensor {
+    return owner.allocWeights(bytes);
+}
 export fn ds4_gpu_tensor_alloc_managed(bytes: u64) ?*Tensor {
     return owner.alloc(bytes);
 }

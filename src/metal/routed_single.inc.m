@@ -26,6 +26,7 @@ void ds4_metal_single_get_facts(uint32_t total, ds4_metal_single_facts *out) {
         memset(out, 0, sizeof(*out));
         ds4_metal_routed_get_facts(total, &out->batch);
         out->parallel_pending = g_parallel_q8_pending;
+        out->full_expert_bind = g_tp_full_expert_bind != 0;
         out->parallel_mode = g_parallel_ffn_mode;
         out->parallel_stage = g_parallel_ffn_stage;
 #define P(key, value)                                                                              \
@@ -37,6 +38,8 @@ void ds4_metal_single_get_facts(uint32_t total, ds4_metal_single_facts *out) {
         P(DS4_SINGLE_MX_FIXED_PAIR, g_moe_mul_mv_id_mxfp4_pair_swiglu_fixed_route_pipeline_nsg1);
         P(DS4_SINGLE_MX_STATIC_PAIR,
           g_moe_mul_mv_id_mxfp4_pair_swiglu_fixed_route_static_pipeline_nsg1);
+        P(DS4_SINGLE_MX_STATIC_V41_PAIR,
+          ds4_gpu_get_mul_mv_pipeline("kernel_mul_mv_id_mxfp4_pair_swiglu_fixed_route_static_v41_f32", 1));
         P(DS4_SINGLE_MX_NSG1_PAIR, g_moe_mul_mv_id_mxfp4_pair_swiglu_pipeline_nsg1);
         P(DS4_SINGLE_MX_TG_PAIR, g_moe_mul_mv_id_mxfp4_pair_swiglu_pipeline_nsg1_tg_multiple);
         P(DS4_SINGLE_MX_FULL_SUM, g_moe_mul_mv_id_mxfp4_sum6_fixed_route_full_rows_pipeline_nsg1);

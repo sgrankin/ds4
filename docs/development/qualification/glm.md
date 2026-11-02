@@ -54,7 +54,7 @@ Text-only tests do not cover image preprocessing, embeddings or image-aware cach
 
 Compare a fixed Metal embedding with other backends: cosine at least 0.995, mean absolute error at most 0.001 and maximum error at most 0.06. With a vision server, `python3 tests/run_glm53_vision_quality.py` requires 6/6; include photos, screenshots, diagrams, text, spatial questions and unrelated-image controls. Check complete answers through CLI, server and agent against the official service, not just plausible prose. Expose raster inputs alone to the agent. Test image turns followed by text and MTP, five images beyond 4K, and a real read/edit/test loop. Image observations must be user-role multimodal turns; text-only observations remain tool-role.
 
-Exercise RGB, RGBA, grayscale and palette PNG, baseline/progressive JPEG, EXIF orientation and malformed, huge or decompression-bomb inputs under sanitizers. Test chat data URIs, Responses `input_image` and Anthropic base64, two images and later image turns. Local paths, file or remote URLs, malformed base64, unsupported media, over 16 images and bodies over 64 MiB must return 4xx without filesystem reads or network access.
+Exercise RGB, RGBA, grayscale and palette PNG, baseline/progressive JPEG, EXIF orientation and malformed, huge or decompression-bomb inputs under sanitizers. Test chat data URIs, Responses `input_image` and Anthropic base64, two images and later image turns. Local paths, file or remote URLs, malformed base64, unsupported media, over 256 images and bodies over 64 MiB must return 4xx without filesystem reads or network access.
 
 ## Historical platform and physical TP plans
 

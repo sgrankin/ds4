@@ -78,6 +78,8 @@ typedef struct {
 
 typedef struct {
     uint32_t ctx, pos, prefill_cap, carry_cap, prefill_max;
+    /* Pruned rows retain the full tile's kernel-selection thresholds. */
+    uint32_t plan_rows;
     uint32_t decoder_replay_floor; /* Active inside a bounded raw replay. */
     uint32_t immutable_cache_end; /* Experimental SWA recovery: suppress publication before this endpoint. */
     uint64_t allocation_bytes;
@@ -93,6 +95,15 @@ typedef struct {
     bool compressed_kv_fp4; /* Physical 288-byte E2M1/E4M3 main-cache rows. */
     bool index_fp4; /* Physical 68-byte index rows; scratch queries remain F32. */
     uint32_t tp_world, tp_rank;
+    bool scalar_decode;
+    /* Per-invocation fusion state, never serialized as session state. */
+    bool hc_attn_deferred, hc_ffn_deferred, kv_stored, attn_expanded, low_unrounded, shared_done;
+    bool tp_balanced_route, tp_gate_fused, defer_shared_down;
+    ds4_gpu_tensor *selected_half, *route_weights_half;
+    ds4_gpu_tensor *rope_tab;
+    uint32_t rope_tab_pos; /* Position + 1; zero outside a scalar step. */
+    /* Immutable decode copies belong to the engine, not borrowed row graphs. */
+    void *decode_weights;
     ds4_gpu_tensor *tp_logits_half;
     ds4_gpu_tensor **tp_out, **tp_in;
     ds4_gpu_tensor **tp_batch_out, **tp_batch_in;
@@ -109,6 +120,8 @@ typedef struct {
     ds4_gpu_tensor *window[40];
     ds41_prerope_archive *prerope;
     ds4_gpu_tensor *compressed[4], *index_cache[4];
+    ds4_gpu_tensor *index_bf16[4], *index_bf16_flag;
+    bool index_bf16_ok; /* Derived views only; ordinary F32 storage is canonical. */
     ds4_gpu_tensor *previous_kv[4], *previous_score[4];
     ds4_gpu_tensor *verify_previous_kv[4], *verify_previous_score[4];
     bool verify_prefix;
@@ -160,6 +173,8 @@ typedef struct {
     ds4_gpu_tensor *block_scores;
     ds4_gpu_tensor *block_selected;
     ds4_gpu_tensor *block_mask;
+    ds4_gpu_tensor *block_list;
+    const ds4_gpu_tensor *block_list_mask;
     ds4_gpu_tensor *heads;
     ds4_gpu_tensor *low;
     ds4_gpu_tensor *route_logits;
@@ -176,6 +191,7 @@ typedef struct {
     ds4_gpu_tensor *shared_mid;
     ds4_gpu_tensor *shared;
     ds4_gpu_tensor *engram_rows;
+    ds4_gpu_tensor *engram_rows_b;
     ds4_gpu_tensor *engram_prefetch;
     ds4_gpu_tensor *engram_kv;
     ds4_gpu_tensor *logits;

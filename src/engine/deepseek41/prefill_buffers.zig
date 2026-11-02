@@ -32,6 +32,8 @@ pub const Views = struct {
 pub fn selectRow(graph: *Graph, row: *const Row) void {
     // This is a shallow execution binding. Do not free its graph-shaped copy.
     inline for (comptime std.meta.fieldNames(Row)) |name| @field(graph, name) = @field(row, name);
+    // A borrowed batch row contains whichever Engram table this layer uses.
+    graph.engram_rows_b = graph.engram_rows;
 }
 
 pub fn carryCopy(config: *const Config, graph: *Graph, offset: u32, count: u32, store: bool) bool {

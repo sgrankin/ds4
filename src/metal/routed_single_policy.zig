@@ -89,22 +89,21 @@ fn specialize(q: *const Request, f: *const Facts, add_in: bool, gate: Mv, down: 
     const write_clamped = present("DS4_METAL_MOE_WRITE_CLAMPED_ACT");
     const resident = q.force_resident or !streaming;
     const mx_pair = q.gate_type == mx and q.down_type == mx;
+    const balanced3 = b.world == 2 and f.full_expert_bind and q.used_experts == 3 and b.first_expert == 0 and b.bound_experts == q.total_experts and absent("DS4_METAL_DISABLE_V41_TP_FIXED_ROUTE");
+    const fixed_slots: i32 = if (balanced3) 3 else 6;
     const tg_multiple = pre and
         absent("DS4_METAL_DISABLE_PRE_M5_MXFP4_MOE_DECODE_TG_MULTIPLE") and
         mx_pair and
-        q.used_experts == 6 and
-        b.world == 1 and
+        ((q.used_experts == 6 and b.world == 1) or balanced3) and
         !add_in and
         !quality and
         !write_clamped and
         resident;
     const fixed_pair = tg_multiple and
         absent("DS4_METAL_DISABLE_PRE_M5_MXFP4_MOE_DECODE_FIXED_ROUTE_PAIR") and
-        q.input_width == 4096 and
-        q.middle_width == 2048 and
-        q.total_experts == 256 and
-        q.gate_row_bytes == 2176 and
-        gate.nei0 == 6 and
+        ((q.input_width == 4096 and q.middle_width == 2048 and q.total_experts == 256 and q.gate_row_bytes == 2176) or
+            (q.input_width == 5120 and q.middle_width == 2304 and q.total_experts == 384 and q.gate_row_bytes == 2720)) and
+        gate.nei0 == fixed_slots and
         gate.nei1 == 1 and
         gate.ne11 == 1 and
         gate.tp_world == 1 and
@@ -112,31 +111,30 @@ fn specialize(q: *const Request, f: *const Facts, add_in: bool, gate: Mv, down: 
         extra(f, c.DS4_SINGLE_MX_FIXED_PAIR) != null;
     const fixed_sum = fixed_pair and
         absent("DS4_METAL_DISABLE_PRE_M5_MXFP4_MOE_DECODE_FIXED_ROUTE_SUM6") and
-        q.output_width == 4096 and
-        q.down_row_bytes == 1088 and
-        q.down_expert_bytes == 4456448 and
-        down.nei0 == 6 and
+        (q.output_width == 4096 or q.output_width == 5120) and
+        q.down_row_bytes == @as(u64, q.middle_width) / 32 * 17 and
+        q.down_expert_bytes == @as(u64, q.output_width) * q.down_row_bytes and
+        down.nei0 == fixed_slots and
         down.nei1 == 1 and
-        down.ne11 == 6 and
+        down.ne11 == fixed_slots and
         down.tp_world == 1 and
         down.tp_expert_base == 0 and
         down.tp_addend == 0 and
         extra(f, c.DS4_SINGLE_MX_FIXED_SUM) != null;
     const full_sum = fixed_sum and
         absent("DS4_METAL_DISABLE_PRE_M5_MXFP4_MOE_DECODE_SUM6_FULL_ROWS") and
-        down.ne00 == 2048 and
-        down.ne01 == 4096 and
-        down.ne0 == 4096 and
+        down.ne00 == q.middle_width and
+        down.ne01 == q.output_width and
+        down.ne0 == q.output_width and
         down.nr0 == 2 and
         extra(f, c.DS4_SINGLE_MX_FULL_SUM) != null;
     // Every specialized trip count is proved by these real packet/shape
     // checks. The per-lane K walk and accumulation order stay unchanged.
     const static_pair = fixed_pair and
         absent("DS4_METAL_DISABLE_PRE_M5_MXFP4_MOE_DECODE_STATIC_TRIP") and
-        gate.ne00 == 4096 and
-        gate.nb01 == 2176 and
+        ((gate.ne00 == 4096 and gate.nb01 == 2176) or (gate.ne00 == 5120 and gate.nb01 == 2720)) and
         extra(f, c.DS4_SINGLE_MX_STATIC_PAIR) != null;
-    const static_sum = full_sum and static_pair and down.nb01 == 1088 and down.nei0 == 6 and extra(f, c.DS4_SINGLE_MX_STATIC_SUM) != null;
+    const static_sum = full_sum and static_pair and (down.nb01 == 1088 or down.nb01 == 1224) and down.nei0 == 6 and extra(f, c.DS4_SINGLE_MX_STATIC_SUM) != null;
     const tp_static = m5 and
         absent("DS4_METAL_DISABLE_M5_TP_MXFP4_STATIC") and
         mx_pair and
@@ -175,6 +173,16 @@ fn specialize(q: *const Request, f: *const Facts, add_in: bool, gate: Mv, down: 
             p.pair_nsg = 1;
         }
     }
+    // Each constant embedded in the V4.1 shader is checked before choosing
+    // it; the older fixed-route variant remains the fallback for other shapes.
+    if (p.pair_pipeline == extra(f, c.DS4_SINGLE_MX_STATIC_PAIR) and static_pair and p.pair_nsg == 1 and
+        gate.ne00 == 5120 and gate.ne01 == 2304 and gate.ne02 == 384 and gate.nb01 == 2720 and gate.nb02 == 2304 * 2720 and
+        gate.ne0 == 2304 and gate.nei0 == 6 and gate.nei1 == 1 and gate.ne11 == 1 and gate.tp_world == 1 and gate.tp_expert_base == 0 and
+        extra(f, c.DS4_SINGLE_MX_STATIC_V41_PAIR) != null and c.ds4_metal_v41_on(c.DS4_GPU_V41_LITERAL_SHAPES) != 0)
+    {
+        p.pair_pipeline = extra(f, c.DS4_SINGLE_MX_STATIC_V41_PAIR);
+        c.ds4_metal_v41_note("kernel_mul_mv_id_mxfp4_pair_swiglu_fixed_route_static_v41_f32");
+    }
     const iq2_pack2 = q.gate_type == iq2 and
         q.used_experts == 6 and
         q.total_experts == 256 and
@@ -201,7 +209,7 @@ fn specialize(q: *const Request, f: *const Facts, add_in: bool, gate: Mv, down: 
         // GLM TP split may use this ordinary IQ2 down-sum.
         p.sum_pipeline = extra(f, c.DS4_SINGLE_IQ2_SUM);
     }
-    p.direct = !quality and (q.used_experts == 6 or (q.used_experts == 8 and b.world == 2)) and p.sum_pipeline != null;
+    p.direct = !quality and (q.used_experts == 6 or (q.used_experts == 8 and b.world == 2) or f.full_expert_bind) and p.sum_pipeline != null;
     return p;
 }
 fn parallelValid(q: *const Request, f: *const Facts, add_in: bool, p: Policy) bool {
@@ -209,37 +217,19 @@ fn parallelValid(q: *const Request, f: *const Facts, add_in: bool, p: Policy) bo
     if (!f.parallel_pending) return true;
     // A concurrent encoder destroys implicit dependencies. Only the resident
     // fused producer -> direct-sum consumer pair has explicit level barriers.
-    const common = f.parallel_mode == 2 and
-        q.used_experts == 6 and
-        q.total_experts == 256 and
-        q.input_width == 4096 and
-        q.middle_width == 2048 and
-        q.output_width == 4096 and
-        !add_in and
+    const common = f.parallel_mode == 2 and !add_in and
         (q.force_resident or !has(b, c.DS4_ROUTED_SSD)) and
-        absent("DS4_METAL_MOE_WRITE_CLAMPED_ACT") and
-        p.fused and
-        p.direct;
-    const iq2_route = q.gate_type == iq2 and
-        q.down_type == q2 and
-        q.gate_row_bytes == 1056 and
-        q.gate_expert_bytes == 2162688 and
-        q.down_row_bytes == 672 and
-        q.down_expert_bytes == 2752512 and
-        b.first_expert == 0 and
-        b.bound_experts == q.total_experts and
-        b.rank == 0 and
-        b.world == 1;
-    const mx_route = q.gate_type == mx and
-        q.down_type == mx and
-        q.gate_row_bytes == 2176 and
-        q.gate_expert_bytes == 4456448 and
-        q.down_row_bytes == 1088 and
-        q.down_expert_bytes == 4456448 and
-        ((b.rank == 0 and
-            b.first_expert == 0) or (b.rank == 1 and
-            b.first_expert +% b.bound_experts == q.total_experts)) and
-        b.world == 2;
+        absent("DS4_METAL_MOE_WRITE_CLAMPED_ACT") and p.fused and p.direct;
+    const iq2_route = q.gate_type == iq2 and q.down_type == q2 and q.used_experts == 6 and q.total_experts == 256 and
+        q.input_width == 4096 and q.middle_width == 2048 and q.output_width == 4096 and
+        q.gate_row_bytes == 1056 and q.gate_expert_bytes == 2162688 and q.down_row_bytes == 672 and q.down_expert_bytes == 2752512 and
+        b.first_expert == 0 and b.bound_experts == q.total_experts and b.rank == 0 and b.world == 1;
+    const balanced3 = b.world == 2 and f.full_expert_bind and q.used_experts == 3 and b.first_expert == 0 and b.bound_experts == q.total_experts and absent("DS4_METAL_DISABLE_V41_TP_FIXED_ROUTE");
+    const mx_shape = (q.total_experts == 256 and q.input_width == 4096 and q.middle_width == 2048 and q.output_width == 4096 and q.gate_row_bytes == 2176 and q.gate_expert_bytes == 4456448 and q.down_row_bytes == 1088 and q.down_expert_bytes == 4456448) or
+        (q.total_experts == 384 and q.input_width == 5120 and q.middle_width == 2304 and q.output_width == 5120 and q.gate_row_bytes == 2720 and q.gate_expert_bytes == 6266880 and q.down_row_bytes == 1224 and q.down_expert_bytes == 6266880);
+    const mx_route = q.gate_type == mx and q.down_type == mx and (q.used_experts == 6 or balanced3) and mx_shape and
+        ((b.world == 1 and b.first_expert == 0 and b.bound_experts == q.total_experts) or
+            (b.world == 2 and ((b.rank == 0 and b.first_expert == 0) or (b.rank == 1 and b.first_expert +% b.bound_experts == q.total_experts))));
     return common and (iq2_route or mx_route);
 }
 fn groupSize(total: u32) u32 {
@@ -417,4 +407,70 @@ pub fn choose(q: *const Request, f: *const Facts, add_in: bool, gate: Mv, down: 
     p.base_views = p.slots_q4 and present("DS4_METAL_Q4_SELECTED_USE_BASE_VIEWS") and absent("DS4_METAL_Q4_SELECTED_EXACT_VIEWS");
     p.transient_views = p.slots_q4 and !p.base_views and present("DS4_METAL_Q4_SELECTED_TRANSIENT_VIEWS");
     return p;
+}
+
+/// Exercise production shape admission with synthetic device facts. This
+/// checks pre-M5 and two-rank choices on any Mac without claiming its speed.
+pub fn checkV41Selections() bool {
+    const std = @import("std");
+    var f = std.mem.zeroes(Facts);
+    f.batch.flags = c.DS4_ROUTED_PRE_M5;
+    f.batch.world = 1;
+    f.batch.bound_experts = 384;
+    for (&f.cached, 0..) |*pipeline, index| pipeline.* = @ptrFromInt(16 + index * 16);
+    for (&f.batch.cached, 0..) |*pipeline, index| pipeline.* = @ptrFromInt(1024 + index * 16);
+    var q = std.mem.zeroes(Request);
+    q.gate_type = mx;
+    q.down_type = mx;
+    q.input_width = 5120;
+    q.middle_width = 2304;
+    q.output_width = 5120;
+    q.total_experts = 384;
+    q.used_experts = 6;
+    q.gate_row_bytes = 2720;
+    q.gate_expert_bytes = 6266880;
+    q.down_row_bytes = 1224;
+    q.down_expert_bytes = 6266880;
+    q.force_resident = true;
+    q.rows = 1;
+    // Use the production packet builder so row counts, strides and nr0 stay
+    // consistent with real single-token invocations.
+    var gate = Batch.mvArgs(&q, &f.batch, false);
+    var down = Batch.mvArgs(&q, &f.batch, true);
+    const ordinary = specialize(&q, &f, false, gate, down);
+    const literal = c.ds4_metal_v41_on(c.DS4_GPU_V41_LITERAL_SHAPES) != 0;
+    if (ordinary.pair_pipeline != extra(&f, if (literal) c.DS4_SINGLE_MX_STATIC_V41_PAIR else c.DS4_SINGLE_MX_STATIC_PAIR) or
+        ordinary.sum_pipeline != extra(&f, c.DS4_SINGLE_MX_STATIC_SUM) or !ordinary.fused or !ordinary.direct)
+    {
+        _ = c.fputs("V4.1 routed policy: pre-M5 six-expert static pair/sum selection failed\n", c.__stderrp);
+        return false;
+    }
+    f.parallel_pending = true;
+    f.parallel_mode = 2;
+    if (!parallelValid(&q, &f, false, ordinary)) {
+        _ = c.fputs("V4.1 routed policy: resident single-Mac concurrent route rejected\n", c.__stderrp);
+        return false;
+    }
+    f.batch.world = 2;
+    f.full_expert_bind = true;
+    q.used_experts = 3;
+    gate = Batch.mvArgs(&q, &f.batch, false);
+    down = Batch.mvArgs(&q, &f.batch, true);
+    // Full expert binding assigns slots rather than expert-ID ownership.
+    gate.tp_world = 1;
+    down.tp_world = 1;
+    const balanced = specialize(&q, &f, false, gate, down);
+    if (balanced.pair_pipeline != extra(&f, c.DS4_SINGLE_MX_STATIC_PAIR) or
+        balanced.sum_pipeline != extra(&f, c.DS4_SINGLE_MX_FULL_SUM) or !balanced.direct or
+        !parallelValid(&q, &f, false, balanced))
+    {
+        _ = c.fputs("V4.1 routed policy: balanced three-expert pair/sum or concurrent admission failed\n", c.__stderrp);
+        return false;
+    }
+    q.gate_expert_bytes += 16;
+    if (parallelValid(&q, &f, false, balanced)) {
+        _ = c.fputs("V4.1 routed policy: concurrent route accepted an unsupported expert stride\n", c.__stderrp);
+        return false;
+    }
+    return true;
 }

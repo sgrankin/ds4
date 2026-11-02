@@ -13,6 +13,7 @@ enum { DS4_STREAMING_PREFILL_HEADROOM_LAYERS = 2 };
  * Cache bytes/count describe the one configured GPU expert cache, not a copy. */
 typedef struct {
     uint64_t ds41_session_bytes;
+    uint64_t decode_weight_bytes; /* Engine-owned exact narrow copies. */
     uint32_t ssd_streaming_cache_experts;
     uint64_t ssd_streaming_cache_bytes;
     uint64_t ssd_streaming_prefill_headroom_bytes;

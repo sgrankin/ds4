@@ -1,6 +1,7 @@
 //! V4.1 activation quantization, Engram gating and two-row KV pooling.
 //! Shape and carry policy live here; ObjC only binds retained Metal resources.
 const std = @import("std");
+const c = @import("metal_c");
 const api = @import("bridge.zig");
 const Tensor = api.Tensor;
 
@@ -42,6 +43,7 @@ pub export fn ds4_gpu_dsv41_engram_add(residual: ?*Tensor, kv: ?*const Tensor, q
         !hasFloats(q_weight, @as(u64, width) * 4) or !hasFloats(k_weight, @as(u64, width) * 4) or
         (mask != null and api.tensorBytes(mask) < rows)) return 0;
     if (api.init() == 0) return 0;
+    const parallel = mask == null and width == 5120 and rows <= 16 and c.ds4_metal_v41_on(c.DS4_GPU_V41_SPLIT_REDUCE) != 0;
     const launch = api.EngramLaunch{
         .args = .{ .width = width, .rows = rows, .eps = eps, .masked = @intFromBool(mask != null) },
         .residual = residual,
@@ -51,7 +53,7 @@ pub export fn ds4_gpu_dsv41_engram_add(residual: ?*Tensor, kv: ?*const Tensor, q
         .mask = if (mask != null) mask else residual,
         .groups_x = rows,
         .groups_y = 4,
-        .threads = 32,
+        .threads = if (parallel) 256 else 32,
     };
     var owned: c_int = 0;
     const command = api.acquire(&owned) orelse return 0;

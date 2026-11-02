@@ -10,8 +10,9 @@
 
 /* Tensor-parallel transport and lockstep protocol.
  *
- * Two ranks run the same logical model, each with one contiguous half of the
- * routed experts resident. Rank 0 (leader) is a normal frontend session that
+ * Two ranks run the same logical model. The default layout gives each rank
+ * one contiguous expert half; V4.1 can negotiate replicated expert maps and
+ * divide each ordered router selection equally. Rank 0 (leader) is a frontend that
  * mirrors every ds4_session_sync()/ds4_session_eval() call to rank 1 (worker)
  * over a TCP control socket, so both engines execute the identical graph
  * sequence.
@@ -115,8 +116,9 @@ enum {
     DS4_TP_MODE_V41_DSPARK = 8u,
 };
 /* Call on both engines before binding the GPU slab. Resident layouts and
- * shared-expert ownership must match before either rank can reduce results. */
-int ds4_tp_agree_execution_mode(ds4_tp *tp, uint32_t flags, char *err, size_t errlen);
+ * shared-expert ownership must match before either rank can reduce results.
+ * full_experts is the local capability on entry and the intersection on return. */
+int ds4_tp_agree_execution_mode(ds4_tp *tp, uint32_t flags, bool *full_experts, char *err, size_t errlen);
 bool ds4_tp_failed(const ds4_tp *tp);
 void ds4_tp_mark_failed(ds4_tp *tp);
 

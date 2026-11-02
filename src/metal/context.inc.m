@@ -161,6 +161,16 @@ static ds4_metal_thread_owners ds4_metal_thread_capture(void) {
 
 @interface DS4MetalContext : NSObject {
 @public
+    ds4_metal_v41_topk_state v41_topk_state;
+    ds4_metal_heads_once heads_once;
+    id<MTLComputePipelineState> heads_reduce_pipeline;
+    uint32_t heads_reduce_width, heads_reduce_groups;
+    bool model_untracked_default;
+    id weight_residency_set;
+    bool weight_residency_added;
+    bool v41_off_read;
+    uint32_t v41_off;
+    NSMutableDictionary<NSString *, NSNumber *> *v41_kernel_runs;
     id<MTLDevice> device;
     id<MTLCommandQueue> queue;
     id<MTLLibrary> library;
@@ -490,7 +500,14 @@ static ds4_metal_thread_owners ds4_metal_thread_capture(void) {
     id<MTLSharedEvent> tp_batch_cpu_event;
     int32_t tp_split_rank;
     int32_t tp_split_world;
+    int32_t tp_full_expert_bind;
     int32_t tp_attn_head_split;
+    // Per-context coherent release storage; the service thread borrows it
+    // until shutdown has joined, after draining submitted work.
+    id<MTLBuffer> tp_release_buffer;
+    volatile uint32_t *tp_release_ptr;
+    uint32_t tp_spin_max_iters;
+    uint64_t tp_stat_spin_iters;
     id<MTLBuffer> tp_poll_buffer;
     volatile uint32_t *tp_poll_region;
     volatile uint32_t *tp_poll_status;
@@ -956,7 +973,12 @@ static void ds4_metal_thread_leave(ds4_metal_thread_scope *scope) {
 #define g_tp_batch_cpu_event (ds4_metal_context_current()->tp_batch_cpu_event)
 #define g_tp_split_rank (ds4_metal_context_current()->tp_split_rank)
 #define g_tp_split_world (ds4_metal_context_current()->tp_split_world)
+#define g_tp_full_expert_bind (ds4_metal_context_current()->tp_full_expert_bind)
 #define g_tp_attn_head_split (ds4_metal_context_current()->tp_attn_head_split)
+#define g_tp_release_buffer (ds4_metal_context_current()->tp_release_buffer)
+#define g_tp_release_ptr (ds4_metal_context_current()->tp_release_ptr)
+#define g_tp_spin_max_iters (ds4_metal_context_current()->tp_spin_max_iters)
+#define g_tp_stat_spin_iters (ds4_metal_context_current()->tp_stat_spin_iters)
 #define g_tp_poll_buffer (ds4_metal_context_current()->tp_poll_buffer)
 #define g_tp_poll_region (ds4_metal_context_current()->tp_poll_region)
 #define g_tp_poll_status (ds4_metal_context_current()->tp_poll_status)

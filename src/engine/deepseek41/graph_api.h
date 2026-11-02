@@ -63,6 +63,7 @@ bool ds4_native_graph_attention_batch41(ds41_gpu_graph *graph, const ds4_model *
     const ds4_layer_weights *layer, const ds4_model_config *config,
     uint32_t layer_index, uint32_t count, bool exact_prefill_rows);
 /* Existing optional trace I/O; ordinary execution returns true. */
+bool ds4_native_graph_trace_active(void);
 bool ds4_native_graph_trace_row(ds4_gpu_tensor *tensor, uint32_t width,
     uint32_t start, uint32_t count, uint32_t layer, const char *name);
 
@@ -168,6 +169,9 @@ bool ds4_native_memory_admit_for_host41(ds4_engine_memory *memory,
     const ds4_weights *weights, const ds4_model_config *config,
     const ds4_engine_memory_inputs *inputs, uint64_t graph_bytes,
     bool fit_cache, uint64_t host_bytes, uint64_t recommended_bytes);
+bool ds4_native_memory_can_replicate41(ds4_engine_memory *, const ds4_weights *,
+    const ds4_model_config *, const ds4_engine_memory_inputs *, uint64_t graph_bytes,
+    uint64_t extra_sidecars);
 bool ds4_native_memory_admit41(ds4_engine_memory *memory,
     const ds4_weights *weights, const ds4_model_config *config,
     const ds4_engine_memory_inputs *inputs, uint64_t graph_bytes, bool fit_cache);

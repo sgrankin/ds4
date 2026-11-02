@@ -308,3 +308,14 @@ export fn ds4_gpu_matmul_q8_0_hc_expand_tensor(
 ) callconv(.c) c_int {
     return p.q8Expand(.{ .out = out_hc, .split = split, .residual = residual_hc, .block = block_out, .input = x }, .{ .map = model_map, .size = model_size, .weight = weight_offset }, .{ .width = n_embd, .hc = n_hc }, in_dim, out_dim, false);
 }
+
+export fn ds4_gpu_hc_weighted_sum_bf16_tensor(out: ?*Tensor, residual: ?*const Tensor, weights: ?*const Tensor, width: u32, hc: u32) c_int {
+    return h.weighted(.{ .out = out, .residual = residual, .post = weights }, .{ .width = width, .hc = hc, .round_bf16 = true }, @as(u64, hc) * 4, "HC weighted sum BF16");
+}
+export fn ds4_gpu_hc_expand_split_bf16_tensor(out: ?*Tensor, block: ?*const Tensor, residual: ?*const Tensor, split: ?*const Tensor, width: u32, hc: u32) c_int {
+    return h.expand(.{ .out = out, .block = block, .residual = residual, .split = split }, .{ .width = width, .hc = hc, .round_bf16 = true }, true, false);
+}
+export fn ds4_gpu_hc_expand_split_add_bf16_tensor(out: ?*Tensor, block: ?*const Tensor, add: ?*const Tensor, residual: ?*const Tensor, split: ?*const Tensor, width: u32, hc: u32) c_int {
+    if (add == null) return 0;
+    return h.expand(.{ .out = out, .block = block, .block_add = add, .residual = residual, .split = split }, .{ .width = width, .hc = hc, .round_bf16 = true }, true, true);
+}

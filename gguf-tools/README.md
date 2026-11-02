@@ -230,7 +230,9 @@ python3 gguf-tools/deepseek41_quantize.py \
 
 Omit `--dry-run` to write the file. Add `--resume` after an interrupted conversion.
 Use `libds4quants.so` on Linux. Gate/up experts use IQ2_XXS and down experts use
-Q2_K; attention, shared experts and the output head use Q8_0. Engram rows retain
+Q2_K; attention, shared experts and the output head use Q8_0. `--quant q4` uses
+Q4_K experts instead. `--quant mxfp4` preserves the released MXFP4 expert
+values and scales, repacking them into GGUF blocks without calibration. Engram rows retain
 their original FP8 values and scales, packed together at the end of the GGUF for
 disk lookups. Vision and DSpark weights are not included.
 
@@ -240,7 +242,9 @@ from the original safetensors. Do not requantize the first GGUF.
 
 For Q4, add `--quant q4` and use `DeepSeek-V4.1-Flash-Q4.gguf` as the output.
 This changes only the routed experts to Q4_K; the other tensor formats and
-disk-only Engram layout stay the same. The same imatrix works for both recipes.
+disk-only Engram layout stay the same. The same imatrix works for Q2 and Q4.
+For released MXFP4 experts, use `--quant mxfp4` and an MXFP4 output name;
+this repacks the original codes and scales without requantization or expert calibration.
 
 Check the finished artifact against the pinned source before running it:
 
@@ -252,7 +256,7 @@ python3 gguf-tools/deepseek41_validate_gguf.py \
 ```
 
 For a calibrated file, pass the same `--imatrix FILE` used during conversion.
-Pass `--quant q4` to the audit as well when checking a Q4 file.
+Pass the matching `--quant q4` or `--quant mxfp4` to the audit for those files.
 The audit checks the complete layout, all non-expert tensors, sampled experts
 and native Engram rows. It does not replace [inference quality tests](quality-testing/deepseek-v4.1-flash-20260910/README.md).
 

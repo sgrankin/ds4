@@ -71,6 +71,18 @@ pub const Policy = struct {
         return true;
     }
 
+    pub fn shortSweepEnabled(self: *const Policy) bool {
+        _ = self;
+        return !present("DS4_METAL_DISABLE_V41_SHORT_SWEEP");
+    }
+
+    pub fn suffixAll(self: *const Policy, count: u32) bool {
+        const graph = self.graph;
+        return !present("DS4_METAL_DISABLE_V41_SUFFIX_ALL") and !graph.quality and
+            graph.tp_world == 1 and !graph.streaming and graph.image_count == 0 and
+            count >= 512 and count < 8192 and count <= graph.carry_cap;
+    }
+
     pub fn prefillCount(self: *const Policy, remaining: u32) u32 {
         const graph = self.graph;
         // TP batches use the bulk protocol; row-gate ablations stay token-major.
@@ -88,14 +100,36 @@ pub const Policy = struct {
         if (boundedSetting("DS4_METAL_V41_SELECTED_LIMIT", 256, 1024)) |value| selected_limit = value;
         if (remaining < selected_limit and self.selectedSmall(small)) return small;
         if (remaining < minimum) return if (self.exactShort(remaining)) remaining else 1;
-        if (graph.carry_cap != 0 and remaining >= 4096 and !present("DS4_METAL_DISABLE_V41_WIDE_PREFILL")) {
+        // One SSD layer sweep avoids re-reading the weights for a medium
+        // append. Arithmetic stays partitioned into the same 2048-row tiles.
+        if (graph.streaming and graph.tp_world == 1 and graph.prefill_cap >= 2048 and
+            graph.carry_cap >= remaining and remaining > 2048 and remaining < 8192 and
+            remaining % 2048 >= 256 and !present("DS4_METAL_DISABLE_V41_MEDIUM_SWEEP") and
+            !present("DS4_METAL_DISABLE_V41_WIDE_PREFILL")) return remaining;
+        const short_sweep = self.shortSweepEnabled();
+        if (graph.carry_cap != 0 and remaining >= (if (short_sweep) @as(u32, 3072) else 4096) and
+            !present("DS4_METAL_DISABLE_V41_WIDE_PREFILL"))
+        {
             const rows: u32 = @min(remaining, graph.carry_cap);
-            return rows - rows % 2048;
+            const tail = rows % 2048;
+            return if (remaining < 8192 and short_sweep and (tail == 0 or tail >= minimum)) rows else rows - tail;
         }
         return @min(remaining, @min(graph.prefill_cap, 2048));
     }
 
     pub fn encoderChunk(self: *const Policy, rows: u32) u32 {
+        // Older Apple GPUs benefit from wider near-power-of-two tiles. Keep
+        // narrow (<256) tails separate because they select different kernels.
+        if (!self.graph.quality and c.ds4_gpu_device_is_pre_m5_apple_silicon() != 0 and
+            !present("DS4_METAL_DISABLE_V41_WIDER_SHORT_CHUNKS"))
+        {
+            const tail2 = rows % 2048;
+            const tail4 = rows % 4096;
+            if (rows >= 6144 and rows < 8192 and self.graph.prefill_cap >= 4096 and
+                (tail2 == 0 or tail2 >= 256)) return 4096;
+            if (rows >= 12288 and rows < 16384 and self.graph.prefill_cap >= 8192 and
+                (tail4 == 0 or tail4 >= 256)) return 8192;
+        }
         if (rows < 8192 and self.graph.prefill_cap > 2048) return 2048;
         // Keep the decoder suffix optimization for 8K prompts.
         if (rows < 16384 and self.graph.prefill_cap > 4096) return 4096;

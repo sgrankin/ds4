@@ -3,17 +3,24 @@ void **ds4_metal_resource_state_slot(void) { return &ds4_metal_context_current()
  * ds4_metal.m; the public handle remains a retained DS4MetalTensor instance. */
 #include "resources.h"
 
-ds4_gpu_tensor *ds4_metal_resource_new(uint64_t bytes) {
+static ds4_gpu_tensor *ds4_metal_resource_new_options(uint64_t bytes, MTLResourceOptions options) {
     @autoreleasepool {
         DS4MetalTensor *tensor = [DS4MetalTensor new];
         tensor.buffer = [g_device newBufferWithLength:(NSUInteger)bytes
-                                              options:MTLResourceStorageModeShared];
+                                              options:options];
         if (!tensor.buffer) return NULL;
         tensor.offset = 0;
         tensor.bytes = bytes;
         tensor.owner = 1;
         return (__bridge_retained ds4_gpu_tensor *)tensor;
     }
+}
+
+ds4_gpu_tensor *ds4_metal_resource_new(uint64_t bytes) {
+    return ds4_metal_resource_new_options(bytes, MTLResourceStorageModeShared);
+}
+ds4_gpu_tensor *ds4_metal_resource_new_weights(uint64_t bytes) {
+    return ds4_metal_resource_new_options(bytes, ds4_gpu_model_resource_options());
 }
 
 ds4_gpu_tensor *ds4_metal_resource_view(const ds4_gpu_tensor *base,
@@ -70,4 +77,43 @@ int ds4_metal_resource_blit(ds4_gpu_tensor *dst, uint64_t absolute_dst,
         [blit endEncoding];
     }
     return 1;
+}
+
+/* Built-at-load weight copies are immutable after CPU publication. Their
+ * residency set belongs to the same Metal owner as the model views. */
+int ds4_gpu_weight_residency(ds4_gpu_tensor *const *tensors, uint32_t n) {
+    @autoreleasepool {
+        DS4MetalContext *context = ds4_metal_context_current();
+#if TARGET_OS_OSX
+        if (@available(macOS 15.0, *)) {
+            if (context->weight_residency_set) {
+                if (context->weight_residency_added && g_queue && [g_queue respondsToSelector:@selector(removeResidencySet:)])
+                    [g_queue removeResidencySet:context->weight_residency_set];
+                [context->weight_residency_set endResidency];
+                [context->weight_residency_set removeAllAllocations];
+                context->weight_residency_set = nil;
+            }
+            context->weight_residency_added = false;
+            if (!n || !g_device || g_ssd_streaming_mode || context->model_views.residency_skipped || getenv("DS4_METAL_NO_RESIDENCY")) return 1;
+            MTLResidencySetDescriptor *desc = [MTLResidencySetDescriptor new];
+            desc.label = @"ds4_built_weights";
+            desc.initialCapacity = n;
+            NSError *error = nil;
+            id set = [g_device newResidencySetWithDescriptor:desc error:&error];
+            if (!set) {
+                fprintf(stderr, "ds4: Metal built-weight residency failed: %s\n", error.localizedDescription.UTF8String);
+                return 0;
+            }
+            for (uint32_t i = 0; i < n; i++) if (tensors[i]) [set addAllocation:ds4_gpu_tensor_buffer(tensors[i])];
+            [set commit];
+            [set requestResidency];
+            context->weight_residency_set = set;
+            if (!getenv("DS4_METAL_DISABLE_QUEUE_RESIDENCY_SET") && g_queue && [g_queue respondsToSelector:@selector(addResidencySet:)]) {
+                [g_queue addResidencySet:set];
+                context->weight_residency_added = true;
+            }
+        }
+#endif
+        return 1;
+    }
 }

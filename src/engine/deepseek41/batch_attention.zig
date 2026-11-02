@@ -38,15 +38,17 @@ pub const BatchAttention = struct {
         const shape = &self.ops.config.shape;
         const model = self.ops.model;
         const query_width = shape.n_head / graph.tp_world * shape.n_head_dim;
-        // This path deliberately uses the original row RMS kernels, followed
-        // by their explicit BF16 boundaries, rather than the scalar norm fuse.
-        return self.ops.matmulBatch(batch.qr, knownWeight(layer.attn_q_a), batch.norm, count, true) and
-            c.ds4_gpu_rms_norm_weight_rows_tensor(batch.qr, batch.qr, model.map, model.size, knownWeight(layer.attn_q_a_norm).abs_offset, shape.n_lora_q, count, shape.rms_eps) != 0 and
+        if (!self.ops.matmulBatch(batch.qr, knownWeight(layer.attn_q_a), batch.norm, count, true) or
+            !self.ops.matmulBatch(batch.kv, knownWeight(layer.attn_kv), batch.norm, count, true)) return false;
+        // Few-row decode batches fuse independent norms, preserving both BF16
+        // output boundaries. Larger rows retain the established RMS kernels.
+        const fused = count <= c.DS4_TP_BATCH_MAX_ROWS and
+            c.ds4_gpu_dsv41_norm_pair_rows(batch.qr, batch.qr, knownWeight(layer.attn_q_a_norm).abs_offset, shape.n_lora_q, batch.kv, batch.kv, knownWeight(layer.attn_kv_a_norm).abs_offset, shape.n_head_dim, model.map, model.size, shape.rms_eps, count) != 0;
+        if (!fused and !(c.ds4_gpu_rms_norm_weight_rows_tensor(batch.qr, batch.qr, model.map, model.size, knownWeight(layer.attn_q_a_norm).abs_offset, shape.n_lora_q, count, shape.rms_eps) != 0 and
             c.ds4_gpu_dsv41_quantize(batch.qr, shape.n_lora_q, count, c.DS4_V41_BF16) != 0 and
-            self.ops.matmulRowsBatch(batch.q, knownWeight(layer.attn_q_b), batch.qr, graph.tp_rank * query_width, query_width, count) and
-            self.ops.matmulBatch(batch.kv, knownWeight(layer.attn_kv), batch.norm, count, true) and
             c.ds4_gpu_rms_norm_weight_rows_tensor(batch.kv, batch.kv, model.map, model.size, knownWeight(layer.attn_kv_a_norm).abs_offset, shape.n_head_dim, count, shape.rms_eps) != 0 and
-            c.ds4_gpu_dsv41_quantize(batch.kv, shape.n_head_dim, count, c.DS4_V41_BF16) != 0;
+            c.ds4_gpu_dsv41_quantize(batch.kv, shape.n_head_dim, count, c.DS4_V41_BF16) != 0)) return false;
+        return self.ops.matmulRowsBatch(batch.q, knownWeight(layer.attn_q_b), batch.qr, graph.tp_rank * query_width, query_width, count);
     }
 
     pub fn projectRows(self: *const BatchAttention, out: ?*Tensor, weight: *const Weight, input: ?*const Tensor, count: u32, round: bool) bool {
@@ -104,6 +106,31 @@ pub const BatchAttention = struct {
             c.ds4_gpu_dsv41_indexer_scores_batch(graph.index_scores, queries, weights, graph.index_cache[owner], compressed, rows, graph.pos + offset, ratio) != 0;
     }
 
+    // Only rows with more than 2048 eight-key blocks need a candidate mask.
+    // Score rows are packed at compressed stride; masks retain context stride.
+    fn candidates(self: *const BatchAttention, layer: u32, compressed: u32, initial: u32, offset: u32, count: u32, ratio: u32) bool {
+        const graph = self.graph;
+        const skip = @min(count, 16385 * ratio -| (initial + 1));
+        if (skip == count) return true;
+        const rows = count - skip;
+        const start = initial + skip;
+        const mask_width = (graph.ctx + 7) / 8;
+        const blocks = (compressed + 7) / 8;
+        const scores = c.ds4_gpu_tensor_view(graph.index_scores, @as(u64, skip) * compressed * 4, @as(u64, rows) * compressed * 4);
+        const mask = c.ds4_gpu_tensor_view(graph.batch.block_mask, @as(u64, offset + skip) * mask_width * 4, @as(u64, rows) * mask_width * 4);
+        defer c.ds4_gpu_tensor_free(mask);
+        defer c.ds4_gpu_tensor_free(scores);
+        if (scores == null or mask == null) return false;
+        return if (layer == 20)
+            c.ds4_gpu_dsv41_candidate_blocks(graph.block_scores, scores, compressed, rows, start, ratio) != 0 and
+                c.ds4_gpu_dsv41_candidate_topk_batch(graph.block_selected, graph.block_scores, blocks, rows, start) != 0 and
+                c.ds4_gpu_dsv41_candidate_mask_batch(mask, graph.block_selected, blocks, rows, mask_width) != 0
+        else if (layer > 20)
+            c.ds4_gpu_dsv41_candidate_filter(scores, mask, compressed, rows, start, ratio, mask_width) != 0
+        else
+            true;
+    }
+
     pub fn index(self: *const BatchAttention, layer: *const Layer, layer_index: u32, count: u32) bool {
         const graph = self.graph;
         const shape = &self.ops.config.shape;
@@ -142,27 +169,34 @@ pub const BatchAttention = struct {
         while (offset < count) : (offset += score_rows) {
             const rows: u32 = @min(count - offset, score_rows);
             if (!self.scoreTile(owner, compressed, count, offset, rows, ratio, packed_scores)) return false;
-            const batch_topk = (start + offset + 1) / ratio >= 1024 and !present("DS4_METAL_DISABLE_V41_BATCH_TOPK");
+            const batch_topk = count > 1 and !present("DS4_METAL_DISABLE_V41_BATCH_TOPK");
+            if (batch_topk and layer_index >= 20 and !self.candidates(layer_index, compressed, start + offset, offset, rows, ratio)) return false;
             var token: u32 = 0;
-            while ((!batch_topk or layer_index >= 20) and token < rows) : (token += 1) {
+            while (!batch_topk and token < rows) : (token += 1) {
                 row.pos = start + offset + token;
                 row.selected_comp = graph.rows_view[offset + token].selected_comp;
                 row.block_mask = graph.rows_view[offset + token].block_mask;
                 row.index_scores = c.ds4_gpu_tensor_view(graph.index_scores, @as(u64, token) * compressed * 4, @as(u64, compressed) * 4);
                 const attention_row = self.attention(&row);
-                const ok = row.index_scores != null and if (batch_topk)
-                    attention_row.candidates(layer_index)
-                else
-                    attention_row.pick(layer_index);
+                const ok = row.index_scores != null and attention_row.pick(layer_index);
                 c.ds4_gpu_tensor_free(row.index_scores);
                 if (!ok) return false;
             }
             if (batch_topk) {
+                // Rows seeing at most top_k keys keep every key; only the
+                // remaining rows need the causal sort/select dispatch.
                 const id_bytes = @as(u64, shape.n_indexer_top_k) * @sizeOf(i32);
+                const limit = (shape.n_indexer_top_k + 1) * ratio;
+                const whole = @min(rows, limit -| (start + offset + 1));
                 const ids = c.ds4_gpu_tensor_view(batch.selected_comp, @as(u64, offset) * id_bytes, @as(u64, rows) * id_bytes);
-                const ok = ids != null and c.ds4_gpu_dsv41_indexer_topk_batch(ids, graph.index_scores, compressed, rows, start + offset, ratio) != 0;
-                c.ds4_gpu_tensor_free(ids);
-                if (!ok) return false;
+                const rest = if (ids != null and whole < rows) c.ds4_gpu_tensor_view(batch.selected_comp, @as(u64, offset + whole) * id_bytes, @as(u64, rows - whole) * id_bytes) else null;
+                const scores = if (rest != null) c.ds4_gpu_tensor_view(graph.index_scores, @as(u64, whole) * compressed * 4, @as(u64, rows - whole) * compressed * 4) else null;
+                defer c.ds4_gpu_tensor_free(scores);
+                defer c.ds4_gpu_tensor_free(rest);
+                defer c.ds4_gpu_tensor_free(ids);
+                if (ids == null or (whole < rows and (rest == null or scores == null)) or
+                    (whole != 0 and c.ds4_gpu_dsv41_indexer_all_batch(ids, whole, start + offset, ratio) == 0) or
+                    (whole < rows and c.ds4_gpu_dsv41_indexer_topk_batch(rest, scores, compressed, rows - whole, start + offset + whole, ratio) == 0)) return false;
             }
         }
         return true;
@@ -227,16 +261,18 @@ pub const BatchAttention = struct {
 
         var row = graph.*; // Borrowed handles only; never deinitialize this copy.
         const batch_index = policy.publishes_index and !present("DS4_METAL_DISABLE_V41_BATCH_INDEX");
-        const batch_publish = policy.publishes_kv and ratio == 2 and !present("DS4_METAL_DISABLE_V41_BATCH_COMPRESS");
+        const batch_publish = policy.publishes_kv and !present("DS4_METAL_DISABLE_V41_BATCH_COMPRESS");
         if (batch_publish and !self.publish(batch, layer, layer_index, start, count)) return false;
-        if (!batch_index or !batch_publish) {
+        const row_publish = policy.publishes_kv and !batch_publish;
+        const row_index = policy.publishes_index and !batch_index;
+        if (row_index or row_publish) {
             for (0..count) |offset| {
                 row.pos = start + @as(u32, @intCast(offset));
                 const row_view: *const Row = @ptrCast(&graph.rows_view[offset]);
                 selectRow(&row, row_view);
                 const attention_row = self.attention(&row);
-                if (!batch_publish and !attention_row.publish(layer, layer_index)) return false;
-                if (!batch_index and !attention_row.selectPublished(layer, layer_index)) return false;
+                if (row_publish and !attention_row.publish(layer, layer_index)) return false;
+                if (row_index and !attention_row.selectPublished(layer, layer_index)) return false;
             }
         }
         if (batch_index and !self.index(layer, layer_index, count)) return false;

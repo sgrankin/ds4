@@ -157,9 +157,13 @@ pub fn run(request: *const Request, add_in: ?*const c.ds4_gpu_tensor) c_int {
         _ = c.fprintf(c.__stderrp, "ds4: unsupported Metal routed MoE quant types gate=%u down=%u\n", q.gate_type, q.down_type);
         return @intFromBool(Dispatch.silent(32158));
     }
-    const gate = Batch.mvArgs(&q, &facts.batch, false);
+    var gate = Batch.mvArgs(&q, &facts.batch, false);
     var down_args = Batch.mvArgs(&q, &facts.batch, true);
     down_args.tp_addend = @intFromBool(add_in != null);
+    if (facts.full_expert_bind) {
+        gate.tp_world = 1;
+        down_args.tp_world = 1;
+    }
     const policy = Policy.choose(&q, &facts, add_in != null, gate, down_args, gate_bytes, down_bytes) orelse return 0;
     if (!policy.slots()) Selection.clearOverride();
     const resource = c.ds4_metal_single_open(&q, add_in) orelse return 0;

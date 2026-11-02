@@ -41,11 +41,6 @@ extern int ds4_gpu_glm_attention_indexed_decode_tensor(
     float beta_fast, float beta_slow);
 #endif
 
-bool ds4_log_is_tty(FILE *fp) {
-    (void)fp;
-    return false;
-}
-
 static void require_ok(int ok, const char *what) {
     if (!ok) {
         fprintf(stderr, "%s failed\n", what);

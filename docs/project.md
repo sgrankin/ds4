@@ -1,8 +1,11 @@
 # Project direction and current status
 
-Updated 2026-10-29. **Runtime implementation and experiments are paused.**
+Updated 2026-11-02. **The upstream port through `890898cf` is complete.**
 The organized manuals and lab journal are available under the [documentation index](README.md).
-The latest authorized batch is complete. No next experiment is selected.
+The initial adaptation omitted upstream functionality; the completion audit
+covered all 118 commits and integrated the missing paths. All upstream
+functionality is required unless we explicitly excised it from this fork;
+hardware qualification limits do not remove that implementation obligation.
 
 ## What we are building
 
@@ -40,9 +43,10 @@ The completed work is installed locally; the stack has not been published.
 | Model interaction | Official-reference prompt/tool handling, client sampling overrides, explicit cache breakpoints and native constrained decoding for DeepSeek and Flint. Typed partial tool calls survive generation limits. | [Interaction qualification](../speed-bench/experiments/interaction-catchup-20261027/README.md), [DSML limits](../speed-bench/experiments/dsml-length-20261028/README.md) |
 | Persistent inference state | RAM/SSD checkpoint storage, suffix relocation from immutable pre-RoPE originals, packed index/main KV, and useful drafter-history persistence. Packed KV and DSP1 are selected through DeepSeek fast presets; ordinary engine defaults differ. | [Recipe index](../recipes/README.md), especially chapters 02, 03, 14 and 15 |
 | Context edits | Semantic endpoints, bounded hot retention, anchor selection and capture during ordinary prefill are complete. Server `persistent-fast` enables this package; the direct agent and other presets do not gain these new boundary defaults. | [Current checkpoint recipe](../recipes/16-semantic-context-checkpoints.md) |
-| Experimental leftovers | Candidate-only scoring, block-only look-back recovery and HC fusion have narrower or diagnostic status. Slower integer/packed-activation prefill hooks were removed. They are not unfinished promises to promote. | [DeepInfer comparison](models/deepseek/deepinfer/comparison.md), [not-adopted lessons](../recipes/not-adopted/README.md) |
+| Upstream maintenance | Complete through `890898cf`, including ordinary graph fusions, tiny-batch expert reuse, pre-M5 selectors, negotiated replicated TP and inline gates. Host, GPU and installed-model checks pass; physical two-Mac/RDMA and older-device performance remain unmeasured. | [Catch-up journal](lab/journal/2026-11-02-upstream-catchup.md), [upstream mechanisms](models/deepseek/upstream-performance.md) |
+| Experimental leftovers | Candidate-only scoring and block-only look-back recovery retain narrower or diagnostic status. The earlier opt-in HC collapse/norm experiment is separate from the integrated upstream graph fusions. Slower integer/packed-activation prefill hooks were removed. | [DeepInfer comparison](models/deepseek/deepinfer/comparison.md), [not-adopted lessons](../recipes/not-adopted/README.md) |
 
-The latest authorized sequence—DSML truncation, drafter-history persistence,
+The earlier sequence—DSML truncation, drafter-history persistence,
 physical main KV packing, one fusion, and context checkpoints—is complete.
 The checkpoint follow-up removed extra streamed-weight sweeps. Its five-pair
 zero-edit comparison finds no clear request-time overhead; all 20 answers pass.
@@ -56,8 +60,7 @@ is a separate capability. Unsupported in-sweep capture uses the older capture pa
 
 ## What remains a choice
 
-There is no active implementation obligation from the last batch. The useful
-directions below are alternatives, not an execution queue:
+The useful directions below are alternatives, not an execution queue:
 
 1. **Use and qualify the current stack in a real agent workflow.** Establish
    whether the accumulated changes improve representative work. Longer

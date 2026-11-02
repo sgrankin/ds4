@@ -262,6 +262,12 @@ export fn ds4_native_dspark_cycle_commit41(args: *const c.ds4_dspark_cycle_args,
 const CycleLibraryContext = struct {
     session: ?*c.ds4_session,
     engine: ?*c.ds4_engine,
+    // This low-level fixture API owns no request-control record. Its caller
+    // selects which cycle to exercise; public Session supplies the scheduler.
+    pub fn schedulerShouldSkip(_: *const CycleLibraryContext) bool {
+        return false;
+    }
+    pub fn schedulerNote(_: *const CycleLibraryContext, _: u32, _: bool) void {}
     pub fn eval(self: *const CycleLibraryContext, token: c_int, errors: []u8) c_int {
         return c.ds4_session_eval(self.session, token, errors.ptr, errors.len);
     }
@@ -325,6 +331,11 @@ export fn ds4_native_memory_admit_for_host41(state: *c.ds4_engine_memory, weight
     const config = configuration(raw);
     const memory = @import("deepseek41/memory.zig").Memory{ .state = state, .config = &config, .weights = weights, .inputs = inputs.* };
     return memory.admitForHost(graph_bytes, fit_cache, host, recommended);
+}
+export fn ds4_native_memory_can_replicate41(state: *c.ds4_engine_memory, weights: *const c.ds4_weights, raw: *const c.ds4_model_config, inputs: *const c.ds4_engine_memory_inputs, graph_bytes: u64, sidecars: u64) bool {
+    const config = configuration(raw);
+    const memory = @import("deepseek41/memory.zig").Memory{ .state = state, .config = &config, .weights = weights, .inputs = inputs.* };
+    return memory.canReplicate(graph_bytes, sidecars);
 }
 export fn ds4_native_memory_admit41(state: *c.ds4_engine_memory, weights: *const c.ds4_weights, raw: *const c.ds4_model_config, inputs: *const c.ds4_engine_memory_inputs, graph_bytes: u64, fit_cache: bool) bool {
     const config = configuration(raw);

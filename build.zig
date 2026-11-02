@@ -195,6 +195,12 @@ pub fn build(b: *std.Build) void {
     const constraint_walk_test = b.addTest(.{ .name = "test-token-constraint", .root_module = constraint_walk_module });
     b.step("token-constraint-test", "Build speculative grammar mask/accept/rollback fixtures")
         .dependOn(&b.addInstallArtifact(constraint_walk_test, .{}).step);
+    const scheduler_module = module(b, target, sdk, .debug);
+    scheduler_module.root_source_file = b.path("src/engine/session_control.zig");
+    scheduler_module.addImport("gguf_c", generatedApi(b, target, sdk, .debug, "src/engine/deepseek41/graph_api.h"));
+    const scheduler_test = b.addTest(.{ .name = "test-dspark-scheduler", .root_module = scheduler_module });
+    b.step("dspark-scheduler-test", "Build count-based native DSpark scheduling checks")
+        .dependOn(&b.addInstallArtifact(scheduler_test, .{}).step);
 
     const core_module = module(b, target, sdk, .fast);
     core_module.linkLibrary(grammar_library);
@@ -753,8 +759,11 @@ pub fn build(b: *std.Build) void {
     inline for (.{
         .{ "dense-mpp-test", "test-metal-dense-mpp", "tests/test_metal_dense_mpp.c" },
         .{ "shared-bf16-test", "test-metal-shared-bf16", "tests/test_metal_shared_bf16.c" },
+        .{ "moe-prefill-test", "test-metal-moe-prefill", "tests/test_metal_moe_prefill.c" },
         .{ "ssd-experts-test", "test-metal-ssd-experts", "tests/test_metal_ssd_experts.c" },
         .{ "command-memory-test", "test-metal-command-memory", "tests/test_metal_command_memory.c" },
+        .{ "tp-link-test", "test-tp-link", "tests/test_tp_link.c" },
+        .{ "indexer-score-test", "test-v41-indexer-score", "tests/test_v41_indexer_score.c" },
         .{ "qwen-kernels-test", "test-qwen4-kernels", "tests/test_qwen4_kernels.c" },
         .{ "glm53-kda-test", "test-glm53-kda", "tests/test_glm53_kda.c" },
         .{ "glm53-vision-prompt-test", "test-glm53-vision-prompt", "tests/test_glm53_vision_prompt.c" },
@@ -768,6 +777,7 @@ pub fn build(b: *std.Build) void {
         .{ "session-steering-test", "test-session-steering", "tests/test_session_steering.zig", "src/ds4.h", "steering_c" },
         .{ "checkpoint-capture-test", "test-checkpoint-capture", "tests/test_checkpoint_capture.zig", "src/ds4.h", "checkpoint_capture_c" },
         .{ "dspark-checkpoint-test", "test-dspark-checkpoint", "tests/test_dspark_checkpoint.zig", "tests/checkpoint_api.h", "checkpoint_c" },
+        .{ "qwen-ple-prefetch-test", "test-qwen4-ple-prefetch", "src/engine/qwen4/prefetch_test.zig", "src/engine/qwen4/api.h", "gguf_c" },
     }) |fixture| {
         const root = module(b, target, sdk, optimize);
         root.root_source_file = b.path(fixture[2]);

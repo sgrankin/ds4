@@ -264,7 +264,7 @@ pub fn tokenize(engine: ?*c.ds4_engine, runtime: ?*c.server, request: *c.request
         }
         return true;
     }
-    if (count > 16) return fail(errors, "too many images; at most 16 are allowed");
+    if (count > c.SERVER_MAX_IMAGES) return fail(errors, std.fmt.comptimePrint("too many images; at most {d} are allowed", .{c.SERVER_MAX_IMAGES}));
     if (engine == null or runtime == null or !c.ds4_engine_has_vision(engine)) return fail(errors, "image input requires starting ds4-server with --vision FILE");
     const srv = runtime.?;
     const ok = transaction: {

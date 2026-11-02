@@ -57,8 +57,10 @@ pub const Ops = struct {
     }
 
     pub fn matmul(self: *const Ops, out: ?*Tensor, weight: *const Weight, input: ?*const Tensor, round: bool) bool {
-        if (round and weight.type == c.DS4_TENSOR_Q8_0 and present("DS4_METAL_V41_FUSED_Q8_BF16"))
-            return c.ds4_gpu_dsv41_matmul_q8_0_bf16_rows(out, self.model.map, self.model.size, weight.abs_offset, weight.dim[0], weight.dim[1], input, 1) != 0;
+        if (round and weight.type == c.DS4_TENSOR_Q8_0)
+            return c.ds4_gpu_matmul_q8_0_bf16_tensor(out, self.model.map, self.model.size, weight.abs_offset, weight.dim[0], weight.dim[1], input, 1) != 0;
+        if (round and weight.type == c.DS4_TENSOR_F16 and
+            c.ds4_gpu_dsv41_project_f16_bf16(out, self.model.map, self.model.size, weight.abs_offset, dimension(weight.dim[0]), dimension(weight.dim[1]), input) != 0) return true;
         return self.plainMatmul(out, weight, weight.dim[0], weight.dim[1], input, 1) and
             (!round or bf16(out, dimension(weight.dim[1])));
     }
@@ -69,8 +71,8 @@ pub const Ops = struct {
         const exact_rows = count <= c.DS4_TP_BATCH_MAX_ROWS or self.exactDenseRows();
         const model = self.model;
         if (round and exact_rows and outputs != self.config.shape.n_vocab and
-            weight.type == c.DS4_TENSOR_Q8_0 and present("DS4_METAL_V41_FUSED_Q8_BF16"))
-            return c.ds4_gpu_dsv41_matmul_q8_0_bf16_rows(out, model.map, model.size, weight.abs_offset, width, outputs, input, count) != 0;
+            weight.type == c.DS4_TENSOR_Q8_0)
+            return c.ds4_gpu_matmul_q8_0_bf16_tensor(out, model.map, model.size, weight.abs_offset, width, outputs, input, count) != 0;
 
         // Small decode batches retain scalar reductions before BF16/sparse
         // routing boundaries. Metal's vocabulary-head dispatch stays separate.
@@ -128,7 +130,7 @@ pub const Ops = struct {
         const width = dimension(weight.dim[0]);
         if (present("DS4_METAL_V41_FUSED_NORM"))
             return c.ds4_gpu_dsv41_rms_norm_weight_bf16_rows(out, input, self.model.map, self.model.size, weight.abs_offset, width, 1, self.config.shape.rms_eps) != 0;
-        return c.ds4_gpu_rms_norm_weight_tensor(out, input, self.model.map, self.model.size, weight.abs_offset, width, self.config.shape.rms_eps) != 0 and bf16(out, width);
+        return c.ds4_gpu_rms_norm_weight_bf16_tensor(out, input, self.model.map, self.model.size, weight.abs_offset, width, self.config.shape.rms_eps) != 0;
     }
 
     pub fn normBatch(self: *const Ops, out: ?*Tensor, input: ?*const Tensor, weight: *const Weight, count: u32) bool {
@@ -165,8 +167,37 @@ pub const Ops = struct {
 
     pub fn hcExpand(self: *const Ops, out: ?*Tensor, block: ?*const Tensor, residual: ?*const Tensor, split: ?*const Tensor) bool {
         const shape = &self.config.shape;
-        return c.ds4_gpu_hc_expand_split_tensor(out, block, residual, split, shape.n_embd, shape.n_hc) != 0 and
-            bf16(out, shape.n_embd *% shape.n_hc);
+        return c.ds4_gpu_hc_expand_split_bf16_tensor(out, block, residual, split, shape.n_embd, shape.n_hc) != 0;
+    }
+
+    /// The HC projection and the collapse consume the same residual but
+    /// different mixer weights: collapse uses the preceding sublayer's PRE.
+    pub fn hcInput(self: *const Ops, graph: *Graph, layer: *const Layer, ffn: bool) bool {
+        const shape = &self.config.shape;
+        const projection = if (ffn) layer.hc_ffn_fn else layer.hc_attn_fn;
+        const scale = if (ffn) layer.hc_ffn_scale else layer.hc_attn_scale;
+        const base = if (ffn) layer.hc_ffn_base else layer.hc_attn_base;
+        const norm_weight = if (ffn) layer.ffn_norm else layer.attn_norm;
+        const residual = if (ffn) graph.after_attn else graph.residual;
+        const previous = if (ffn) graph.attn_split else graph.pre;
+        const split = if (ffn) graph.ffn_split else graph.attn_split;
+        if (ffn) graph.hc_ffn_deferred = false else graph.hc_attn_deferred = false;
+        // The previous mixer can collapse this residual immediately; the new
+        // mixer is only needed by the later expansion. Piggyback it on the
+        // independent router/query projection instead of launching it here.
+        const defer_shape = if (ffn)
+            layer.ffn_gate_inp.*.type == c.DS4_TENSOR_F32 and layer.ffn_gate_inp.*.dim[0] == 5120 and layer.ffn_gate_inp.*.dim[1] == 384 and !present("DS4_METAL_PLAIN_MV_NR0")
+        else
+            layer.attn_q_b.*.type == c.DS4_TENSOR_Q8_0 and layer.attn_q_b.*.dim[0] == 1280 and layer.attn_q_b.*.dim[1] == 32768 and !present("DS4_METAL_Q8_MV_NSG");
+        if (graph.scalar_decode and !c.ds4_native_graph_trace_active() and graph.tp_world == 1 and !graph.quality and !graph.streaming and graph.imatrix == null and projection.*.type == c.DS4_TENSOR_F16 and norm_weight.*.type == c.DS4_TENSOR_F32 and defer_shape and
+            c.ds4_gpu_dsv41_deferred_collapse(graph.x, graph.norm, residual, previous, self.model.map, self.model.size, norm_weight.*.abs_offset, shape.rms_eps) != 0)
+        {
+            if (ffn) graph.hc_ffn_deferred = true else graph.hc_attn_deferred = true;
+            return true;
+        }
+        if (projection.*.type == c.DS4_TENSOR_F16 and !present("DS4_METAL_DISABLE_V41_HC_BLOCK_INPUT") and
+            c.ds4_gpu_dsv41_hc_block_input_rows(graph.mix, graph.x, graph.norm, split, residual, previous, self.model.map, self.model.size, projection.*.abs_offset, scale.*.abs_offset, base.*.abs_offset, norm_weight.*.abs_offset, shape.n_hc * shape.n_embd, 24, shape.n_embd, shape.n_hc, shape.n_hc_sinkhorn_iter, shape.hc_eps, shape.rms_eps, 1, if (ffn) 24 else shape.n_hc) != 0) return true;
+        return self.hcMix(graph, layer, ffn) and self.hcNorm(graph.x, graph.norm, residual, previous, ffn, norm_weight, 1);
     }
 
     pub fn hcMix(self: *const Ops, graph: *Graph, layer: *const Layer, ffn: bool) bool {
@@ -200,14 +231,30 @@ pub const Ops = struct {
         return c.ds4_gpu_dsv41_rope(tensor, width, heads, 1, position, self.config.compress_ratios[layer] != 0, inverse) != 0;
     }
 
-    pub fn sumPartial(self: *const Ops, graph: *Graph, tensor: ?*Tensor, layer: u32, gate: u32) bool {
-        if (graph.tp_world != 2) return true;
-        const slot = layer *% c.DS4_TP_GATES_PER_LAYER +% gate;
-        if (c.ds4_gpu_tensor_copy(graph.tp_out[slot], 0, tensor, 0, @as(u64, self.config.shape.n_embd) * 4) == 0 or
-            c.ds4_gpu_tp_gate_encode(layer, gate) == 0) return false;
+    pub fn gatePartial(self: *const Ops, graph: *Graph, tensor: ?*Tensor, layer: u32, gate: u32) bool {
+        const slot = layer * c.DS4_TP_GATES_PER_LAYER + gate;
+        return (tensor == graph.tp_out[slot] or c.ds4_gpu_tensor_copy(graph.tp_out[slot], 0, tensor, 0, @as(u64, self.config.shape.n_embd) * 4) != 0) and
+            c.ds4_gpu_tp_gate_encode(layer, gate) != 0;
+    }
+
+    pub fn expandPartials(self: *const Ops, graph: *Graph, out: ?*Tensor, base: ?*const Tensor, split: ?*const Tensor, layer: u32, gate: u32) bool {
+        const slot = layer * c.DS4_TP_GATES_PER_LAYER + gate;
         const first = if (graph.tp_rank != 0) graph.tp_in[slot] else graph.tp_out[slot];
         const second = if (graph.tp_rank != 0) graph.tp_out[slot] else graph.tp_in[slot];
-        return c.ds4_gpu_add_tensor(tensor, first, second, self.config.shape.n_embd) != 0;
+        return c.ds4_gpu_hc_expand_split_add_bf16_tensor(out, first, second, base, split, self.config.shape.n_embd, self.config.shape.n_hc) != 0;
+    }
+
+    pub fn sumPartial(self: *const Ops, graph: *Graph, tensor: ?*Tensor, layer: u32, gate: u32) bool {
+        return self.sumPartialInto(graph, tensor, tensor, layer, gate);
+    }
+
+    pub fn sumPartialInto(self: *const Ops, graph: *Graph, source: ?*Tensor, destination: ?*Tensor, layer: u32, gate: u32) bool {
+        if (graph.tp_world != 2) return true;
+        if (!self.gatePartial(graph, source, layer, gate)) return false;
+        const slot = layer * c.DS4_TP_GATES_PER_LAYER + gate;
+        const first = if (graph.tp_rank != 0) graph.tp_in[slot] else graph.tp_out[slot];
+        const second = if (graph.tp_rank != 0) graph.tp_out[slot] else graph.tp_in[slot];
+        return c.ds4_gpu_add_tensor(destination, first, second, self.config.shape.n_embd) != 0;
     }
 
     pub fn sumPartialBatch(self: *const Ops, graph: *Graph, tensor: ?*Tensor, layer: u32, gate: u32, count: u32) bool {

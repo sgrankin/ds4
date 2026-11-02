@@ -12,6 +12,8 @@
  * the sole borrowed string, immutable for the server lifetime. No engine or
  * session layout crosses this boundary. */
 #define SERVER_IMAGE_MARKER_BYTES 64
+/* Per-request cap; engine vision spans are dynamically allocated. */
+#define SERVER_MAX_IMAGES 256
 
 typedef struct {
     char marker[SERVER_IMAGE_MARKER_BYTES];

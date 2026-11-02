@@ -31,3 +31,19 @@ export fn ds4_gpu_attention_decode_heads_tensor(heads: ?*Tensor, map: ?*const an
         .width = width,
     });
 }
+
+export fn ds4_gpu_dsv41_heads_once_arm(table: ?*const Tensor, compressed: bool) void {
+    owner.headsArm(table, compressed);
+}
+export fn ds4_gpu_dsv41_heads_once_take() c_int {
+    return owner.headsTake();
+}
+
+export fn ds4_gpu_dsv41_attention_decode(heads: ?*Tensor, map: ?*const anyopaque, size: u64, sinks: u64, q: ?*const Tensor, raw: ?*const Tensor, raw_rows: u32, raw_cap: u32, raw_start: u32, cache: ?*const Tensor, ids: ?*const Tensor, selected: ?*Tensor, cache_rows: u32, attended: u32, n_head: u32, width: u32) c_int {
+    _ = selected;
+    if (width != 512 or attended == 0 or attended > cache_rows or c.ds4_gpu_tensor_bytes(cache) < @as(u64, cache_rows) * width * 4 or c.ds4_gpu_tensor_bytes(ids) < @as(u64, attended) * 4 or c.ds4_metal_attention_get_facts().flags & c.DS4_ATTN_QUALITY != 0 or c.getenv("DS4_METAL_DISABLE_GATHERED_KV_STAGE") != null) return 0;
+    return owner.run(.{ .heads = heads, .map = map, .size = size, .sinks_offset = sinks, .q = q, .raw = raw, .raw_rows = raw_rows, .raw_cap = raw_cap, .raw_start = raw_start, .comp = cache, .comp_half = 0, .comp_rows = attended, .mask = null, .use_mask = 0, .n_head = n_head, .width = width, .ids = ids });
+}
+export fn ds4_gpu_dsv41_flash_attn_reduce_check(heads: ?*Tensor, tmp: ?*const Tensor, rows: u32, transform: c_int, tab: ?*const Tensor, compressed: bool) c_int {
+    return owner.reduceCheck(heads, tmp, rows, transform != 0, tab, compressed);
+}

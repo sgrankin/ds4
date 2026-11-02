@@ -75,6 +75,9 @@ ds4_metal_attention_pipeline ds4_metal_hc_control_pipeline(uint32_t kind) {
     case DS4_HC_EXPAND:
       p = g_hc_expand_pipeline;
       break;
+    case DS4_HC_EXPAND_SERIAL_BF16:
+      p = ds4_gpu_get_pipeline("kernel_dsv4_hc_expand4_serial_add_bf16");
+      break;
     case DS4_HC_EXPAND4:
       p = ds4_gpu_hot_pipeline(g_dsv4_hc_expand4_pipeline,
                                "kernel_dsv4_hc_expand4");

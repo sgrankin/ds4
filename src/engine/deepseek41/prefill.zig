@@ -71,6 +71,40 @@ pub const Prefill = struct {
         return result;
     }
 
+    fn blockInput(executor: Executor, row: *Row, layer: *const Layer, ffn: bool, pre: ?*const c.ds4_gpu_tensor, stride: u32, count: u32) bool {
+        const shape = &executor.ops.config.shape;
+        const weight = if (ffn) layer.hc_ffn_fn else layer.hc_attn_fn;
+        if (count > c.DS4_TP_BATCH_MAX_ROWS or weight.*.type != c.DS4_TENSOR_F16 or
+            present("DS4_METAL_DISABLE_V41_HC_BLOCK_INPUT")) return false;
+        const scale = if (ffn) layer.hc_ffn_scale else layer.hc_attn_scale;
+        const base = if (ffn) layer.hc_ffn_base else layer.hc_attn_base;
+        const norm = if (ffn) layer.ffn_norm else layer.attn_norm;
+        const mix_width = 2 * shape.n_hc + shape.n_hc * shape.n_hc;
+        return c.ds4_gpu_dsv41_hc_block_input_rows(
+            row.mix,
+            row.x,
+            row.norm,
+            if (ffn) row.ffn_split else row.attn_split,
+            if (ffn) row.after_attn else row.residual,
+            pre,
+            executor.ops.model.map,
+            executor.ops.model.size,
+            weight.*.abs_offset,
+            scale.*.abs_offset,
+            base.*.abs_offset,
+            norm.*.abs_offset,
+            shape.n_hc * shape.n_embd,
+            mix_width,
+            shape.n_embd,
+            shape.n_hc,
+            shape.n_hc_sinkhorn_iter,
+            shape.hc_eps,
+            shape.rms_eps,
+            count,
+            stride,
+        ) != 0;
+    }
+
     pub fn beforeBatch(executor: Executor, row: *Row, layer: *const Layer, index: u32, count: u32) bool {
         const graph = executor.graph;
         const shape = &executor.ops.config.shape;
@@ -79,15 +113,30 @@ pub const Prefill = struct {
             if (!executor.ops.matmulBatch(row.engram_kv, layer.engram_kv, row.engram_rows, count, true) or
                 c.ds4_gpu_dsv41_engram_add(row.residual, row.engram_kv, graph.engram_q_norm[table], graph.engram_k_norm[table], if (graph.image_count != 0) graph.image_text_mask else null, shape.n_embd, count, shape.rms_eps) == 0) return false;
         }
+        if (blockInput(executor, row, layer, false, if (index != 0) row.ffn_split else row.pre, if (index != 0) 2 * shape.n_hc + shape.n_hc * shape.n_hc else shape.n_hc, count)) return true;
         if (!executor.ops.hcMixBatch(row, layer, false, count)) return false;
         // V4.1 uses the preceding sublayer's mixer, not the newly computed one.
         return executor.ops.hcNorm(row.x, row.norm, row.residual, if (index != 0) row.ffn_split else row.pre, index != 0, layer.attn_norm, count);
     }
 
-    pub fn afterBatch(executor: Executor, row: *Row, layer: *const Layer, index: u32, count: u32) bool {
-        return executor.expand(row.after_attn, row.block, row.residual, row.attn_split, index, count, false) and
-            executor.ops.hcMixBatch(row, layer, true, count) and
-            executor.ops.hcNorm(row.x, row.norm, row.after_attn, row.attn_split, true, layer.ffn_norm, count);
+    /// Fuse only the final projection; low already contains the exact grouped
+    /// projection. Residual steering keeps its established expansion hook.
+    pub fn expandAttentionRows(executor: Executor, row: *Row, layer: *const Layer, count: u32) bool {
+        if (c.ds4_native_graph_trace_active() or count > c.DS4_TP_BATCH_MAX_ROWS or executor.graph.tp_world != 1 or executor.graph.steering_attn_scale != 0 or
+            layer.attn_output_b.*.type != c.DS4_TENSOR_Q8_0 or present("DS4_METAL_DISABLE_V41_EXPAND_FUSION")) return false;
+        return c.ds4_gpu_dsv41_matmul_expand_rows(row.after_attn, executor.ops.model.map, executor.ops.model.size, layer.attn_output_b.*.abs_offset, @intCast(layer.attn_output_b.*.dim[0]), @intCast(layer.attn_output_b.*.dim[1]), row.low, null, row.residual, row.attn_split, executor.ops.config.shape.n_hc, count) != 0;
+    }
+
+    pub fn afterBatch(executor: Executor, row: *Row, layer: *const Layer, index: u32, count: u32, expanded: bool) bool {
+        const hc = executor.ops.config.shape.n_hc;
+        const ready = if (expanded)
+            @import("steering_capture.zig").capture(executor.graph, row.after_attn, index, count, executor.ops.config.shape.n_embd, hc, false)
+        else
+            executor.expand(row.after_attn, row.block, row.residual, row.attn_split, index, count, false);
+        return ready and
+            (blockInput(executor, row, layer, true, row.attn_split, 2 * hc + hc * hc, count) or
+                (executor.ops.hcMixBatch(row, layer, true, count) and
+                    executor.ops.hcNorm(row.x, row.norm, row.after_attn, row.attn_split, true, layer.ffn_norm, count)));
     }
 
     // Publish all encoder compressed keys, but warm only the decoder's local
@@ -159,7 +208,10 @@ pub const Prefill = struct {
         const total_count: u32 = @intCast(tokens.len);
         const policy = Policy{ .config = config, .graph = graph, .weights = weights };
         const encoder_chunk = policy.encoderChunk(total_count);
-        const wide = total_count > encoder_chunk;
+        // Checkpoint capture retains its already-qualified full-row behavior;
+        // ordinary prompts may prune inside a tile while preserving its plan.
+        const suffix_all = self.checkpoints == null and policy.suffixAll(total_count);
+        const wide = total_count > encoder_chunk or suffix_all;
         if ((!graph.valid and !resume_encoder) or total_count == 0 or (wide and total_count > graph.carry_cap) or
             total_count > graph.ctx - graph.pos or graph.imatrix != null or !policy.tpBatchEnabled()) return false;
         const profile = present("DS4_METAL_GRAPH_PREFILL_PROFILE");
@@ -174,7 +226,9 @@ pub const Prefill = struct {
         const batch_core = !exact_short and batch_attention and !present("DS4_METAL_DISABLE_V41_BATCH_CORE");
         const batch_hc = batch_attention and (batch_moe or (exact_short and
             (selected_small or present("DS4_METAL_V41_EXACT_BATCH_HC")))) and !present("DS4_METAL_DISABLE_V41_BATCH_HC");
-        const decoder_suffix = wide and total_count >= 8192 and !present("DS4_METAL_DISABLE_V41_DECODER_SUFFIX");
+        const suffix_rows = 1 + (shape.n_layer - 20) * 127;
+        const decoder_suffix = self.checkpoints == null and (suffix_all or
+            (wide and total_count >= suffix_rows and !present("DS4_METAL_DISABLE_V41_DECODER_SUFFIX")));
         const replay_rows = policy.replayRows(total_count);
         const replay_selected_requested = replay_rows != 0 and replaySelected();
         var replay_selected: [c.DS4_MAX_LAYER]bool = @splat(false);
@@ -247,27 +301,43 @@ pub const Prefill = struct {
                 }
             }
             const mapped_at = if (profile) nowSeconds() else 0;
+            // A shrinking decoder suffix retains its established 2048-row
+            // partitions even when encoder tiles are wider.
+            const chunk: u32 = if (wide and index >= 20 and encoder_chunk > 2048) 2048 else encoder_chunk;
             var first: u32 = 0;
             if (ok and decoder_suffix and index >= 20) {
                 if (index == 20) ok = decoderPrepare(executor, layer, index, initial_start, 0, total_count, true, batch_hc, batch_attention, callbacks);
                 if (replay_rows != 0) {
                     first = total_count - replay_rows;
                 } else {
-                    const needed = (if (graph.dspark != null) @as(u32, 128) else 1) + (shape.n_layer - 1 - index) * 127;
-                    first = total_count - needed;
-                    if (ok) ok = decoderPrepare(executor, layer, index, initial_start, first - 127, 127, false, batch_hc, batch_attention, callbacks);
+                    const needed = 1 + (shape.n_layer - 1 - index) * 127;
+                    first = total_count -| needed;
+                    if (suffix_all) {
+                        // Prune at a compressor block boundary, retaining at
+                        // least 256 rows so router/expert dispatch stays stable.
+                        const chunk_start = first - first % chunk;
+                        const chunk_end = @min(total_count, chunk_start + chunk);
+                        if (chunk_end - first < 256)
+                            first = if (chunk_end - chunk_start > 256) chunk_end - 256 else chunk_start;
+                        const over = (initial_start + first) % 128;
+                        first = if (first - chunk_start >= over) first - over else chunk_start;
+                    }
+                    const short_sweep = total_count < 8192 and policy.shortSweepEnabled() and !suffix_all;
+                    if (short_sweep) first -= first % 2048;
+                    const warm: u32 = @min(first, if (short_sweep) @as(u32, 128) else 127);
+                    if (ok and first != 0) ok = decoderPrepare(executor, layer, index, initial_start, first - warm, warm, false, batch_hc, batch_attention, callbacks);
                 }
             }
-            // A shrinking decoder suffix keeps its established partitions,
-            // even when the encoder uses larger aligned matrix tiles.
-            const chunk: u32 = if (wide and index >= 20 and encoder_chunk > 2048) 2048 else encoder_chunk;
             var offset = first;
-            while (ok and offset < total_count) : (offset += chunk) {
+            while (ok and offset < total_count) : (offset += if (suffix_all) chunk - offset % chunk else chunk) {
                 if (callbacks.cancelled()) {
                     ok = false;
                     break;
                 }
-                const count: u32 = @min(total_count - offset, chunk);
+                const span = if (suffix_all) chunk - offset % chunk else chunk;
+                const count: u32 = @min(total_count - offset, span);
+                const chunk_start = offset - offset % chunk;
+                graph.plan_rows = if (suffix_all) @min(total_count - chunk_start, chunk) else 0;
                 const start = initial_start + offset;
                 graph.pos = start;
                 var active = buffers.Views{};
@@ -362,7 +432,14 @@ pub const Prefill = struct {
                     }
                     if (ok) ok = executor.trace(graph.batch.heads, shape.n_head * shape.n_head_dim / graph.tp_world, start, count, index, "1d-heads");
                     stage.mark(&ok, "attention core/index");
-                    if (ok and graph.tp_world == 2) {
+                    var expanded = false;
+                    if (ok and batch_hc and graph.tp_world == 1 and count <= c.DS4_TP_BATCH_MAX_ROWS and layer.attn_output_a.*.type == c.DS4_TENSOR_Q8_0 and layer.attn_output_b.*.type == c.DS4_TENSOR_Q8_0) {
+                        ok = c.ds4_gpu_attention_output_low_q8_rows_exact_tensor(active.row.low, model.map, model.size, layer.attn_output_a.*.abs_offset, 4096, shape.n_lora_o, shape.n_out_group, 0, shape.n_out_group, graph.batch.heads, count) != 0;
+                        if (ok) expanded = expandAttentionRows(executor, &active.row, layer, count);
+                    }
+                    if (ok and expanded) {
+                        // The fused projection already wrote every HC stream.
+                    } else if (ok and graph.tp_world == 2) {
                         ok = c.ds4_gpu_dsv41_attention_output_tp_batch(graph.batch.block, graph.batch.low, model.map, model.size, layer.attn_output_a.*.abs_offset, layer.attn_output_b.*.abs_offset, graph.batch.heads, count, graph.tp_rank) != 0 and
                             executor.ops.sumPartialBatch(graph, graph.batch.block, index, c.DS4_TP_GATE_ATTN, count) and
                             c.ds4_gpu_dsv41_quantize(graph.batch.block, shape.n_embd, count, c.DS4_V41_BF16) != 0;
@@ -381,7 +458,7 @@ pub const Prefill = struct {
                     }
                     if (ok) ok = executor.trace(graph.batch.block, shape.n_embd, start, count, index, "2-attn");
                     stage.mark(&ok, "attention output");
-                    if (ok and batch_hc) ok = afterBatch(executor, &active.row, layer, index, count);
+                    if (ok and batch_hc) ok = afterBatch(executor, &active.row, layer, index, count, expanded);
                     if (ok and batch_hc) ok = executor.trace(active.row.norm, shape.n_embd, start, count, index, "3-norm") and
                         executor.trace(active.row.ffn_split, 24, start, count, index, "3-split");
                     stage.mark(&ok, "hc/ffn norm");
@@ -403,19 +480,23 @@ pub const Prefill = struct {
                 }
                 if (ok and (batch_moe or exact_moe)) {
                     const moe = executor.moe();
+                    const deferred_down = !c.ds4_native_graph_trace_active() and !exact_moe and batch_hc and graph.tp_world == 1 and count <= c.DS4_TP_BATCH_MAX_ROWS;
+                    graph.defer_shared_down = deferred_down;
                     ok = if (exact_moe) moe.exactTiles(layer, index, count) else moe.batch(layer, index, count, false, !layer_selected);
+                    graph.defer_shared_down = false;
                     if (ok) ok = executor.trace(graph.batch.selected, shape.n_expert_used, start, count, index, "3a-selected") and
                         executor.trace(graph.batch.route_weights, shape.n_expert_used, start, count, index, "3b-weights") and
                         executor.trace(graph.batch.shared, shape.n_embd, start, count, index, "3c-shared") and
                         executor.trace(graph.batch.routed, shape.n_embd, start, count, index, "3d-routed");
                     stage.mark(&ok, "shared/routed ffn");
-                    if (ok and batch_hc) ok = c.ds4_gpu_add_tensor(active.row.block, active.row.routed, active.row.shared, count * shape.n_embd) != 0 and
+                    if (ok and batch_hc) ok = if (deferred_down) executor.finishMoeRows(&active.row, layer, index, count) else c.ds4_gpu_add_tensor(active.row.block, active.row.routed, active.row.shared, count * shape.n_embd) != 0 and
                         c.ds4_gpu_dsv41_quantize(active.row.block, shape.n_embd, count, c.DS4_V41_BF16) != 0 and
                         executor.expand(active.row.residual, active.row.block, active.row.after_attn, active.row.ffn_split, index, count, true);
                     token = 0;
                     while (ok and !batch_hc and token < count) : (token += 1) {
                         buffers.selectRow(&row, @ptrCast(&graph.rows_view[token]));
                         const local = rowExecutor(executor, &row);
+                        row.shared_done = true;
                         ok = c.ds4_gpu_add_tensor(row.block, row.routed, row.shared, shape.n_embd) != 0 and
                             support.bf16(row.block, shape.n_embd) and local.afterMoe(index);
                     }
@@ -424,6 +505,10 @@ pub const Prefill = struct {
                 if (ok and index + 1 == shape.n_layer) if (self.checkpoints) |collector| {
                     ok = collector.finalRows(start, count, &graph.rows_view[0], batch_hc);
                 };
+                // A later pruned layer may retain fewer than 128 rows. Capture
+                // its drafter features now, before those earlier rows disappear.
+                if (ok and decoder_suffix and index >= 19 and index + 1 < shape.n_layer)
+                    ok = executor.capture(index + 1, start, graph.batch.residual, count);
                 if (ok and wide and index + 1 < shape.n_layer) ok = buffers.carryCopy(config, graph, offset, count, true);
                 if (ok) ok = executor.trace(graph.batch.residual, shape.n_hc * shape.n_embd, start, count, index, "4-residual");
                 const encoded_at = if (profile) nowSeconds() else 0;
@@ -443,6 +528,7 @@ pub const Prefill = struct {
                     row.pre = graph.rows_view[count - 1].ffn_split;
                 }
             }
+            graph.plan_rows = 0;
         }
         if (!prefetch.join(!ok)) ok = false;
         if (!streaming.joinAll()) ok = false;

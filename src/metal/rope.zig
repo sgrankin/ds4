@@ -334,7 +334,14 @@ fn initializeFrequencies() callconv(.c) void {
         }
     }
 }
+pub fn frequencyValues(compressed: bool) [32]f32 {
+    _ = c.pthread_once(&frequency_once, initializeFrequencies);
+    return frequencies[@intFromBool(compressed)];
+}
 pub fn v41(x: ?*api.Tensor, width: u32, heads: u32, rows: u32, start: u32, stride: u32, compressed: bool, inverse: bool) bool {
+    return v41Rounded(x, width, heads, rows, start, stride, compressed, inverse, false);
+}
+pub fn v41Rounded(x: ?*api.Tensor, width: u32, heads: u32, rows: u32, start: u32, stride: u32, compressed: bool, inverse: bool, round_all: bool) bool {
     @setFloatMode(.strict);
     const count = @as(u64, width) *% heads *% rows;
     if (width < 64 or
@@ -362,6 +369,7 @@ pub fn v41(x: ?*api.Tensor, width: u32, heads: u32, rows: u32, start: u32, strid
         .inverse = @intFromBool(inverse),
         .stride = stride,
         .frequencies = frequencies[@intFromBool(compressed)],
+        .round_all = @intFromBool(round_all),
     };
     launch.groups_x = heads;
     launch.groups_y = rows;

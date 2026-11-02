@@ -51,7 +51,7 @@ fn addId(ids: *c.stop_list, id: [*c]const u8) void {
 pub fn visibleKey(optional_req: ?*const c.request, value: [*c]const u8, images: *c.visible_image_key) [*c]u8 {
     images.* = std.mem.zeroes(c.visible_image_key);
     const req = optional_req orelse return null;
-    if (value == null or req.image_count > 16 or (req.image_count != 0 and req.image_markers == null)) return null;
+    if (value == null or req.image_count > c.SERVER_MAX_IMAGES or (req.image_count != 0 and req.image_markers == null)) return null;
     const raw = text(value);
     const owned = allocator.dupeSentinel(u8, raw, 0) catch fatal();
     var success = false;
@@ -322,8 +322,8 @@ fn tokenizeSuffix(runtime: *c.server, req: *const c.request, source: [*c]const u
 
 pub fn suffix(runtime: *c.server, slot: *c.server_slot, req: *const c.request, suffix_text: [*c]const u8, out: *c.ds4_tokens) bool {
     const live = c.ds4_session_tokens(slot.session);
-    if (live == null or suffix_text == null or req.image_count > 16) return false;
-    var spans: [16]c.ds4_vision_span = undefined;
+    if (live == null or suffix_text == null or req.image_count > c.SERVER_MAX_IMAGES) return false;
+    var spans: [c.SERVER_MAX_IMAGES]c.ds4_vision_span = undefined;
     var old_count = req.image_count;
     const raw = text(suffix_text);
     for (0..req.image_count) |position| {

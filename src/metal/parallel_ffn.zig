@@ -100,8 +100,9 @@ pub fn start(r: *const Request) c_int {
     if (!gate_w.valid() or !up_w.valid() or !down_w.valid()) return 0;
     const fallback: u64 = if (c.ds4_metal_dense_facts(false) & c.DS4_DENSE_TP_TWO != 0) 2 else 4;
     const nsg = c.ds4_zig_metal_env_u64("DS4_METAL_Q8_MV_NSG", fallback, 1, 8);
-    const gate_pso = pipeline(if (r.split) "kernel_dsv4_shared_gate_up_swiglu_q8_0_split" else "kernel_dsv4_shared_gate_up_swiglu_q8_0", @intCast(nsg));
-    const down_pso = pipeline(if (r.split) "kernel_dsv4_shared_down_q8_0_split" else "kernel_mul_mv_q8_0_f32", 4);
+    const gate_pso = pipeline(if (r.split) "kernel_dsv4_shared_gate_up_swiglu_q8_0_split" else if (r.bf16) "kernel_dsv4_shared_mid_swiglu_q8_0_bf16" else "kernel_dsv4_shared_gate_up_swiglu_q8_0", @intCast(nsg));
+    const down_nsg: u64 = if (r.kslice_f32) nsg else 4;
+    const down_pso = pipeline(if (r.split) "kernel_dsv4_shared_down_q8_0_split" else if (r.kslice_f32) "kernel_mul_mv_q8_0_f32_bf16in" else if (r.bf16) "kernel_mul_mv_q8_0_f32_bf16io" else "kernel_mul_mv_q8_0_f32", @intCast(down_nsg));
     if (gate_pso == null or down_pso == null or c.ds4_metal_schedule_pipeline_threads(down_pso) < 128) return 0;
 
     commands.closeEncoder();
@@ -129,6 +130,7 @@ pub fn start(r: *const Request) c_int {
     }
     p.clamp = r.clamp;
     p.nsg = nsg;
+    p.down_nsg = down_nsg;
     p.nr0 = 2;
     p.shared_bytes = 256;
     p.split = r.split;

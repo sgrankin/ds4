@@ -23,7 +23,7 @@ from deepseek41_quantize import (NativeQuantizer, validate_scales, write_engram,
 from deepseek41_metadata import GGUF_ALIGNMENT, engram_layout, metadata
 import deepseek41_validate_gguf as artifact_audit
 from glm53_quantize import (
-    TensorPlan, QTYPE_F32, QTYPE_I8, QTYPE_IQ2_XXS, QTYPE_Q2_K, QTYPE_Q4_K,
+    TensorPlan, QTYPE_F32, QTYPE_I8, QTYPE_IQ2_XXS, QTYPE_Q2_K, QTYPE_Q4_K, QTYPE_MXFP4,
     align, kv_string, kv_u32, load_tokenizer_records, print_plan, qtype_nbytes,
 )
 
@@ -91,6 +91,25 @@ class ConversionTests(unittest.TestCase):
             self.assertEqual(self.q.encode(actual, qt), self.q.encode(expected, qt))
             weights = np.linspace(.01, 2, 256, dtype=np.float32)
             self.assertEqual(self.q.encode(actual, qt, weights), self.q.encode(expected, qt, weights))
+
+    def test_released_mxfp4_repack(self):
+        codes = np.arange(256, dtype=np.uint8).reshape(2, 128)
+        scales = np.arange(120, 136, dtype=np.uint8).reshape(2, 8)
+        db = MemoryDB(codes, scales, dtype="I8")
+        packed = np.frombuffer(self.q.to_mxfp4(db, db.name), np.uint8).reshape(2, 8, 17)
+        np.testing.assert_array_equal(packed[:, :, 0], scales)
+        # GGUF stores first/second half-blocks in the low/high nibbles,
+        # whereas the release stores adjacent values in each byte.
+        unpacked = np.concatenate((packed[:, :, 1:] & 15, packed[:, :, 1:] >> 4), axis=2)
+        original = codes.reshape(2, 8, 16)
+        expected = np.empty((2, 8, 32), np.uint8)
+        expected[:, :, 0::2] = original & 15
+        expected[:, :, 1::2] = original >> 4
+        np.testing.assert_array_equal(unpacked, expected)
+        self.assertEqual(packed.nbytes, qtype_nbytes(QTYPE_MXFP4, (256, 2)))
+        scales[0, 0] = 255
+        with self.assertRaisesRegex(ValueError, "nonfinite scale"):
+            self.q.to_mxfp4(db, db.name)
 
     def test_engram_pack(self):
         rng = np.random.default_rng(17)

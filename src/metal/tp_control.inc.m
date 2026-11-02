@@ -22,6 +22,8 @@ ds4_metal_tp_facts ds4_metal_tp_get_facts(void) {
         .shared_events = available,
         .selected_event = g_selected_readback_event != nil,
         .pending_count = (uint64_t)[g_pending_cbs count],
+        .spin_max_iters = g_tp_spin_max_iters,
+        .release = V(g_tp_release_buffer),
         .slab = V(g_tp_slab_buffer),
         .checks_buffer = V(g_tp_check_buffer),
         .poll = V(g_tp_poll_buffer)};
@@ -153,6 +155,8 @@ int ds4_metal_tp_encode(void *command, const ds4_metal_tp_launch *p) {
     if (!cb || !p->pipeline)
       return 0;
     id<MTLComputeCommandEncoder> enc = ds4_gpu_compute_encoder(cb);
+    if (p->kind == DS4_TP_PAYLOAD_PUBLISH && g_batch_encoder_concurrent)
+      [enc memoryBarrierWithScope:MTLBarrierScopeBuffers];
     [enc setComputePipelineState:(__bridge id<MTLComputePipelineState>)p->
                                  pipeline];
 #define B(I, F)                                                                \
@@ -161,6 +165,19 @@ int ds4_metal_tp_encode(void *command, const ds4_metal_tp_launch *p) {
          atIndex:I]
 #define A(I, F) [enc setBytes:&p->F length:sizeof(p->F) atIndex:I]
     switch (p->kind) {
+    case DS4_TP_PAYLOAD_PUBLISH:
+      B(0, payload);
+      A(1, words);
+      break;
+    case DS4_TP_FLAG_PUBLISH:
+      B(0, flags);
+      A(1, value);
+      break;
+    case DS4_TP_RELEASE_WAIT:
+      B(0, control);
+      A(1, value);
+      A(2, words);
+      break;
     case DS4_TP_FLAG:
       B(0, flags);
       A(1, value);
@@ -196,6 +213,9 @@ int ds4_metal_tp_encode(void *command, const ds4_metal_tp_launch *p) {
       [enc setThreadgroupMemoryLength:(NSUInteger)p->shared_bytes atIndex:0];
     [enc dispatchThreadgroups:MTLSizeMake(p->groups, 1, 1)
         threadsPerThreadgroup:MTLSizeMake(p->threads, 1, 1)];
+    // The CPU exchange is invisible to Metal hazard tracking.
+    if (p->kind == DS4_TP_RELEASE_WAIT)
+      [enc memoryBarrierWithScope:MTLBarrierScopeBuffers];
     if (p->end_encoder)
       ds4_gpu_end_compute_encoder(cb, enc);
 #undef B

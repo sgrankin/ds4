@@ -361,14 +361,16 @@ fn contextError(srv: *c.server, fd: c_int, req: *const c.request, stop: [*c]cons
     append(&out, "}}\n");
     response(srv, fd, 400, out.ptr, stop);
 }
-pub fn modelValues(out: *c.buf, id: [*c]const u8, name: [*c]const u8, context: c_int, default_tokens: c_int) void {
+pub fn modelValues(out: *c.buf, id: [*c]const u8, name: [*c]const u8, context: c_int, default_tokens: c_int, has_vision: bool) void {
     append(out, "{\"id\":");
     quote(out, id);
     append(out, ",\"object\":\"model\",\"created\":1767225600,\"owned_by\":\"ds4.c\",\"name\":");
     quote(out, name);
     append(out, ",\"context_length\":");
     number(out, context);
-    append(out, ",\"top_provider\":{\"context_length\":");
+    append(out, ",\"architecture\":{\"input_modalities\":[\"text\"");
+    if (has_vision) append(out, ",\"image\"");
+    append(out, "],\"output_modalities\":[\"text\"]},\"top_provider\":{\"context_length\":");
     number(out, context);
     append(out, ",\"max_completion_tokens\":");
     number(out, @min(default_tokens, context));
@@ -401,26 +403,26 @@ fn models(srv: *c.server, fd: c_int, id: [*c]const u8, stop: [*c]const volatile 
         return;
     }
     if (id != null) {
-        modelValues(&out, id, c.ds4_engine_model_name(srv.engine), srv.ctx_size, srv.default_tokens);
+        modelValues(&out, id, c.ds4_engine_model_name(srv.engine), srv.ctx_size, srv.default_tokens, c.ds4_engine_has_vision(srv.engine));
         append(&out, "\n");
     } else {
         append(&out, "{\"object\":\"list\",\"data\":[");
-        if (c.ds4_engine_is_deepseek41(srv.engine) or c.ds4_engine_is_flint(srv.engine)) modelValues(&out, modelId(srv.engine), c.ds4_engine_model_name(srv.engine), srv.ctx_size, srv.default_tokens) else if (c.ds4_engine_is_qwen4(srv.engine)) {
+        if (c.ds4_engine_is_deepseek41(srv.engine) or c.ds4_engine_is_flint(srv.engine)) modelValues(&out, modelId(srv.engine), c.ds4_engine_model_name(srv.engine), srv.ctx_size, srv.default_tokens, c.ds4_engine_has_vision(srv.engine)) else if (c.ds4_engine_is_qwen4(srv.engine)) {
             for ([_][*:0]const u8{ "qwen3.8-flash-next", "qwen3.8-flash-next-chat", "qwen3.8-flash-next-reasoner" }, 0..) |alias, index| {
                 if (index != 0) append(&out, ",");
-                modelValues(&out, alias, c.ds4_engine_model_name(srv.engine), srv.ctx_size, srv.default_tokens);
+                modelValues(&out, alias, c.ds4_engine_model_name(srv.engine), srv.ctx_size, srv.default_tokens, c.ds4_engine_has_vision(srv.engine));
             }
         } else if (c.ds4_engine_is_glm_dsa(srv.engine)) {
             const base = modelId(srv.engine);
             var variant: [64]u8 = undefined;
-            modelValues(&out, base, c.ds4_engine_model_name(srv.engine), srv.ctx_size, srv.default_tokens);
+            modelValues(&out, base, c.ds4_engine_model_name(srv.engine), srv.ctx_size, srv.default_tokens, c.ds4_engine_has_vision(srv.engine));
             for ([_][*:0]const u8{ "-chat", "-reasoner" }) |suffix| {
                 _ = c.snprintf(&variant, variant.len, "%s%s", base, suffix);
                 append(&out, ",");
-                modelValues(&out, &variant, c.ds4_engine_model_name(srv.engine), srv.ctx_size, srv.default_tokens);
+                modelValues(&out, &variant, c.ds4_engine_model_name(srv.engine), srv.ctx_size, srv.default_tokens, c.ds4_engine_has_vision(srv.engine));
             }
         } else {
-            modelValues(&out, "deepseek-v4-pro", c.ds4_engine_model_name(srv.engine), srv.ctx_size, srv.default_tokens);
+            modelValues(&out, "deepseek-v4-pro", c.ds4_engine_model_name(srv.engine), srv.ctx_size, srv.default_tokens, c.ds4_engine_has_vision(srv.engine));
         }
         if (decisions != null and text(decisions).len > 2) {
             append(&out, ",");

@@ -115,6 +115,21 @@ fn finish(command: *anyopaque, owned: c_int, program: Program, args: *const anyo
 }
 
 pub export fn ds4_gpu_matmul_f32_tensor(out: ?*Tensor, map: ?*const anyopaque, size: u64, offset: u64, width: u64, outputs: u64, x: ?*const Tensor, rows: u64) callconv(.c) c_int {
+    return run(out, map, size, offset, width, outputs, x, rows, rows, false);
+}
+
+/// Pruning removes rows, not the arithmetic schedule selected for the complete
+/// sweep. Keep that selection independent of the smaller physical dispatch.
+pub export fn ds4_gpu_matmul_f32_plan_tensor(out: ?*Tensor, map: ?*const anyopaque, size: u64, offset: u64, width: u64, outputs: u64, x: ?*const Tensor, rows: u64, plan_rows: u64) callconv(.c) c_int {
+    return run(out, map, size, offset, width, outputs, x, rows, @max(rows, plan_rows), false);
+}
+
+pub export fn ds4_gpu_dsv41_matmul_f32_rows(out: ?*Tensor, map: ?*const anyopaque, size: u64, offset: u64, width: u32, outputs: u32, x: ?*const Tensor, rows: u32) c_int {
+    if (map == null or width == 0 or outputs == 0 or rows == 0 or rows > 65535) return 0;
+    return run(out, map, size, offset, width, outputs, x, rows, rows, true);
+}
+
+fn run(out: ?*Tensor, map: ?*const anyopaque, size: u64, offset: u64, width: u64, outputs: u64, x: ?*const Tensor, rows: u64, plan_rows: u64, force_plain: bool) c_int {
     if (api.init() == 0) return 0;
     if (width > std.math.maxInt(u32) or outputs > std.math.maxInt(u32) or rows == 0 or rows > std.math.maxInt(u32)) return 0;
     if (width > std.math.maxInt(u64) / rows / 4 or outputs > std.math.maxInt(u64) / rows / 4) return 0;
@@ -134,7 +149,7 @@ pub export fn ds4_gpu_matmul_f32_tensor(out: ?*Tensor, map: ?*const anyopaque, s
     const command = api.acquire(&owned) orelse return 0;
     const buffers = Buffers{ .weights = weights, .inner = inner, .x = x, .out = out };
     const facts = c.ds4_zig_metal_f32_facts();
-    if (rows == 1) {
+    if (plan_rows == 1 or force_plain) {
         var dispatch = plain(width);
         // Few-output M5 matvecs use one row per SIMD group without changing
         // the per-row walk/reduction tree. The explicit override works on all
@@ -146,15 +161,15 @@ pub export fn ds4_gpu_matmul_f32_tensor(out: ?*Tensor, map: ?*const anyopaque, s
         }
         const args = mvArgs(width, outputs, rows, dispatch.rows);
         const nr: u64 = @intCast(dispatch.rows);
-        return finish(command, owned, .{ .kind = c.DS4_METAL_F32_MV, .name = dispatch.name, .nsg = @intCast(dispatch.groups) }, &args, @sizeOf(Mv), buffers, .{ .x = (outputs + nr - 1) / nr, .threads_y = dispatch.groups, .shared = dispatch.shared }, "F32 tensor matvec");
+        return finish(command, owned, .{ .kind = c.DS4_METAL_F32_MV, .name = dispatch.name, .nsg = @intCast(dispatch.groups) }, &args, @sizeOf(Mv), buffers, .{ .x = (outputs + nr - 1) / nr, .y = rows, .threads_y = dispatch.groups, .shared = dispatch.shared }, "F32 tensor matvec");
     }
-    const router = width == 5120 and outputs == 384 and rows >= 32 and facts & c.DS4_METAL_F32_QUALITY == 0 and
+    const router = width == 5120 and outputs == 384 and plan_rows >= 32 and facts & c.DS4_METAL_F32_QUALITY == 0 and
         api.envPresent("DS4_METAL_DISABLE_V41_ROUTER_BATCH") == 0;
-    if (router and rows >= 256 and api.envPresent("DS4_METAL_DISABLE_V41_ROUTER_MM") == 0) {
+    if (router and plan_rows >= 256 and api.envPresent("DS4_METAL_DISABLE_V41_ROUTER_MM") == 0) {
         const args = mmArgs(width, outputs, rows);
         return finish(command, owned, .{ .kind = c.DS4_METAL_F32_MM, .name = "kernel_mul_mm_f32_f32_full", .bc_out = rows % 32 != 0 }, &args, @sizeOf(api.MmArgs), buffers, .{ .x = (rows + 31) / 32, .y = outputs / 64, .threads_x = 128, .shared = 12288 }, "F32 router prefill matmul");
     }
-    if ((rows <= 8 or router) and width % 128 == 0) {
+    if ((plan_rows <= 8 or router) and width % 128 == 0) {
         const nsg: i16 = if (router) 2 else @intCast(c.ds4_zig_metal_env_u64("DS4_METAL_MV_EXT_NSG", 2, 1, 8));
         const nxpsg: i16 = if (width % 256 == 0 and (rows < 3 or (rows == 3 and facts & c.DS4_METAL_F32_VERIFY_EXACT != 0))) 16 else if (width % 128 == 0) 8 else 4;
         const rows_per_group = extRows(rows);

@@ -22,6 +22,8 @@ and checkpoint-matched vision files.
   through execution to continuation and saved state.
 - [Apple Silicon implementation](apple-silicon.md): data layout, memory movement,
   GPU work and optimization tradeoffs.
+- [Upstream performance changes](upstream-performance.md): the measured
+  bottlenecks behind recent upstream optimizations and how each change works.
 - [DeepInfer comparison](deepinfer/comparison.md): official mechanisms, local
   adaptations and remaining differences.
 

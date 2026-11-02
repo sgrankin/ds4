@@ -38085,6 +38085,13 @@ static bool ds41_trace_row(ds4_gpu_tensor *x, uint32_t width,
 #else
 #define ds41_trace_row(...) true
 #endif
+bool ds4_native_graph_trace_active(void) {
+#ifdef DS4_TEST_V41_TRACE
+    return ds41_trace_dir != NULL;
+#else
+    return false;
+#endif
+}
 bool ds4_native_graph_trace_row(ds4_gpu_tensor *tensor, uint32_t width,
         uint32_t start, uint32_t count, uint32_t layer, const char *name) {
 #ifdef DS4_TEST_V41_TRACE
@@ -38251,7 +38258,7 @@ static bool ds41_attention_candidates(ds41_gpu_graph *g, uint32_t il) {
                 !ds4_gpu_indexer_topk_tensor(g->block_selected, g->block_scores, blocks, 1, top) ||
                 !ds4_gpu_dsv4_topk_mask_tensor(g->block_mask, g->block_selected, blocks, 1, top)) return false;
         } else if (il > 20 &&
-            !ds4_gpu_dsv41_candidate_filter(g->index_scores, g->block_mask, n_comp, 1, pos, ratio)) return false;
+            !ds4_gpu_dsv41_candidate_filter(g->index_scores, g->block_mask, n_comp, 1, pos, ratio, 0)) return false;
     }
     return true;
 }
@@ -64348,6 +64355,28 @@ static bool ds41_memory_admit(ds4_engine *e, uint64_t graph_bytes, bool fit_cach
     return ds4_native_memory_admit41(&e->core.memory, &e->core.weights, &config,
         &inputs, graph_bytes, fit_cache);
 }
+#ifdef __APPLE__
+static bool ds41_tp_can_replicate_experts(const ds4_engine *e, const ds4_engine_options *opt) {
+    if (DS4_MODEL_FAMILY != DS4_MODEL_FAMILY_DEEPSEEK41 || (DS4_N_EXPERT_USED & 1u) ||
+        getenv("DS4_METAL_DISABLE_V41_TP_BALANCED_ROUTE")) return false;
+    const uint32_t ctx = opt->context_size > 0 ? (uint32_t)opt->context_size : 4096u;
+    const uint64_t graph = ds4_mul_sat_u64(ds41_graph_bytes(ctx, e->core.prefill_chunk),
+                                           engine_placement_session_count(e));
+    uint64_t sidecar_bytes = 0;
+    const char *sidecars[] = {opt->vision_path, opt->mtp_path};
+    for (size_t i = 0; i < sizeof(sidecars) / sizeof(sidecars[0]); i++) {
+        if (!sidecars[i] || !sidecars[i][0]) continue;
+        struct stat st;
+        if (stat(sidecars[i], &st) || st.st_size < 0) return false;
+        sidecar_bytes = ds4_add_sat_u64(sidecar_bytes, (uint64_t)st.st_size);
+    }
+    const ds4_model_config config = ds41_native_config();
+    ds4_engine_memory_inputs inputs = ds41_memory_inputs(e);
+    inputs.target_model_bytes = e->core.model.size;
+    return ds4_native_memory_can_replicate41((ds4_engine_memory *)&e->core.memory,
+        &e->core.weights, &config, &inputs, graph, sidecar_bytes);
+}
+#endif
 #endif /* DS4_HAS_DEEPSEEK41_GPU */
 
 
@@ -64482,6 +64511,7 @@ void ds4_core_memory_summary(
     const uint64_t ds41_drafter_bytes = core->dspark && core->dspark_weights.v41 ?
         ds4_add_sat_u64(core->mtp_model.size, UINT64_C(64) << 20) : 0;
     total = ds4_add_sat_u64(total, ds41_drafter_bytes);
+    total = ds4_add_sat_u64(total, core->memory.decode_weight_bytes);
 
     const bool color = ds4_log_is_tty(stderr);
     const char *green = color ? "\x1b[32m" : "";
@@ -64514,6 +64544,8 @@ void ds4_core_memory_summary(
     }
     if (ds41_drafter_bytes) fprintf(stderr, " + drafter weights/buffers %.2f GiB",
                                     ds4_bytes_to_gib(ds41_drafter_bytes));
+    if (core->memory.decode_weight_bytes) fprintf(stderr, " + exact decode copies %.2f GiB",
+                                                ds4_bytes_to_gib(core->memory.decode_weight_bytes));
     fprintf(stderr,
             " = %s%.2f GiB planned%s\n",
             bright_green,
@@ -64947,13 +64979,16 @@ static int ds4_engine_open_internal(ds4_engine **out,
         }
     }
 
-    /* TP always maps one contiguous routed-expert half per rank. Decide
-     * immediately after binding so memory guards account only the bytes this
-     * rank owns (replicated dense weights plus its expert shard). */
+    /* Resident V4.1 TP may keep every expert when the complete footprint
+     * fits. Startup later intersects the two ranks' offers before selecting
+     * balanced routing. Otherwise map one contiguous expert half per rank;
+     * admission must charge the actual mapping in either case. */
 #ifndef DS4_NO_GPU
-    const bool tp_shard =
-        opt->tp.role != DS4_TP_NONE &&
-        !e->core.ssd_streaming;
+    const bool resident_tp = opt->tp.role != DS4_TP_NONE && !e->core.ssd_streaming;
+#ifdef __APPLE__
+    e->core.v41_full_experts = resident_tp && ds41_tp_can_replicate_experts(e, opt);
+#endif
+    const bool tp_shard = resident_tp && !e->core.v41_full_experts;
     const int tp_shard_rank = opt->tp.role == DS4_TP_WORKER ? 1 : 0;
     bool tp_expert_split_active = false;
 #if !defined(__APPLE__) && !defined(DS4_ROCM_BUILD)
@@ -66902,7 +66937,8 @@ int ds4_engine_tp_bind(ds4_engine *e, struct ds4_tp *tp, char *err, size_t errle
         execution_mode |= DS4_TP_MODE_V41_SHARED_OWNER;
         if (ds41_shared_balance_enabled()) execution_mode |= DS4_TP_MODE_V41_SHARED_BALANCE;
     }
-    if (!ds4_tp_agree_execution_mode(tp, execution_mode, err, errlen)) return 0;
+    e->tp.v41_balanced_route = e->core.v41_full_experts;
+    if (!ds4_tp_agree_execution_mode(tp, execution_mode, &e->tp.v41_balanced_route, err, errlen)) return 0;
     const uint32_t slots = (uint32_t)DS4_N_LAYER * DS4_TP_GATES_PER_LAYER;
     const uint64_t vec_bytes = (uint64_t)DS4_N_EMBD * sizeof(float);
     const uint64_t slab_bytes = ds4_tp_slab_bytes((uint32_t)DS4_N_LAYER, (uint32_t)DS4_N_EMBD);
@@ -67020,8 +67056,9 @@ int ds4_engine_tp_bind(ds4_engine *e, struct ds4_tp *tp, char *err, size_t errle
     e->tp.eval_seq = 0;
     e->tp.active = true;
     ds4_log(stderr, DS4_LOG_OK,
-            "tensor parallelism bound: rank %d, %s, %s transport",
-            e->tp.rank, e->cuda_tp_expert_split ? "MXFP4 expert intermediate split" :
+            "tensor parallelism bound: rank %d, %s, %s transport\n",
+            e->tp.rank, e->tp.v41_balanced_route ? "balanced selected experts" :
+                        e->cuda_tp_expert_split ? "MXFP4 expert intermediate split" :
                                                "50/50 expert ownership",
             ds4_tp_is_rdma(tp) ? "rdma" : "tcp");
     return 1;
@@ -67432,6 +67469,7 @@ int ds4_session_create(ds4_session **out, ds4_engine *e, int ctx_size) {
             if (e->tp.active) {
                 s->ds41.graph.tp_world = 2;
                 s->ds41.graph.tp_rank = (uint32_t)e->tp.rank;
+                s->ds41.graph.tp_balanced_route = e->tp.v41_balanced_route;
                 s->ds41.graph.tp_out = e->tp.out_views;
                 s->ds41.graph.tp_in = e->tp.in_views;
                 s->ds41.graph.tp_batch_out = e->tp.batch_out_views;

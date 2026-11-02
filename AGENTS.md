@@ -18,6 +18,11 @@ the lab journal rather than duplicating it across status documents.
 - Keep public engine and session interfaces narrow; frontends should not depend
   on tensor internals. Preserve model-specific mapping, packing and cache
   ownership rather than copying whole GGUFs as an incidental loading change.
+- Upstream catch-ups must port all functionality unless we explicitly excised
+  that functionality from this fork. Do not narrow the port to the currently
+  installed model or available hardware. Record hardware validation limits
+  separately from implementation completeness; a merge parent alone does not
+  establish that upstream behavior has been integrated.
 - Explain non-obvious model mechanics, numerical boundaries and cache or resource
   lifetimes beside the implementation as well as in the owning manual.
 - Keep CPU reference checks bounded. Preserve the admission lock and pressure

@@ -5,6 +5,7 @@
 #include "ds4_engine_configuration.h"
 #include "ds4_model_weights.h"
 #include "ds4_dspark_weights.h"
+#include "ds4_engram.h"
 #include "ds4_support_weights.h"
 #include "ds4_vocab.h"
 #include "ds4_session_sampling.h"
@@ -43,6 +44,10 @@ typedef struct {
     ds4_weights weights;
     ds4_mtp_weights mtp_weights;
     ds4_dspark_weights dspark_weights;
+    /* Native V4.1 immutable decode copies and optional Engram page warmer.
+     * Both retire before the target model mapping. Session graphs borrow. */
+    void *decode_weights;
+    ds4_engram_warm *engram_warm;
 #ifndef DS4_NO_GPU
     ds4_glm53_vision_weights vision_weights;
     ds4_deepseek4_vision_weights deepseek4_vision_weights;
@@ -77,6 +82,7 @@ typedef struct {
     bool cuda_tensor_parallel;
     bool glm_tp_token_prefill;
     bool ssd_streaming;
+    bool v41_full_experts; /* Resident TP rank mapped all experts. */
     bool ssd_streaming_cold;
     bool ssd_streaming_full_layers_set;
     bool ssd_streaming_static_decode_map;

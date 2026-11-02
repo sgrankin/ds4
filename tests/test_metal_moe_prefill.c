@@ -151,9 +151,10 @@ cleanup:
 
 /* Compare production decode shapes with independent one-row calls. Only
  * selected experts need nonzero weights. Q4 also covers single-host batches. */
-static int check_static_batch(bool q4) {
-    const uint32_t D = q4 ? 5120 : 4096, H = q4 ? 2304 : 2048;
-    const uint32_t N = q4 ? 8 : 6, E = q4 ? 384 : 256;
+static int check_static_batch(bool q4, bool v41_mx) {
+    const bool v41 = q4 || v41_mx;
+    const uint32_t D = v41 ? 5120 : 4096, H = v41 ? 2304 : 2048;
+    const uint32_t N = v41 ? 8 : 6, E = v41 ? 384 : 256;
     const uint32_t type = q4 ? 12 : 39;
     const uint64_t row = q4 ? D / 256 * sizeof(q4_block) : D / 32 * sizeof(mxfp4_block);
     const uint64_t down_row = q4 ? H / 256 * sizeof(q4_block) : H / 32 * sizeof(mxfp4_block);
@@ -163,7 +164,7 @@ static int check_static_batch(bool q4) {
     memset(model, 0, bytes);
     const int32_t mx_active[] = {0, 1, 63, 125, 126, 127, 128, 129, 130, 192, 254, 255};
     const int32_t q4_active[] = {0, 1, 63, 127, 190, 191, 192, 193, 255, 381, 382, 383};
-    const int32_t *active = q4 ? q4_active : mx_active;
+    const int32_t *active = v41 ? q4_active : mx_active;
     for (int w = 0; w < 3; w++) {
         for (unsigned e = 0; e < 12; e++) {
             void *data = (char *)model + w * tensor + active[e] * expert;
@@ -208,7 +209,8 @@ static int check_static_batch(bool q4) {
          ds4_gpu_tensor_write(it, 0, ids, sizeof(ids)) &&
          ds4_gpu_tensor_write(wt, 0, weights, sizeof(weights));
     setenv("DS4_TP_NO_KEEPALIVE", "1", 1);
-    for (int rank = q4 ? -1 : 0; rank < 2 && ok; rank++) {
+    if (v41_mx) ds4_gpu_test_set_flags(DS4_GPU_TEST_COUNT_KERNELS);
+    for (int rank = v41 ? -1 : 0; rank < 2 && ok; rank++) {
         if (rank >= 0) ok = ds4_gpu_tp_init((uint32_t)rank, NULL, 0, 0, 0, NULL, NULL);
         for (uint32_t r = 0; r < N && ok; r++) {
             ds4_gpu_tensor *xr = ds4_gpu_tensor_view(xt, r * D * sizeof(float), D * sizeof(float));
@@ -225,10 +227,11 @@ static int check_static_batch(bool q4) {
         }
         const uint32_t sizes[] = {6, 2, 5, 3, 4, 6};
         const uint32_t q4_sizes[] = {8, 1, 2, 3, 4, 5, 6, 7, 8};
-        const unsigned n_sizes = q4 ? sizeof(q4_sizes) / sizeof(*q4_sizes) : sizeof(sizes) / sizeof(*sizes);
+        const unsigned n_sizes = v41 ? sizeof(q4_sizes) / sizeof(*q4_sizes) : sizeof(sizes) / sizeof(*sizes);
         for (unsigned i = 0; i < n_sizes && ok; i++) {
+            const uint64_t dedup_before = ds4_gpu_test_kernel_runs("kernel_mul_mv_id_mxfp4_pair_swiglu_dedup_f32");
             bool half_mid = true;
-            const uint32_t n = q4 ? q4_sizes[i] : sizes[i];
+            const uint32_t n = v41 ? q4_sizes[i] : sizes[i];
             ok = ds4_gpu_tensor_fill_f32(mid, NAN, N * SELECTED * H) &&
                  ds4_gpu_tensor_fill_f32(out, NAN, N * D) &&
                  ds4_gpu_routed_moe_batch_tensor(
@@ -236,6 +239,8 @@ static int check_static_batch(bool q4) {
                     type, type, expert, row, expert, down_row, D, H, D,
                     it, wt, E, SELECTED, 7.0f, xt, 0, n, &half_mid, true) &&
                  !half_mid && ds4_gpu_tensor_read(out, 0, actual, N * D * sizeof(float));
+            if (v41_mx && rank == -1 && n >= 2)
+                ok = ok && ds4_gpu_test_kernel_runs("kernel_mul_mv_id_mxfp4_pair_swiglu_dedup_f32") == dedup_before + 1;
             for (uint32_t j = 0; j < N * D && ok; j++) {
                 ok = j >= n * D ? isnan(actual[j]) :
                     isfinite(actual[j]) && isfinite(reference[j]) && actual[j] == reference[j];
@@ -324,11 +329,17 @@ done:
 }
 
 int main(int argc, char **argv) {
+    if (argc == 2 && !strcmp(argv[1], "--v41-mxfp4-decode")) {
+        if (!ds4_gpu_init()) return 1;
+        ds4_gpu_set_quality(false);
+        ds4_gpu_set_ssd_streaming(false);
+        return check_static_batch(false, true) ? 0 : 1;
+    }
     if (argc == 2 && !strcmp(argv[1], "--v41-q4-decode")) {
         if (!ds4_gpu_init()) return 1;
         ds4_gpu_set_quality(false);
         ds4_gpu_set_ssd_streaming(false);
-        return check_static_batch(true) ? 0 : 1;
+        return check_static_batch(true, false) ? 0 : 1;
     }
     const bool address = argc == 2 && !strcmp(argv[1], "--ssd-address");
     const bool v41_tp = argc == 2 && !strcmp(argv[1], "--v41-tp");
@@ -442,7 +453,7 @@ int main(int argc, char **argv) {
     free(model);
     if (ok) {
         ok = ds4_gpu_init();
-        if (ok && ds4_gpu_device_is_m5_apple_silicon()) ok = check_static_batch(false);
+        if (ok && ds4_gpu_device_is_m5_apple_silicon()) ok = check_static_batch(false, false);
         ds4_gpu_cleanup();
     }
     return ok ? 0 : 1;

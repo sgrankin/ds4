@@ -20,6 +20,7 @@ typedef struct {
  * the parent's MTLBuffer; disposing either handle does not retire the other.
  * Registration and range/offset policy belong to the native resource owner. */
 ds4_gpu_tensor *ds4_metal_resource_new(uint64_t bytes);
+ds4_gpu_tensor *ds4_metal_resource_new_weights(uint64_t bytes);
 ds4_gpu_tensor *ds4_metal_resource_view(const ds4_gpu_tensor *base,
     uint64_t absolute_offset, uint64_t bytes);
 ds4_metal_tensor_region ds4_metal_resource_region(const ds4_gpu_tensor *tensor);

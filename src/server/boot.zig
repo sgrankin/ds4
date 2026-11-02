@@ -474,6 +474,8 @@ pub fn run(argc: c_int, argv: [*c][*c]u8, stop: [*c]volatile c.sig_atomic_t, lis
     if (engine != null) contextMemory(&cfg, engine, slot_count);
     var srv = zero(c.server);
     srv.engine = engine;
+    if (c.ds4_engine_is_deepseek41(engine))
+        srv.idle_prefill_quantum = @intCast(c.ds4_engine_context_memory_estimate(engine, cfg.ctx_size).prefill_cap);
     srv.tp_leader = leader;
     srv.ctx_size = cfg.ctx_size;
     srv.slot_count = slot_count;

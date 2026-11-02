@@ -2487,7 +2487,7 @@ static bool read_http_request(int fd, http_request *r) {
 
 static void append_model_json_values(buf *output, const char *id,
         const char *name, int context, int default_tokens) {
-    ds4_server_serving_models_json(output, id, name, context, default_tokens);
+    ds4_server_serving_models_json(output, id, name, context, default_tokens, false);
 }
 
 static void set_client_socket_nonblocking(int fd);
@@ -2584,6 +2584,9 @@ static void test_mixed_prefill_quantum_option(void) {
 
     server s = {.mixed_prefill_quantum = custom.mixed_prefill_quantum};
     TEST_ASSERT(server_prefill_quantum_for(&s, false) == 2048);
+    TEST_ASSERT(server_prefill_quantum_for(&s, true) == 2048);
+    s.idle_prefill_quantum = 8192;
+    TEST_ASSERT(server_prefill_quantum_for(&s, false) == 8192);
     TEST_ASSERT(server_prefill_quantum_for(&s, true) == 2048);
     s.mixed_prefill_quantum = defaults.mixed_prefill_quantum;
     TEST_ASSERT(server_prefill_quantum_for(&s, true) == 128);
@@ -5195,6 +5198,44 @@ static void test_render_think_max_prompt_prefix(void) {
 
     free(prompt);
     chat_msgs_free(&msgs);
+}
+
+/* A must-echo client replays an assistant turn that produced no reasoning as a
+ * single space, because the hosted API rejects an empty string.  A
+ * whitespace-only body is not reasoning: rendering it puts a token between
+ * <think> and </think> that the model never sampled, so the replayed prompt no
+ * longer tokenises to the cached prefix and the whole conversation is
+ * re-prefilled.  Render a blank body exactly like an absent one.
+ */
+static void test_render_blank_reasoning_is_absent(void) {
+    const char *pad_json =
+        "[{\"role\":\"user\",\"content\":\"Hello\"},"
+        "{\"role\":\"assistant\",\"content\":\"\",\"reasoning_content\":\" \","
+        "\"tool_calls\":[{\"id\":\"c1\",\"type\":\"function\","
+        "\"function\":{\"name\":\"run\",\"arguments\":\"{}\"}}]}]";
+    const char *none_json =
+        "[{\"role\":\"user\",\"content\":\"Hello\"},"
+        "{\"role\":\"assistant\",\"content\":\"\","
+        "\"tool_calls\":[{\"id\":\"c1\",\"type\":\"function\","
+        "\"function\":{\"name\":\"run\",\"arguments\":\"{}\"}}]}]";
+
+    chat_msgs pad = {0}, none = {0};
+    const char *p1 = pad_json, *p2 = none_json;
+    TEST_ASSERT(parse_messages(&p1, &pad));
+    TEST_ASSERT(parse_messages(&p2, &none));
+
+    char *a = render_chat_prompt_text_for_syntax(SERVER_MODEL_SYNTAX_DEEPSEEK41,
+                                                &pad, NULL, NULL, DS4_THINK_MEDIUM);
+    char *b = render_chat_prompt_text_for_syntax(SERVER_MODEL_SYNTAX_DEEPSEEK41,
+                                                &none, NULL, NULL, DS4_THINK_MEDIUM);
+    TEST_ASSERT(a != NULL);
+    TEST_ASSERT(b != NULL);
+    TEST_ASSERT(strcmp(a, b) == 0);
+
+    free(a);
+    free(b);
+    chat_msgs_free(&pad);
+    chat_msgs_free(&none);
 }
 
 static void test_render_non_thinking_prompt_closes_think(void) {
@@ -8038,6 +8079,23 @@ static void test_model_metadata_clamps_completion_to_context(void) {
     buf_free(&b);
 }
 
+static void test_model_metadata_reports_modalities(void) {
+    for (int vision = 0; vision <= 1; vision++) {
+        buf b = {0};
+        ds4_server_serving_models_json(&b, "model", "Model", 32768, 4096, vision);
+        const char *json = b.ptr;
+        TEST_ASSERT(json_skip_value(&json));
+        TEST_ASSERT(*json == '\0');
+        TEST_ASSERT(strstr(b.ptr, "\"architecture\":{") != NULL);
+        TEST_ASSERT(strstr(b.ptr, vision ?
+            "\"input_modalities\":[\"text\",\"image\"]" :
+            "\"input_modalities\":[\"text\"]") != NULL);
+        TEST_ASSERT(strstr(b.ptr, "\"output_modalities\":[\"text\"]") != NULL);
+        if (!vision) TEST_ASSERT(strstr(b.ptr, "\"image\"") == NULL);
+        buf_free(&b);
+    }
+}
+
 static void test_live_prefix_rewind_target(void) {
     TEST_ASSERT(live_prefix_rewind_target(true, 17, 8, 8) == 7);
     TEST_ASSERT(live_prefix_rewind_target(true, 49826, 48379, 48379) == 48378);
@@ -9615,6 +9673,27 @@ static void test_visible_image_key(void) {
     free(visible);
 }
 
+/* The request cap and visible-history identity must agree: the final image
+ * marker participates in prefix matching, including above the former 16 cap. */
+static void test_visible_image_key_at_request_limit(void) {
+    char markers[SERVER_MAX_IMAGES][SERVER_IMAGE_MARKER_BYTES];
+    buf prompt = {0};
+    for (size_t i = 0; i < SERVER_MAX_IMAGES; i++) {
+        snprintf(markers[i], sizeof(markers[i]), "nonce_%03zu", i);
+        buf_puts(&prompt, markers[i]);
+    }
+    request req = {.image_count = SERVER_MAX_IMAGES, .image_markers = markers};
+    visible_image_key images;
+    char *key = visible_prompt_key(&req, prompt.ptr, &images);
+    TEST_ASSERT(key && images.count == SERVER_MAX_IMAGES);
+    TEST_ASSERT(images.offsets[SERVER_MAX_IMAGES - 1] ==
+                strlen(markers[0]) * (SERVER_MAX_IMAGES - 1));
+    free(key);
+    req.image_count++;
+    TEST_ASSERT(visible_prompt_key(&req, prompt.ptr, &images) == NULL);
+    buf_free(&prompt);
+}
+
 static void test_anthropic_tool_image_output(void) {
     buf json = {0};
     buf_puts(&json, "[{\"content\":[{\"type\":\"tool_result\","
@@ -10132,6 +10211,7 @@ static void ds4_server_unit_tests_run(void) {
     test_deepseek41_anthropic_results();
     test_deepseek41_live_result_order();
     test_visible_image_key();
+    test_visible_image_key_at_request_limit();
     test_anthropic_tool_image_output();
     test_responses_tool_image_output();
     test_server_image_embedding_cache();
@@ -10157,6 +10237,7 @@ static void ds4_server_unit_tests_run(void) {
     test_api_thinking_controls_parse();
     test_render_think_max_prompt_prefix();
     test_render_non_thinking_prompt_closes_think();
+    test_render_blank_reasoning_is_absent();
     test_render_drops_old_reasoning_without_tools();
     test_render_preserves_reasoning_with_tools();
     test_render_chat_prompt_text_renders_tools_before_system();
@@ -10271,6 +10352,7 @@ static void ds4_server_unit_tests_run(void) {
     test_json_int_handles_non_finite_values();
     test_tool_history_validation_handles_large_replays();
     test_model_metadata_clamps_completion_to_context();
+    test_model_metadata_reports_modalities();
     test_live_prefix_rewind_target();
     test_client_socket_nonblocking_flag();
     test_client_disconnect_probe();

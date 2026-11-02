@@ -539,6 +539,13 @@ fn readMessage(reader: *Reader, anthropic: bool, trusted_store: bool) Invalid!c.
             }
         } else if (!anthropic and equal(key, "reasoning_content")) {
             try replaceContent(reader, &message.reasoning);
+            // Some clients echo absent reasoning as a space. That space was
+            // never sampled: retaining it changes tokenization and busts KV
+            // prefix reuse on an otherwise unchanged assistant/tool turn.
+            if (message.reasoning != null and std.mem.trim(u8, bytes(message.reasoning), " \t\r\n\x0b\x0c").len == 0) {
+                c.free(message.reasoning);
+                message.reasoning = null;
+            }
         } else if (!anthropic and equal(key, "tool_call_id")) {
             const id = try reader.string();
             defer c.free(id);

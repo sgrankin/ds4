@@ -39,7 +39,7 @@ pub const Memory = struct {
             recommended * 7 / 8;
         const rows: u32 = if (context > 0) @intCast(context) else 1;
         const layout = Layout.init(self.config, rows, chunk);
-        const graph_bytes = layout.bytes();
+        const graph_bytes = layout.bytes() +| self.state.decode_weight_bytes;
         const available = if (target > graph_bytes) target - graph_bytes else 0;
         const rounded = available / gib * gib;
         return if (rounded == 0) gib else rounded;
@@ -204,6 +204,7 @@ pub const Memory = struct {
         }
         weights +|= self.inputs.vision_model_bytes;
         weights +|= self.inputs.mtp_model_bytes;
+        weights +|= self.state.decode_weight_bytes;
         var graph_bytes = graph_bytes_;
         if (self.inputs.dspark) graph_bytes +|= (@as(u64, 64) << 20) *| self.inputs.session_count;
         const fixed = weights +| (graph_bytes +| (2 * gib +% self.state.ssd_streaming_prefill_headroom_bytes));
@@ -223,6 +224,21 @@ pub const Memory = struct {
             self.state.ssd_streaming_cache_bytes = @as(u64, count) *% expert;
         }
         return true;
+    }
+
+    /// Replication is optional. Compare its complete resident footprint without
+    /// shrinking a cache or emitting an admission failure for the shard fallback.
+    pub fn canReplicate(self: *const Memory, graph_bytes: u64, extra_sidecars: u64) bool {
+        var host: u64 = 0;
+        var size: usize = @sizeOf(u64);
+        if (c.sysctlbyname("hw.memsize", &host, &size, null, 0) != 0 or host == 0) return false;
+        const recommended = c.ds4_gpu_recommended_working_set_size();
+        if (recommended == 0) return false;
+        const draft = if (self.inputs.dspark) (@as(u64, 64) << 20) *| self.inputs.session_count else 0;
+        const fixed = self.inputs.target_model_bytes +| self.inputs.vision_model_bytes +|
+            self.inputs.mtp_model_bytes +| self.state.decode_weight_bytes +| extra_sidecars +|
+            graph_bytes +| draft +| (2 * gib) +| self.state.ssd_streaming_prefill_headroom_bytes;
+        return fixed < @min(host / 8 * 7, recommended);
     }
 
     pub fn admit(self: *const Memory, graph_bytes: u64, fit_cache: bool) bool {

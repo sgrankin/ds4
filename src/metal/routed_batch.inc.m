@@ -338,7 +338,8 @@ bool ds4_metal_routed_encode(ds4_metal_routed_resources *opaque, void *command,
             return false;
         if (p->kind == DS4_ROUTED_TABLE_SUM && !r->downTable.argumentBuffer)
             return false;
-        if ((p->kind == DS4_ROUTED_MAP || p->kind == DS4_ROUTED_MM ||
+        if ((p->kind == DS4_ROUTED_DEDUP_PLAN || p->kind == DS4_ROUTED_DEDUP_PAIR ||
+             p->kind == DS4_ROUTED_MAP || p->kind == DS4_ROUTED_MM ||
              p->kind == DS4_ROUTED_MM_PAIR || p->kind == DS4_ROUTED_PACK_OFFSETS ||
              p->kind == DS4_ROUTED_PACK_RHS) &&
             !r->mapBuffer)
@@ -421,6 +422,12 @@ bool ds4_metal_routed_encode(ds4_metal_routed_resources *opaque, void *command,
             B(5, DS4_ROUTED_UP, 0);
             B(6, DS4_ROUTED_SELECTED, 0);
             break;
+        case DS4_ROUTED_DEDUP_PLAN:
+            A(0, mv);
+            B(1, DS4_ROUTED_SELECTED, 0);
+            DIRECT(2, r->mapBuffer);
+            break;
+        case DS4_ROUTED_DEDUP_PAIR:
         case DS4_ROUTED_PAIR_SWI:
         case DS4_ROUTED_ADDR_PAIR:
         case DS4_ROUTED_TABLE_PAIR:
@@ -442,6 +449,7 @@ bool ds4_metal_routed_encode(ds4_metal_routed_resources *opaque, void *command,
             B(7, DS4_ROUTED_MID, 0);
             B(8, DS4_ROUTED_SELECTED, 0);
             B(9, DS4_ROUTED_WEIGHTS, 0);
+            if (p->kind == DS4_ROUTED_DEDUP_PAIR) DIRECT(10, r->mapBuffer);
             if (p->kind == DS4_ROUTED_TABLE_PAIR) {
                 if (!ds4_gpu_bind_q4_expert_table_anchors(enc, r->gateTable, 10, 6) ||
                     !ds4_gpu_bind_q4_expert_table_anchors(enc, r->upTable, 16, 6)) {

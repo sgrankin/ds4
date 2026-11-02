@@ -59,6 +59,9 @@ enum {
     DS4_METAL_INDEX_SIMD_F32, DS4_METAL_INDEX_SIMD_FP4,
     DS4_METAL_INDEX_FP4_UNPACK, DS4_METAL_INDEX_FP4_PREPARE,
     DS4_METAL_INDEX_FP4_BATCH_SCORE, DS4_METAL_INDEX_FP4_BATCH_SIMD,
+    DS4_METAL_INDEX_ROWS4, DS4_METAL_INDEX_WIDE,
+    DS4_METAL_INDEX_MERGE_STAGED, DS4_METAL_INDEX_MERGE_FUSED,
+    DS4_METAL_INDEX_V41_MMA,
 };
 ds4_metal_index_pipeline ds4_metal_index_get_pipeline(uint32_t kind);
 ds4_metal_index_facts ds4_metal_index_get_facts(void);
@@ -84,7 +87,7 @@ typedef union {
 } ds4_metal_index_topk_packet;
 typedef struct {
     ds4_metal_index_pipeline pipeline;
-    bool merge, to_selected;
+    bool merge, to_selected, fused;
     ds4_metal_index_topk_packet args;
     const ds4_gpu_tensor *scores;
     ds4_gpu_tensor *selected;

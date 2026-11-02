@@ -271,6 +271,18 @@ static void test_reader(void) {
             assert(output[r][count] == 123456.0f);
         }
     }
+    /* The overlapped batch has the same row ordering and values, and finish
+     * joins before the borrowed IDs/output can be reused. */
+    ds4_engram_prefetch *batch = ds4_engram_read_batch_start(&tables[0], ids[0], 1,
+        DS4_ENGRAM_COLS, output[0]);
+    assert(batch && ds4_engram_read_batch_finish(batch));
+    assert(!memcmp(output[0], expected[0], sizeof(expected[0])));
+    const uint32_t saved_id = ids[0][0];
+    ids[0][0] = 2;
+    batch = ds4_engram_read_batch_start(&tables[0], ids[0], 1,
+        DS4_ENGRAM_COLS, output[0]);
+    assert(batch && !ds4_engram_read_batch_finish(batch) && errno == EINVAL);
+    ids[0][0] = saved_id;
     ids[1][23] = 2;
     assert(!ds4_engram_reader_start(readers[0], tables, ids, output[0]) && errno == EINVAL);
     ids[1][23] = 0;
@@ -299,11 +311,35 @@ static void test_reader(void) {
     assert(close(fd) == 0);
 }
 
+static void test_warm(void) {
+    char path[] = ".workspaces/engram-warm-XXXXXX";
+    const int fd = mkstemp(path);
+    assert(fd >= 0);
+    unsigned char bytes[4096] = {1, 2, 3};
+    assert(write(fd, bytes, sizeof(bytes)) == sizeof(bytes));
+    ds4_engram_warm *warm = ds4_engram_warm_start(path, 0, sizeof(bytes));
+    assert(warm);
+    double seconds = -1;
+    /* A pressure stop is allowed: warming is only a reclaimable hint. Waiting
+     * must still finish and destruction must join even on that path. */
+    (void)ds4_engram_warm_wait(warm, &seconds);
+    assert(seconds >= 0);
+    ds4_engram_warm_stop(warm);
+    warm = ds4_engram_warm_start(path, 0, sizeof(bytes));
+    assert(warm);
+    ds4_engram_warm_stop(warm);
+    unsigned char actual[sizeof(bytes)];
+    assert(pread(fd, actual, sizeof(actual), 0) == sizeof(actual));
+    assert(!memcmp(bytes, actual, sizeof(bytes)));
+    assert(close(fd) == 0 && unlink(path) == 0);
+}
+
 int main(void) {
     test_hash();
     test_rows();
     test_all_scaled_values();
     test_reader();
+    test_warm();
     puts("Engram hashes, history and bounded disk rows: PASS");
     return 0;
 }

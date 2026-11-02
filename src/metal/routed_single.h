@@ -31,6 +31,7 @@ enum {
     DS4_SINGLE_IQ2_SUM,
     DS4_SINGLE_MX_FIXED_PAIR,
     DS4_SINGLE_MX_STATIC_PAIR,
+    DS4_SINGLE_MX_STATIC_V41_PAIR,
     DS4_SINGLE_MX_NSG1_PAIR,
     DS4_SINGLE_MX_TG_PAIR,
     DS4_SINGLE_MX_FULL_SUM,
@@ -52,6 +53,7 @@ typedef struct {
 typedef struct {
     ds4_metal_routed_facts batch;
     bool parallel_pending;
+    bool full_expert_bind;
     int32_t parallel_mode;
     int32_t parallel_stage;
     const ds4_metal_hc_pipeline *cached[DS4_SINGLE_PIPELINE_COUNT];

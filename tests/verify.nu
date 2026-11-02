@@ -18,6 +18,8 @@ const HOST = [
     [session-state-test, [test-session-state]]
     [steering-bank-test, [test-steering-banks]]
     [draft-checkpoint-wire-test, [test-draft-checkpoint-wire]]
+    [dspark-scheduler-test, [test-dspark-scheduler]]
+    [qwen-ple-prefetch-test, []]
     [decisions-test, [test-decisions]]
     [grammar-test, [test-grammar]]
     [prompt-tokens-test, [test-prompt-tokens]]
@@ -84,6 +86,7 @@ Run model-free host and script checks. The scripts subcommand skips compilation.
     checked ($bin | path join test-state-cache) ($work | path join state)
     checked ($bin | path join test-response-store) ($work | path join responses)
     checked ($bin | path join ds4_test) --server
+    checked ($bin | path join test-qwen4-ple-prefetch) --invalid-tokens
     checked ($bin | path join ds4_agent_test)
     checked python3 tests/test_web_recovery.py ($bin | path join test-web-recovery)
     script-tests

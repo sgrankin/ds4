@@ -63,12 +63,13 @@ typedef struct {
 typedef struct {
     uint32_t width, heads, rows, start, inverse, stride;
     float frequencies[32];
+    uint32_t round_all;
 } ds4_metal_rope_v41_args;
 
 _Static_assert(sizeof(ds4_metal_rope_tail_args) == 144, "RoPE tail packet");
 _Static_assert(sizeof(ds4_metal_rope_head_args) == 56, "Head norm/RoPE packet");
 _Static_assert(sizeof(ds4_metal_rope_glm_args) == 52, "GLM RoPE packet");
-_Static_assert(sizeof(ds4_metal_rope_v41_args) == 152, "V4.1 RoPE packet");
+_Static_assert(sizeof(ds4_metal_rope_v41_args) == 156, "V4.1 RoPE packet");
 /* The affine64 packet is already actual ds4_metal_attention_rope_args. */
 enum {
     DS4_ROPE_M3 = 1,

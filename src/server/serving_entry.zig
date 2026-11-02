@@ -41,8 +41,8 @@ export fn ds4_server_serving_wait(runtime: *c.server, pending: *c.job) void {
 export fn ds4_server_serving_stop(runtime: *c.server) void {
     owner.requestStop(runtime);
 }
-export fn ds4_server_serving_models_json(out: *c.buf, id: [*c]const u8, name: [*c]const u8, context: c_int, default_tokens: c_int) void {
-    owner.modelValues(out, id, name, context, default_tokens);
+export fn ds4_server_serving_models_json(out: *c.buf, id: [*c]const u8, name: [*c]const u8, context: c_int, default_tokens: c_int, has_vision: bool) void {
+    owner.modelValues(out, id, name, context, default_tokens, has_vision);
 }
 export fn ds4_server_serving_client(runtime: *c.server, fd: c_int, stop: [*c]const volatile c.sig_atomic_t) void {
     owner.client(runtime, fd, stop);

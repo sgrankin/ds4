@@ -85,6 +85,28 @@ smaller selected-expert tiles and the ordinary cache, avoiding a full sweep.
 The choice depends on the chunk and available cache; [prefill policy](../../../src/engine/deepseek41/prefill_policy.zig)
 and [execution](../../../src/engine/deepseek41/prefill.zig) define it.
 
+A medium SSD append on one GPU can stay in one layer sweep when it fits carry
+storage, has at least 2,048 rows of prefill capacity, contains more than 2,048
+and fewer than 8,192 rows, and its final tile has at least 256 rows. The runtime
+still partitions arithmetic into 2,048-row tiles;
+it avoids starting a second streamed-weight sweep for the remainder. On
+pre-M5 Apple GPUs, selected near-power-of-two lengths can use wider encoder
+tiles. These are dispatch policies ported from upstream, not newly measured
+speedups on this machine.
+
+The later decoder layers attend only to a local window. To produce the final
+row, each earlier decoder layer therefore needs only the suffix that can
+influence that row through the remaining layers. The prefill controller warms
+the required raw window and skips older decoder work. Resident single-GPU
+text sweeps can also prune inside a tile from 512 rows upward, retaining
+compressor alignment and the original tile's router plan. Shorter prompts,
+quality mode, image input and tensor parallelism keep their applicable broader
+schedule. Semantic checkpoint collection evaluates every row because it must
+also produce earlier endpoints, and approximate decoder replay has its own
+policy. The dependency calculation preserves the rows needed for the result;
+changing execution shapes can still change floating-point rounding. This
+pruning is distinct from importing cached activations after an edit.
+
 Decode advances a session one token at a time, leaving less opportunity to
 amortize a weight read across its rows. A cache miss can therefore lie on the
 path to the next token. The server can batch work from multiple sessions and
@@ -97,6 +119,52 @@ for scheduling and the [implementation](implementation.md) for ownership.
 
 The ordinary router selects experts from the model's scores regardless of
 which weights happen to be resident.
+
+### Exact copies of widened weights
+
+Some GGUF tensors store checkpoint BF16 values as F32, or checkpoint FP8 values
+as F16. At engine startup, the native
+[decode-weight owner](../../../src/engine/deepseek41/decode_weights.zig) checks
+whether narrower copies can reproduce every value. Every F32 router-weight
+word must have zero in its low 16 bits. Engram and index-query projections must fit
+eight-bit E4M3 codes, with four exponent bits and three mantissa bits, plus one
+power-of-two scale per 32 by 32 block. A failed check retains the wider reader.
+
+When the value checks succeed and quality mode is off, scalar projections read
+fewer weight bytes per token by reconstructing values from the narrow copies.
+Prefill can still use the existing GGUF matrices. The copies occupy additional
+RAM, charged once to the engine's memory
+budget; sessions borrow them. A dedicated residency set and startup warmup
+prepare their Metal readers. Teardown drains GPU work before releasing the
+copies. The GGUF file and quantized expert-cache entries retain their formats.
+Quality mode uses the wider weights.
+
+### Scalar work and command scheduling
+
+For each token, Engram hashes its n-grams into two learned tables, whose rows
+feed layers 1 and 14. The [executor](../../../src/engine/deepseek41/executor.zig)
+starts both reads before encoding layer 0. At each consuming layer, the executor
+joins the corresponding reader and uploads its output into a separate GPU input
+buffer. Those distinct buffers
+allow earlier work to keep running during the second upload. The ordinary
+single-Mac path submits work after layer 0 and then every two layers by default;
+the output head can join the final submission. On failure, the executor joins
+outstanding readers before their borrowed token IDs and output rows leave scope.
+
+The ordinary scalar path combines the Q and KV projections of one activation,
+then normalizes both results together. Suitable matrix kernels round their
+outputs to BF16 before writing them, saving a separate rounding pass. For
+eligible small rows, another kernel computes the hyper-connection mixer and
+uses the preceding sublayer's mixer weights to collapse and normalize the
+residual. These fusions reduce dispatch and intermediate-memory work while
+preserving the required rounding boundaries. Eligible attention output and
+shared-expert down projections can also fuse
+their result with residual expansion. When steering or tracing needs the
+intermediate result, the applicable path falls back to separate operations.
+The [upstream performance account](upstream-performance.md) explains the
+bottlenecks and upstream measurements; the
+[catch-up journal](../../lab/journal/2026-11-02-upstream-catchup.md) records
+qualification.
 
 ### Resident expert substitution
 
@@ -132,6 +200,22 @@ weighted outputs are combined. Grouping, unpacking and staging also cost work;
 a single decode row does not necessarily benefit in the same way. See
 [routed dispatch](../../../src/metal/routed_batch.inc.m) and the
 [MoE kernels](../../../src/metal/moe.metal).
+
+Small batches take a different route from wide prefill. For two to eight
+resident MXFP4 rows, the V4.1 decoder can first identify repeated expert IDs,
+then reuse a gate/up weight load across rows that selected the same expert.
+Its temporary plan uses context-owned mapping scratch, with GPU queue order
+keeping successive layers from overwriting a live plan. Q4_K small batches
+have their own compact kernels. These selectors check the weight strides,
+model dimensions and expert ownership before choosing a specialized kernel;
+other shapes keep the general reader.
+
+The shared expert can run beside resident MXFP4 routed work when its Q8
+projections and the device support the concurrent encoder. A barrier separates
+gate/up from down projections, and both branches finish before residual
+expansion. Streaming and unsupported combinations retain serial execution.
+The [distributed execution guide](../../backends/distributed.md) describes the
+additional ownership and synchronization needed for two Macs.
 
 Hardware dispatch chooses among implementations for the operation and device.
 The M5 path includes cooperative Metal tensor `matmul2d` operations with float
@@ -216,6 +300,15 @@ relevance scores for top-k; it does not gather main KV or perform final
 attention. A scoring implementation can read expanded F32 keys directly, while
 a packed implementation decodes the needed FP4 values as it scores. Both perform
 the same retrieval task, regardless of physical layout.
+
+Expanded index storage also maintains a disposable BF16 view of its F32 keys.
+Each publishing layer writes new keys to both arrays. The ordinary scalar row
+scorer can read the narrower view; after restoring a checkpoint or grafting a
+suffix, the runtime rebuilds it and checks that every live key is exactly
+representable in BF16. A failed check keeps that scorer on F32 until reset.
+Packed index storage uses its existing 68-byte rows without this extra view.
+Candidate-only and explicitly selected SIMD scorers use their own readers;
+the view does not determine which scoring algorithm runs.
 
 SIMD scoring is a separate dispatch choice from packing: it has both F32 and
 FP4 readers. In decode, when SIMD is enabled and at least 1,024 **index rows**

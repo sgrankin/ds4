@@ -14,10 +14,6 @@
 #include "ds4.h"
 #include "ds4_gpu.h"
 
-bool ds4_log_is_tty(FILE *fp) {
-    (void)fp;
-    return false;
-}
 
 static uint32_t g_rng = 0x9e3779b9u;
 
