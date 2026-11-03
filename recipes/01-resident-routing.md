@@ -82,6 +82,13 @@ tighter score-gap policy offer other tradeoffs. These short probes identify
 candidate settings; they do not establish broad agent quality. Presets remain
 at three, and the report owns the full curve, samples and qualification limits.
 
+The [longer quality follow-up](../speed-bench/experiments/2026-11-02-resident-long/README.md)
+compares 4,096 corpus positions and 3,371 recorded assistant positions per
+policy. Five retains a small average likelihood cost, with larger local changes
+in final explanatory prose. All three policies pass the long-prompt retrieval
+and correction checks. This supports the candidate tradeoff without establishing
+autonomous coding accuracy; presets remain unchanged.
+
 ## What did not earn its complexity
 
 The [functional-expert map study](../speed-bench/experiments/resident-functional-hour2-20261003/README.md)

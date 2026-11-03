@@ -835,6 +835,9 @@ pub fn build(b: *std.Build) void {
     const decoder_replay_frontend = object(b, target, sdk, clang, "speed-bench/decoder_replay_bench.c", "decoder-replay-main", optimize, test_flags);
     const decoder_replay = executable(b, target, sdk, core, null, null, "decoder-replay-bench", decoder_replay_frontend, optimize);
     b.step("decoder-replay-bench", "Build the existing teacher-logit/task probe (run separately)").dependOn(&b.addInstallArtifact(decoder_replay, .{}).step);
+    const agent_replay_frontend = object(b, target, sdk, clang, "speed-bench/agent-session/replay.c", "agent-session-replay-main", optimize, test_flags);
+    const agent_replay = executable(b, target, sdk, core, null, null, "agent-session-replay", agent_replay_frontend, optimize);
+    b.step("agent-session-replay", "Build the recorded agent-session replay/teacher-logit probe (run separately)").dependOn(&b.addInstallArtifact(agent_replay, .{}).step);
     const swa_restore_frontend = object(b, target, sdk, clang, "speed-bench/swa_restore_probe.c", "swa-restore-main", optimize, test_flags);
     const swa_restore_probe = executable(b, target, sdk, core, null, null, "swa-restore-probe", swa_restore_frontend, optimize);
     b.step("swa-restore-probe", "Build direct block-only SWA recovery probe (run separately)").dependOn(&b.addInstallArtifact(swa_restore_probe, .{}).step);

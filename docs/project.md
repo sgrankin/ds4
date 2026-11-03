@@ -7,10 +7,12 @@ covered all 118 commits and integrated the missing paths. All upstream
 functionality is required unless we explicitly excised it from this fork;
 hardware qualification limits do not remove that implementation obligation.
 
-The one-hour resident-routing experiment is complete. Caps through six are
-implemented; cap five is promising for warm appends, but broader agent quality
-is not yet qualified. The existing three-expert presets remain unchanged.
-See the [result and decision](lab/journal/2026-11-02-resident-routing-through-six.md).
+The resident-routing experiments are complete. Caps through six are implemented;
+cap five remains a promising warm-append tradeoff after longer fixed-history
+quality checks. Autonomous agent quality is not yet qualified. The existing
+three-expert presets remain unchanged. See the
+[timing sweep](lab/journal/2026-11-02-resident-routing-through-six.md) and
+[longer quality follow-up](lab/journal/2026-11-02-resident-long-quality.md).
 
 ## What we are building
 

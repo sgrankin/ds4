@@ -50,6 +50,8 @@ static double milliseconds(void) {
 int main(int argc, char **argv) {
     if (argc != 5) {
         fprintf(stderr,"usage: %s MODEL REPLAY LOGITS_OUT SNAPSHOT_OUT\n",argv[0]);
+        fprintf(stderr,"DS4_REPLAY_TEACHER_DIR: write per-D teacher logits.bin and rows.csv in an existing directory\n"
+            "DS4_REPLAY_SKIP_FINAL_SNAPSHOT=1: omit SNAPSHOT_OUT in teacher mode\n");
         return 2;
     }
     char err[256] = {0};
@@ -60,7 +62,27 @@ int main(int argc, char **argv) {
     ds4_session_snapshot snapshot={0};
     float *logits=NULL;
     FILE *input=fopen(argv[2],"r"), *output=NULL, *state=NULL;
+    FILE *teacher_logits=NULL, *teacher_rows=NULL;
+    unsigned long long teacher_row=0;
+    const char *teacher_dir=getenv("DS4_REPLAY_TEACHER_DIR");
+    const char *skip_env=getenv("DS4_REPLAY_SKIP_FINAL_SNAPSHOT");
+    const int skip_snapshot=skip_env && !strcmp(skip_env,"1");
     REQUIRE(input);
+    REQUIRE(!skip_snapshot || teacher_dir);
+    if (teacher_dir) {
+        char path[4096];
+        REQUIRE(*teacher_dir);
+        int length=snprintf(path,sizeof(path),"%s/logits.bin",teacher_dir);
+        REQUIRE(length>=0 && (size_t)length<sizeof(path));
+        teacher_logits=fopen(path,"wbx");
+        REQUIRE(teacher_logits);
+        length=snprintf(path,sizeof(path),"%s/rows.csv",teacher_dir);
+        REQUIRE(length>=0 && (size_t)length<sizeof(path));
+        teacher_rows=fopen(path,"wx");
+        REQUIRE(teacher_rows);
+        REQUIRE(fputs("index,phase,position,target,vocab\n",teacher_rows)>=0);
+        fprintf(stderr,"REPLAY teacher logits enabled; phase times include logit copy and file I/O and are diagnostic only\n");
+    }
     uint32_t context=100000;
     const char *context_env=getenv("DS4_REPLAY_CONTEXT");
     if (context_env) {
@@ -89,8 +111,9 @@ int main(int argc, char **argv) {
     REQUIRE(ds4_session_create(&session,engine,context)==0);
     const int vocab=ds4_engine_vocab_size(engine);
     logits=malloc((size_t)vocab*sizeof(float));
-    output=fopen(argv[3],"wb"); state=fopen(argv[4],"wb");
-    REQUIRE(logits && output && state);
+    output=fopen(argv[3],"wb");
+    if (!skip_snapshot) state=fopen(argv[4],"wb");
+    REQUIRE(logits && output && (skip_snapshot || state));
     puts("phase,kind,context,tokens,ms,first_decode_ms");
     char kind;
     int cached,count;
@@ -123,6 +146,19 @@ int main(int argc, char **argv) {
             REQUIRE(ds4_session_sync(session,&history,err,sizeof(err))==0);
         } else {
             for (int i=0;i<count;i++) {
+                if (teacher_logits) {
+                    /* These logits predict the recorded token before it enters
+                     * KV. Keep original P/D boundaries and all earlier teacher
+                     * tokens, so compared policies see identical histories.
+                     * Each CSV row indexes one native float32 vocabulary row
+                     * (little-endian on the supported Metal host). */
+                    REQUIRE(ds4_session_pos(session)==start+i);
+                    REQUIRE(ds4_session_copy_logits(session,logits,vocab)==vocab);
+                    REQUIRE(fwrite(logits,sizeof(float),(size_t)vocab,teacher_logits)==(size_t)vocab);
+                    REQUIRE(fprintf(teacher_rows,"%llu,%d,%d,%d,%d\n",
+                        teacher_row,phase,start+i,history.v[start+i],vocab)>0);
+                    teacher_row++;
+                }
                 REQUIRE(ds4_session_eval(session,history.v[start+i],err,sizeof(err))==0);
                 if (!i) {
                     first=milliseconds()-t0;
@@ -153,8 +189,12 @@ int main(int argc, char **argv) {
         fflush(stdout);
     }
     REQUIRE(feof(input) && phase>1);
-    REQUIRE(ds4_session_save_snapshot(session,&snapshot,err,sizeof(err))==0);
-    REQUIRE(fwrite(snapshot.ptr,1,snapshot.len,state)==snapshot.len);
+    /* Approximate routing may not publish a canonical snapshot. Quality-only
+     * runs can omit that artifact explicitly after recording all teacher rows. */
+    if (!skip_snapshot) {
+        REQUIRE(ds4_session_save_snapshot(session,&snapshot,err,sizeof(err))==0);
+        REQUIRE(fwrite(snapshot.ptr,1,snapshot.len,state)==snapshot.len);
+    }
     /* Cumulative cache counters, outside every timed phase. */
     ds4_gpu_print_memory_report("replay final");
     rc=0;
@@ -162,6 +202,8 @@ done:
     if (input) fclose(input);
     if (output && fclose(output)!=0) rc=1;
     if (state && fclose(state)!=0) rc=1;
+    if (teacher_logits && fclose(teacher_logits)!=0) rc=1;
+    if (teacher_rows && fclose(teacher_rows)!=0) rc=1;
     free(logits); ds4_tokens_free(&history);
     ds4_session_snapshot_free(&snapshot);
     ds4_session_free(session); ds4_engine_close(engine);

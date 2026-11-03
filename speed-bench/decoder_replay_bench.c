@@ -140,15 +140,29 @@ static bool answer_equal(const char *text, const char *expected) {
     return n == strlen(expected) && !memcmp(text, expected, n);
 }
 
+static int sync_prompt(ds4_session *s, const ds4_tokens *prompt, int warm_tail,
+                       char *err, size_t errlen) {
+    if (warm_tail) {
+        /* Resident selected-prefill routing is a warm-append path. Materialize
+         * the shared prefix first so the tail exercises that same path for
+         * teacher logits and the independent greedy answer. */
+        ds4_tokens prefix = *prompt;
+        prefix.len -= warm_tail;
+        int rc = ds4_session_sync(s, &prefix, err, errlen);
+        if (rc) return rc;
+    }
+    return ds4_session_sync(s, prompt, err, errlen);
+}
+
 int main(int argc, char **argv) {
     const char *model = NULL, *out = NULL, *selected = "all";
     int rows = 0, wanted = 8192, chunk = 8192, ctx = CONTEXT, compressed_f16 = 0;
     int thinking = 0, max_new = MAX_NEW, cache_gb = 64, candidate_sweep = 0, simd_sweep = 0;
-    int resident_env = 0;
+    int resident_env = 0, warm_tail = 0;
     for (int i = 1; i < argc; i++) {
         if (!strcmp(argv[i], "--help")) {
             puts("decoder_replay_bench --model MODEL --out EXISTING_DIR --rows 0|128|256 "
-                 "[--tokens 8192] [--chunk 8192] [--ctx 16384] [--compressed-kv-f16 0|1] "
+                 "[--tokens 8192] [--chunk 8192] [--ctx 16384] [--warm-tail 0] [--compressed-kv-f16 0|1] "
                  "[--case all|ordinary|favorable|changed] [--thinking 0|1] [--max-new 48] [--cache-gb 64] [--candidate-sweep 0|1] [--simd-sweep 0|1] [--resident-env 0|1]");
             return 0;
         }
@@ -161,6 +175,7 @@ int main(int argc, char **argv) {
         else if (!strcmp(key, "--tokens")) wanted = number(value);
         else if (!strcmp(key, "--chunk")) chunk = number(value);
         else if (!strcmp(key, "--ctx")) ctx = number(value);
+        else if (!strcmp(key, "--warm-tail")) warm_tail = number(value);
         else if (!strcmp(key, "--compressed-kv-f16")) compressed_f16 = number(value);
         else if (!strcmp(key, "--thinking")) thinking = number(value);
         else if (!strcmp(key, "--max-new")) max_new = number(value);
@@ -177,6 +192,7 @@ int main(int argc, char **argv) {
     }
     if (!model || !out || !count || (rows != 0 && rows != 128 && rows != 256) ||
         wanted < 2048 || max_new < 1 || wanted + max_new >= ctx || chunk < 1 || chunk > 8192 ||
+        warm_tail < 0 || warm_tail >= wanted ||
         (thinking != 0 && thinking != 1) || cache_gb < 1 || cache_gb > 128 ||
         (candidate_sweep != 0 && candidate_sweep != 1) ||
         (simd_sweep != 0 && simd_sweep != 1) || (candidate_sweep && simd_sweep) ||
@@ -229,10 +245,10 @@ int main(int argc, char **argv) {
      * apply mode permits substitutions; runtime footers record actual use. */
     bool native_routing = strcmp(route_mode, "apply") != 0 ||
         (strtof(route_gap, NULL) == 0 && strtof(prefill_gap, NULL) == 0);
-    fprintf(tokens, "{\"rows\":%d,\"vocab\":%d,\"context\":%d,\"chunk\":%d,\"compressed_kv_f16\":%d,"
+    fprintf(tokens, "{\"rows\":%d,\"vocab\":%d,\"context\":%d,\"chunk\":%d,\"warm_tail\":%d,\"initial_prefix_tokens\":%d,\"compressed_kv_f16\":%d,"
         "\"planned_raw_bytes\":%llu,\"planned_compressed_bytes\":%llu,\"planned_total_bytes\":%llu,\"ssd_cache_gib\":%d,"
         "\"mtp\":false,\"thinking\":%s,\"max_new\":%d,\"native_routing\":%s,\"resident_env\":%s,\"logits_dtype\":\"float32_le\",\"engine_open_ms\":%.6f,\"resident_route_gap\":",
-        rows, vocab, ctx, chunk, compressed_f16, (unsigned long long)memory.raw_bytes,
+        rows, vocab, ctx, chunk, warm_tail, wanted - warm_tail, compressed_f16, (unsigned long long)memory.raw_bytes,
         (unsigned long long)memory.compressed_bytes, (unsigned long long)memory.total_bytes, cache_gb,
         thinking ? "true" : "false", max_new, native_routing ? "true" : "false",
         resident_env ? "true" : "false", open_ms);
@@ -254,13 +270,15 @@ int main(int argc, char **argv) {
             fixtures[which].name, rows, prompt.len, teacher.len, record_start, query_start);
         ds4_session_invalidate(s);
         double start = now_ms();
-        CHECK(ds4_session_sync(s, &prompt, err, sizeof(err)) == 0);
+        CHECK(sync_prompt(s, &prompt, warm_tail, err, sizeof(err)) == 0);
         double sync_ms = now_ms() - start;
         CHECK(ds4_session_pos(s) == prompt.len);
         bool approximate = ds4_session_is_approximate(s);
         uint64_t payload_bytes = ds4_session_payload_bytes(s);
         uint64_t suffix_cache_bytes = ds4_session_suffix_cache_bytes(s);
-        if (wanted == 8192 && chunk == 8192) {
+        /* These replay invariants describe a single cold 8192-token prefill.
+         * A warm append can mark rows=0 approximate through resident routing. */
+        if (wanted == 8192 && chunk == 8192 && warm_tail == 0) {
             CHECK(approximate == (rows != 0));
             CHECK(rows ? payload_bytes == 0 && suffix_cache_bytes == 0 : payload_bytes > 0);
             if (compressed_f16) CHECK(suffix_cache_bytes == 0);
@@ -281,7 +299,7 @@ int main(int argc, char **argv) {
         /* A fresh prefill prevents teacher tokens from conditioning the answer. */
         ds4_session_invalidate(s);
         start = now_ms();
-        CHECK(ds4_session_sync(s, &prompt, err, sizeof(err)) == 0);
+        CHECK(sync_prompt(s, &prompt, warm_tail, err, sizeof(err)) == 0);
         double greedy_sync_ms = now_ms() - start;
         if (candidate_sweep || simd_sweep)
             CHECK(ds4_session_save_snapshot(s, &sweep_snapshot, err, sizeof(err)) == 0);
