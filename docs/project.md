@@ -20,6 +20,10 @@ establishes large-context rates after that adoption. The
 implements shared-expert overlap, bounded event polling and precise expert-cache
 retirement. It is enabled by the resident fast presets; ordinary runtime
 defaults remain opt-in.
+The [profile after overlap](lab/journal/2026-11-03-post-overlap-profile.md)
+selects the existing attention-head transform and per-token RoPE table as the
+next candidate for SSD streaming decode. It is a recommendation, not an enabled
+change; the timing refresh also records unresolved variation in warm appends.
 
 ## What we are building
 

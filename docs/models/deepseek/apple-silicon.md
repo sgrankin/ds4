@@ -198,6 +198,17 @@ qualification. Our [32K profile](../../../speed-bench/experiments/2026-11-03-con
 examines these dependencies with the current streamed IQ2/Q2 model and resident
 substitution, where several of those non-streaming paths are ineligible.
 
+The [profile after routing overlap](../../../speed-bench/experiments/2026-11-03-post-overlap-profile/README.md)
+identifies the per-token RoPE table as the next decode experiment. Without that
+table, the low-rank attention output projection repeats the same inverse
+rotation while loading attention heads for different output pairs. The existing
+alternative transforms each head once during attention reduction, then uses a
+plain projection. It preserves the two BF16 rounding boundaries in focused
+tests, but enabling it for SSD streaming still needs full-model qualification.
+The profiled projection cost includes matrix multiplication and weight traffic;
+removing repeated rotations cannot remove that entire cost. The separate query
+projection and its forward RoPE are outside this candidate.
+
 ### Resident expert substitution
 
 During SSD streaming, an optional resident-route approximation can replace

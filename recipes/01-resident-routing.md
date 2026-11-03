@@ -102,6 +102,10 @@ event polling and cache-only retirement at the ready boundary. It preserves
 the selector and native coefficients. Both resident presets enable this
 scheduling package; its separate decode saving should not be added to the
 routing-policy percentages above.
+The [profile after overlap](../speed-bench/experiments/2026-11-03-post-overlap-profile/README.md)
+still finds little exposed expert I/O in this workload. It recommends testing
+an existing attention rotation optimization next, rather than changing the
+resident policy again.
 
 ## What did not earn its complexity
 

@@ -1,9 +1,12 @@
 #!/usr/bin/env nu
 # Run from the repository root under speed-bench/ideas/pressure_run.py.
 # Timing is profile-free; quality and profile stages are diagnostics only.
-def main [out: path, stage: string = 'timing', --cache: string = '64GB', --spin-us: int = 0] {
-    if $stage not-in ['timing' 'smoke' 'quality' 'profile'] {
-        error make {msg: 'Stage must be timing, smoke, quality or profile'}
+def main [out: path, stage: string = 'timing', --cache: string = '64GB', --spin-us: int = 0, --only: string = 'both', --samples: int = 5] {
+    if $stage not-in ['timing' 'smoke' 'quality' 'profile' 'timeline'] {
+        error make {msg: 'Stage must be timing, smoke, quality, profile or timeline'}
+    }
+    if $only not-in ['both' 'baseline' 'overlap'] {
+        error make {msg: '--only must be both, baseline or overlap'}
     }
     mkdir $out
     for key in ($env | columns | where {|key| $key | str starts-with 'DS4'}) { hide-env $key }
@@ -18,13 +21,14 @@ def main [out: path, stage: string = 'timing', --cache: string = '64GB', --spin-
     }
     let frontier = if $stage in ['smoke' 'quality'] { 8192 } else { 32768 }
     let tokens = if $stage == 'smoke' { 32 } else { 128 }
-    let repeats = if $stage == 'timing' { 5 } else { 1 }
+    let repeats = if $stage == 'timing' { $samples } else { 1 }
     for repeat in 1..$repeats {
         let arms = if ($repeat mod 2) == 0 { ['overlap' 'baseline'] } else { ['baseline' 'overlap'] }
         for arm in $arms {
+            if $only != 'both' and $arm != $only { continue }
             let dest = $out | path join $'($repeat)-($arm)'
             mkdir $dest
-            let diagnostic = if $stage == 'profile' { {
+            let diagnostic = if $stage in ['profile' 'timeline'] { {
                 DS4_METAL_GRAPH_PREFILL_PROFILE: '1'
                 DS4_METAL_PIPELINE_CREATE_PROFILE: '1'
                 DS4_METAL_STREAMING_PREFILL_LAYER_PREAD_PROFILE: '1'
@@ -36,7 +40,10 @@ def main [out: path, stage: string = 'timing', --cache: string = '64GB', --spin-
             let settings = $common | merge $diagnostic | merge {
                 DS4_METAL_V41_ROUTE_SHARED_OVERLAP: (if $arm == 'overlap' { '1' } else { '0' })
                 DS4_METAL_SELECTED_READBACK_SPIN_US: (if $arm == 'overlap' { $spin_us | into string } else { '0' })
-            }
+            } | merge (if $stage == 'timeline' { {
+                DS4_METAL_CB_TIMES: '1'
+                DS4_METAL_ENCODER_TIMELINE: ($dest | path join 'timeline.txt')
+            } } else { {} })
             let quality_args = if $stage == 'quality' {
                 let logits = $dest | path join 'logits'
                 mkdir $logits

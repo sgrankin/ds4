@@ -1,10 +1,11 @@
 # Selected experiment
 
-**No active experiment.** The 2026-11-03
-[routing/shared-expert overlap](../../docs/lab/journal/2026-11-03-route-overlap.md)
-slice is complete and adopted in the resident fast presets. Broader optimization
-is authorized by the user; further changes remain separate experiments with
-their own fixed baseline and initial one-hour budget.
+**Completed 2026-11-03: profile the adopted overlap path and select its next target.**
+
+The [result report](../experiments/2026-11-03-post-overlap-profile/README.md)
+records five current samples, separate diagnostic profiles and the recommended
+next experiment: extend the existing per-token RoPE table and attention-head
+transform to eligible SSD streaming decode. No further experiment is selected.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome

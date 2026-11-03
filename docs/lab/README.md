@@ -31,6 +31,7 @@ command or speed is evidence at its recorded revision, not a current-build claim
 | [Longer resident-routing quality](journal/2026-11-02-resident-long-quality.md) | Longer text and recorded agent histories retain a small mean cost at five substitutions, with local wording changes and narrow answer checks. |
 | [32K throughput and dependencies](journal/2026-11-03-context32-profile.md) | Five-pair chunk comparison and separate profiles identify the per-layer routing handoff as a useful next target after resident substitution. |
 | [Routing/shared-expert overlap](journal/2026-11-03-route-overlap.md) | Bounded event polling improves decode; precise expert-cache retirement preserves eviction behavior when work continues after the router event. |
+| [Profiling after overlap](journal/2026-11-03-post-overlap-profile.md) | The current path uses fewer command buffers; repeated inverse rotation in attention output is the next bounded decode target. Noisy append timings and intrusive profile limits remain visible. |
 
 The [design folder](../design/README.md) preserves unselected ideas separately from
 measured conclusions. Original concise reports under `speed-bench/` own complete
