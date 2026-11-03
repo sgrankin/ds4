@@ -7,13 +7,20 @@ be absent while slightly weaker experts are resident. Substitute a bounded
 number of those misses. This is intentionally approximate: neighboring router
 scores do not imply equivalent expert functions.
 
-Our DeepSeek-specific selector starts from the six ORIGINAL selected experts,
+Our DeepSeek-specific selector starts from the six original selected experts,
 unbiased affinities `p`, learned correction bias `b`, and native mixture weights.
-Protect the strongest three original contributions. For each of at most three
-weak original slots, require its original normalized mass to be≤.25 and the
-total replaced mass≤.50. Only a missing expert is eligible. Choose the highest
-`p+b` resident candidate outside the six original IDs and all earlier substitutes,
-with corrected rank≤64, affinity within `p_old*(1±gap)`, and
+The configurable substitution limit selects the one to six original slots with
+the lowest unbiased affinities for consideration. A slot's original normalized
+mass is its affinity divided by the sum of the six selected affinities. The
+selector does not search stronger slots to make up for a
+resident or otherwise ineligible choice. Original resident experts are preserved.
+Each considered slot must satisfy the per-slot original normalized mass limit;
+multi-slot plans also have a total replaced-mass limit. Setting that total limit
+to 1 disables the cap, including a rounding edge case where the six normalized
+float masses sum slightly above one. One-slot mode does not consult the total
+limit. Choose the highest `p+b` resident candidate outside the six original IDs
+and all earlier substitutes, within the configured corrected rank, with affinity
+within `p_old*(1±gap)`, and
 `(p_old+b_old)-(p_new+b_new) ≤ gap*p_old`. Ties use expert ID. The tested gap .90
 is permissive; do not describe it as a near-identical function guarantee.
 
@@ -39,12 +46,15 @@ The assumptions are model-family routing semantics, unique resident experts and
 an execution path that accepts changed IDs with preserved coefficients. Port
 the policy at the routing boundary; do not copy DeepSeek bias/affinity formulas
 unchanged into a different MoE. Sources:
-[selector](../src/ds4_resident_route.h), [runtime](../src/ds4.c),
+[selector](../src/resident_route.zig), [runtime](../src/engine/deepseek41/route_services.zig),
 [focused test](../tests/test_resident_route.c).
 
 ## Local knobs and measured points
 
-Decoder: `DS4_METAL_V41_RESIDENT_ROUTE_GAP=.90`, `_MAX_SUBS=3`, `_MAX_RANK=64`,
+The `resident-fast` and `persistent-fast` presets use at most the three weakest
+original slots, protecting the strongest three, with a per-slot mass limit of
+.25 and total limit of .50. Their decoder settings are
+`DS4_METAL_V41_RESIDENT_ROUTE_GAP=.90`, `_MAX_SUBS=3`, `_MAX_RANK=64`,
 `_MAX_MASS=.25`, `_MAX_TOTAL_MASS=.50`, `_POLICY=replace`, `_NATIVE_WEIGHTS=1`
 (all latter names share `DS4_METAL_V41_RESIDENT_ROUTE`). Selected prefill adds
 `DS4_METAL_V41_RESIDENT_PREFILL_GAP=.90`. `resident-fast` enables the decoder;
@@ -55,12 +65,22 @@ disables its substitutions. Ordinary runtime behavior remains opt-in.
 |---|---|---|
 | [Item22](../speed-bench/experiments/resident-combined-hour22-20261004/README.md), `fe5d6e26` | Decoder cap 3 saved 9.70% task time; cap 1 saved 3.58% | Ledger/LRU, stable high-effort READ0/WRITE128/FINAL1, suffix off; all 8 first codes 161/161; native drift .33% |
 | [Item37](../speed-bench/experiments/recipe-prefill-hour37-20261008/README.md), `9c6918f0` | Prefill cap 3 saved 10.64% warm append /9.32% versus faster control; coding pair 5.98% /2.86% | Q2, SSD64 GB, ctx 8192/chunk 512/tile 64/limit 1024; decoder off; two reused coding families; coding drift 6.22% |
-| Item37 fixed teacher | cap 3 ΔNLL+.005043, KL.002259; cap 1 +.001723/.000834 | One evolving trajectory,343 teacher rows, not 343 independent tasks; cap 3 worst target ΔNLL+1.111 and KL.472 |
+| Item37 fixed teacher | cap 3 ΔNLL +.005043, KL .002259; cap 1 +.001723 / .000834 | One evolving trajectory, 343 teacher rows, not 343 independent tasks; cap 3 worst target ΔNLL +1.111 and KL .472 |
 
-Item37 initial prefill changed only .26%, establishing no initial-prefill gain.
-Cap1's warm mean saving 1.84% sat inside 22.39% control drift and was 9.15% slower
+Item 37 initial prefill changed only .26%, establishing no initial-prefill gain.
+Cap 1's warm mean saving 1.84% sat inside 22.39% control drift and was 9.15% slower
 than its faster control. Its later coding arm was unbracketed. Keep those weak
 points rather than selecting only a favorable denominator.
+
+The [2026-11-02 sweep](../speed-bench/experiments/2026-11-02-resident-six/README.md)
+extends the selector through six slots. With five timing samples per policy,
+cap five without mass limits saves 7.16% on a 512-token warm append plus 32
+decode steps relative to the existing preset. Its 64-position teacher
+delta-NLL is +0.0446 nats/token against native routing. Cap six has effectively
+the same mean latency and substantially more distribution drift. Four and the
+tighter score-gap policy offer other tradeoffs. These short probes identify
+candidate settings; they do not establish broad agent quality. Presets remain
+at three, and the report owns the full curve, samples and qualification limits.
 
 ## What did not earn its complexity
 
@@ -73,20 +93,29 @@ The [original-arrival prototype](../speed-bench/experiments/original-arrival-hou
 used a bounded worker to fetch one displaced ideal expert, promoting it only if
 READY at a nonwaiting deadline. Initial joins made strong variants 10–18% slower
 than substitution alone. Joining only admitted tickets made retention-age 8
-timing-neutral (−.21%, control spread .65%) with+.30% logical reads; age 1 remained
+timing-neutral (−.21%, control spread .65%) with +.30% logical reads; age 1 remained
 7.40% slower. It remains a private experiment, not part of the preset. Do not
 claim that using resident substitutes implies asynchronous ideal-expert arrival
 has been integrated or proved beneficial.
 
 ## Replication and credit
 
-Freeze native before/after, sweep substitution caps 1/2/3, and log actual decoder
+Freeze native before/after, sweep the chosen substitution caps, and log actual decoder
 and prefill substitutions. Compare warm append AND cold bootstrap, fixed-teacher
 ΔNLL/KL, and first-attempt complete tool tasks. Count requested reads separately
 from physical I/O. Re-run a growth case with the same expert-cache capacity.
 
 The broader cache-aware routing idea is credited to
-[MoCCE](https://arxiv.org/abs/2412.00099). Its cache-prior logit bonus/reweighting
-is different from our bounded ID-only substitution. The warm-prefill priority
-came from [ds4-recipe](https://tangled.org/astrra.space/ds4-recipe), chapter 06;
-its AMD/HIP throughput is not a local measurement.
+[MoCCE](https://arxiv.org/abs/2412.00099). The local `ds4-recipe` chapter 06
+at revision `0316b956` describes a different Cache-Prior policy: it adds
+`λ` times a per-layer running mean of the corrected score range to resident
+experts and the original top `keep`, then selects the top six again. It
+renormalizes the selected experts' unbonused affinities into mixture weights.
+That policy preserves resident original picks and protected top picks, but has
+no 50% replaced-mass cap. Our preset instead bounds changes to the three
+weakest original slots and retains their original coefficients.
+
+That chapter recommends `λ = .09`, `keep = 3`; its reported speed and quality
+study used `λ = .10`, `keep = 2`. Its AMD/HIP measurements are not measurements
+of this Metal implementation. It also motivated our warm-prefill investigation;
+see [ds4-recipe chapter 06](https://tangled.org/astrra.space/ds4-recipe/blob/0316b956/06-expert-cache-and-routing.md).

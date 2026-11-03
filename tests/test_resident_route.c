@@ -11,7 +11,76 @@ static void base(float *p, float *bias, uint8_t *resident) {
     resident[6] = 1;
 }
 
+static void four_to_six(void) {
+    const int32_t ids[6] = {0, 1, 2, 3, 4, 5};
+    const uint32_t weakest[6] = {4, 5, 2, 3, 1, 0};
+    /* Exact binary masses make both the per-slot and cumulative boundaries
+     * explicit. Equal contributions retain the original slot order. */
+    const float p[12] = {6, 4, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1};
+    const float bias[12] = {0};
+    uint8_t resident[12] = {0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1};
+    ds4_resident_route_plan plan;
+    for (uint32_t max_subs = 4; max_subs <= 6; max_subs++) {
+        assert(ds4_resident_route_choose_plan(ids, p, bias, resident, 12, 6,
+            1, 12, 1, max_subs, 1, &plan));
+        assert(plan.count == max_subs);
+        int32_t final[6]; memcpy(final, ids, sizeof(final));
+        float replaced_mass = 0;
+        for (uint32_t i = 0; i < plan.count; i++) {
+            const ds4_resident_route_change change = plan.changes[i];
+            assert(change.slot == weakest[i] && change.old_expert == (uint32_t)ids[weakest[i]]);
+            assert(change.new_expert == 6 + i && resident[change.new_expert]);
+            replaced_mass += p[change.old_expert] / 16;
+            final[change.slot] = (int32_t)change.new_expert;
+        }
+        assert(plan.total_mass == replaced_mass);
+        for (uint32_t i = max_subs; i < 6; i++) assert(final[weakest[i]] == ids[weakest[i]]);
+        for (uint32_t i = 0; i < 6; i++) for (uint32_t j = 0; j < i; j++) assert(final[i] != final[j]);
+
+        /* An already resident native slot stays put. It does not expand the
+         * original eligible set to include a stronger missing contributor. */
+        resident[4] = 1;
+        assert(ds4_resident_route_choose_plan(ids, p, bias, resident, 12, 6,
+            1, 12, 1, max_subs, 1, &plan));
+        assert(plan.count == max_subs - 1);
+        for (uint32_t i = 0; i < plan.count; i++) {
+            assert(plan.changes[i].slot == weakest[i + 1]);
+            assert(!resident[plan.changes[i].old_expert]);
+            assert(plan.changes[i].new_expert >= 6);
+        }
+        resident[4] = 0;
+
+        assert(ds4_resident_route_choose_plan(ids, p, bias, resident, 12, 6,
+            1, 12, .125f, max_subs, 1, &plan) && plan.count == 4);
+        assert(ds4_resident_route_choose_plan(ids, p, bias, resident, 12, 6,
+            1, 12, .12f, max_subs, 1, &plan) && plan.count == 2);
+        assert(ds4_resident_route_choose_plan(ids, p, bias, resident, 12, 6,
+            1, 12, 1, max_subs, .125f, &plan) && plan.count == 2 && plan.total_mass == .125f);
+        assert(ds4_resident_route_choose_plan(ids, p, bias, resident, 12, 6,
+            1, 9, 1, max_subs, 1, &plan) && plan.count == 3);
+        assert(ds4_resident_route_choose_plan(ids, p, bias, resident, 12, 6,
+            .01f, 12, 1, max_subs, 1, &plan) && plan.count == 2);
+    }
+    /* A rejected request clears the enlarged plan, including unused slots. */
+    memset(&plan, 0xff, sizeof(plan));
+    assert(!ds4_resident_route_choose_plan(ids, p, bias, resident, 12, 6,
+        1, 12, 1, 7, 1, &plan));
+    const ds4_resident_route_plan zero = {0};
+    assert(!memcmp(&plan, &zero, sizeof(plan)));
+
+    /* Normalizing and adding these six f32 contributions rounds above one.
+     * MAX_TOTAL_MASS=1 disables the cap; smaller limits still enforce it. */
+    const float rounding[12] = {.1f, .2f, .3f, .4f, .5f, .6f,
+                               .09f, .09f, .09f, .09f, .09f, .09f};
+    assert(ds4_resident_route_choose_plan(ids, rounding, bias, resident, 12, 6,
+        1, 12, 1, 6, 1, &plan));
+    assert(plan.count == 6 && plan.total_mass > 1 && plan.total_mass < 1.000001f);
+    assert(ds4_resident_route_choose_plan(ids, rounding, bias, resident, 12, 6,
+        1, 12, 1, 6, .99f, &plan) && plan.count == 5 && plan.total_mass <= .99f);
+}
+
 int main(void) {
+    four_to_six();
     float p[10], bias[10], weights[6];
     uint8_t resident[10];
     int32_t ids[6] = {0, 1, 2, 3, 4, 5};
@@ -140,6 +209,6 @@ int main(void) {
     memset(frozen, 0, sizeof(frozen));
     assert(!ds4_resident_route_choose_plan(ids, p, bias, frozen, 10, 6,
         .1f, 10, 1.0f / 6, 3, .50f, &later));
-    puts("PASS: bounded unique routes, top-contribution protection, two-sided affinity and mass limits, two-original-miss budget, one-slot parity, normalized weights, frozen prefill residency");
+    puts("PASS: bounded unique routes through six substitutions, top-contribution protection, two-sided affinity and mass limits, two-original-miss budget, one-slot parity, normalized weights, frozen prefill residency");
     return 0;
 }

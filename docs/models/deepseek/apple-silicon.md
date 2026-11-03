@@ -168,12 +168,15 @@ qualification.
 
 ### Resident expert substitution
 
-During SSD streaming, an optional resident-route approximation
-can replace up to three weaker missing choices with resident candidates, subject
-to affinity, rank and mass bounds. It keeps the original coefficients and
-protects the three strongest choices, but a substitute expert computes a
-different function. The [routing recipe](../../../recipes/01-resident-routing.md)
-explains the limits and measured quality tradeoff.
+During SSD streaming, an optional resident-route approximation can replace
+missing choices with resident candidates, subject to affinity, rank and mass
+bounds. Its configurable selector considers the weakest one to six original
+slots and preserves original resident choices and mixture coefficients. The
+presets consider at most three slots, protecting the strongest three, and limit
+each replaced original mass to .25 and their total to .50. A substitute expert
+still computes a different function. The
+[routing recipe](../../../recipes/01-resident-routing.md) explains the limits
+and measured quality tradeoff.
 
 For example, if a weak selected expert is absent, the policy can assign its
 original mixture coefficient to an eligible resident expert. The current token

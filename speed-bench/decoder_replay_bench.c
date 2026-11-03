@@ -144,11 +144,12 @@ int main(int argc, char **argv) {
     const char *model = NULL, *out = NULL, *selected = "all";
     int rows = 0, wanted = 8192, chunk = 8192, ctx = CONTEXT, compressed_f16 = 0;
     int thinking = 0, max_new = MAX_NEW, cache_gb = 64, candidate_sweep = 0, simd_sweep = 0;
+    int resident_env = 0;
     for (int i = 1; i < argc; i++) {
         if (!strcmp(argv[i], "--help")) {
             puts("decoder_replay_bench --model MODEL --out EXISTING_DIR --rows 0|128|256 "
                  "[--tokens 8192] [--chunk 8192] [--ctx 16384] [--compressed-kv-f16 0|1] "
-                 "[--case all|ordinary|favorable|changed] [--thinking 0|1] [--max-new 48] [--cache-gb 64] [--candidate-sweep 0|1] [--simd-sweep 0|1]");
+                 "[--case all|ordinary|favorable|changed] [--thinking 0|1] [--max-new 48] [--cache-gb 64] [--candidate-sweep 0|1] [--simd-sweep 0|1] [--resident-env 0|1]");
             return 0;
         }
         if (++i >= argc) return 2;
@@ -166,6 +167,7 @@ int main(int argc, char **argv) {
         else if (!strcmp(key, "--cache-gb")) cache_gb = number(value);
         else if (!strcmp(key, "--candidate-sweep")) candidate_sweep = number(value);
         else if (!strcmp(key, "--simd-sweep")) simd_sweep = number(value);
+        else if (!strcmp(key, "--resident-env")) resident_env = number(value);
         else return 2;
     }
     bool chosen[CASES] = {0}; int count = 0;
@@ -178,6 +180,7 @@ int main(int argc, char **argv) {
         (thinking != 0 && thinking != 1) || cache_gb < 1 || cache_gb > 128 ||
         (candidate_sweep != 0 && candidate_sweep != 1) ||
         (simd_sweep != 0 && simd_sweep != 1) || (candidate_sweep && simd_sweep) ||
+        (resident_env != 0 && resident_env != 1) ||
         (compressed_f16 != 0 && compressed_f16 != 1)) return 2;
     int rc = 1; char err[256] = {0}, setting[16];
     ds4_engine *e = NULL; ds4_session *s = NULL;
@@ -188,9 +191,13 @@ int main(int argc, char **argv) {
     snprintf(setting, sizeof(setting), "%d", rows);
     CHECK(setenv("DS4_V41_DECODER_REPLAY_ROWS", setting, 1) == 0);
     CHECK(setenv("DS4_V41_COMPRESSED_KV_F16", compressed_f16 ? "1" : "0", 1) == 0);
-    CHECK(setenv("DS4_METAL_V41_RESIDENT_ROUTE_GAP", "0", 1) == 0);
-    CHECK(setenv("DS4_METAL_V41_RESIDENT_PREFILL_GAP", "0", 1) == 0);
-    CHECK(setenv("DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS", "0", 1) == 0);
+    /* Historical replay comparisons keep native routing unless explicitly
+     * asked to exercise the caller's resident-routing configuration. */
+    if (!resident_env) {
+        CHECK(setenv("DS4_METAL_V41_RESIDENT_ROUTE_GAP", "0", 1) == 0);
+        CHECK(setenv("DS4_METAL_V41_RESIDENT_PREFILL_GAP", "0", 1) == 0);
+        CHECK(setenv("DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS", "0", 1) == 0);
+    }
     raw = output(out, "logits.bin", "wbx"); csv = output(out, "rows.csv", "wx");
     timings = output(out, "timings.csv", "wx"); tokens = output(out, "tokens.json", "wx");
     answers = output(out, "answers.jsonl", "wx");
@@ -212,12 +219,27 @@ int main(int argc, char **argv) {
     fprintf(csv, "case,step,target,nll,argmax\n");
     fprintf(timings, "case,rows,prompt_tokens,teacher_tokens,sync_ms,teacher_ms,greedy_sync_ms,greedy_ms,generated_tokens,stopped,exact,approximate,payload_bytes,suffix_cache_bytes\n");
     ds4_context_memory memory = ds4_engine_context_memory_estimate(e, ctx);
+    const char *route_gap = getenv("DS4_METAL_V41_RESIDENT_ROUTE_GAP");
+    const char *prefill_gap = getenv("DS4_METAL_V41_RESIDENT_PREFILL_GAP");
+    const char *route_mode = getenv("DS4_METAL_V41_RESIDENT_ROUTE_MODE");
+    if (!route_gap || !*route_gap) route_gap = "0";
+    if (!prefill_gap || !*prefill_gap) prefill_gap = "0";
+    if (!route_mode || !*route_mode) route_mode = "apply";
+    /* Diagnostic modes preserve the original IDs and coefficients. Enabled
+     * apply mode permits substitutions; runtime footers record actual use. */
+    bool native_routing = strcmp(route_mode, "apply") != 0 ||
+        (strtof(route_gap, NULL) == 0 && strtof(prefill_gap, NULL) == 0);
     fprintf(tokens, "{\"rows\":%d,\"vocab\":%d,\"context\":%d,\"chunk\":%d,\"compressed_kv_f16\":%d,"
         "\"planned_raw_bytes\":%llu,\"planned_compressed_bytes\":%llu,\"planned_total_bytes\":%llu,\"ssd_cache_gib\":%d,"
-        "\"mtp\":false,\"thinking\":%s,\"max_new\":%d,\"native_routing\":true,\"logits_dtype\":\"float32_le\",\"engine_open_ms\":%.6f,\"cases\":[",
+        "\"mtp\":false,\"thinking\":%s,\"max_new\":%d,\"native_routing\":%s,\"resident_env\":%s,\"logits_dtype\":\"float32_le\",\"engine_open_ms\":%.6f,\"resident_route_gap\":",
         rows, vocab, ctx, chunk, compressed_f16, (unsigned long long)memory.raw_bytes,
         (unsigned long long)memory.compressed_bytes, (unsigned long long)memory.total_bytes, cache_gb,
-        thinking ? "true" : "false", max_new, open_ms);
+        thinking ? "true" : "false", max_new, native_routing ? "true" : "false",
+        resident_env ? "true" : "false", open_ms);
+    json_text(tokens, route_gap);
+    fprintf(tokens, ",\"resident_prefill_gap\":"); json_text(tokens, prefill_gap);
+    fprintf(tokens, ",\"resident_route_mode\":"); json_text(tokens, route_mode);
+    fprintf(tokens, ",\"cases\":[");
     int row_start = 0, emitted = 0;
     for (int which = 0; which < CASES; which++) {
         if (!chosen[which]) continue;
@@ -270,8 +292,16 @@ int main(int argc, char **argv) {
             int token = ds4_session_argmax(s); CHECK(token >= 0 && token < vocab);
             if (ds4_token_is_stop(e, token)) { stopped = true; break; }
             ds4_tokens_push(&generated, token);
+            if (thinking && ds4_token_is_thinking_control(e, token)) {
+                size_t n = 0; char *piece = ds4_token_text(e, token, &n); CHECK(piece);
+                /* Both opening and closing tags are controls. Reopened
+                 * reasoning is generated normally but excluded from grading. */
+                in_thinking = !(n == 8 && !memcmp(piece, "</think>", 8));
+                free(piece);
+                CHECK(ds4_session_eval(s, token, err, sizeof(err)) == 0);
+                continue;
+            }
             if (in_thinking) {
-                if (ds4_token_is_thinking_control(e, token)) in_thinking = false;
                 CHECK(ds4_session_eval(s, token, err, sizeof(err)) == 0);
                 continue;
             }

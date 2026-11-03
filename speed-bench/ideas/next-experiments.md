@@ -1,7 +1,13 @@
 # Selected experiment
 
-**Paused for reassessment, 2026-10-28. No experiment is selected.**
-The latest authorized batch and checkpoint follow-up are complete.
+**No experiment is selected. The 2026-11-02 resident-routing slice is complete.**
+
+Caps through six and alternative mass/score limits were tested in seven policies,
+with five timing samples each. The [journal entry](../../docs/lab/journal/2026-11-02-resident-routing-through-six.md)
+records the decision and links the full results. Cap five is promising for warm
+appends; presets remain at three. Broader agent qualification or a full
+Cache-Prior implementation would be a new selected outcome, not an automatic
+continuation.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome

@@ -164,6 +164,7 @@ speed-bench/ideas/artifacts/
 !/speed-bench/experiments/*/*.py
 !/speed-bench/experiments/*/*.sh
 !/speed-bench/experiments/*/*.nu
+!/speed-bench/experiments/2026-11-02-resident-six/pareto.svg
 !/speed-bench/experiments/*/*.c
 !/speed-bench/experiments/upstream-selected-read-20261023/candidate.patch
 !/speed-bench/experiments/integer-prefill-20261027/*.patch

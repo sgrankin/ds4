@@ -40,6 +40,9 @@ const RouteStats = struct {
     full_snapshots: u64 = 0,
     double_layers: u64 = 0,
     triple_layers: u64 = 0,
+    four_layers: u64 = 0,
+    five_layers: u64 = 0,
+    six_layers: u64 = 0,
     planned: u64 = 0,
     drops: u64 = 0,
     native_weights_requested: bool = false,
@@ -61,6 +64,9 @@ const PrefillStats = struct {
     skipped_bytes: u64 = 0,
     double_layers: u64 = 0,
     triple_layers: u64 = 0,
+    four_layers: u64 = 0,
+    five_layers: u64 = 0,
+    six_layers: u64 = 0,
     replaced_mass: f64 = 0,
 };
 const State = struct {
@@ -117,12 +123,12 @@ fn mean(total: f64, count: u64) f64 {
 }
 fn report() callconv(.c) void {
     const s = &current().route_stats;
-    _ = c.fprintf(c.__stderrp, "ds4: resident-route layers=%llu substitutions=%llu native_misses=%llu skipped_loads=%llu skipped_bytes=%llu mean_mass=%.8f mean_score_gap=%.8f mean_affinity_ratio=%.8f mean_rank=%.3f full_snapshots=%llu double_layers=%llu planned_substitutions=%llu drops=%llu triple_layers=%llu\n", s.layers, s.substitutions, s.native_misses, s.skipped_loads, s.skipped_bytes, mean(s.replaced_mass, s.substitutions), mean(s.score_gap, s.substitutions), mean(s.affinity_ratio, s.substitutions), mean(s.rank, s.substitutions), s.full_snapshots, s.double_layers, s.planned, s.drops, s.triple_layers);
+    _ = c.fprintf(c.__stderrp, "ds4: resident-route layers=%llu substitutions=%llu native_misses=%llu skipped_loads=%llu skipped_bytes=%llu mean_mass=%.8f mean_score_gap=%.8f mean_affinity_ratio=%.8f mean_rank=%.3f full_snapshots=%llu double_layers=%llu planned_substitutions=%llu drops=%llu triple_layers=%llu four_layers=%llu five_layers=%llu six_layers=%llu\n", s.layers, s.substitutions, s.native_misses, s.skipped_loads, s.skipped_bytes, mean(s.replaced_mass, s.substitutions), mean(s.score_gap, s.substitutions), mean(s.affinity_ratio, s.substitutions), mean(s.rank, s.substitutions), s.full_snapshots, s.double_layers, s.planned, s.drops, s.triple_layers, s.four_layers, s.five_layers, s.six_layers);
     if (s.native_weights_requested)
         _ = c.fprintf(c.__stderrp, "ds4: resident-route-native-weights requested=1 substitutions=%llu\n", s.native_substitutions);
     const p = &current().prefill_stats;
     if (p.calls != 0 or p.fallbacks != 0)
-        _ = c.fprintf(c.__stderrp, "ds4: resident-prefill calls=%llu fallbacks=%llu frozen_residents=%llu row_layers=%llu native_misses=%llu planned_substitutions=%llu substitutions=%llu skipped_bytes=%llu double_layers=%llu triple_layers=%llu mean_mass=%.8f native_weights=1\n", p.calls, p.fallbacks, p.frozen, p.row_layers, p.native_misses, p.planned, p.substitutions, p.skipped_bytes, p.double_layers, p.triple_layers, mean(p.replaced_mass, p.substitutions));
+        _ = c.fprintf(c.__stderrp, "ds4: resident-prefill calls=%llu fallbacks=%llu frozen_residents=%llu row_layers=%llu native_misses=%llu planned_substitutions=%llu substitutions=%llu skipped_bytes=%llu double_layers=%llu triple_layers=%llu four_layers=%llu five_layers=%llu six_layers=%llu mean_mass=%.8f native_weights=1\n", p.calls, p.fallbacks, p.frozen, p.row_layers, p.native_misses, p.planned, p.substitutions, p.skipped_bytes, p.double_layers, p.triple_layers, p.four_layers, p.five_layers, p.six_layers, mean(p.replaced_mass, p.substitutions));
 }
 pub fn metricsRead(output: ?*c.ds4_resident_route_metrics) void {
     const out = output orelse return;
@@ -200,7 +206,7 @@ pub const Transaction = struct {
         if (value != null and value[0] != 0) {
             var end: [*c]u8 = null;
             const count = c.strtoul(value, &end, 10);
-            if (end == value or end[0] != 0 or count < 1 or count > 3) die("resident route max substitutions must be 1, 2 or 3");
+            if (end == value or end[0] != 0 or count < 1 or count > c.DS4_RESIDENT_ROUTE_MAX_SUBS) die("resident route max substitutions must be in [1,6]");
             g.resident_route_max_subs = @intCast(count);
         }
         if (g.resident_route_drop_weak and g.resident_route_max_subs != 1) die("resident route drop policy permits one original weak miss only");
@@ -307,6 +313,9 @@ pub const Transaction = struct {
             current().prefill_stats.replaced_mass += row_plan.total_mass;
             current().prefill_stats.double_layers +%= @intFromBool(row_plan.count == 2);
             current().prefill_stats.triple_layers +%= @intFromBool(row_plan.count == 3);
+            current().prefill_stats.four_layers +%= @intFromBool(row_plan.count == 4);
+            current().prefill_stats.five_layers +%= @intFromBool(row_plan.count == 5);
+            current().prefill_stats.six_layers +%= @intFromBool(row_plan.count == 6);
         }
         current().prefill_stats.substitutions +%= substitutions;
         current().prefill_stats.skipped_bytes +%= substitutions *% expert_bytes;
@@ -340,12 +349,9 @@ pub const Transaction = struct {
             var old_mass: f32 = undefined;
             eligible = route.ds4_resident_route_weakest(selected.ptr, affinity, shape.n_expert, shape.n_expert_used, g.resident_route_max_mass, &slot, &old_mass) and selected_resident[slot] == 0;
         } else {
-            var slots: [3]u32 = undefined;
-            var masses: [3]f32 = undefined;
-            const admitted = if (g.resident_route_max_subs == 2)
-                route.ds4_resident_route_weak_pair(selected.ptr, affinity, shape.n_expert, shape.n_expert_used, g.resident_route_max_mass, &slots, &masses)
-            else
-                route.ds4_resident_route_weak_triple(selected.ptr, affinity, shape.n_expert, shape.n_expert_used, g.resident_route_max_mass, &slots, &masses);
+            var slots: [c.DS4_RESIDENT_ROUTE_MAX_SUBS]u32 = undefined;
+            var masses: [c.DS4_RESIDENT_ROUTE_MAX_SUBS]f32 = undefined;
+            const admitted = route.weakSlots(selected.ptr, affinity, shape.n_expert, shape.n_expert_used, g.resident_route_max_mass, g.resident_route_max_subs, &slots, &masses);
             for (slots[0..admitted], masses[0..admitted]) |slot, mass_| eligible = eligible or (selected_resident[slot] == 0 and mass_ <= g.resident_route_max_total_mass);
         }
         if (metrics) |p| {
@@ -386,6 +392,9 @@ pub const Transaction = struct {
         s.per_layer[index] +%= proposed.count;
         s.double_layers +%= @intFromBool(proposed.count == 2);
         s.triple_layers +%= @intFromBool(proposed.count == 3);
+        s.four_layers +%= @intFromBool(proposed.count == 4);
+        s.five_layers +%= @intFromBool(proposed.count == 5);
+        s.six_layers +%= @intFromBool(proposed.count == 6);
         s.drops +%= @intFromBool(self.graph.resident_route_drop_weak);
         s.skipped_loads +%= proposed.count;
         s.skipped_bytes +%= proposed.count *% (2 *% table.gate_expert_bytes +% table.down_expert_bytes);

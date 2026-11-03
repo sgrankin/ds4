@@ -6,6 +6,7 @@
 #include <stdint.h>
 
 #define DS4_RESIDENT_ROUTE_PROFILE_LAYERS 40u
+#define DS4_RESIDENT_ROUTE_MAX_SUBS 6u
 
 typedef struct {
     uint64_t calls, eligible, snapshots, plans, planned_substitutions, substitutions;
@@ -32,7 +33,7 @@ typedef struct {
 typedef struct {
     uint32_t count;
     float total_mass;
-    ds4_resident_route_change changes[3];
+    ds4_resident_route_change changes[DS4_RESIDENT_ROUTE_MAX_SUBS];
 } ds4_resident_route_plan;
 
 typedef struct {

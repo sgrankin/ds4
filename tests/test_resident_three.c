@@ -57,7 +57,8 @@ static void compare_plan(const ds4_resident_route_plan *p,
         assert(!memcmp(&p->changes[i].affinity_ratio, &old->changes[i].affinity_ratio, sizeof(float)));
     }
     const ds4_resident_route_change zero = {0};
-    assert(!memcmp(&p->changes[2], &zero, sizeof(zero)));
+    for (uint32_t i = 2; i < DS4_RESIDENT_ROUTE_MAX_SUBS; i++)
+        assert(!memcmp(&p->changes[i], &zero, sizeof(zero)));
 }
 
 static void choose_native(int32_t *ids, const float *p, const float *bias, uint32_t total) {

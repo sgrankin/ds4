@@ -7,6 +7,11 @@ covered all 118 commits and integrated the missing paths. All upstream
 functionality is required unless we explicitly excised it from this fork;
 hardware qualification limits do not remove that implementation obligation.
 
+The one-hour resident-routing experiment is complete. Caps through six are
+implemented; cap five is promising for warm appends, but broader agent quality
+is not yet qualified. The existing three-expert presets remain unchanged.
+See the [result and decision](lab/journal/2026-11-02-resident-routing-through-six.md).
+
 ## What we are building
 
 A focused, native local inference server for the M5 Max, with possible M1 Max
@@ -97,5 +102,5 @@ remain ideas. No investigation of these starts automatically.
 - **This page:** current goals, capability boundaries and choices.
 - **[Recipes](../recipes/README.md):** how adopted techniques work and their tradeoffs.
 - **[Lab journal](lab/README.md):** experiment narratives, negative results and original evidence.
-- **[Experiment queue](../speed-bench/ideas/next-experiments.md):** selected work only; currently paused.
+- **[Experiment queue](../speed-bench/ideas/next-experiments.md):** selected work only.
 - **`speed-bench/experiments/`:** historical measurement evidence, read through a specific link rather than as a project overview.

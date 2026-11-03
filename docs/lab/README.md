@@ -27,6 +27,7 @@ command or speed is evidence at its recorded revision, not a current-build claim
 | [Documentation reorganization](journal/2026-10-28-documentation-reorganization.md) | Replacing running status blobs with maintained manuals and discoverable research. |
 | [Root documentation cleanup](journal/2026-10-29-root-documentation-cleanup.md) | Evaluation provenance, scoped release qualification and one canonical agent guide. |
 | [Upstream catch-up](journal/2026-11-02-upstream-catchup.md) | Native adaptation through 890898cf, cache quantizer alignment, continuation checks and five-pair regression evidence. |
+| [Resident routing through six](journal/2026-11-02-resident-routing-through-six.md) | Seven policies, five samples each: cap five improves warm time beyond the current preset; six adds drift without a reliable extra mean saving. |
 
 The [design folder](../design/README.md) preserves unselected ideas separately from
 measured conclusions. Original concise reports under `speed-bench/` own complete

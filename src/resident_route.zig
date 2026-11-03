@@ -123,15 +123,47 @@ pub fn ds4_resident_route_weak_triple(selected: [*c]const i32, affinity: [*c]con
     return if (masses[2] <= max_mass) 3 else 2;
 }
 
-// Two- and three-slot plans have the same replacement loop. Their independent
-// eligibility helpers above retain the original summation/slot-selection order.
+// Share eligibility between decode preflight and planning. Extend the original
+// weak-slot order without letting a replacement change later eligibility.
+// Existing one/two/three-slot helpers retain their exact arithmetic and ties.
+pub fn weakSlots(selected: [*c]const i32, affinity: [*c]const f32, total: u32, used: u32, max_mass: f32, max_subs: u32, slots: [*c]u32, masses: [*c]f32) u32 {
+    @setFloatMode(.strict);
+    if (slots == null or masses == null or max_subs < 1 or max_subs > c.DS4_RESIDENT_ROUTE_MAX_SUBS) return 0;
+    if (max_subs == 1) return @intFromBool(ds4_resident_route_weakest(selected, affinity, total, used, max_mass, &slots[0], &masses[0]));
+    if (max_subs == 2) return ds4_resident_route_weak_pair(selected, affinity, total, used, max_mass, slots, masses);
+    var count = ds4_resident_route_weak_triple(selected, affinity, total, used, max_mass, slots, masses);
+    if (count != 3 or max_subs == 3) return count;
+    var sum: f32 = 0;
+    for (selected[0..used]) |id| sum += affinity[@intCast(id)];
+    while (count < max_subs) {
+        var weakest: ?u32 = null;
+        for (selected[0..used], 0..) |id, slot| {
+            var included = false;
+            for (slots[0..count]) |previous| included = included or previous == slot;
+            if (included) continue;
+            if (weakest == null or affinity[@intCast(id)] < affinity[@intCast(selected[weakest.?])]) weakest = @intCast(slot);
+        }
+        const slot = weakest.?; // Six unique native routes and at most six slots.
+        const mass = affinity[@intCast(selected[slot])] / sum;
+        if (mass > max_mass) break;
+        slots[count] = slot;
+        masses[count] = mass;
+        count += 1;
+    }
+    return count;
+}
+
+// All multi-slot plans have the same replacement loop. Eligibility helpers
+// above retain the original summation/slot-selection order for one to three.
 fn fillPlan(routes: []const i32, affinity: []const f32, bias: []const f32, resident: []const u8, max_gap: f32, max_rank: u32, max_total_mass: f32, slots: []const u32, masses: []const f32, plan: *Plan) bool {
     @setFloatMode(.strict);
     for (slots, masses) |slot, mass| {
         const old: usize = @intCast(routes[slot]);
         // Budget original contribution, not the evolving fallback mixture.
         // Preserve the original skip behavior rather than stopping the scan.
-        if (resident[old] != 0 or plan.total_mass + mass > max_total_mass) continue;
+        // A limit of one permits all six: their normalized f32 masses can sum
+        // just above one, which must not accidentally impose a five-slot cap.
+        if (resident[old] != 0 or (max_total_mass < 1 and plan.total_mass + mass > max_total_mass)) continue;
         const change = replacement(routes, affinity, bias, resident, max_gap, max_rank, slot, mass, plan.changes[0..plan.count]) orelse continue;
         plan.changes[plan.count] = change;
         plan.count += 1;
@@ -167,10 +199,10 @@ pub fn ds4_resident_route_choose_plan(selected: [*c]const i32, affinity: [*c]con
         return true;
     }
     if (max_subs == 3) return ds4_resident_route_choose_triple(selected, affinity, bias, resident, total, used, max_gap, max_rank, max_mass, max_total_mass, plan);
-    if (max_subs != 2 or bias == null or resident == null or max_gap <= 0 or max_rank <= used or max_total_mass <= 0) return false;
-    var slots: [2]u32 = undefined;
-    var masses: [2]f32 = undefined;
-    const count = ds4_resident_route_weak_pair(selected, affinity, total, used, max_mass, &slots, &masses);
+    if (max_subs < 2 or max_subs > c.DS4_RESIDENT_ROUTE_MAX_SUBS or bias == null or resident == null or max_gap <= 0 or max_rank <= used or max_total_mass <= 0) return false;
+    var slots: [c.DS4_RESIDENT_ROUTE_MAX_SUBS]u32 = undefined;
+    var masses: [c.DS4_RESIDENT_ROUTE_MAX_SUBS]f32 = undefined;
+    const count = weakSlots(selected, affinity, total, used, max_mass, max_subs, &slots, &masses);
     if (count == 0) return false;
     return fillPlan(selected[0..used], affinity[0..total], bias[0..total], resident[0..total], max_gap, max_rank, max_total_mass, slots[0..count], masses[0..count], plan);
 }
