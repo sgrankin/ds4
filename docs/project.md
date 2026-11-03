@@ -14,6 +14,11 @@ qualified. See the
 [timing sweep](lab/journal/2026-11-02-resident-routing-through-six.md) and
 [longer quality follow-up](lab/journal/2026-11-02-resident-long-quality.md).
 
+The [32K throughput and dependency profile](lab/journal/2026-11-03-context32-profile.md)
+establishes current large-context rates after that adoption. Overlapping the
+resident-routing host decision with independent shared-expert work is the next
+proposed decode experiment; it has not been implemented or scheduled.
+
 ## What we are building
 
 A focused, native local inference server for the M5 Max, with possible M1 Max

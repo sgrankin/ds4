@@ -1,8 +1,9 @@
 # Selected experiment
 
-**No active experiment.** The longer resident-routing quality comparison is
-complete; the [journal entry](../../docs/lab/journal/2026-11-02-resident-long-quality.md)
-links its results and limits. Presets remain unchanged. No follow-up is selected.
+**No active experiment.** The 2026-11-03
+[32K throughput and dependency profile](../../docs/lab/journal/2026-11-03-context32-profile.md)
+is complete. Overlapping the resident-routing decision with shared-expert work
+is the proposed next decode experiment; implementation has not started.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome

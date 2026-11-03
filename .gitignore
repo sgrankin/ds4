@@ -168,6 +168,7 @@ speed-bench/ideas/artifacts/
 !/speed-bench/experiments/2026-11-02-resident-long/block-kl.svg
 !/speed-bench/experiments/2026-11-02-resident-long/agent-block-kl.svg
 !/speed-bench/experiments/2026-11-02-resident-long/agent-running-mean-delta-nll.svg
+!/speed-bench/experiments/2026-11-03-context32-profile/paired-throughput.svg
 !/speed-bench/experiments/*/*.c
 !/speed-bench/experiments/upstream-selected-read-20261023/candidate.patch
 !/speed-bench/experiments/integer-prefill-20261027/*.patch

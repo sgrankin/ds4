@@ -91,6 +91,14 @@ and correction checks. This supports the candidate tradeoff without establishing
 autonomous coding accuracy. The five-substitution policy was adopted for both
 presets on 2026-11-03.
 
+The [32K dependency profile](../speed-bench/experiments/2026-11-03-context32-profile/README.md)
+finds 99.33% of decode layer calls fully resident after substitution with a
+64 GiB cache target on the measured prose workload. Avoiding expert reads does
+not remove the per-layer GPU-to-CPU routing handoff: the host still selects
+substitutes before routed computation can proceed. Overlapping that decision
+with independent shared-expert work is a proposed follow-up, not part of this
+policy's measured saving.
+
 ## What did not earn its complexity
 
 The [functional-expert map study](../speed-bench/experiments/resident-functional-hour2-20261003/README.md)

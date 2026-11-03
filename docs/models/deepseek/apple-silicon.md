@@ -148,7 +148,14 @@ joins the corresponding reader and uploads its output into a separate GPU input
 buffer. Those distinct buffers
 allow earlier work to keep running during the second upload. The ordinary
 single-Mac path submits work after layer 0 and then every two layers by default;
-the output head can join the final submission. On failure, the executor joins
+the output head can join the final submission. In the default eligible
+SSD-streaming decode path, however, each layer's router ends the current GPU
+commands before the CPU reads selected IDs, applies any resident substitutions
+and begins loading the selected weights. Routed expert execution follows that
+host decision. Thus the general two-layer submission interval does not remove
+this per-router dependency. The optional asynchronous load path has different
+synchronization; see [MoE dispatch](../../../src/engine/deepseek41/moe.zig).
+On failure, the executor joins
 outstanding readers before their borrowed token IDs and output rows leave scope.
 
 The ordinary scalar path combines the Q and KV projections of one activation,
@@ -161,10 +168,14 @@ preserving the required rounding boundaries. Eligible attention output and
 shared-expert down projections can also fuse
 their result with residual expansion. When steering or tracing needs the
 intermediate result, the applicable path falls back to separate operations.
+The deferred hyper-connection mixer and the per-token RoPE coefficient table
+also require non-streaming execution, among their other eligibility checks.
 The [upstream performance account](upstream-performance.md) explains the
 bottlenecks and upstream measurements; the
 [catch-up journal](../../lab/journal/2026-11-02-upstream-catchup.md) records
-qualification.
+qualification. Our [32K profile](../../../speed-bench/experiments/2026-11-03-context32-profile/README.md)
+examines these dependencies with the current streamed IQ2/Q2 model and resident
+substitution, where several of those non-streaming paths are ineligible.
 
 ### Resident expert substitution
 
