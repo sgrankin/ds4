@@ -1,6 +1,6 @@
 # Project direction and current status
 
-Updated 2026-11-02. **The upstream port through `890898cf` is complete.**
+Updated 2026-11-03. **The upstream port through `890898cf` is complete.**
 The organized manuals and lab journal are available under the [documentation index](README.md).
 The initial adaptation omitted upstream functionality; the completion audit
 covered all 118 commits and integrated the missing paths. All upstream
@@ -8,9 +8,9 @@ functionality is required unless we explicitly excised it from this fork;
 hardware qualification limits do not remove that implementation obligation.
 
 The resident-routing experiments are complete. Caps through six are implemented;
-cap five remains a promising warm-append tradeoff after longer fixed-history
-quality checks. Autonomous agent quality is not yet qualified. The existing
-three-expert presets remain unchanged. See the
+cap five is adopted in the `resident-fast` and `persistent-fast` presets after
+longer fixed-history quality checks. Autonomous agent quality is not yet
+qualified. See the
 [timing sweep](lab/journal/2026-11-02-resident-routing-through-six.md) and
 [longer quality follow-up](lab/journal/2026-11-02-resident-long-quality.md).
 

@@ -172,9 +172,8 @@ During SSD streaming, an optional resident-route approximation can replace
 missing choices with resident candidates, subject to affinity, rank and mass
 bounds. Its configurable selector considers the weakest one to six original
 slots and preserves original resident choices and mixture coefficients. The
-presets consider at most three slots, protecting the strongest three, and limit
-each replaced original mass to .25 and their total to .50. A substitute expert
-still computes a different function. The
+presets consider at most five slots, protecting the strongest, with per-slot and
+total mass limits of 1. A substitute expert still computes a different function. The
 [routing recipe](../../../recipes/01-resident-routing.md) explains the limits
 and measured quality tradeoff.
 

@@ -146,10 +146,10 @@ def --wrapped main [...arguments: string] {
     if $preset != 'context-fast' {
         $settings = ($settings | merge {
             DS4_METAL_V41_RESIDENT_ROUTE_GAP: '.90'
-            DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS: '.25'
+            DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS: '1'
             DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK: '64'
-            DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS: '3'
-            DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS: '.50'
+            DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS: '5'
+            DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS: '1'
             DS4_METAL_V41_RESIDENT_ROUTE_POLICY: 'replace'
             DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS: '1'
         })

@@ -51,11 +51,11 @@ unchanged into a different MoE. Sources:
 
 ## Local knobs and measured points
 
-The `resident-fast` and `persistent-fast` presets use at most the three weakest
-original slots, protecting the strongest three, with a per-slot mass limit of
-.25 and total limit of .50. Their decoder settings are
-`DS4_METAL_V41_RESIDENT_ROUTE_GAP=.90`, `_MAX_SUBS=3`, `_MAX_RANK=64`,
-`_MAX_MASS=.25`, `_MAX_TOTAL_MASS=.50`, `_POLICY=replace`, `_NATIVE_WEIGHTS=1`
+The `resident-fast` and `persistent-fast` presets use at most the five weakest
+original slots, protecting the strongest, with per-slot and total mass limits
+of 1. Their decoder settings are
+`DS4_METAL_V41_RESIDENT_ROUTE_GAP=.90`, `_MAX_SUBS=5`, `_MAX_RANK=64`,
+`_MAX_MASS=1`, `_MAX_TOTAL_MASS=1`, `_POLICY=replace`, `_NATIVE_WEIGHTS=1`
 (all latter names share `DS4_METAL_V41_RESIDENT_ROUTE`). Selected prefill adds
 `DS4_METAL_V41_RESIDENT_PREFILL_GAP=.90`. `resident-fast` enables the decoder;
 `persistent-fast` also enables prefill. Setting the prefill gap explicitly 0
@@ -75,19 +75,21 @@ points rather than selecting only a favorable denominator.
 The [2026-11-02 sweep](../speed-bench/experiments/2026-11-02-resident-six/README.md)
 extends the selector through six slots. With five timing samples per policy,
 cap five without mass limits saves 7.16% on a 512-token warm append plus 32
-decode steps relative to the existing preset. Its 64-position teacher
-delta-NLL is +0.0446 nats/token against native routing. Cap six has effectively
+decode steps relative to the then-current three-substitution preset. Its
+64-position teacher delta-NLL is +0.0446 nats/token against native routing.
+Cap six has effectively
 the same mean latency and substantially more distribution drift. Four and the
 tighter score-gap policy offer other tradeoffs. These short probes identify
-candidate settings; they do not establish broad agent quality. Presets remain
-at three, and the report owns the full curve, samples and qualification limits.
+candidate settings; they do not establish broad agent quality. The report owns
+the full curve, samples and qualification limits.
 
 The [longer quality follow-up](../speed-bench/experiments/2026-11-02-resident-long/README.md)
 compares 4,096 corpus positions and 3,371 recorded assistant positions per
 policy. Five retains a small average likelihood cost, with larger local changes
 in final explanatory prose. All three policies pass the long-prompt retrieval
 and correction checks. This supports the candidate tradeoff without establishing
-autonomous coding accuracy; presets remain unchanged.
+autonomous coding accuracy. The five-substitution policy was adopted for both
+presets on 2026-11-03.
 
 ## What did not earn its complexity
 
@@ -119,8 +121,8 @@ at revision `0316b956` describes a different Cache-Prior policy: it adds
 experts and the original top `keep`, then selects the top six again. It
 renormalizes the selected experts' unbonused affinities into mixture weights.
 That policy preserves resident original picks and protected top picks, but has
-no 50% replaced-mass cap. Our preset instead bounds changes to the three
-weakest original slots and retains their original coefficients.
+no 50% replaced-mass cap. Our preset bounds changes to the five weakest
+original slots and retains their original coefficients.
 
 That chapter recommends `λ = .09`, `keep = 3`; its reported speed and quality
 study used `λ = .10`, `keep = 2`. Its AMD/HIP measurements are not measurements

@@ -3,7 +3,7 @@
 Five substitutions remains a reasonable candidate after the longer quality
 screen. Its average likelihood cost is small across the measured texts and
 recorded agent session, though individual positions change substantially.
-The three-expert presets remain unchanged.
+The three-expert presets remained unchanged during this slice.
 
 ## Context and setup
 
@@ -11,7 +11,7 @@ The previous sweep recommended five for its warm-time saving, but its quality
 probe covered only 64 teacher positions. The user asked for longer traces before
 adoption. This one-hour slice fixed engine revision `6da1b939`, the M5 Max, the
 1017 IQ2_XXS/Q2_K imatrix quant and a 48 GiB expert-cache target. It compared
-native routing, the current three-expert policy and the proposed five-expert
+native routing, the then-current three-expert policy and the proposed five-expert
 policy; no runtime implementation changed.
 
 Each policy scored 4,096 positions from code and prose after 8K/9K frontiers,
@@ -38,3 +38,11 @@ autonomous coding pass or a long-context speed comparison. Keep the cap-five
 recommendation as a measured tradeoff, without claiming a task-success rate or
 extrapolating to much longer contexts. No preset promotion or further experiment
 was part of this slice.
+
+## Adoption on 2026-11-03
+
+The five-substitution policy was adopted for `resident-fast` and
+`persistent-fast`, with per-slot and total mass limits of 1. The longer quality
+screen supports this tradeoff but does not qualify autonomous agent accuracy.
+The [routing recipe](../../../recipes/01-resident-routing.md) describes the
+current settings.
