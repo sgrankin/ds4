@@ -71,10 +71,13 @@ bool ds4_metal_tp_selected_ready(void) {
     return g_selected_readback_event != nil;
   }
 }
-bool ds4_metal_tp_wait_selected(uint64_t sequence) {
+uint64_t ds4_metal_tp_selected_value(void) {
+  return g_selected_readback_event.signaledValue;
+}
+bool ds4_metal_tp_wait_selected(uint64_t sequence, uint64_t timeout_ms) {
   @autoreleasepool {
     return [g_selected_readback_event waitUntilSignaledValue:sequence
-                                                   timeoutMS:60000];
+                                                   timeoutMS:timeout_ms];
   }
 }
 bool ds4_metal_tp_enqueue(const ds4_gpu_tp_request *request) {
@@ -135,14 +138,19 @@ void ds4_metal_tp_drop(void *command) {
     __unused id retired = (__bridge_transfer id)command;
   }
 }
+bool ds4_metal_tp_command_complete(void *command) {
+  return [(__bridge id<MTLCommandBuffer>)command status] == MTLCommandBufferStatusCompleted;
+}
 void ds4_metal_tp_clear_transients(void) {
   [g_transient_buffers removeAllObjects];
 }
 bool ds4_metal_tp_new_batch(void) {
   g_batch_cb = ds4_gpu_new_command_buffer();
   g_batch_has_work = NO;
-  if (g_batch_cb)
+  if (g_batch_cb) {
+    ds4_gpu_timeline_attach(g_batch_cb);
     ds4_gpu_stream_expert_cache_note_batch_created();
+  }
   return g_batch_cb != nil;
 }
 /* Named temporary whole library, not relabeled as a driver leaf. */

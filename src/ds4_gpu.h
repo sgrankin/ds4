@@ -221,6 +221,10 @@ void ds4_gpu_kv_norm_task_end_concurrent(void);
 #endif
 int ds4_gpu_signal_selected_readback_ready(uint64_t *event_value);
 int ds4_gpu_commit_and_wait_selected_readback(uint64_t event_value, const char *label);
+/* Metal scalar overlap only: caller has waited for its router event, and no
+ * submitted expert-cache reader follows that event. Retire those cache reads
+ * without releasing pending command buffers, static views or the new batch. */
+void ds4_gpu_retire_selected_expert_reads(void);
 int ds4_gpu_wait_selected_readback_ready(uint64_t event_value, const char *label);
 #ifdef DS4_ROCM_BUILD
 int ds4_gpu_tensor_read_after_selected_event(const ds4_gpu_tensor *tensor,

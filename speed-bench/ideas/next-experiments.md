@@ -1,9 +1,10 @@
 # Selected experiment
 
 **No active experiment.** The 2026-11-03
-[32K throughput and dependency profile](../../docs/lab/journal/2026-11-03-context32-profile.md)
-is complete. Overlapping the resident-routing decision with shared-expert work
-is the proposed next decode experiment; implementation has not started.
+[routing/shared-expert overlap](../../docs/lab/journal/2026-11-03-route-overlap.md)
+slice is complete and adopted in the resident fast presets. Broader optimization
+is authorized by the user; further changes remain separate experiments with
+their own fixed baseline and initial one-hour budget.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome

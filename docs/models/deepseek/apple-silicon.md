@@ -158,6 +158,27 @@ synchronization; see [MoE dispatch](../../../src/engine/deepseek41/moe.zig).
 On failure, the executor joins
 outstanding readers before their borrowed token IDs and output rows leave scope.
 
+An opt-in scalar streaming path with resident routing can move the shared
+expert's gate/up projections and activation across that host wait. They use
+the same normalized input as the router but do not use its selected IDs or
+coefficients. The GPU signals an event after routing and continues the shared
+work while the CPU reads the selection, applies the resident policy and starts
+expert loads. The routed computation still depends on that selection. The
+optional `DS4_METAL_SELECTED_READBACK_SPIN_US` wait polls for a bounded period
+before blocking, trading host CPU time for potentially faster event response.
+The `resident-fast` and `persistent-fast` launcher presets enable overlap and
+default to a 2 ms poll, with environment overrides; ordinary runtime defaults
+remain off. Both waits retain the 60-second overall deadline.
+
+Event readiness and resource retirement are distinct. Earlier routed expert
+reads precede the router event, so this path can retire their expert-cache pins
+after the event without waiting for independent shared work. Pending command
+buffers, their static views and the newly opened batch remain live until their
+usual completion. This distinction keeps cache eviction choices from changing
+merely because the shared work is still running. See the
+[overlap experiment](../../../speed-bench/experiments/2026-11-03-route-overlap/README.md)
+for eligibility, measurements and quality limits.
+
 The ordinary scalar path combines the Q and KV projections of one activation,
 then normalizes both results together. Suitable matrix kernels round their
 outputs to BF16 before writing them, saving a separate rounding pass. For

@@ -152,6 +152,8 @@ def --wrapped main [...arguments: string] {
             DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS: '1'
             DS4_METAL_V41_RESIDENT_ROUTE_POLICY: 'replace'
             DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS: '1'
+            DS4_METAL_V41_ROUTE_SHARED_OVERLAP: (env-or DS4_METAL_V41_ROUTE_SHARED_OVERLAP '1')
+            DS4_METAL_SELECTED_READBACK_SPIN_US: (env-or DS4_METAL_SELECTED_READBACK_SPIN_US '2000')
         })
     }
     if $preset == 'persistent-fast' {

@@ -175,13 +175,18 @@ pub const Moe = struct {
             c.ds4_gpu_dsv41_router_one(graph.selected, graph.route_weights, graph.route_probs, graph.route_logits, model.map, model.size, bias.*.abs_offset, shape.n_expert, shape.n_expert_used, shape.expert_weight_scale) != 0;
         if (!routed_one and c.ds4_gpu_router_select_tensor(graph.selected, graph.route_weights, graph.route_probs, model.map, model.size, bias.*.abs_offset, 0, 0, token, shape.n_expert, shape.n_expert_used, shape.expert_weight_scale, 0, 0, true, false, graph.route_logits) == 0) return false;
 
-        // Resolve selected SSD reads before shared work so their I/O can
-        // overlap its GPU execution. The override avoids a second ID readback.
+        // Baseline: resolve SSD reads before shared work to overlap their I/O.
+        // The optional event path instead overlaps shared work with the host
+        // routing decision. Both overrides avoid a second ID readback.
         const eligible = graph.streaming and !graph.quality and graph.imatrix == null and
             graph.image_count == 0 and graph.tp_world == 1 and
             !present("DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS");
         const asynchronous = eligible and present("DS4_METAL_V41_ASYNC_EXPERT_LOAD");
         const early = eligible and !asynchronous;
+        const overlap_setting = c.getenv("DS4_METAL_V41_ROUTE_SHARED_OVERLAP");
+        const overlap_shared = early and graph.scalar_decode and graph.resident_route_gap > 0 and
+            !graph.hc_ffn_deferred and !graph.predict_load.active and !services.oracle_deferred and
+            overlap_setting != null and std.mem.eql(u8, std.mem.span(overlap_setting), "1");
         const table = self.streamTable(layer, index, gate_row *% shape.n_ff_exp, down_row *% shape.n_embd);
         var load = std.mem.zeroes(c.metal_graph_selected_async_load);
         var selected_ids: [c.DS4_MAX_EXPERT_USED]i32 = undefined;
@@ -216,7 +221,22 @@ pub const Moe = struct {
                 // validation while loading exact recorded addresses now.
                 if (!self.routing().captureDeferred(index, selected_ids[0..shape.n_expert_used])) return false;
             } else {
-                if (c.ds4_gpu_end_commands() == 0) return false;
+                if (overlap_shared) {
+                    // Only routing must finish before the host reads IDs and
+                    // affinities. Shared gate/up reads norm, not routing state,
+                    // so it can run while the host applies resident policy.
+                    // Pending commands retain their static/shared resources.
+                    var event: u64 = 0;
+                    if (c.ds4_gpu_signal_selected_readback_ready(&event) == 0 or
+                        !self.sharedGateUp(layer, graph.shared_gate, graph.shared_up, graph.shared_mid, graph.norm, 1) or
+                        c.ds4_gpu_commit_and_wait_selected_readback(event, "resident route/shared overlap") == 0) return false;
+                    // Earlier routed outputs feed this router, so every
+                    // submitted expert-cache read precedes its event. Retire
+                    // those reads only: otherwise conservative in-flight pins
+                    // change eviction choices under a small cache budget.
+                    // The new empty batch and pending static views stay live.
+                    c.ds4_gpu_retire_selected_expert_reads();
+                } else if (c.ds4_gpu_end_commands() == 0) return false;
                 if (profile) |metrics| {
                     metrics.router_wait_ms += nowMilliseconds() - started;
                     metrics.calls +%= 1;
@@ -229,7 +249,8 @@ pub const Moe = struct {
                 started = if (profile != null) nowMilliseconds() else 0.0;
                 if (c.ds4_gpu_stream_expert_cache_begin_selected_load(&table, &selected_ids, shape.n_expert_used) == 0) return false;
                 if (profile) |metrics| metrics.begin_load_ms += nowMilliseconds() - started;
-                if (c.ds4_gpu_begin_commands() == 0) return false;
+                // The event wait already opened the next command buffer.
+                if (!overlap_shared and c.ds4_gpu_begin_commands() == 0) return false;
             }
         }
         const concurrent_eligible = shared_here and !graph.streaming and !graph.quality and
@@ -248,7 +269,7 @@ pub const Moe = struct {
             if (c.ds4_gpu_dsv41_hc_block_input_rows(graph.mix, graph.x, graph.flat_norm, graph.ffn_split, graph.after_attn, graph.attn_split, model.map, model.size, layer.hc_ffn_fn.*.abs_offset, layer.hc_ffn_scale.*.abs_offset, layer.hc_ffn_base.*.abs_offset, layer.ffn_norm.*.abs_offset, shape.n_hc * shape.n_embd, 24, shape.n_embd, shape.n_hc, shape.n_hc_sinkhorn_iter, shape.hc_eps, shape.rms_eps, 1, shape.n_hc) == 0) return false;
             graph.hc_ffn_deferred = false;
         }
-        if (shared_here and !shared_queued and !self.sharedSerial(layer, shared_split, shared_dim, shared_lane, graph.tp_world == 2 or !graph.scalar_decode)) return false;
+        if (shared_here and !shared_queued and !overlap_shared and !self.sharedSerial(layer, shared_split, shared_dim, shared_lane, graph.tp_world == 2 or !graph.scalar_decode)) return false;
         if (!shared_queued and !graph.scalar_decode) graph.shared_done = true;
         if (asynchronous) {
             const flushed = c.ds4_gpu_flush_commands() != 0;
@@ -263,7 +284,7 @@ pub const Moe = struct {
                 return false;
             }
         }
-        if (early and (c.ds4_gpu_flush_commands() == 0 or
+        if (early and ((!overlap_shared and c.ds4_gpu_flush_commands() == 0) or
             c.ds4_gpu_routed_moe_set_selected_override(&selected_ids, shape.n_expert_used) == 0)) return false;
         if (balanced) c.ds4_gpu_tp_full_expert_bind(1);
         const routed_ok = c.ds4_gpu_routed_moe_one_tensor(routed, graph.gate, graph.up, graph.mid, graph.experts, model.map, model.size, layer.ffn_gate_exps.*.abs_offset, layer.ffn_up_exps.*.abs_offset, layer.ffn_down_exps.*.abs_offset, layer.ffn_gate_exps.*.type, layer.ffn_down_exps.*.type, table.gate_expert_bytes, gate_row, table.down_expert_bytes, down_row, shape.n_embd, shape.n_ff_exp, shape.n_embd, if (balanced) graph.selected_half else graph.selected, if (balanced) graph.route_weights_half else graph.route_weights, shape.n_expert, if (balanced) shape.n_expert_used / 2 else shape.n_expert_used, shape.swiglu_clamp_exp, graph.norm, null, index, !graph.streaming) != 0;

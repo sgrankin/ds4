@@ -65,7 +65,16 @@ They are different workloads, not percentages to add or general speed promises.
 `context-fast` retains native expert routing while enabling context reuse.
 `resident-fast` enables resident decoder routing and disables suffix reuse.
 `persistent-fast` combines decoder/selected-prefill routing and left/right
-suffix reuse. All DeepSeek fast profiles default packed index storage and
+suffix reuse.
+
+Both resident presets also overlap routing with shared-expert work and poll
+router readiness for up to 2 ms before blocking. Set
+`DS4_METAL_V41_ROUTE_SHARED_OVERLAP=0` to disable this scheduling change, or
+`DS4_METAL_SELECTED_READBACK_SPIN_US=0` to retain overlap with blocking waits.
+The [routing overlap experiment](../speed-bench/experiments/2026-11-03-route-overlap/README.md)
+records its decode gain and increased CPU use.
+
+All DeepSeek fast profiles default packed index storage and
 SIMD index scoring on; `persistent-packed` is an alias for `persistent-fast`.
 Explicit `DS4_V41_INDEX_FP4=0` or
 `DS4_V41_INDEX_SIMD=0` overrides are honored. Inspect [ds4-local](../ds4-local): all use context 8192, an explicit

@@ -296,9 +296,31 @@ pub fn signalSelected(output: *u64) bool {
     output.* = s.selected_sequence;
     return true;
 }
+fn awaitSelected(sequence: u64) bool {
+    const spin_us = c.ds4_zig_metal_env_u64("DS4_METAL_SELECTED_READBACK_SPIN_US", 0, 0, 5000);
+    if (spin_us == 0) return c.ds4_metal_tp_wait_selected(sequence, 60000);
+    const start = c.ds4_metal_dense_now_ms();
+    const spin_until = start + @as(f64, @floatFromInt(spin_us)) / 1000.0;
+    while (true) {
+        if (c.ds4_metal_tp_selected_value() >= sequence) return true;
+        if (c.ds4_metal_dense_now_ms() >= spin_until) break;
+    }
+    // A delayed GPU falls back to blocking under the same overall deadline.
+    // The bound avoids monopolizing a host core on a stalled command buffer.
+    const remaining = 60000.0 - (c.ds4_metal_dense_now_ms() - start);
+    return remaining > 0 and c.ds4_metal_tp_wait_selected(sequence, @intFromFloat(@ceil(remaining)));
+}
+var selected_profile_calls: u64 = 0;
+var selected_profile_completed: u64 = 0;
 fn retireReadback(command: ?*anyopaque, sequence: u64, label: [*:0]const u8) bool {
     c.ds4_metal_tp_commit(command);
-    const signaled = c.ds4_metal_tp_wait_selected(sequence);
+    const signaled = awaitSelected(sequence);
+    if (present("DS4_METAL_SELECTED_READBACK_PROFILE") and std.mem.eql(u8, std.mem.span(label), "resident route/shared overlap")) {
+        selected_profile_calls +%= 1;
+        selected_profile_completed +%= @intFromBool(c.ds4_metal_tp_command_complete(command));
+        if (selected_profile_calls % 2560 == 0)
+            _ = c.fprintf(c.__stderrp, "ds4: selected-readback calls=%llu shared_complete_on_return=%llu\n", selected_profile_calls, selected_profile_completed);
+    }
     c.ds4_metal_tp_append_pending(command);
     if (!signaled) {
         _ = c.fprintf(c.__stderrp, "ds4: timeout waiting for Metal shared event in %s\n", label);
@@ -328,11 +350,17 @@ pub fn commitSelected(sequence: u64, label: ?[*:0]const u8) bool {
     defer c.ds4_metal_tp_drop(command);
     return retireReadback(command, sequence, label orelse "selected-id overlap");
 }
+// This is deliberately separate from commitSelected: a generic event caller
+// may have encoded more expert consumers after its signal. The scalar MoE
+// caller proves that only independent static shared weights remain in flight.
+pub fn retireSelectedExpertReads() void {
+    c.ds4_metal_schedule_cache_event(c.DS4_SCHEDULE_PENDING_DONE);
+}
 pub fn waitSelected(sequence: u64, label: ?[*:0]const u8) bool {
     if (api.init() == 0 or sequence == 0) return false;
     const f = facts();
     if (!eventSupport(f) or !f.selected_event) return false;
-    if (!c.ds4_metal_tp_wait_selected(sequence)) {
+    if (!awaitSelected(sequence)) {
         _ = c.fprintf(c.__stderrp, "ds4: timeout waiting for Metal shared event in %s\n", label orelse "selected-id readback");
         return false;
     }

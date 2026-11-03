@@ -95,9 +95,13 @@ The [32K dependency profile](../speed-bench/experiments/2026-11-03-context32-pro
 finds 99.33% of decode layer calls fully resident after substitution with a
 64 GiB cache target on the measured prose workload. Avoiding expert reads does
 not remove the per-layer GPU-to-CPU routing handoff: the host still selects
-substitutes before routed computation can proceed. Overlapping that decision
-with independent shared-expert work is a proposed follow-up, not part of this
-policy's measured saving.
+substitutes before routed computation can proceed. The
+[overlap follow-up](../speed-bench/experiments/2026-11-03-route-overlap/README.md)
+now queues independent shared-expert work across that decision, with bounded
+event polling and cache-only retirement at the ready boundary. It preserves
+the selector and native coefficients. Both resident presets enable this
+scheduling package; its separate decode saving should not be added to the
+routing-policy percentages above.
 
 ## What did not earn its complexity
 

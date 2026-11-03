@@ -8,6 +8,9 @@ export fn ds4_gpu_signal_selected_readback_ready(value: ?*u64) c_int {
 export fn ds4_gpu_commit_and_wait_selected_readback(value: u64, label: ?[*:0]const u8) c_int {
     return @intFromBool(owner.commitSelected(value, label));
 }
+export fn ds4_gpu_retire_selected_expert_reads() void {
+    owner.retireSelectedExpertReads();
+}
 export fn ds4_gpu_wait_selected_readback_ready(value: u64, label: ?[*:0]const u8) c_int {
     return @intFromBool(owner.waitSelected(value, label));
 }
