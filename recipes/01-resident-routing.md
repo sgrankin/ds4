@@ -103,9 +103,10 @@ the selector and native coefficients. Both resident presets enable this
 scheduling package; its separate decode saving should not be added to the
 routing-policy percentages above.
 The [profile after overlap](../speed-bench/experiments/2026-11-03-post-overlap-profile/README.md)
-still finds little exposed expert I/O in this workload. It recommends testing
-an existing attention rotation optimization next, rather than changing the
-resident policy again.
+still finds little exposed expert I/O in this workload. The subsequent
+[streaming RoPE experiment](../speed-bench/experiments/2026-11-03-stream-rope/README.md)
+enables attention rotation reuse in the resident presets without changing the
+resident policy. That decode improvement has its own baseline and measurements.
 
 ## What did not earn its complexity
 

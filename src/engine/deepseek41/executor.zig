@@ -251,7 +251,12 @@ pub const Executor = struct {
         }
         graph.rope_tab_pos = 0;
         defer graph.rope_tab_pos = 0;
-        if (output != null and graph.rope_tab != null and graph.tp_world == 1 and !graph.streaming and !graph.quality and
+        // The graph-owned table survives streaming command boundaries. Opt in
+        // to transforming each attention head once before its low projection;
+        // retain the existing rounding, shape fallbacks and per-token validity.
+        const streaming_rope_setting = c.getenv("DS4_METAL_V41_STREAMING_ROPE_TABLE");
+        const streaming_rope = streaming_rope_setting != null and streaming_rope_setting[0] != 0 and c.strcmp(streaming_rope_setting, "0") != 0;
+        if (output != null and graph.rope_tab != null and graph.tp_world == 1 and (!graph.streaming or streaming_rope) and !graph.quality and
             (c.ds4_gpu_v41_off() & c.DS4_GPU_V41_ROPE_TABLE) == 0 and c.ds4_gpu_commands_active() != 0 and
             c.ds4_gpu_dsv41_rope_coeff_table(graph.rope_tab, graph.pos) != 0) graph.rope_tab_pos = graph.pos + 1;
         for (self.weights.layer[0..shape.n_layer], 0..) |*weights, index| {

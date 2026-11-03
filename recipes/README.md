@@ -73,6 +73,10 @@ router readiness for up to 2 ms before blocking. Set
 `DS4_METAL_SELECTED_READBACK_SPIN_US=0` to retain overlap with blocking waits.
 The [routing overlap experiment](../speed-bench/experiments/2026-11-03-route-overlap/README.md)
 records its decode gain and increased CPU use.
+The presets also reuse the per-token RoPE table during SSD-streamed decode;
+`DS4_METAL_V41_STREAMING_ROPE_TABLE=0` restores the inline rotation path.
+The [streaming RoPE experiment](../speed-bench/experiments/2026-11-03-stream-rope/README.md)
+records numerical checks and its separate decode measurements.
 
 All DeepSeek fast profiles default packed index storage and
 SIMD index scoring on; `persistent-packed` is an alias for `persistent-fast`.

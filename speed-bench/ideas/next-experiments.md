@@ -1,11 +1,11 @@
 # Selected experiment
 
-**Completed 2026-11-03: profile the adopted overlap path and select its next target.**
+**Completed 2026-11-03: per-token RoPE reuse in SSD streaming decode.**
 
-The [result report](../experiments/2026-11-03-post-overlap-profile/README.md)
-records five current samples, separate diagnostic profiles and the recommended
-next experiment: extend the existing per-token RoPE table and attention-head
-transform to eligible SSD streaming decode. No further experiment is selected.
+The [result report](../experiments/2026-11-03-stream-rope/README.md) records
+five alternating pairs at both 8K and 32K plus focused and full-model numerical
+checks. The resident fast presets adopt the feature; the 32K gain is in decode,
+with whole-phase and short-context limits retained. No next experiment is selected.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome

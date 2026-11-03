@@ -189,8 +189,8 @@ preserving the required rounding boundaries. Eligible attention output and
 shared-expert down projections can also fuse
 their result with residual expansion. When steering or tracing needs the
 intermediate result, the applicable path falls back to separate operations.
-The deferred hyper-connection mixer and the per-token RoPE coefficient table
-also require non-streaming execution, among their other eligibility checks.
+The deferred hyper-connection mixer still requires non-streaming execution,
+among its other eligibility checks.
 The [upstream performance account](upstream-performance.md) explains the
 bottlenecks and upstream measurements; the
 [catch-up journal](../../lab/journal/2026-11-02-upstream-catchup.md) records
@@ -198,16 +198,22 @@ qualification. Our [32K profile](../../../speed-bench/experiments/2026-11-03-con
 examines these dependencies with the current streamed IQ2/Q2 model and resident
 substitution, where several of those non-streaming paths are ineligible.
 
-The [profile after routing overlap](../../../speed-bench/experiments/2026-11-03-post-overlap-profile/README.md)
-identifies the per-token RoPE table as the next decode experiment. Without that
-table, the low-rank attention output projection repeats the same inverse
-rotation while loading attention heads for different output pairs. The existing
-alternative transforms each head once during attention reduction, then uses a
-plain projection. It preserves the two BF16 rounding boundaries in focused
-tests, but enabling it for SSD streaming still needs full-model qualification.
-The profiled projection cost includes matrix multiplication and weight traffic;
-removing repeated rotations cannot remove that entire cost. The separate query
-projection and its forward RoPE are outside this candidate.
+The per-token RoPE table also works in eligible single-device SSD streaming
+when `DS4_METAL_V41_STREAMING_ROPE_TABLE=1`; `resident-fast` and `persistent-fast`
+enable it with an explicit `0` override. Without the table, the low-rank attention
+output projection repeats the same inverse rotation while loading heads for
+different output pairs. The table lets attention reduction transform each head
+once, preserving BF16 rounding before and after rotation, then use a plain
+projection. It also combines index-query rotation and quantization. The
+graph-owned table remains live across command submissions and is marked valid
+only for the current token. Quality mode, TP and unsupported shapes retain their
+existing paths; prefill arithmetic is unchanged.
+
+The [streaming RoPE experiment](../../../speed-bench/experiments/2026-11-03-stream-rope/README.md)
+records full-model numerical checks and five-pair comparisons at 8K and 32K.
+The projection still performs its matrix multiplication and reads its weights;
+the separate query projection and forward RoPE also remain unchanged. Reusing
+the rotation removes only part of the previously profiled work.
 
 ### Resident expert substitution
 
