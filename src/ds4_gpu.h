@@ -533,6 +533,11 @@ int ds4_gpu_stream_expert_cache_snapshot(const ds4_gpu_stream_expert_table *tabl
 /* Same read-only identity check, with n_selected outputs in selected-ID order. */
 int ds4_gpu_stream_expert_cache_snapshot_selected(const ds4_gpu_stream_expert_table *table,
         const int32_t *selected, uint32_t n_selected, uint8_t *resident);
+/* Scalar resident-only decode preflight. Publishes matching cached addresses
+ * and pins every possible selection in the current command batch. The caller
+ * supplies n_total_expert mask bytes and must not overlap this with cache loads. */
+uint32_t ds4_gpu_stream_expert_cache_resident_ready(const ds4_gpu_stream_expert_table *table,
+        uint8_t *resident);
 /* The async selected-load worker registers itself so Metal cache paths never
  * wait on command buffers from that thread (they fail the load instead and
  * the caller retries synchronously). */
@@ -2940,6 +2945,7 @@ int ds4_gpu_glm_routed_moe_batch_direct_scalar_q4_tensor(
         uint32_t                mid_token_stride);
 
 int ds4_gpu_routed_moe_set_selected_override(const int32_t *selected, uint32_t n_selected);
+void ds4_gpu_routed_moe_set_resident_only(uint32_t layer, bool enabled);
 void ds4_gpu_set_glm_mtp_verify_mode(bool enabled);
 #ifdef DS4_ROCM_BUILD
 int ds4_gpu_dspark_gfx1151_fast_path(void);

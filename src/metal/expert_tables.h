@@ -115,6 +115,9 @@ int ds4_native_table_stream_expert_cache_set_addr_slot_raw(
     ds4_metal_expert_buffer_ref down_buffer, uintptr_t down_inner);
 int ds4_native_table_stream_expert_cache_addr_buffers(ds4_metal_expert_cache_state *state,
                                                       uint32_t layer);
+uint32_t ds4_native_table_stream_resident_entries(ds4_metal_expert_cache_state *state,
+        const ds4_gpu_stream_expert_table *table, uint8_t *resident,
+        ds4_gpu_stream_expert_cache_entry **entries, bool publish);
 void ds4_native_table_stream_full_expert_addr_clear_layer(ds4_metal_expert_cache_state *state,
                                                           uint32_t layer);
 ds4_gpu_stream_expert_cache_entry *ds4_native_table_stream_full_expert_addr_table_prepare(

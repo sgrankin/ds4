@@ -104,6 +104,37 @@ pub const Tables = struct {
         inline for (self.cacheBuffers(layer), values) |buffer, value| words(buffer)[expert] = value;
         return true;
     }
+    pub fn residentEntries(self: Tables, table: ?*const c.ds4_gpu_stream_expert_table, output: [*c]u8, entries: [*c][*c]Entry, publish: bool) u32 {
+        const input = table orelse return 0;
+        if (!self.facts.streaming or !self.facts.gpu_addresses or input.layer >= layers or
+            self.state.full_entries[input.layer].valid != 0 or fullRequested(self.facts.streaming)) return 0;
+        const cache = Cache.Cache{ .state = self.state, .streaming = true };
+        var resident: [experts]u8 = undefined;
+        if (!cache.snapshot(input, null, &resident)) return 0;
+        const mask = resident[0..input.n_total_expert];
+        if (output != null) @memcpy(output[0..mask.len], mask);
+        var count: u32 = 0;
+        for (mask) |value| count += value;
+        if (count < 6) return count;
+        if (publish and (self.state.cache_batch_seq == 0 and self.state.cache_owned_seq == 0)) return 0;
+        if (!self.ensureAddresses(input.layer)) return 0;
+        // The GPU may choose any published resident. Pin the whole set before
+        // encoding it: later demand loads may evict other entries, but these
+        // slots and address values survive until the existing completion fence.
+        // This uses only cached buffers, never full model-map expert regions.
+        var index: u32 = 0;
+        for (mask, 0..) |value, expert| {
+            if (value == 0) {
+                if (publish) self.zeroAddress(input.layer, @intCast(expert));
+                continue;
+            }
+            const entry = &self.state.entries[input.layer][expert];
+            if (publish and (!self.setAddress(input.layer, @intCast(expert), entry.gate_buffer, entry.gate_inner, entry.up_buffer, entry.up_inner, entry.down_buffer, entry.down_inner) or !cache.mark(entry))) return 0;
+            if (entries != null) entries[index] = entry;
+            index += 1;
+        }
+        return count;
+    }
     pub fn ensureCompact(self: Tables, layer: u32) bool {
         if (!self.facts.device or layer >= layers) return false;
         const labels = .{ "ds4_stream_compact_gate_addresses", "ds4_stream_compact_up_addresses", "ds4_stream_compact_down_addresses", "ds4_stream_compact_selected_ids" };

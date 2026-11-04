@@ -119,6 +119,7 @@ bool ds4_metal_single_cache_available(ds4_metal_single_resources *resources);
 bool ds4_metal_single_split_ready(void);
 bool ds4_metal_single_addresses(ds4_metal_single_resources *resources);
 bool ds4_metal_single_full_addresses(ds4_metal_single_resources *resources);
+bool ds4_metal_single_resident_addresses(ds4_metal_single_resources *resources);
 int ds4_metal_single_trace_replay(int32_t *ids, uint32_t count);
 bool ds4_metal_single_trace_record(uint32_t layer, const int32_t *ids, uint32_t count,
                                    uint32_t total);
@@ -168,6 +169,8 @@ void ds4_native_metal_selected_trace_close(void);
 typedef struct {
     int32_t ids[8];
     uint32_t count;
+    uint32_t resident_layer;
+    bool resident_only;
 } ds4_metal_selected_override;
 ds4_metal_selected_override *ds4_metal_single_override_state(void);
 void **ds4_metal_single_diagnostics_slot(void);

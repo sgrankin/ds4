@@ -229,6 +229,54 @@ kernel void kernel_dsv41_router_one(
     }
 }
 
+// This opt-in approximation retains the native router's six mixture weights.
+// It repairs only IDs, in native score order: a missing slot receives the best
+// available resident not already selected, with lower expert ID breaking ties.
+// No CPU cap/gap/rank protection applies, including to the strongest contributor.
+// The host copies an identity-matching mask with >=6 entries and protects all
+// those entries through routed GPU completion; the kernel never admits a miss.
+kernel void kernel_dsv41_resident_route_one(
+        constant uint2 &args [[buffer(0)]],
+        device int32_t *selected [[buffer(1)]],
+        device const float *probs [[buffer(2)]],
+        device const float *bias [[buffer(3)]],
+        constant uchar *resident [[buffer(4)]],
+        device uint32_t *trace [[buffer(5)]],
+        uint lane [[thread_index_in_threadgroup]]) {
+    if (lane != 0) return;
+    int32_t ids[6];
+    float total = 0.0f, changed_mass = 0.0f;
+    uint changes = 0;
+    for (uint slot = 0; slot < 6; ++slot) {
+        ids[slot] = selected[slot];
+        if (args.y) trace[slot] = as_type<uint32_t>(ids[slot]);
+        total += probs[ids[slot]];
+    }
+    for (uint slot = 0; slot < 6; ++slot) {
+        if (resident[ids[slot]]) continue;
+        int best = -1;
+        float best_score = -INFINITY;
+        for (uint expert = 0; expert < args.x; ++expert) {
+            if (!resident[expert]) continue;
+            bool included = false;
+            for (uint other = 0; other < 6; ++other) included |= ids[other] == (int)expert;
+            if (included) continue;
+            const float score = probs[expert] + bias[expert];
+            if (best < 0 || score > best_score) { best = (int)expert; best_score = score; }
+        }
+        // Six distinct admitted residents and six unique native IDs guarantee
+        // an unused resident for every missing slot, even if a score is NaN.
+        changed_mass += probs[ids[slot]];
+        ids[slot] = best;
+        ++changes;
+    }
+    for (uint slot = 0; slot < 6; ++slot) selected[slot] = ids[slot];
+    if (args.y) {
+        trace[6] = changes;
+        trace[7] = as_type<uint32_t>(changed_mass / max(total, 6.103515625e-5f));
+    }
+}
+
 struct ds4_metal_args_dsv41_rope {
     uint width, heads, rows, start, inverse, stride;
     float frequencies[32];

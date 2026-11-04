@@ -69,6 +69,11 @@ export fn ds4_gpu_routed_moe_one_tensor(
 export fn ds4_gpu_routed_moe_set_selected_override(ids: [*c]const i32, count: u32) c_int {
     return @import("routed_single_selected.zig").setOverride(ids, count);
 }
+export fn ds4_gpu_routed_moe_set_resident_only(layer: u32, enabled: bool) void {
+    const state: *c.ds4_metal_selected_override = c.ds4_metal_single_override_state();
+    state.resident_layer = layer;
+    state.resident_only = enabled;
+}
 
 // The selected model owns its optional trace/hotlist data.
 const Diagnostics = @import("routed_diagnostics.zig");

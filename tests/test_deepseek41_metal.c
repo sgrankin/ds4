@@ -164,6 +164,86 @@ static int check_router(void) {
     return 1;
 }
 
+#ifdef __APPLE__
+static int check_resident_router(void) {
+    enum { N = 384, K = 6 };
+    const size_t model_bytes = (size_t)getpagesize();
+    float *bias = NULL;
+    CHECK(posix_memalign((void **)&bias, model_bytes, model_bytes) == 0);
+    memset(bias, 0, model_bytes);
+    float logits[N];
+    for (unsigned e = 0; e < N; ++e) {
+        logits[e] = (float)((e * 37) % 193) / 16.0f - 6.0f;
+        bias[e] = (float)(e % 7) * 0.125f;
+    }
+    CHECK(ds4_gpu_set_model_map(bias, model_bytes));
+    ds4_gpu_tensor *x = upload(logits, sizeof(logits));
+    ds4_gpu_tensor *p = upload(NULL, sizeof(logits));
+    ds4_gpu_tensor *ids = upload(NULL, K * sizeof(int32_t));
+    ds4_gpu_tensor *weights = upload(NULL, K * sizeof(float));
+    ds4_gpu_tensor *trace = upload(NULL, 32);
+    CHECK(x && p && ids && weights && trace);
+    for (unsigned n = 256; n <= N; n += 128) {
+        CHECK(ds4_gpu_dsv41_router_one(ids, weights, p, x, bias, model_bytes, 0, n, K, 1.5f));
+        CHECK(ds4_gpu_synchronize());
+        int32_t native[K]; float native_weights[K], native_probs[N];
+        CHECK(ds4_gpu_tensor_read(ids, 0, native, sizeof(native)));
+        CHECK(ds4_gpu_tensor_read(weights, 0, native_weights, sizeof(native_weights)));
+        CHECK(ds4_gpu_tensor_read(p, 0, native_probs, n * sizeof(float)));
+        for (unsigned mode = 0; mode < 3; ++mode) {
+            uint8_t resident[N] = {0};
+            if (mode == 0) memset(resident, 1, n);
+            else {
+                unsigned count = 0;
+                if (mode == 1) for (unsigned k = 0; k < K; k += 2) {
+                    resident[native[k]] = 1;
+                    ++count;
+                }
+                for (unsigned e = 0; e < n && count < K; ++e) {
+                    int original = 0;
+                    for (unsigned k = 0; k < K; ++k) original |= native[k] == (int32_t)e;
+                    if (!original) { resident[e] = 1; ++count; }
+                }
+                CHECK(count == K);
+            }
+            CHECK(ds4_gpu_tensor_write(ids, 0, native, sizeof(native)));
+            CHECK(ds4_gpu_begin_commands());
+            CHECK(ds4_gpu_dsv41_resident_route_one(ids, p, bias, model_bytes, 0, n, K, resident, trace));
+            CHECK(ds4_gpu_end_commands());
+            int32_t actual[K]; float actual_weights[K], actual_probs[N]; uint32_t details[8];
+            CHECK(ds4_gpu_tensor_read(ids, 0, actual, sizeof(actual)));
+            CHECK(ds4_gpu_tensor_read(weights, 0, actual_weights, sizeof(actual_weights)));
+            CHECK(ds4_gpu_tensor_read(p, 0, actual_probs, n * sizeof(float)));
+            CHECK(ds4_gpu_tensor_read(trace, 0, details, sizeof(details)));
+            CHECK(!memcmp(native_weights, actual_weights, sizeof(native_weights)));
+            CHECK(!memcmp(native_probs, actual_probs, n * sizeof(float)));
+            CHECK(!memcmp(native, details, sizeof(native)));
+            unsigned changes = 0; float total = 0, changed = 0;
+            for (unsigned k = 0; k < K; ++k) {
+                CHECK(isfinite(actual_weights[k]));
+                CHECK(actual[k] >= 0 && actual[k] < (int32_t)n && resident[actual[k]]);
+                for (unsigned j = 0; j < k; ++j) CHECK(actual[k] != actual[j]);
+                total += native_probs[native[k]];
+                if (resident[native[k]]) CHECK(actual[k] == native[k]);
+                else { ++changes; changed += native_probs[native[k]]; }
+            }
+            float traced_mass; memcpy(&traced_mass, &details[7], sizeof(traced_mass));
+            CHECK(details[6] == changes);
+            CHECK(fabsf(traced_mass - changed / fmaxf(total, 0x1p-14f)) < 1e-6f);
+            if (mode == 0) CHECK(!memcmp(native, actual, sizeof(native)));
+            if (mode == 1) CHECK(changes == 3);
+            if (mode == 2) CHECK(changes == 6);
+        }
+    }
+    ds4_gpu_tensor_free(x); ds4_gpu_tensor_free(p); ds4_gpu_tensor_free(ids);
+    ds4_gpu_tensor_free(weights); ds4_gpu_tensor_free(trace);
+    ds4_gpu_cleanup(); free(bias);
+    CHECK(ds4_gpu_init());
+    fprintf(stderr, "Resident router: all-resident identity, partial/all replacements, unique IDs and unchanged finite weights PASS\n");
+    return 1;
+}
+#endif
+
 static int check_quantization(void) {
     enum { WIDTH = 512, ROWS = 33, N = WIDTH * ROWS };
     float *source = malloc(N * sizeof(float)), *actual = malloc(N * sizeof(float));
@@ -3602,6 +3682,13 @@ int main(int argc, char **argv) {
         ds4_gpu_cleanup();
         return ok ? 0 : 1;
     }
+#ifdef __APPLE__
+    if (argc == 2 && !strcmp(argv[1], "--resident-router")) {
+        const int ok = ds4_gpu_init() && check_resident_router();
+        ds4_gpu_cleanup();
+        return ok ? 0 : 1;
+    }
+#endif
     if (argc == 2 && !strcmp(argv[1], "--tp-attention")) {
         const int ok = ds4_gpu_init() && check_tp_attention();
         ds4_gpu_cleanup();

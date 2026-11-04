@@ -3,6 +3,13 @@
  * actual strong cache fields only; borrowed results keep their original owner.
  */
 #include "expert_tables.h"
+uint32_t ds4_gpu_stream_expert_cache_resident_ready(const ds4_gpu_stream_expert_table *table,
+                                                   uint8_t *resident) {
+    if (!resident || !g_ssd_streaming_mode || g_glm_model_mode ||
+        !g_moe_mul_mv_addr_iq2_xxs_pair_swiglu_pipeline || !g_moe_mul_mv_addr_q2_k_sum6_pipeline)
+        return 0;
+    return ds4_native_table_stream_resident_entries(&g_expert_cache, table, resident, NULL, true);
+}
 void ds4_metal_tables_facts(ds4_metal_table_facts *out) {
     @autoreleasepool {
         memset(out, 0, sizeof(*out));

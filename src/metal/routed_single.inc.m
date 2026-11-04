@@ -228,6 +228,22 @@ bool ds4_metal_single_full_addresses(ds4_metal_single_resources *opaque) {
         return ok != 0;
     }
 }
+bool ds4_metal_single_resident_addresses(ds4_metal_single_resources *opaque) {
+    @autoreleasepool {
+        DS4RoutedSingleResources *r = SINGLE_CONTEXT;
+        const ds4_metal_routed_request *q = &r->request;
+        const ds4_gpu_stream_expert_table table = {
+            .model_map = q->model, .model_size = q->model_bytes, .layer = q->layer,
+            .n_total_expert = q->total_experts, .gate_offset = q->gate_offset,
+            .up_offset = q->up_offset, .down_offset = q->down_offset,
+            .gate_expert_bytes = q->gate_expert_bytes, .down_expert_bytes = q->down_expert_bytes,
+        };
+        r->entryCount = ds4_native_table_stream_resident_entries(&g_expert_cache, &table,
+                                                                NULL, r->entries, false);
+        if (r->entryCount < q->used_experts) return false;
+        return ds4_metal_single_addresses(opaque);
+    }
+}
 
 
 /* Complete existing cache action; file policy never lives in this binding. */

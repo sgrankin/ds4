@@ -37,6 +37,9 @@ export fn ds4_native_table_stream_expert_cache_set_addr_slot_raw(state: *State, 
 export fn ds4_native_table_stream_expert_cache_addr_buffers(state: *State, layer: u32) c_int {
     return @intFromBool(tables(state).ensureAddresses(layer));
 }
+export fn ds4_native_table_stream_resident_entries(state: *State, table: ?*const c.ds4_gpu_stream_expert_table, resident: [*c]u8, entries: [*c][*c]Entry, publish: bool) u32 {
+    return tables(state).residentEntries(table, resident, entries, publish);
+}
 export fn ds4_native_table_stream_full_expert_addr_clear_layer(state: *State, layer: u32) void {
     tables(state).clearFull(layer);
 }

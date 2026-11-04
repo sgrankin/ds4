@@ -55,6 +55,25 @@ export fn ds4_gpu_dsv41_router_rows(selected: ?*Tensor, weights: ?*Tensor, probs
 export fn ds4_gpu_dsv41_router_one(selected: ?*Tensor, weights: ?*Tensor, probs: ?*Tensor, logits: ?*const Tensor, map: ?*const anyopaque, size: u64, bias: u64, experts: u32, k: u32, scale: f32) c_int {
     return ds4_gpu_dsv41_router_rows(selected, weights, probs, logits, map, size, bias, experts, k, scale, 1);
 }
+export fn ds4_gpu_dsv41_resident_route_one(selected: ?*Tensor, probs: ?*const Tensor, map: ?*const anyopaque, size: u64, bias_offset: u64, experts: u32, top_k: u32, resident: [*c]const u8, trace: ?*Tensor) c_int {
+    if (experts < 6 or experts > 1024 or top_k != 6 or resident == null or
+        !fits(selected, 24) or !fits(probs, @as(u64, experts) * 4) or
+        (trace != null and !fits(trace, 32))) return 0;
+    var count: u32 = 0;
+    for (resident[0..experts]) |present| count += @intFromBool(present != 0);
+    if (count < top_k) return 0;
+    const bias = K.model(map, size, bias_offset, @as(u64, experts) * 4) orelse return 0;
+    defer bias.deinit();
+    const p = Buffer.tensor(probs);
+    defer p.deinit();
+    const s = Buffer.tensor(selected);
+    defer s.deinit();
+    const t = Buffer.tensor(if (trace != null) trace else selected);
+    defer t.deinit();
+    const args = extern struct { n_expert: u32, trace: u32 }{ .n_expert = experts, .trace = @intFromBool(trace != null) };
+    const mask = Binding{ .index = 4, .view = zero_view, .bytes = resident, .length = experts };
+    return dispatch("kernel_dsv41_resident_route_one", &.{ arg(0, &args), buf(1, s.view), buf(2, p.view), buf(3, bias.view), mask, buf(5, t.view) }, .{ .tx = 32 });
+}
 const QuantRope = extern struct { width: u32, start: u32, inverse: u32 = 0, mode: u32, frequencies: [32]f32 };
 const MvRope = extern struct { width: u32, start: u32, inverse: u32, frequencies: [32]f32 };
 fn mvRope(width: u32, start: u32, compressed: bool, inverse: bool) MvRope {

@@ -65,6 +65,17 @@ pub const State = struct {
         var source: [*:0]const u8 = "readback";
         var ids_available = true;
         var ids_from_host = false;
+        if (overrideState().resident_only and overrideState().resident_layer == q.layer) {
+            overrideState().resident_only = false;
+            clearOverride();
+            if (!p.slots_iq2 or !Batch.pairPresent(&f.batch, c.DS4_ROUTED_ADDR_IQ2_SWI, c.DS4_ROUTED_ADDR_Q2_SUM) or
+                !c.ds4_metal_single_resident_addresses(resource)) return false;
+            // The preflight pinned every address the resident-only GPU router
+            // may select. Keep GPU IDs and native weights; no host readback,
+            // cache loading, hotness update or pruning occurs on this path.
+            self.address = true;
+            return true;
+        }
         const size_known = c.ds4_metal_single_cache_note_size(resource);
         const full = p.slots_iq2 and
             present("DS4_METAL_ENABLE_STREAMING_FULL_EXPERT_ADDR_TABLE") and

@@ -26,6 +26,17 @@ int ds4_gpu_dsv41_router_one(ds4_gpu_tensor *selected, ds4_gpu_tensor *weights,
                              ds4_gpu_tensor *probs, const ds4_gpu_tensor *logits,
                              const void *model_map, uint64_t model_size, uint64_t bias_offset,
                              uint32_t n_expert, uint32_t top_k, float scale);
+/* Experimental Metal-only ID repair after the native six-expert router. The
+ * caller protects every resident expert until its GPU reads complete. The mask
+ * is copied into the command; weights and probabilities are never rewritten.
+ * Missing slots are repaired in native score order, not weakest-affinity order,
+ * without the CPU policy's cap, gap or rank limits. At least six residents are
+ * required. Optional trace contains six native IDs, replacement count and the
+ * fraction of original affinity mass replaced (32 bytes total). */
+int ds4_gpu_dsv41_resident_route_one(ds4_gpu_tensor *selected, const ds4_gpu_tensor *probs,
+                                     const void *model_map, uint64_t model_size, uint64_t bias_offset,
+                                     uint32_t n_expert, uint32_t top_k, const uint8_t *resident,
+                                     ds4_gpu_tensor *trace);
 /* The same for a few rows (Metal only), and the rows' F32 logits with the
  * single-row matvec's reduction. */
 int ds4_gpu_dsv41_router_rows(ds4_gpu_tensor *selected, ds4_gpu_tensor *weights,

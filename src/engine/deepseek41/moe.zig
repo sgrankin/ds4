@@ -144,6 +144,36 @@ pub const Moe = struct {
         return self.ops.matmulBatch(graph.batch.route_logits, layer.ffn_gate_inp, graph.batch.norm, count, false);
     }
 
+    fn residentGpuRequested(self: *const Moe, layer: *const Layer) bool {
+        const graph = self.graph;
+        const enabled = c.getenv("DS4_METAL_V41_RESIDENT_GPU") orelse return false;
+        if (!std.mem.eql(u8, std.mem.span(enabled), "1")) return false;
+        // These diagnostic/alternate dispatch modes need host-selected IDs or
+        // a different resource contract. Leave their established path intact.
+        inline for (.{
+            "DS4_MOE_RECORD_SELECTED_IDS",                 "DS4_MOE_REPLAY_SELECTED_IDS",                   "DS4_MOE_RECORD_SELECTED_HOTLIST",
+            "DS4_METAL_DISABLE_IQ2_SELECTED_EXPERT_VIEWS", "DS4_METAL_DISABLE_STREAMING_EXPERT_ADDR_TABLE", "DS4_METAL_ENABLE_STREAMING_FULL_EXPERT_ADDR_TABLE",
+            "DS4_METAL_MOE_WRITE_CLAMPED_ACT",             "DS4_METAL_DISABLE_ROUTED_PAIR_SWIGLU_FUSION",
+        }) |name| if (present(name)) return false;
+        // The ordinary route/load step refreshes the expert cache periodically.
+        // Other steps use only resident experts, accepting weaker substitutions
+        // in exchange for avoiding the per-layer selected-ID readback. Position
+        // makes the cadence reproducible across checkpoint restores.
+        const refresh = if (c.getenv("DS4_METAL_V41_RESIDENT_GPU_REFRESH")) |value|
+            @as(u32, @intCast(@max(1, c.atoi(value))))
+        else
+            8;
+        return graph.pos % refresh != 0 and graph.streaming and graph.scalar_decode and
+            !graph.quality and graph.imatrix == null and graph.image_count == 0 and graph.tp_world == 1 and
+            graph.resident_route_gap > 0 and graph.resident_route_native_weights and graph.resident_route_mode == 0 and
+            !graph.predict_active and !graph.predict_load.active and !graph.hc_ffn_deferred and
+            graph.decoder_replay_floor == 0 and graph.steering_attn_scale == 0 and graph.steering_ffn_scale == 0 and
+            !c.ds4_native_graph_trace_active() and !present("DS4_V41_ROUTE_RECORD") and !present("DS4_V41_ROUTE_ORACLE") and
+            !present("DS4_METAL_V41_ASYNC_EXPERT_LOAD") and !present("DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS") and
+            self.ops.config.shape.n_expert_used == 6 and self.ops.config.shape.n_expert <= c.DS4_MAX_EXPERT and
+            layer.ffn_gate_exps.*.type == c.DS4_TENSOR_IQ2_XXS and layer.ffn_down_exps.*.type == c.DS4_TENSOR_Q2_K;
+    }
+
     pub fn partial(self: *const Moe, layer: *const Layer, index: u32, token: u32, services: *const c.ds4_native_moe_services) bool {
         const graph = self.graph;
         const model = self.ops.model;
@@ -182,12 +212,24 @@ pub const Moe = struct {
             graph.image_count == 0 and graph.tp_world == 1 and
             !present("DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS");
         const asynchronous = eligible and present("DS4_METAL_V41_ASYNC_EXPERT_LOAD");
-        const early = eligible and !asynchronous;
+        const table = self.streamTable(layer, index, gate_row *% shape.n_ff_exp, down_row *% shape.n_embd);
+        var resident_mask: [c.DS4_MAX_EXPERT]u8 = undefined;
+        const resident_gpu = self.residentGpuRequested(layer) and
+            c.ds4_gpu_stream_expert_cache_resident_ready(&table, &resident_mask) >= shape.n_expert_used;
+        if (resident_gpu) {
+            // Readiness pins every candidate until queued GPU reads retire.
+            // The repair changes IDs only: original native mixture weights stay
+            // attached to their slots. All six repaired IDs must be resident;
+            // this deliberately relaxes the CPU policy's cap/gap/rank limits.
+            if (c.ds4_gpu_dsv41_resident_route_one(graph.selected, graph.route_probs, model.map, model.size, bias.*.abs_offset, shape.n_expert, shape.n_expert_used, &resident_mask, null) == 0) return false;
+            c.ds4_gpu_routed_moe_set_resident_only(index, true);
+        }
+        defer if (resident_gpu) c.ds4_gpu_routed_moe_set_resident_only(index, false);
+        const early = eligible and !asynchronous and !resident_gpu;
         const overlap_setting = c.getenv("DS4_METAL_V41_ROUTE_SHARED_OVERLAP");
         const overlap_shared = early and graph.scalar_decode and graph.resident_route_gap > 0 and
             !graph.hc_ffn_deferred and !graph.predict_load.active and !services.oracle_deferred and
             overlap_setting != null and std.mem.eql(u8, std.mem.span(overlap_setting), "1");
-        const table = self.streamTable(layer, index, gate_row *% shape.n_ff_exp, down_row *% shape.n_embd);
         var load = std.mem.zeroes(c.metal_graph_selected_async_load);
         var selected_ids: [c.DS4_MAX_EXPERT_USED]i32 = undefined;
         // Unlike the old C early exit after a failed predicted-load join,
