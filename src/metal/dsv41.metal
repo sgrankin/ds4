@@ -172,8 +172,7 @@ struct ds4_metal_args_dsv41_router {
 // kernel_argsort_f32_i32_desc (padding indices sort last), and the weights
 // normalised as the generic chain does: gather, SIMD sum over the top_k lanes,
 // clamp, divide, scale. Threadgroup memory holds nth ints and 2 * nth floats.
-template<bool shuffle>
-kernel void kernel_dsv41_router(
+kernel void kernel_dsv41_router_one(
         constant ds4_metal_args_dsv41_router &args,
         device const float *logits,
         device const float *bias,
@@ -205,28 +204,8 @@ kernel void kernel_dsv41_router(
         score[col] = args.has_bias ? p + bias[col] : p;
     }
     threadgroup_barrier(mem_flags::mem_threadgroup);
-    int reg_idx = (int)col;
-    float reg_value = reg_idx < width ? score[col] : 0.0f;
     for (int k = 2; k <= (int)ntg; k *= 2) {
         for (int j = k / 2; j > 0; j /= 2) {
-            // The argsort hybrid keeps the same comparator network: small
-            // strides exchange registers within a SIMD group, large strides
-            // use shared indices. Strict comparisons preserve its tie order;
-            // replacing them with an ID tie-break would change routed experts.
-            if (shuffle && j < 32) {
-                if (k > 32 && j == 16) {
-                    reg_idx = shmem_i32[col];
-                    reg_value = reg_idx < width ? score[reg_idx] : 0.0f;
-                }
-                const int other = simd_shuffle_xor(reg_idx, j);
-                const float value = simd_shuffle_xor(reg_value, j);
-                const bool first = (((int)col & k) == 0) == (((int)col & j) == 0);
-                const bool exchange = first ?
-                    (reg_idx >= width || (other < width && reg_value < value)) :
-                    (other >= width || (reg_idx < width && reg_value > value));
-                if (exchange) { reg_idx = other; reg_value = value; }
-                continue;
-            }
             const int ixj = (int)col ^ j;
             if (ixj > (int)col) {
                 const int a = shmem_i32[col], b = shmem_i32[ixj];
@@ -237,13 +216,9 @@ kernel void kernel_dsv41_router(
             }
             threadgroup_barrier(mem_flags::mem_threadgroup);
         }
-        if (shuffle && k >= 32) {
-            shmem_i32[col] = reg_idx;
-            threadgroup_barrier(mem_flags::mem_threadgroup);
-        }
     }
     if (col < args.top_k) {
-        const int32_t idx = shuffle ? reg_idx : shmem_i32[col];
+        const int32_t idx = shmem_i32[col];
         selected[col] = idx;
         const float w = prob[idx];
         const float total = clamp(simd_sum(w), 6.103515625e-5f, INFINITY);
@@ -253,8 +228,6 @@ kernel void kernel_dsv41_router(
         weights[col] = *quotient * args.scale;
     }
 }
-template [[host_name("kernel_dsv41_router_one")]] kernel decltype(kernel_dsv41_router<false>) kernel_dsv41_router<false>;
-template [[host_name("kernel_dsv41_router_one_simd")]] kernel decltype(kernel_dsv41_router<true>) kernel_dsv41_router<true>;
 
 struct ds4_metal_args_dsv41_rope {
     uint width, heads, rows, start, inverse, stride;

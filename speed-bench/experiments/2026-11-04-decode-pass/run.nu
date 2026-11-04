@@ -2,7 +2,7 @@
 # Run from the repository root under speed-bench/ideas/pressure_run.py.
 # Compare one selected environment setting against the adopted decode baseline.
 # Timing is profile-free; quality and profile stages are diagnostics only.
-def main [out: path, stage: string = 'timing', --flag: string = 'DS4_METAL_V41_PACKED_F16_GATHER', --control: string = '0', --candidate: string = '1', --cache: string = '64GB', --frontier: int = 0, --only: string = 'both', --samples: int = 5] {
+def main [out: path, stage: string = 'timing', --flag: string = 'DS4_METAL_V41_PACKED_F16_GATHER', --control: string = '0', --candidate: string = '1', --cache: string = '64GB', --frontier: int = 0, --only: string = 'both', --samples: int = 5, --tokens: int = 0] {
     if $stage not-in ['timing' 'smoke' 'quality' 'profile' 'timeline'] {
         error make {msg: 'Stage must be timing, smoke, quality, profile or timeline'}
     }
@@ -21,7 +21,7 @@ def main [out: path, stage: string = 'timing', --flag: string = 'DS4_METAL_V41_P
         DS4_METAL_V41_RESIDENT_ROUTE_POLICY: 'replace'
     }
     let frontier = if $frontier > 0 { $frontier } else if $stage in ['smoke' 'quality'] { 8192 } else { 32768 }
-    let tokens = if $stage == 'smoke' { 32 } else { 128 }
+    let tokens = if $tokens > 0 { $tokens } else if $stage == 'smoke' { 32 } else { 128 }
     let repeats = if $stage == 'timing' { $samples } else { 1 }
     for repeat in 1..$repeats {
         let arms = if ($repeat mod 2) == 0 { ['candidate' 'baseline'] } else { ['baseline' 'candidate'] }

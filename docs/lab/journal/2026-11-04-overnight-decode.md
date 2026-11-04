@@ -45,3 +45,18 @@ buffer or allocation. Earlier host preparation consumes some potential overlap,
 so the profile's exposed tail was not a promised saving. The
 [result report](../../../speed-bench/experiments/2026-11-04-decode-pass/shared-down.md)
 owns the measurements, rounding/lifetime explanation and diagnostic limits.
+
+## Fewer router barriers did not establish a decode gain
+
+Replacing the router's intra-SIMD sorting exchanges reduced threadgroup barriers
+from 46 to 16 while preserving tested probabilities, tied expert order and
+weights. The separate profile showed only about 0.05 ms less router time per
+token. All 45 comparison stages remain, and shared expert work overlaps almost
+the entire router interval; the selected-ID event still constrains host routing.
+
+Five-pair comparisons at 8K and 32K, followed by five longer 32K decode pairs,
+showed no consistent throughput gain. We left the change unadopted rather than
+call the small mixed differences a regression. The prototype remains recoverable
+from its experiment commit; the active implementation returns to the adopted
+baseline. The [router report](../../../speed-bench/experiments/2026-11-04-decode-pass/router-simd.md)
+records all samples, the longer workload's slow append and the diagnostic limits.
