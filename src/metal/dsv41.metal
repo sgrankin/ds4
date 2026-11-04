@@ -1369,26 +1369,52 @@ kernel void kernel_dsv41_deferred_collapse_norm(
     if (gid == 0) atomic_store_explicit(counter, 0u, memory_order_relaxed);
 }
 
-// Standalone 1280 -> 32768 query projection, using the deferred query's
-// geometry without changing the HC schedule. Eight physical SIMD groups own
-// eight adjacent output rows. The helper indexes group.x * 4 + simd, so pass
-// group.x * 2 to cover eight rows per threadgroup without overlap.
-// Its five K tiles retain the NSG=4 reference's four logical accumulators:
-// tile 4 adds to slot 0, then the same two SIMD reduction stages round to BF16.
+// Fixed 1280 -> 32768 query projection: each physical SIMD group owns an
+// adjacent output pair and reuses its input loads for both rows. Eight SIMD
+// groups therefore cover 16 output rows, with no cross-group exchange.
+// Each row still has four logical NSG=4 accumulators: K tile 4 adds to slot 0,
+// then the original two reduction stages produce the BF16 projection value.
 kernel void kernel_dsv41_query_short_q8(
         constant ds4_metal_args_mul_mv &mv [[buffer(0)]],
         device const char *weight [[buffer(1)]], device const char *x [[buffer(2)]],
         device float *q [[buffer(3)]], constant ds4_metal_args_mv_rope &rope [[buffer(4)]],
-        threadgroup float *pairs [[threadgroup(0)]], uint3 group [[threadgroup_position_in_grid]],
+        uint3 group [[threadgroup_position_in_grid]],
         ushort lane [[thread_index_in_simdgroup]], ushort simd [[simdgroup_index_in_threadgroup]]) {
-    const float value = ds4_q8_short_value<40, false>(mv, weight, x, uint3(group.x*2u,0,0), lane, simd);
-    if (lane == 0) pairs[simd] = value;
-    threadgroup_barrier(mem_flags::mem_threadgroup);
-    // Even SIMD groups consume adjacent BF16 row pairs. Preserve the forward
-    // RoPE multiply/FMA order and second BF16 rounding at each head's tail.
-    if (lane == 0 && (simd & 1u) == 0) {
-        const uint row = group.x * 8u + simd, col = row % rope.width;
-        const float re = pairs[simd], im = pairs[simd + 1u];
+    const uint row = group.x * 16u + simd * 2u;
+    device const block_q8_0 *wr = (device const block_q8_0 *)(weight + row * mv.nb01);
+    device const block_q8_0 *wi = (device const block_q8_0 *)(weight + (row + 1u) * mv.nb01);
+    device const float *input = (device const float *)x;
+    // Four lanes split each 32-value Q8 block into eight values per lane;
+    // the other eight lane groups select the eight blocks of this K tile.
+    const short ix = lane / 4, il = lane % 4;
+    float partial_re[4] = {0.f, 0.f, 0.f, 0.f};
+    float partial_im[4] = {0.f, 0.f, 0.f, 0.f};
+    FOR_UNROLL (short tile = 0; tile < 5; ++tile) {
+        const short ib = tile * 8 + ix;
+        float yl[8];
+        FOR_UNROLL (short i = 0; i < 8; ++i) yl[i] = input[ib * 32 + il * 8 + i];
+        device const int8_t *qr = wr[ib].qs + il * 8;
+        device const int8_t *qi = wi[ib].qs + il * 8;
+        float sum_re = 0.f, sum_im = 0.f;
+        FOR_UNROLL (short i = 0; i < 8; ++i) {
+            sum_re += qr[i] * yl[i];
+            sum_im += qi[i] * yl[i];
+        }
+        partial_re[tile % 4] += sum_re * wr[ib].d;
+        partial_im[tile % 4] += sum_im * wi[ib].d;
+    }
+    FOR_UNROLL (short i = 0; i < 4; ++i) {
+        partial_re[i] = simd_sum(partial_re[i]);
+        partial_im[i] = simd_sum(partial_im[i]);
+    }
+    const float slot_re = lane < 4 ? partial_re[lane] : 0.f;
+    const float slot_im = lane < 4 ? partial_im[lane] : 0.f;
+    const float re = ds4_bf16_round(simd_sum(slot_re));
+    const float im = ds4_bf16_round(simd_sum(slot_im));
+    // Both BF16 values are now in the same SIMD group. Its lane 0 preserves
+    // the forward RoPE multiply/FMA order and second rounding at each tail.
+    if (lane == 0) {
+        const uint col = row % rope.width;
         if (col >= rope.width - 64u) {
             const float theta = float(rope.start) * rope.frequencies[(col - (rope.width - 64u)) >> 1u];
             const float c = precise::cos(theta);
