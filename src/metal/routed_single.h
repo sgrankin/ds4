@@ -54,6 +54,8 @@ typedef struct {
     ds4_metal_routed_facts batch;
     bool parallel_pending;
     bool full_expert_bind;
+    bool resident_only;
+    uint32_t resident_layer;
     int32_t parallel_mode;
     int32_t parallel_stage;
     const ds4_metal_hc_pipeline *cached[DS4_SINGLE_PIPELINE_COUNT];

@@ -311,7 +311,18 @@ pub const Moe = struct {
             layer.ffn_gate_exps.*.type == c.DS4_TENSOR_MXFP4 and layer.ffn_down_exps.*.type == c.DS4_TENSOR_MXFP4 and
             layer.ffn_gate_shexp.*.type == c.DS4_TENSOR_Q8_0 and layer.ffn_up_shexp.*.type == c.DS4_TENSOR_Q8_0 and
             layer.ffn_down_shexp.*.type == c.DS4_TENSOR_Q8_0;
-        const concurrent = concurrent_eligible and graph.tp_world != 2 and
+        const parallel_setting = c.getenv("DS4_METAL_V41_RESIDENT_GPU_PARALLEL");
+        const resident_parallel = resident_gpu and shared_here and
+            parallel_setting != null and std.mem.eql(u8, std.mem.span(parallel_setting), "1") and
+            shape.n_expert == 384 and shape.n_embd == 5120 and shape.n_ff_exp == 2304 and
+            gate_row == 1320 and down_row == 756 and
+            layer.ffn_gate_shexp.*.type == c.DS4_TENSOR_Q8_0 and layer.ffn_up_shexp.*.type == c.DS4_TENSOR_Q8_0 and
+            layer.ffn_down_shexp.*.type == c.DS4_TENSOR_Q8_0 and
+            !present("DS4_METAL_DISABLE_V41_CONCURRENT_FFN") and !present("DS4_METAL_MOE_ONE_STAGE_PROFILE");
+        // Resident preflight already pins every possible expert. Start closes
+        // the router/repair encoder; the existing two-stage join then barriers
+        // both mid buffers before their down projections. Refreshes stay serial.
+        const concurrent = (resident_parallel or (concurrent_eligible and graph.tp_world != 2)) and
             c.ds4_gpu_parallel_ffn_start_bf16(graph.shared_gate, graph.shared_up, graph.shared_mid, graph.shared, model.map, model.size, layer.ffn_gate_shexp.*.abs_offset, layer.ffn_up_shexp.*.abs_offset, layer.ffn_down_shexp.*.abs_offset, shape.n_embd, shape.n_ff_exp, graph.norm, shape.swiglu_clamp_exp) != 0;
         const concurrent_tp = concurrent_eligible and shared_split and balanced and
             !present("DS4_METAL_DISABLE_V41_TP_CONCURRENT_FFN") and !present("DS4_METAL_DISABLE_V41_TP_FIXED_ROUTE") and
@@ -348,6 +359,8 @@ pub const Moe = struct {
             shared_queued = false;
             if (!complete and !self.sharedSerial(layer, shared_split, shared_dim, shared_lane, true)) return false;
             graph.shared_done = true;
+            if (resident_parallel and complete and present("DS4_METAL_V41_RESIDENT_GPU_PARALLEL_PROFILE"))
+                _ = c.fprintf(c.__stderrp, "ds4: resident parallel pos=%u layer=%u joined=1\n", graph.pos, index);
         }
         // Half-width shared down projections remain F32 until the rank sum;
         // whole shared projections preserve their BF16 output boundary.

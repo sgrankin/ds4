@@ -218,8 +218,21 @@ fn parallelValid(q: *const Request, f: *const Facts, add_in: bool, p: Policy) bo
     // A concurrent encoder destroys implicit dependencies. Only the resident
     // fused producer -> direct-sum consumer pair has explicit level barriers.
     const common = f.parallel_mode == 2 and !add_in and
-        (q.force_resident or !has(b, c.DS4_ROUTED_SSD)) and
         absent("DS4_METAL_MOE_WRITE_CLAMPED_ACT") and p.fused and p.direct;
+    // This layer-scoped override is armed only after resident preflight pins
+    // every possible GPU selection. Prove the later slots/address branch here:
+    // no full-model views, host selection, loads or stage flushes may intervene.
+    const resident_address = f.resident_only and f.resident_layer == q.layer and
+        f.parallel_stage == 0 and has(b, c.DS4_ROUTED_SSD) and !has(b, c.DS4_ROUTED_QUALITY) and !q.force_resident and
+        q.rows == 1 and q.gate_type == iq2 and q.down_type == q2 and q.used_experts == 6 and q.total_experts == 384 and
+        q.input_width == 5120 and q.middle_width == 2304 and q.output_width == 5120 and
+        q.gate_row_bytes == 1320 and q.gate_expert_bytes == 3041280 and q.down_row_bytes == 756 and q.down_expert_bytes == 3870720 and
+        b.first_expert == 0 and b.bound_experts == q.total_experts and b.rank == 0 and b.world == 1 and
+        extraPair(f, c.DS4_SINGLE_SLOTS_IQ2_PAIR, c.DS4_SINGLE_SLOTS_Q2_SUM) and
+        commonPair(f, c.DS4_ROUTED_ADDR_IQ2_SWI, c.DS4_ROUTED_ADDR_Q2_SUM) and
+        absent("DS4_METAL_DISABLE_IQ2_SELECTED_EXPERT_VIEWS") and absent("DS4_METAL_DISABLE_STREAMING_EXPERT_ADDR_TABLE") and
+        absent("DS4_METAL_MOE_ONE_STAGE_PROFILE");
+    if (resident_address) return common;
     const iq2_route = q.gate_type == iq2 and q.down_type == q2 and q.used_experts == 6 and q.total_experts == 256 and
         q.input_width == 4096 and q.middle_width == 2048 and q.output_width == 4096 and
         q.gate_row_bytes == 1056 and q.gate_expert_bytes == 2162688 and q.down_row_bytes == 672 and q.down_expert_bytes == 2752512 and
@@ -230,7 +243,7 @@ fn parallelValid(q: *const Request, f: *const Facts, add_in: bool, p: Policy) bo
     const mx_route = q.gate_type == mx and q.down_type == mx and (q.used_experts == 6 or balanced3) and mx_shape and
         ((b.world == 1 and b.first_expert == 0 and b.bound_experts == q.total_experts) or
             (b.world == 2 and ((b.rank == 0 and b.first_expert == 0) or (b.rank == 1 and b.first_expert +% b.bound_experts == q.total_experts))));
-    return common and (iq2_route or mx_route);
+    return common and (q.force_resident or !has(b, c.DS4_ROUTED_SSD)) and (iq2_route or mx_route);
 }
 fn groupSize(total: u32) u32 {
     var size: u32 = 32;
@@ -472,5 +485,36 @@ pub fn checkV41Selections() bool {
         _ = c.fputs("V4.1 routed policy: concurrent route accepted an unsupported expert stride\n", c.__stderrp);
         return false;
     }
+    // The streaming exception must retain the cache-address path and its
+    // layer-specific preflight; ordinary cache misses cannot enter this scope.
+    f.batch.flags |= c.DS4_ROUTED_SSD;
+    f.batch.world = 1;
+    f.full_expert_bind = false;
+    f.resident_only = true;
+    f.resident_layer = 7;
+    q.layer = 7;
+    q.force_resident = false;
+    q.gate_type = iq2;
+    q.down_type = q2;
+    q.used_experts = 6;
+    q.gate_row_bytes = 1320;
+    q.gate_expert_bytes = 3041280;
+    q.down_row_bytes = 756;
+    q.down_expert_bytes = 3870720;
+    gate = Batch.mvArgs(&q, &f.batch, false);
+    down = Batch.mvArgs(&q, &f.batch, true);
+    const resident = choose(&q, &f, false, gate, down, q.total_experts * q.gate_expert_bytes, q.total_experts * q.down_expert_bytes) orelse return false;
+    if (!resident.slots_iq2 or resident.address or resident.table or resident.boundary()) return false;
+    f.resident_only = false;
+    if (parallelValid(&q, &f, false, resident)) return false;
+    f.resident_only = true;
+    f.resident_layer += 1;
+    if (parallelValid(&q, &f, false, resident)) return false;
+    f.resident_layer = q.layer;
+    q.gate_expert_bytes += 16;
+    if (parallelValid(&q, &f, false, resident)) return false;
+    q.gate_expert_bytes -= 16;
+    f.batch.cached[c.DS4_ROUTED_ADDR_Q2_SUM] = null;
+    if (parallelValid(&q, &f, false, resident)) return false;
     return true;
 }

@@ -27,6 +27,9 @@ void ds4_metal_single_get_facts(uint32_t total, ds4_metal_single_facts *out) {
         ds4_metal_routed_get_facts(total, &out->batch);
         out->parallel_pending = g_parallel_q8_pending;
         out->full_expert_bind = g_tp_full_expert_bind != 0;
+        const ds4_metal_selected_override *selected = ds4_metal_single_override_state();
+        out->resident_only = selected->resident_only;
+        out->resident_layer = selected->resident_layer;
         out->parallel_mode = g_parallel_ffn_mode;
         out->parallel_stage = g_parallel_ffn_stage;
 #define P(key, value)                                                                              \
