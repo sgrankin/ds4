@@ -225,13 +225,15 @@ groups. It preserves the generic kernel's four logical accumulation chains,
 reduction order and BF16 rounding before and after RoPE. The weight layout and
 number of weight bytes read do not change.
 
-Set `DS4_METAL_V41_SHORT_Q8_QUERY=1` to select this kernel for the exact shape
-in single-rank attention. An explicit `DS4_METAL_Q8_MV_NSG` setting retains the
-generic path. The flag does not enable deferred hyper-connection work or change
-batched prefill. It remains outside presets: the
+`resident-fast` and `persistent-fast` enable this kernel for the exact shape
+in single-rank attention; `persistent-packed` aliases `persistent-fast`. Set
+`DS4_METAL_V41_SHORT_Q8_QUERY=0` to disable it or `=1` to select it explicitly.
+Ordinary runtime and `context-fast` defaults remain unchanged. An explicit
+`DS4_METAL_Q8_MV_NSG` setting retains the generic path. The flag does not enable
+deferred hyper-connection work or change batched prefill. The
 [query experiment](../../../speed-bench/experiments/2026-11-03-short-q8-query/README.md)
 finds neutral 8K timing and a possible small 32K decode benefit whose size is
-uncertain. This is an unresolved performance result, not a numerical rejection.
+uncertain; tested logits match exactly.
 
 ### Resident expert substitution
 

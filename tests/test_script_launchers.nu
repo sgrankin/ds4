@@ -11,7 +11,7 @@ def --wrapped main [...args: string] {
         DS4_METAL_V41_RESIDENT_ROUTE_GAP DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS
         DS4_METAL_V41_RESIDENT_PREFILL_GAP DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS
         DS4_METAL_V41_ROUTE_SHARED_OVERLAP DS4_METAL_SELECTED_READBACK_SPIN_US
-        DS4_METAL_V41_STREAMING_ROPE_TABLE
+        DS4_METAL_V41_STREAMING_ROPE_TABLE DS4_METAL_V41_SHORT_Q8_QUERY
         DS4_AGENT_CONTEXT_SUFFIX_REUSE DS4_AGENT_CONTEXT_SUFFIX_PREROPE
         DS4_AGENT_CONTEXT_SUFFIX_FRESH_TAIL DS4_AGENT_CONTEXT_SUFFIX_RIGHT
         DS4_SERVER_CONTEXT_SUFFIX_REUSE DS4_SERVER_CONTEXT_SUFFIX_FRESH_TAIL
@@ -70,7 +70,7 @@ def main [] {
         DS4_METAL_V41_RESIDENT_PREFILL_GAP: '' DS4_V41_COMPRESSED_KV_F16: '1'
         DS4_V41_INDEX_SIMD: '' DS4_V41_INDEX_FP4: ''
         DS4_METAL_V41_ROUTE_SHARED_OVERLAP: '' DS4_METAL_SELECTED_READBACK_SPIN_US: ''
-        DS4_METAL_V41_STREAMING_ROPE_TABLE: ''
+        DS4_METAL_V41_STREAMING_ROPE_TABLE: '' DS4_METAL_V41_SHORT_Q8_QUERY: ''
     })
     assert equal $agent_result.exit_code 0 $agent_result.stderr
     let agent = $agent_result.stdout | from json
@@ -85,31 +85,35 @@ def main [] {
     assert equal $agent.env.DS4_METAL_V41_ROUTE_SHARED_OVERLAP '1'
     assert equal $agent.env.DS4_METAL_SELECTED_READBACK_SPIN_US '2000'
     assert equal $agent.env.DS4_METAL_V41_STREAMING_ROPE_TABLE '1'
+    assert equal $agent.env.DS4_METAL_V41_SHORT_Q8_QUERY '1'
     let blocking_result = (call $launcher ($leading ++ ['persistent-fast'] ++ $requested) {
         DS4_METAL_V41_ROUTE_SHARED_OVERLAP: '0' DS4_METAL_SELECTED_READBACK_SPIN_US: '0'
-        DS4_METAL_V41_STREAMING_ROPE_TABLE: '0'
+        DS4_METAL_V41_STREAMING_ROPE_TABLE: '0' DS4_METAL_V41_SHORT_Q8_QUERY: '0'
     })
     assert equal $blocking_result.exit_code 0 $blocking_result.stderr
     let blocking = $blocking_result.stdout | from json
     assert equal $blocking.env.DS4_METAL_V41_ROUTE_SHARED_OVERLAP '0'
     assert equal $blocking.env.DS4_METAL_SELECTED_READBACK_SPIN_US '0'
     assert equal $blocking.env.DS4_METAL_V41_STREAMING_ROPE_TABLE '0'
+    assert equal $blocking.env.DS4_METAL_V41_SHORT_Q8_QUERY '0'
     for profile in [context-fast resident-fast persistent-fast persistent-packed] {
         let packed_result = (call $launcher ($leading ++ [$profile] ++ $requested) {
-            DS4_V41_INDEX_FP4: '' DS4_V41_INDEX_SIMD: ''
+            DS4_V41_INDEX_FP4: '' DS4_V41_INDEX_SIMD: '' DS4_METAL_V41_SHORT_Q8_QUERY: ''
         })
         assert equal $packed_result.exit_code 0 $packed_result.stderr
         let packed = $packed_result.stdout | from json
         assert equal $packed.args ($defaults ++ $requested)
         assert equal $packed.env.DS4_V41_INDEX_FP4 '1' $profile
         assert equal $packed.env.DS4_V41_INDEX_SIMD '1' $profile
+        assert equal $packed.env.DS4_METAL_V41_SHORT_Q8_QUERY (if $profile == 'context-fast' { '' } else { '1' }) $profile
         let unpacked_result = (call $launcher ($leading ++ [$profile] ++ $requested) {
-            DS4_V41_INDEX_FP4: '0' DS4_V41_INDEX_SIMD: '0'
+            DS4_V41_INDEX_FP4: '0' DS4_V41_INDEX_SIMD: '0' DS4_METAL_V41_SHORT_Q8_QUERY: '0'
         })
         assert equal $unpacked_result.exit_code 0 $unpacked_result.stderr
         let unpacked = $unpacked_result.stdout | from json
         assert equal $unpacked.env.DS4_V41_INDEX_FP4 '0' $profile
         assert equal $unpacked.env.DS4_V41_INDEX_SIMD '0' $profile
+        assert equal $unpacked.env.DS4_METAL_V41_SHORT_Q8_QUERY '0' $profile
     }
     assert equal $agent.env.DS4_AGENT_CONTEXT_SUFFIX_PREROPE '1'
     assert equal $agent.env.DS4_AGENT_CONTEXT_SUFFIX_RIGHT '1'
@@ -127,6 +131,7 @@ def main [] {
         DS4_SERVER_RESPONSE_STORE_DIR: ($work | path join 'custom store/responses')
         DS4_METAL_DSV41_SOURCE: 'shader override with spaces.metal'
         DS4_V41_INDEX_FP4: '' DS4_V41_INDEX_SIMD: ''
+        DS4_METAL_V41_SHORT_Q8_QUERY: ''
     })
     assert equal $server_result.exit_code 0 $server_result.stderr
     let server = $server_result.stdout | from json
@@ -139,6 +144,7 @@ def main [] {
     assert equal $server.env.DS4_METAL_DSV41_SOURCE 'shader override with spaces.metal'
     assert equal $server.env.DS4_V41_INDEX_FP4 '1'
     assert equal $server.env.DS4_V41_INDEX_SIMD '1'
+    assert equal $server.env.DS4_METAL_V41_SHORT_Q8_QUERY '1'
     assert equal $server.env.DS4_SERVER_CONTEXT_BOUNDARY_POLICY 'anchors'
     assert equal $server.env.DS4_SERVER_CONTEXT_CAPTURE_IN_SWEEP '1'
     assert (($work | path join 'custom cache') | path exists)

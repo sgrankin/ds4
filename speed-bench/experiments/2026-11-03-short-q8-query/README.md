@@ -3,9 +3,9 @@
 The first specialized kernel produced identical logits in the measured 8K
 teacher-forced workload, but its five 32K timing pairs did not establish a
 whole-workload speedup. A second version also produced identical logits in that
-workload. Its 8K timing was neutral and its 32K timing was mixed. We retain
-the specialized kernel as an opt-in experiment without preset adoption; a
-small benefit remains unresolved.
+workload. Its 8K timing was neutral and its 32K timing was mixed. The resident
+fast presets now enable the specialized kernel; the size of any benefit remains
+uncertain.
 
 ## What changed
 
@@ -22,9 +22,10 @@ revision `5f34699b`, assigns adjacent rows to one SIMD group, reuses input
 loads for both rows, and needs no barrier for the pair. It retains the generic
 four-slot reduction and BF16 rounding boundaries. The [kernel](../../../src/metal/dsv41.metal)
 and [dispatch](../../../src/metal/v41_dispatch.zig) show the implementation:
-the specialized path is opt-in with `DS4_METAL_V41_SHORT_Q8_QUERY=1`, limited
+the specialized path is selected with `DS4_METAL_V41_SHORT_Q8_QUERY=1`, limited
 to this shape and single-rank attention, and yields to an explicit Q8 NSG
-override. The [focused test](../../../tests/test_deepseek41_metal.c) compares
+override. The resident fast presets set this flag by default, while an explicit
+`0` disables it; ordinary runtime and `context-fast` defaults are unchanged. The [focused test](../../../tests/test_deepseek41_metal.c) compares
 the two kernels bitwise at four positions in both frequency modes and checks
 dispatch and the override; run it with `--short-query`.
 The focused test passed for V2.
@@ -161,9 +162,12 @@ The paired-row refinement was not clearly faster than V1's separate profile
 observation of approximately 3.33–3.38 ms. The local `timeline-paired` files
 retain this diagnostic; it is not a comparative performance measurement.
 
-We retain the small specialized kernel as an opt-in experiment, without
-adopting it in a preset. Its benefit remains unresolved rather than established
-or rejected as slower. The `ds4-agent` and `ds4-server` builds passed.
+We initially left the small specialized kernel outside presets because its
+benefit was unresolved. On reassessment, we adopted it in `resident-fast` and
+`persistent-fast` (`persistent-packed` is an alias): exact tested logits, no
+meaningful measured regression and a small implementation support a low-risk
+engineering choice despite the uncertain gain. This decision uses the same
+evidence, not a new benchmark. The `ds4-agent` and `ds4-server` builds passed.
 
 ## Reproduction
 

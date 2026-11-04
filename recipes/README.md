@@ -76,7 +76,12 @@ records its decode gain and increased CPU use.
 The presets also reuse the per-token RoPE table during SSD-streamed decode;
 `DS4_METAL_V41_STREAMING_ROPE_TABLE=0` restores the inline rotation path.
 The [streaming RoPE experiment](../speed-bench/experiments/2026-11-03-stream-rope/README.md)
-records numerical checks and its separate decode measurements.
+records numerical checks and its separate decode measurements. Both resident
+presets also enable the short Q8 query kernel; explicit
+`DS4_METAL_V41_SHORT_Q8_QUERY=0` disables it. The [query experiment](../speed-bench/experiments/2026-11-03-short-q8-query/README.md)
+found exact tested logits and no meaningful measured regression, though the
+size of any speed benefit is uncertain. Ordinary runtime and `context-fast`
+defaults remain unchanged.
 
 All DeepSeek fast profiles default packed index storage and
 SIMD index scoring on; `persistent-packed` is an alias for `persistent-fast`.

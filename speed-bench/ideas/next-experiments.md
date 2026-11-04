@@ -2,9 +2,9 @@
 
 No experiment is currently selected. The one-hour
 [short Q8 query experiment](../experiments/2026-11-03-short-q8-query/README.md)
-is complete. The specialized kernel remains opt-in; presets are unchanged.
-Five-pair comparisons are neutral at 8K and suggest a small, uncertain 32K
-decode benefit. The [journal entry](../../docs/lab/journal/2026-11-03-short-q8-query.md)
+is complete. The resident fast presets enable the specialized kernel.
+Five-pair comparisons are neutral at
+8K and suggest a small, uncertain 32K decode benefit. The [journal entry](../../docs/lab/journal/2026-11-03-short-q8-query.md)
 records the decision.
 
 [Project direction and current status](../../docs/project.md) records the goals,
