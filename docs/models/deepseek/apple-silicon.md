@@ -315,6 +315,21 @@ Activation depends on the launcher policy:
   native routing.
 - Ordinary routing remains native without these opt-in policies.
 
+An experimental `DS4_METAL_V41_RESIDENT_GPU=1` path moves replacement selection
+onto the GPU when resident routing already has a positive gap, native weights
+and apply mode, as in the resident fast presets. The CPU first validates and pins
+every resident candidate; the GPU
+then replaces missing IDs with unique resident choices and executes them through
+the cache's existing address tables. It preserves native slot weights but drops
+the CPU policy's cap, gap and rank limits, including protection of the strongest
+expert. Ordinary routing/loading refreshes the cache every eight positions by
+default (`DS4_METAL_V41_RESIDENT_GPU_REFRESH`). This prototype is limited to
+eligible scalar IQ2/Q2 text decode; unsupported modes and layers with fewer than
+six residents retain the original path. It is not enabled by a preset. The
+[handoff experiment](../../../speed-bench/experiments/2026-11-04-resident-handoff/README.md)
+records its measured dependency change, quality costs and remaining performance
+work; [MoE orchestration](../../../src/engine/deepseek41/moe.zig) owns eligibility.
+
 ### Executing the selected experts
 
 Metal uses batched routed matrix multiplication to group rows by expert. The

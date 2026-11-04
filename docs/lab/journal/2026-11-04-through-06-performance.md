@@ -161,3 +161,22 @@ The variant and its temporary fixture were removed, with measured revisions
 preserved in the [report](../../../speed-bench/experiments/2026-11-04-output-b-rows/README.md).
 This is a decision about absent demonstrated benefit, not a claim that a small
 noisy difference proves a regression. The qualified preset package is unchanged.
+
+## Ninth question: remove the resident-routing host handoff
+
+We reused the cache's GPU address tables and added resident-only ID repair,
+with ordinary routing every eight positions to refresh the cache. The prototype
+pins every possible resident choice and preserves native coefficients, but
+relaxes the preset's substitution limits. Five-pair tests found neutral fresh
+decode and consistently slower warm decode at 32K; 8K total timing was neutral.
+Distribution drift increased at 32K, while both reasoning-enabled coding outputs
+passed the independent interval tests. A diagnostic trace allocation failure
+remains recorded separately from successful task completion.
+
+The profiles establish useful groundwork: the routing handoff shrank, and CPU
+sampling exposed redundant address-table writes. Keep the explicit opt-in for
+a bounded follow-up removing that preparation work, without promoting it to
+presets or replacing the installed binaries. The
+[report](../../../speed-bench/experiments/2026-11-04-resident-handoff/README.md)
+owns the samples, numerical tails and profile limitations. Measure the follow-up
+and the combined path against their respective baselines before judging benefit.

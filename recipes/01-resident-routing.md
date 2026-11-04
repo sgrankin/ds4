@@ -114,6 +114,22 @@ preserved cache capacity and measured logits but did not establish an append
 or whole-workload improvement. The selection policy and 4 GiB slab default
 remain unchanged.
 
+## Experimental GPU selection without the host handoff
+
+The [resident-handoff prototype](../speed-bench/experiments/2026-11-04-resident-handoff/README.md)
+repairs missing IDs on the GPU using only pinned resident experts, retaining
+native slot weights but relaxing the preset's substitution limits. Periodic
+ordinary routing refreshes the cache. It remains opt-in: five-pair tests do not
+establish a speed gain, and warm 32K decode is consistently slower. Fixed-history
+drift is measurable, while one coding task per arm passes the independent checks.
+
+The dependency profile nevertheless shows substantially less routing handoff,
+and CPU samples expose redundant address-table writes in the new preparation
+path. Retain this groundwork for a bounded follow-up removing those writes,
+then compare the combined path with the original baseline. The
+[Apple Silicon manual](../docs/models/deepseek/apple-silicon.md#resident-expert-substitution)
+owns activation and lifetime details; neither fast preset enables this prototype.
+
 ## What did not earn its complexity
 
 The [functional-expert map study](../speed-bench/experiments/resident-functional-hour2-20261003/README.md)
