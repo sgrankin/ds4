@@ -73,6 +73,11 @@ router readiness for up to 2 ms before blocking. Set
 `DS4_METAL_SELECTED_READBACK_SPIN_US=0` to retain overlap with blocking waits.
 The [routing overlap experiment](../speed-bench/experiments/2026-11-03-route-overlap/README.md)
 records its decode gain and increased CPU use.
+Both presets submit queued decode work after every eligible layer, giving the
+GPU ready work sooner. `DS4_METAL_V41_DECODE_FLUSH_LAYERS=2` restores the ordinary
+two-layer cadence; `0` disables periodic submissions. The
+[cadence comparison](../speed-bench/experiments/2026-11-04-decode-pass/flush-cadence.md)
+records five-pair decode improvements at 8K and 32K and the numerical checks.
 The presets also reuse the per-token RoPE table during SSD-streamed decode;
 `DS4_METAL_V41_STREAMING_ROPE_TABLE=0` restores the inline rotation path.
 The [streaming RoPE experiment](../speed-bench/experiments/2026-11-03-stream-rope/README.md)

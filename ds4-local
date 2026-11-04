@@ -157,6 +157,7 @@ def --wrapped main [...arguments: string] {
             DS4_METAL_V41_STREAMING_ROPE_TABLE: (env-or DS4_METAL_V41_STREAMING_ROPE_TABLE '1')
             DS4_METAL_V41_SHORT_Q8_QUERY: (env-or DS4_METAL_V41_SHORT_Q8_QUERY '1')
             DS4_METAL_V41_PACKED_F16_GATHER: (env-or DS4_METAL_V41_PACKED_F16_GATHER '1')
+            DS4_METAL_V41_DECODE_FLUSH_LAYERS: (env-or DS4_METAL_V41_DECODE_FLUSH_LAYERS '1')
         })
     }
     if $preset == 'persistent-fast' {

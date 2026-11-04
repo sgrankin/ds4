@@ -179,6 +179,17 @@ merely because the shared work is still running. See the
 [overlap experiment](../../../speed-bench/experiments/2026-11-03-route-overlap/README.md)
 for eligibility, measurements and quality limits.
 
+The resident fast presets also submit queued decode work after every eligible
+layer. This lets the GPU start the routed calculation while the CPU encodes
+the next layer, instead of retaining it until a later router submission.
+These periodic flushes neither wait for completion nor retire cache pins;
+router events and the final drain still enforce those lifetimes. Set
+`DS4_METAL_V41_DECODE_FLUSH_LAYERS=2` to restore the ordinary two-layer cadence,
+or `0` to disable periodic submissions. The ordinary runtime and `context-fast`
+defaults remain unchanged. The [cadence experiment](../../../speed-bench/experiments/2026-11-04-decode-pass/flush-cadence.md)
+qualifies the every-layer choice on single-Mac text decode at 8K and 32K;
+other hardware and TP performance have not been measured.
+
 The ordinary scalar path combines the Q and KV projections of one activation,
 then normalizes both results together. Suitable matrix kernels round their
 outputs to BF16 before writing them, saving a separate rounding pass. For
