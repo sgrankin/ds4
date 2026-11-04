@@ -41,6 +41,14 @@ profile-off latency measurements. Pause unrelated work during those measurements
 [Performance and benchmarking](../development/benchmarking.md) describes the existing
 context sweep and its scope.
 
+When reporting steady decode, specify which tokens were excluded. Dropping only
+the first token does not establish that resource initialization has finished.
+For changes to allocation or residency, retain the first-step latency and the
+complete generation window; use per-token diagnostics to investigate costs
+that move within that window. The [expert-slab experiment](../../speed-bench/experiments/2026-11-03-expert-slabs/README.md)
+shows why lower reported steady decode throughput does not necessarily mean
+that the complete decode takes longer.
+
 Run one heavy model job at a time under the existing
 [pressure guard](../../speed-bench/ideas/pressure_run.py), including commands
 that open a model for diagnostics. The guard rejects a second cooperating

@@ -1,13 +1,13 @@
 # Selected experiment
 
-**Completed 2026-11-03: profile the adopted RoPE path and identify the next attempt.**
+**Completed 2026-11-03: test expert-cache allocation granularity.**
 
-The [result report](../experiments/2026-11-03-post-rope-profile/README.md) localizes
-the slow warm append to a delay before routed expert GPU execution. Recommended
-next: compare 4,096 and 512 MiB expert-cache slabs at unchanged actual cache
-capacity, with five alternating samples per side and separate diagnostic
-profiles. This has not been run or adopted. A standalone short-Q8 query kernel
-is a separate later candidate for steady decode TPS.
+The [result report](../experiments/2026-11-03-expert-slabs/README.md) retains the
+4 GiB default after five alternating pairs at 8K and 32K. Smaller slabs shorten
+the first decode step, but do not establish an append or complete workload
+improvement. Numerical and cache-capacity checks passed. The standalone
+short-Q8 query kernel remains a separate, unstarted candidate for decode TPS;
+this completed experiment does not authorize starting it.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome

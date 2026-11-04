@@ -26,8 +26,10 @@ streaming decode. The resident fast presets enable it after numerical checks
 and five-pair comparisons at 8K and 32K. Warm-append timing variation remains
 unresolved; the measured benefit is in decode.
 The [follow-up dependency profile](lab/journal/2026-11-03-post-rope-profile.md)
-localizes a slow append to a delay before routed expert GPU work starts. Testing
-smaller expert-cache buffers is the next recommendation, not an adopted change.
+localizes a slow append to a delay before routed expert GPU work starts. The
+[slab-size experiment](lab/journal/2026-11-03-expert-slabs.md) did not establish
+an append or whole-workload improvement; the 4 GiB default remains. Smaller
+buffers provide a first-decode-step tradeoff, with exact measured logits.
 
 ## What we are building
 

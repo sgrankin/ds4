@@ -109,8 +109,10 @@ enables attention rotation reuse in the resident presets without changing the
 resident policy. That decode improvement has its own baseline and measurements.
 The [next dependency profile](../speed-bench/experiments/2026-11-03-post-rope-profile/README.md)
 finds that resident selected-prefill can still wait substantially before its
-expert kernels start. Smaller cache slabs are a proposed diagnostic; the
-selection policy and current buffer-size default are unchanged.
+expert kernels start. The [slab-size comparison](../speed-bench/experiments/2026-11-03-expert-slabs/README.md)
+preserved cache capacity and measured logits but did not establish an append
+or whole-workload improvement. The selection policy and 4 GiB slab default
+remain unchanged.
 
 ## What did not earn its complexity
 

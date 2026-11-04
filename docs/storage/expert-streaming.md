@@ -88,9 +88,12 @@ different granularity: selected-address prefill tells Metal which whole slab
 buffers its indirect expert addresses will read. Locking a slot against host
 paging does not establish the cost of making that buffer available to the GPU.
 This distinction matters when profiling a wait before expert kernels begin.
-The [November 3 dependency profile](../../speed-bench/experiments/2026-11-03-post-rope-profile/README.md)
-motivates testing smaller slabs; it does not establish that smaller allocations
-are faster. The default remains 4,096 MiB.
+The [slab-size comparison](../../speed-bench/experiments/2026-11-03-expert-slabs/README.md)
+tested 4,096 and 512 MiB at unchanged logical capacity. Smaller slabs shortened
+the first decode step but increased time in the remaining generation window;
+they did not reliably improve the complete measured workload or solve the slow
+append. The default remains 4,096 MiB. This is a measured latency tradeoff, not
+evidence that every operation benefits from smaller resources.
 
 ## M5 Max measurements
 
