@@ -132,8 +132,15 @@ does not establish an attribution speedup. The subsequent
 uses the resident-only path to overlap shared and routed experts. Its combined
 comparison improves fresh decode at 8K and 32K and warm decode at 8K, with neutral
 warm 32K timing. The added concurrency preserves all tested serial-route logits;
-the GPU substitution policy remains approximate. Keep the route experimental
-while measuring refresh cadence's speed–quality tradeoff. Detailed encoder
+the GPU substitution policy remains approximate. The
+[refresh study](../speed-bench/experiments/2026-11-04-resident-refresh/README.md)
+selects ordinary routing every sixteen positions for further agent-workload
+qualification. It improves fresh decode at 32K and over longer 8K continuations;
+warm gains are smaller and less certain. Fixed-history quality has a modest
+average cost with larger local tails. The four-position option has lower
+measured drift but unresolved timing because of a retained slow sample.
+Keep the route experimental until the selected point is qualified on agent work.
+Detailed encoder
 profiling changes batching and adds host overhead; its gap reduction is not a
 predicted ordinary-runtime saving. The
 [Apple Silicon manual](../docs/models/deepseek/apple-silicon.md#resident-expert-substitution)

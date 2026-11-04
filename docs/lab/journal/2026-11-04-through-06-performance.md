@@ -220,3 +220,21 @@ without preset or installed-binary promotion. The
 owns all samples and qualification. This is a useful follow-on from an initially
 neutral dependency change; the next bounded question is the refresh interval's
 speed–quality curve before choosing a preset configuration.
+
+## Twelfth question: choose a resident refresh interval
+
+With runtime and cache size fixed, we compared ordinary CPU routing with GPU
+resident selection that returns to the ordinary route every four, eight or
+sixteen positions. Five-pair timings and longer fixed-history quality checks
+make the tradeoff explicit. The sixteen-position option improves fresh decode
+at 32K and across 512-token continuations at 8K. Warm gains are smaller and
+less certain. The four-position option has less measured quality drift, but a
+retained slow timing sample leaves its fresh-speed estimate unresolved.
+
+Carry sixteen into recorded-agent and fresh coding qualification; do not change
+presets or installed binaries yet. The measured average quality cost is modest,
+but larger local tails and changed top choices remain visible. Timing and
+quality use different window lengths in the 32K sweep; the 8K follow-up matches
+them. The [report and tradeoff figure](../../../speed-bench/experiments/2026-11-04-resident-refresh/README.md)
+own all samples, variation and interpretation limits. Normal pressure and
+read-only system checks did not establish a cause for the timing outliers.
