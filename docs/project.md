@@ -25,6 +25,9 @@ extends the existing attention-head transform and per-token RoPE table to SSD
 streaming decode. The resident fast presets enable it after numerical checks
 and five-pair comparisons at 8K and 32K. Warm-append timing variation remains
 unresolved; the measured benefit is in decode.
+The [follow-up dependency profile](lab/journal/2026-11-03-post-rope-profile.md)
+localizes a slow append to a delay before routed expert GPU work starts. Testing
+smaller expert-cache buffers is the next recommendation, not an adopted change.
 
 ## What we are building
 

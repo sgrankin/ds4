@@ -107,6 +107,10 @@ still finds little exposed expert I/O in this workload. The subsequent
 [streaming RoPE experiment](../speed-bench/experiments/2026-11-03-stream-rope/README.md)
 enables attention rotation reuse in the resident presets without changing the
 resident policy. That decode improvement has its own baseline and measurements.
+The [next dependency profile](../speed-bench/experiments/2026-11-03-post-rope-profile/README.md)
+finds that resident selected-prefill can still wait substantially before its
+expert kernels start. Smaller cache slabs are a proposed diagnostic; the
+selection policy and current buffer-size default are unchanged.
 
 ## What did not earn its complexity
 

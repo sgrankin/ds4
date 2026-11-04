@@ -252,6 +252,20 @@ a single decode row does not necessarily benefit in the same way. See
 [routed dispatch](../../../src/metal/routed_batch.inc.m) and the
 [MoE kernels](../../../src/metal/moe.metal).
 
+In the small selected-address prefill path, the host reads router results,
+prepares the selected expert buffers and submits their computation. The current
+[routed backend](../../../src/metal/routed_batch.zig) waits for that computation
+before returning. This wait also protects cache slots: unlike the separate
+cached-IQ2 path, selected-address prefill does not mark those entries in flight.
+Removing the wait would require preventing those slots from being reused and
+keeping the temporary address and overflow buffers valid until the consuming
+command completes.
+Retaining a Metal buffer alone would not stop the CPU from overwriting a slot.
+The [expert-storage manual](../../storage/expert-streaming.md#how-metal-stores-cached-experts)
+explains the allocation granularity, and the
+[dependency profile](../../../speed-bench/experiments/2026-11-03-post-rope-profile/README.md)
+distinguishes GPU computation from the delay before it starts.
+
 Small batches take a different route from wide prefill. For two to eight
 resident MXFP4 rows, the V4.1 decoder can first identify repeated expert IDs,
 then reuse a gate/up weight load across rows that selected the same expert.

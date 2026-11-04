@@ -72,6 +72,26 @@ Leave expert preloading enabled for normal use. `--ssd-streaming-cold` and
 `--ssd-streaming-preload-experts N` are mainly useful for controlled measurements.
 See [benchmarking](../development/benchmarking.md) and the [release QA guide](../development/qualification/README.md).
 
+## How Metal stores cached experts
+
+The default Metal streaming cache groups expert slots into large buffers called
+slabs. Each slot holds an expert's gate, up and down weights; those three views
+share one Metal buffer and use different offsets. The
+[storage policy](../../src/metal/expert_storage.zig) targets 4,096 MiB per slab,
+rounded down to whole slots. `DS4_METAL_STREAMING_EXPERT_SLAB_MB` changes that
+allocation size independently of the requested expert-cache capacity. The last
+slab can be smaller. There is a 256-slab limit, so arbitrarily small slabs are
+not a way to preserve a large cache.
+
+The CPU locks populated slots with `mlock`. GPU resource declarations have a
+different granularity: selected-address prefill tells Metal which whole slab
+buffers its indirect expert addresses will read. Locking a slot against host
+paging does not establish the cost of making that buffer available to the GPU.
+This distinction matters when profiling a wait before expert kernels begin.
+The [November 3 dependency profile](../../speed-bench/experiments/2026-11-03-post-rope-profile/README.md)
+motivates testing smaller slabs; it does not establish that smaller allocations
+are faster. The default remains 4,096 MiB.
+
 ## M5 Max measurements
 
 On a 128 GB M5 Max, with automatic cache sizing and no speculative decoding:

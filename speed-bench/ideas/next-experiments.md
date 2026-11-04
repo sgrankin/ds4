@@ -1,11 +1,13 @@
 # Selected experiment
 
-**Completed 2026-11-03: per-token RoPE reuse in SSD streaming decode.**
+**Completed 2026-11-03: profile the adopted RoPE path and identify the next attempt.**
 
-The [result report](../experiments/2026-11-03-stream-rope/README.md) records
-five alternating pairs at both 8K and 32K plus focused and full-model numerical
-checks. The resident fast presets adopt the feature; the 32K gain is in decode,
-with whole-phase and short-context limits retained. No next experiment is selected.
+The [result report](../experiments/2026-11-03-post-rope-profile/README.md) localizes
+the slow warm append to a delay before routed expert GPU execution. Recommended
+next: compare 4,096 and 512 MiB expert-cache slabs at unchanged actual cache
+capacity, with five alternating samples per side and separate diagnostic
+profiles. This has not been run or adopted. A standalone short-Q8 query kernel
+is a separate later candidate for steady decode TPS.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome
