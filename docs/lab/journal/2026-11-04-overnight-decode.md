@@ -60,3 +60,18 @@ call the small mixed differences a regression. The prototype remains recoverable
 from its experiment commit; the active implementation returns to the adopted
 baseline. The [router report](../../../speed-bench/experiments/2026-11-04-decode-pass/router-simd.md)
 records all samples, the longer workload's slow append and the diagnostic limits.
+
+## Reuse the query's existing position coefficients
+
+The short Q8 query can read forward RoPE coefficients from the graph's current
+per-token table, preserving its projection, reduction and BF16 boundaries.
+This removes repeated trigonometry without allocating storage or adding a
+dispatch. The table is valid only within the scalar step that encoded it.
+
+Five alternating pairs at both 8K and 32K were neutral to slightly favorable,
+and all 768 tested full-model rows and continuation hashes matched. The separate
+profile did not show less exposed query work. We adopted the small reuse change
+in the resident fast presets with an explicit off switch, without attributing
+a specific speed gain to it. The [coefficient report](../../../speed-bench/experiments/2026-11-04-decode-pass/query-rope-table.md)
+owns the samples, numerical checks and limits. The next investigation moves
+to host work in the remaining routing gaps.

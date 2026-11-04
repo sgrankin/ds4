@@ -13,6 +13,7 @@ run's settings and arguments.
 | [Decode submission cadence](flush-cadence.md) | Adopt every-layer submission in the resident fast presets. Five pairs at each of 8K and 32K improve fresh and warm decode; tested logits remain exact, including a tighter cache. |
 | [Shared down during host routing](shared-down.md) | Adopted in the resident fast presets. Splitting the down/HC fusion gives a modest decode gain, with exact tested logits and no new command buffer or allocation. |
 | [SIMD exchanges in router sorting](router-simd.md) | Unadopted. Three five-pair batches, including longer decode, show no consistent throughput gain. This is not a demonstrated regression; the prototype remains in its experiment commit. |
+| [RoPE coefficients in the short query](query-rope-table.md) | Adopted as a small reuse change in the resident fast presets. Tested outputs are exact and timings are neutral to slightly favorable; the profile does not establish a shorter exposed query tail or a specific speed gain. |
 
 The session is still active. Results from different baselines are not additive;
 a final comparison will measure the adopted combination against the starting

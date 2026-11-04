@@ -45,6 +45,7 @@ def main [out: path, stage: string = 'timing', --flag: string = 'DS4_METAL_V41_P
                 DS4_METAL_V41_STREAMING_ROPE_TABLE: '1'
                 DS4_METAL_STREAMING_EXPERT_SLAB_MB: '4096'
                 DS4_METAL_V41_SHORT_Q8_QUERY: '1'
+                DS4_METAL_V41_SHORT_Q8_QUERY_TABLE: '1'
                 DS4_METAL_V41_PACKED_F16_GATHER: '1'
                 DS4_METAL_V41_DECODE_FLUSH_LAYERS: '1'
             } | upsert $flag (if $arm == 'candidate' { $candidate } else { $control }) | merge (if $stage == 'timeline' { {

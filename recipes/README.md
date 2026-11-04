@@ -94,6 +94,13 @@ found exact tested logits and no meaningful measured regression, though the
 size of any speed benefit is uncertain. Ordinary runtime and `context-fast`
 defaults remain unchanged.
 
+The resident presets also reuse the current token's RoPE coefficients in that
+short query; `DS4_METAL_V41_SHORT_Q8_QUERY_TABLE=0` restores inline trigonometry.
+The [coefficient comparison](../speed-bench/experiments/2026-11-04-decode-pass/query-rope-table.md)
+found exact tested outputs and neutral to slightly favorable timings. Its
+separate profile did not establish an exposed-query reduction, so no specific
+speed gain is attributed to this small reuse change.
+
 Both resident presets select half-precision gather for packed FP4 main KV;
 `DS4_METAL_V41_PACKED_F16_GATHER=0` restores F32 gather. The
 [comparison](../speed-bench/experiments/2026-11-04-decode-pass/f16-gather.md)

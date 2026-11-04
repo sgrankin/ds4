@@ -241,8 +241,8 @@ existing paths; prefill arithmetic is unchanged.
 The [streaming RoPE experiment](../../../speed-bench/experiments/2026-11-03-stream-rope/README.md)
 records full-model numerical checks and five-pair comparisons at 8K and 32K.
 The projection still performs its matrix multiplication and reads its weights.
-This table reuse does not change the separate query projection and forward
-RoPE; it removes only part of the previously profiled work.
+That optimization targets the attention output and index query. The separate
+query projection and its forward RoPE are described below.
 
 During decode, the generic Q8 matrix-vector kernel expands a 1,280-element
 activation into 32,768 query values for the attention heads, rounds them to
@@ -263,6 +263,23 @@ deferred hyper-connection work or change batched prefill. The
 [query experiment](../../../speed-bench/experiments/2026-11-03-short-q8-query/README.md)
 finds neutral 8K timing and a possible small 32K decode benefit whose size is
 uncertain; tested logits match exactly.
+
+The resident fast presets also let the short query read its forward-rotation
+coefficients from the same per-token table, using
+`DS4_METAL_V41_SHORT_Q8_QUERY_TABLE=1`. The table stores positive-angle cosine
+and sine; forward and inverse consumers choose their respective FMA formulas.
+The projection, reduction and both BF16 rounding boundaries stay unchanged.
+The scalar executor marks the table valid only after encoding it for the current
+position, and clears that marker at step boundaries. Its graph-owned storage
+survives streaming submissions, so reuse adds a buffer binding without an
+allocation or another coefficient-generation pass.
+
+An explicit `DS4_METAL_V41_SHORT_Q8_QUERY_TABLE=0`, an unavailable current table,
+or the short kernel's existing shape/NSG/TP exclusions retain the inline path.
+The [coefficient-reuse experiment](../../../speed-bench/experiments/2026-11-04-decode-pass/query-rope-table.md)
+found exact tested outputs and neutral to slightly favorable five-pair timings.
+Its diagnostic did not establish a shorter exposed query tail; this is a small,
+low-risk reuse of existing work, not a demonstrated kernel-speed improvement.
 
 ### Resident expert substitution
 
