@@ -1374,12 +1374,12 @@ kernel void kernel_dsv41_deferred_collapse_norm(
 // groups therefore cover 16 output rows, with no cross-group exchange.
 // Each row still has four logical NSG=4 accumulators: K tile 4 adds to slot 0,
 // then the original two reduction stages produce the BF16 projection value.
-kernel void kernel_dsv41_query_short_q8(
-        constant ds4_metal_args_mul_mv &mv [[buffer(0)]],
-        device const char *weight [[buffer(1)]], device const char *x [[buffer(2)]],
-        device float *q [[buffer(3)]], constant ds4_metal_args_mv_rope &rope [[buffer(4)]],
-        uint3 group [[threadgroup_position_in_grid]],
-        ushort lane [[thread_index_in_simdgroup]], ushort simd [[simdgroup_index_in_threadgroup]]) {
+template<bool table>
+static inline void dsv41_query_short_q8_body(
+        constant ds4_metal_args_mul_mv &mv,
+        device const char *weight, device const char *x,
+        device float *q, constant ds4_metal_args_mv_rope &rope,
+        device const float2 *tab, uint3 group, ushort lane, ushort simd) {
     const uint row = group.x * 16u + simd * 2u;
     device const block_q8_0 *wr = (device const block_q8_0 *)(weight + row * mv.nb01);
     device const block_q8_0 *wi = (device const block_q8_0 *)(weight + (row + 1u) * mv.nb01);
@@ -1416,13 +1416,44 @@ kernel void kernel_dsv41_query_short_q8(
     if (lane == 0) {
         const uint col = row % rope.width;
         if (col >= rope.width - 64u) {
-            const float theta = float(rope.start) * rope.frequencies[(col - (rope.width - 64u)) >> 1u];
-            const float c = precise::cos(theta);
-            const float sn = precise::sin(theta);
+            const uint pair = (col - (rope.width - 64u)) >> 1u;
+            float c, sn;
+            if (table) {
+                // The table generator ignores its inverse field and stores
+                // positive-angle (cos, sin); forward query uses sin unchanged.
+                // Its precise::sincos replaces the separate calls below, while
+                // the projection, both BF16 boundaries and FMA order stay fixed.
+                const float2 cs = tab[pair];
+                c = cs.x;
+                sn = cs.y;
+            } else {
+                const float theta = float(rope.start) * rope.frequencies[pair];
+                c = precise::cos(theta);
+                sn = precise::sin(theta);
+            }
             q[row] = ds4_bf16_round(fma(re, c, -(im * sn)));
             q[row + 1u] = ds4_bf16_round(fma(im, c, re * sn));
         } else { q[row] = re; q[row + 1u] = im; }
     }
+}
+
+kernel void kernel_dsv41_query_short_q8(
+        constant ds4_metal_args_mul_mv &mv [[buffer(0)]],
+        device const char *weight [[buffer(1)]], device const char *x [[buffer(2)]],
+        device float *q [[buffer(3)]], constant ds4_metal_args_mv_rope &rope [[buffer(4)]],
+        uint3 group [[threadgroup_position_in_grid]],
+        ushort lane [[thread_index_in_simdgroup]], ushort simd [[simdgroup_index_in_threadgroup]]) {
+    dsv41_query_short_q8_body<false>(mv, weight, x, q, rope, nullptr, group, lane, simd);
+}
+
+kernel void kernel_dsv41_query_short_q8_tab(
+        constant ds4_metal_args_mul_mv &mv [[buffer(0)]],
+        device const char *weight [[buffer(1)]], device const char *x [[buffer(2)]],
+        device float *q [[buffer(3)]], constant ds4_metal_args_mv_rope &rope [[buffer(4)]],
+        device const float2 *tab [[buffer(5)]],
+        uint3 group [[threadgroup_position_in_grid]],
+        ushort lane [[thread_index_in_simdgroup]], ushort simd [[simdgroup_index_in_threadgroup]]) {
+    dsv41_query_short_q8_body<true>(mv, weight, x, q, rope, tab, group, lane, simd);
 }
 
 kernel void kernel_dsv41_query_deferred_hc(

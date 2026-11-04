@@ -7,28 +7,27 @@ includes choosing the next bottleneck after each result; it does not authorize
 unrelated features or publishing main. Reserve the final slice for combined
 qualification and a concise account of adopted changes and unsuccessful attempts.
 
-**Current loop: use SIMD exchanges in the router's sort.** Started
-2026-11-04 02:00 Eastern, with a one-hour budget ending 03:00. Baseline
-`3e5f39f8` includes F16 gather, every-layer submission and shared-down overlap.
-The current profile records 40 router calls and about 1.49 ms of router
-duration per token, immediately before the selected-readback signal. That sum
-is not predicted savings. Adapt the existing hybrid SIMD bitonic sorter to
-replace intra-SIMD barriers while preserving the network's stage/comparison
-order, tied expert IDs, padding and weight normalization. Keep the original
-kernel as fallback and initially select only the 384-expert, top-six scalar
-shape with `DS4_METAL_V41_ROUTER_SIMD=1`.
+**Current loop: reuse RoPE coefficients in the short-query kernel.** Started
+2026-11-04 02:52 Eastern, with a one-hour budget ending 03:52. Baseline
+`a1900948` closes the router experiment and retains the three adopted decode
+changes. The current diagnostic trace shows about 0.9 ms of query work per
+token extending beyond compressed KV staging. This is not predicted savings.
 
-A focused Zig GPU fixture compares probabilities, ordered IDs and weights,
-including boundary ties and normalization-floor cases. Then use five
-alternating pairs at 32K and 8K, full-model numerical checks and a separate
-profile. Raw evidence lives under
-`.workspaces/overnight-decode-20261104/router-simd/`.
+Keep the existing short Q8 projection and its reduction, BF16 boundaries and
+rotation FMA order. Test reading the existing per-token coefficient table
+instead of recomputing sine and cosine for every query head. Enable only with
+`DS4_METAL_V41_SHORT_Q8_QUERY_TABLE=1` and a table valid for the current scalar
+position; preserve ordinary dispatch and unsupported-shape fallbacks. Check
+raw and compressed frequencies, position changes, scalar tails and full-model
+logits before five alternating timing pairs at 32K and 8K. Use a separate
+profile to see whether any kernel saving reaches the exposed query tail.
+Raw evidence belongs under
+`.workspaces/overnight-decode-20261104/query-rope-table/`.
 
-The [gather](../experiments/2026-11-04-decode-pass/f16-gather.md),
-[cadence](../experiments/2026-11-04-decode-pass/flush-cadence.md) and
-[shared-down](../experiments/2026-11-04-decode-pass/shared-down.md) loops are
-complete and adopted. The [session index](../experiments/2026-11-04-decode-pass/README.md)
-links completed results.
+The [session index](../experiments/2026-11-04-decode-pass/README.md) links the
+three adopted changes and the unadopted router experiment. The router's mixed
+small differences are not a demonstrated regression; its prototype remains
+recoverable in the recorded experiment revision.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome

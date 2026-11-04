@@ -288,11 +288,22 @@ pub const Attention = struct {
         }
         if (layer.attn_q_b.*.type == c.DS4_TENSOR_Q8_0) {
             var bytes: u64 = 0;
-            if (c.ds4_gguf_tensor_nbytes(layer.attn_q_b.*.type, layer.attn_q_b.*.dim[0], &bytes) and
-                c.ds4_gpu_dsv41_project_q(graph.q, self.model.map, self.model.size, layer.attn_q_b.*.abs_offset + @as(u64, graph.tp_rank) * query_width * bytes, @intCast(layer.attn_q_b.*.dim[0]), query_width, graph.qr, graph.pos, self.config.compress_ratios[index] != 0) != 0)
-            {
-                roped.* = true;
-                return true;
+            if (c.ds4_gguf_tensor_nbytes(layer.attn_q_b.*.type, layer.attn_q_b.*.dim[0], &bytes)) {
+                const table_setting = c.getenv("DS4_METAL_V41_SHORT_Q8_QUERY_TABLE");
+                // The scalar executor publishes validity only after encoding
+                // this position's table. The graph owns its storage across
+                // streaming commits; step boundaries clear the validity marker.
+                const table = table_setting != null and c.strcmp(table_setting, "1") == 0 and
+                    graph.rope_tab != null and graph.rope_tab_pos == graph.pos + 1;
+                const offset = layer.attn_q_b.*.abs_offset + @as(u64, graph.tp_rank) * query_width * bytes;
+                const projected = if (table)
+                    c.ds4_gpu_dsv41_project_q_tab(graph.q, self.model.map, self.model.size, offset, @intCast(layer.attn_q_b.*.dim[0]), query_width, graph.qr, graph.pos, self.config.compress_ratios[index] != 0, graph.rope_tab)
+                else
+                    c.ds4_gpu_dsv41_project_q(graph.q, self.model.map, self.model.size, offset, @intCast(layer.attn_q_b.*.dim[0]), query_width, graph.qr, graph.pos, self.config.compress_ratios[index] != 0);
+                if (projected != 0) {
+                    roped.* = true;
+                    return true;
+                }
             }
         }
         return op.matmulRows(graph.q, knownWeight(layer.attn_q_b), graph.qr, graph.tp_rank * query_width, query_width);

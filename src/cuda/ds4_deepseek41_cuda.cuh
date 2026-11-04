@@ -669,6 +669,11 @@ extern "C" int ds4_gpu_dsv41_attention_decode(ds4_gpu_tensor *, const void *, ui
                                               ds4_gpu_tensor *, uint32_t, uint32_t, uint32_t, uint32_t) { return 0; }
 extern "C" int ds4_gpu_dsv41_project_q(ds4_gpu_tensor *, const void *, uint64_t, uint64_t, uint32_t, uint32_t,
                                        const ds4_gpu_tensor *, uint32_t, bool) { return 0; }
+extern "C" int ds4_gpu_dsv41_project_q_tab(ds4_gpu_tensor *out, const void *map, uint64_t size, uint64_t offset,
+                                           uint32_t width, uint32_t outputs, const ds4_gpu_tensor *input,
+                                           uint32_t pos, bool compressed, const ds4_gpu_tensor *) {
+    return ds4_gpu_dsv41_project_q(out, map, size, offset, width, outputs, input, pos, compressed);
+}
 extern "C" int ds4_gpu_dsv41_attention_low(ds4_gpu_tensor *, const void *, uint64_t, uint64_t, uint32_t, uint32_t,
                                            uint32_t, ds4_gpu_tensor *, uint32_t, bool) { return 0; }
 extern "C" int ds4_gpu_dsv41_hc_block_input_rows(ds4_gpu_tensor *, ds4_gpu_tensor *, ds4_gpu_tensor *,

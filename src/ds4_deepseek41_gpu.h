@@ -297,6 +297,13 @@ int ds4_gpu_dsv41_query_deferred_hc(ds4_gpu_tensor *q, ds4_gpu_tensor *mix, ds4_
 int ds4_gpu_dsv41_project_q(ds4_gpu_tensor *out, const void *model_map, uint64_t model_size,
                             uint64_t weight_offset, uint32_t in_dim, uint32_t out_dim,
                             const ds4_gpu_tensor *x, uint32_t pos, bool compressed);
+/* Optional current-position table from rope_coeff_table for the eligible short
+ * Q8 query shape; otherwise uses the ordinary project_q path. The caller owns
+ * table validity and lifetime through completion of the queued projection. */
+int ds4_gpu_dsv41_project_q_tab(ds4_gpu_tensor *out, const void *model_map, uint64_t model_size,
+                                uint64_t weight_offset, uint32_t in_dim, uint32_t out_dim,
+                                const ds4_gpu_tensor *x, uint32_t pos, bool compressed,
+                                const ds4_gpu_tensor *tab);
 /* A bf16 Q8_0 matvec of one row expanded straight into the n_hc residual
  * streams; `add` (optional) joins the row before the expand. */
 int ds4_gpu_dsv41_matmul_expand_rows(ds4_gpu_tensor *out_hc, const void *model_map, uint64_t model_size,

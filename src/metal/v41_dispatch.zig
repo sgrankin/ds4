@@ -317,6 +317,12 @@ export fn ds4_gpu_dsv41_query_deferred_hc(q: ?*Tensor, mix: ?*Tensor, split: ?*T
     return dispatch("kernel_dsv41_query_deferred_hc", &.{ arg(0, &hc), arg(1, &split_args), buf(2, rs.view), buf(3, fw.view), buf(4, mx.view), buf(5, sw.view), buf(6, bw.view), buf(7, sp.view), buf(8, count.view), arg(9, &mv), buf(10, qw.view), buf(11, qrbuf.view), buf(12, qbuf.view), arg(13, &rope), buf(14, out.view), buf(15, nw.view), buf(16, no.view), buf(17, pr.view), arg(18, &kvargs), buf(19, kb.view), buf(20, K.at(cb.view, cache_offset)) }, .{ .x = 16 + 2 + 4096, .tx = 32, .ty = 8, .shared = 96 * 4 });
 }
 export fn ds4_gpu_dsv41_project_q(out: ?*Tensor, map: ?*const anyopaque, size: u64, offset: u64, width: u32, outputs: u32, input: ?*const Tensor, pos: u32, compressed: bool) c_int {
+    return projectQ(out, map, size, offset, width, outputs, input, pos, compressed, null);
+}
+export fn ds4_gpu_dsv41_project_q_tab(out: ?*Tensor, map: ?*const anyopaque, size: u64, offset: u64, width: u32, outputs: u32, input: ?*const Tensor, pos: u32, compressed: bool, tab: ?*const Tensor) c_int {
+    return projectQ(out, map, size, offset, width, outputs, input, pos, compressed, tab);
+}
+fn projectQ(out: ?*Tensor, map: ?*const anyopaque, size: u64, offset: u64, width: u32, outputs: u32, input: ?*const Tensor, pos: u32, compressed: bool, tab: ?*const Tensor) c_int {
     if (width == 0 or width % 32 != 0 or outputs == 0 or outputs % 512 != 0 or outputs > 65536 or pos >= 1048576 or !fits(input, @as(u64, width) * 4) or !fits(out, @as(u64, outputs) * 4) or c.ds4_gpu_init() == 0) return 0;
     const weight = K.model(map, size, offset, @as(u64, width / 32) * 34 * outputs) orelse return 0;
     defer weight.deinit();
@@ -333,6 +339,11 @@ export fn ds4_gpu_dsv41_project_q(out: ?*Tensor, map: ?*const anyopaque, size: u
         c.getenv("DS4_METAL_Q8_MV_NSG") == null and
         c.ds4_metal_attention_get_facts().flags & c.DS4_ATTN_TP_SINGLE != 0)
     {
+        if (fits(tab, 512)) {
+            const table = Buffer.tensor(tab);
+            defer table.deinit();
+            return dispatch("kernel_dsv41_query_short_q8_tab", &.{ arg(0, &mv), buf(1, weight.view), buf(2, src.view), buf(3, dst.view), arg(4, &rope), buf(5, K.at(table.view, if (compressed) 256 else 0)) }, .{ .x = 2048, .tx = 32, .ty = 8 });
+        }
         return dispatch("kernel_dsv41_query_short_q8", &.{ arg(0, &mv), buf(1, weight.view), buf(2, src.view), buf(3, dst.view), arg(4, &rope) }, .{ .x = 2048, .tx = 32, .ty = 8 });
     }
     const nsg: u32 = @intCast(c.ds4_zig_metal_env_u64("DS4_METAL_Q8_MV_NSG", if (c.ds4_metal_dense_facts(false) & c.DS4_DENSE_TP_TWO != 0) 2 else 4, 1, 8));
