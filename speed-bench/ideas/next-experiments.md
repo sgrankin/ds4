@@ -7,27 +7,26 @@ includes choosing the next bottleneck after each result; it does not authorize
 unrelated features or publishing main. Reserve the final slice for combined
 qualification and a concise account of adopted changes and unsuccessful attempts.
 
-**Current loop: reuse RoPE coefficients in the short-query kernel.** Started
-2026-11-04 02:52 Eastern, with a one-hour budget ending 03:52. Baseline
-`a1900948` closes the router experiment and retains the three adopted decode
-changes. The current diagnostic trace shows about 0.9 ms of query work per
-token extending beyond compressed KV staging. This is not predicted savings.
+**Current loop: profile host routing gaps and remove one preparation cost.**
+Started 2026-11-04 03:32 Eastern, with a one-hour budget ending 04:32. Baseline
+`a65c4fa6` includes the four adopted overnight changes. The latest GPU trace
+still shows about 5.6–5.9 ms/token uncovered between router completion and
+routed work. This interval is not all proven CPU execution time.
 
-Keep the existing short Q8 projection and its reduction, BF16 boundaries and
-rotation FMA order. Test reading the existing per-token coefficient table
-instead of recomputing sine and cosine for every query head. Enable only with
-`DS4_METAL_V41_SHORT_Q8_QUERY_TABLE=1` and a table valid for the current scalar
-position; preserve ordinary dispatch and unsupported-shape fallbacks. Check
-raw and compressed frequencies, position changes, scalar tails and full-model
-logits before five alternating timing pairs at 32K and 8K. Use a separate
-profile to see whether any kernel saving reaches the exposed query tail.
+Take a short CPU sample during steady 32K teacher decode, outside comparative
+timings. Separate event polling from command encoding, resource declarations
+and cache preparation. Select one concrete, simple cost from that evidence,
+implement it behind a flag, then use at least five alternating samples per side
+and appropriate quality/lifetime checks. If no useful host target emerges,
+record that outcome instead of expanding instrumentation indefinitely.
 Raw evidence belongs under
-`.workspaces/overnight-decode-20261104/query-rope-table/`.
+`.workspaces/overnight-decode-20261104/cpu-host-profile/`.
 
-The [session index](../experiments/2026-11-04-decode-pass/README.md) links the
-three adopted changes and the unadopted router experiment. The router's mixed
-small differences are not a demonstrated regression; its prototype remains
-recoverable in the recorded experiment revision.
+The [session index](../experiments/2026-11-04-decode-pass/README.md) links four
+adopted changes and the unadopted router experiment. Coefficient reuse is a
+small low-risk adoption with neutral to slightly favorable timings, not an
+established kernel-speed gain. The final combination still needs measurement
+against the session's starting configuration.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome

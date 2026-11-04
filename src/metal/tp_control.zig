@@ -299,11 +299,25 @@ pub fn signalSelected(output: *u64) bool {
 fn awaitSelected(sequence: u64) bool {
     const spin_us = c.ds4_zig_metal_env_u64("DS4_METAL_SELECTED_READBACK_SPIN_US", 0, 0, 5000);
     if (spin_us == 0) return c.ds4_metal_tp_wait_selected(sequence, 60000);
+    const clock_stride = c.ds4_zig_metal_env_u64("DS4_METAL_SELECTED_READBACK_CLOCK_STRIDE", 1, 1, 64);
     const start = c.ds4_metal_dense_now_ms();
     const spin_until = start + @as(f64, @floatFromInt(spin_us)) / 1000.0;
-    while (true) {
-        if (c.ds4_metal_tp_selected_value() >= sequence) return true;
-        if (c.ds4_metal_dense_now_ms() >= spin_until) break;
+    if (clock_stride == 1) {
+        // Keep the original loop free of a burst counter at the default stride.
+        while (true) {
+            if (c.ds4_metal_tp_selected_value() >= sequence) return true;
+            if (c.ds4_metal_dense_now_ms() >= spin_until) break;
+        }
+    } else {
+        // Readiness is checked on every poll; only clock reads are amortized.
+        // The deadline is coarse by at most one bounded burst, so the spin
+        // budget is not an exact elapsed-time cutoff.
+        while (true) {
+            for (0..@as(usize, @intCast(clock_stride))) |_| {
+                if (c.ds4_metal_tp_selected_value() >= sequence) return true;
+            }
+            if (c.ds4_metal_dense_now_ms() >= spin_until) break;
+        }
     }
     // A delayed GPU falls back to blocking under the same overall deadline.
     // The bound avoids monopolizing a host core on a stalled command buffer.

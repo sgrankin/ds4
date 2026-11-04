@@ -3,8 +3,8 @@
 # Compare one selected environment setting against the adopted decode baseline.
 # Timing is profile-free; quality and profile stages are diagnostics only.
 def main [out: path, stage: string = 'timing', --flag: string = 'DS4_METAL_V41_PACKED_F16_GATHER', --control: string = '0', --candidate: string = '1', --cache: string = '64GB', --frontier: int = 0, --only: string = 'both', --samples: int = 5, --tokens: int = 0] {
-    if $stage not-in ['timing' 'smoke' 'quality' 'profile' 'timeline'] {
-        error make {msg: 'Stage must be timing, smoke, quality, profile or timeline'}
+    if $stage not-in ['timing' 'smoke' 'quality' 'profile' 'timeline' 'cpu-profile'] {
+        error make {msg: 'Stage must be timing, smoke, quality, profile, timeline or cpu-profile'}
     }
     if $only not-in ['both' 'baseline' 'candidate'] {
         error make {msg: '--only must be both, baseline or candidate'}
@@ -56,12 +56,18 @@ def main [out: path, stage: string = 'timing', --flag: string = 'DS4_METAL_V41_P
                 let logits = $dest | path join 'logits'
                 mkdir $logits
                 [--dump-frontier-logits-dir $logits --dump-decode-logits-dir $logits]
+            } else if $stage == 'cpu-profile' {
+                # One frontier marker lets an external sampler start after
+                # prefill; no per-token dumps or GPU profiling are enabled.
+                let frontier_dir = $dest | path join 'frontier'
+                mkdir $frontier_dir
+                [--dump-frontier-logits-dir $frontier_dir]
             } else { [] }
             let args = [
                 --model gguf/DeepSeek-V4.1-Flash-1017-IQ2_XXS-Q2_K-imatrix.gguf
                 --metal --ssd-streaming --ssd-streaming-cache-experts $cache
                 --prompt-file speed-bench/promessi_sposi.txt
-                --ctx-start ($frontier | into string) --ctx-max (($frontier + 512) | into string)
+                --ctx-start ($frontier | into string) --ctx-max ((if $stage == 'cpu-profile' { $frontier } else { $frontier + 512 }) | into string)
                 --step-incr 512 --ctx-alloc 40960 --prefill-chunk 8192
                 --gen-tokens ($tokens | into string) --teacher-forced-decode
                 --csv ($dest | path join 'timings.csv')
