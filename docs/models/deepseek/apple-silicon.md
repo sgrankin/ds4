@@ -417,6 +417,16 @@ These are launcher policies rather than universal engine defaults. See the
 [main KV recipe](../../../recipes/15-packed-main-kv.md) and
 [index recipe](../../../recipes/14-packed-index-cache.md) for the settings.
 
+For selected rows from packed FP4 main owners, the resident fast presets gather
+directly to half-precision scratch; the engine default gathers to F32 and then
+converts during attention staging. Half input can enable fused staging and
+padding, but native V4.1 retains vector attention and the ordinary or
+heads-transform reduction. Both scratch allocations remain, and persistent KV
+and checkpoint formats are unchanged. Set `DS4_METAL_V41_PACKED_F16_GATHER=0`
+to use F32 gather. This differs from the existing F16-storage gather default;
+the [FP4-owner comparison](../../../speed-bench/experiments/2026-11-04-decode-pass/f16-gather.md)
+records its measured behavior and quality limits.
+
 Fresh publication keeps the scale computed by the quantizer. Importing an old
 expanded main cache is different: only decoded values remain, and recomputing
 the original scale is not generally idempotent. The legacy repacker preserves

@@ -83,6 +83,12 @@ found exact tested logits and no meaningful measured regression, though the
 size of any speed benefit is uncertain. Ordinary runtime and `context-fast`
 defaults remain unchanged.
 
+Both resident presets select half-precision gather for packed FP4 main KV;
+`DS4_METAL_V41_PACKED_F16_GATHER=0` restores F32 gather. The
+[comparison](../speed-bench/experiments/2026-11-04-decode-pass/f16-gather.md)
+found exact tested logits and neutral to slightly favorable latency at 8K and
+32K. This is separate from the F16-storage gather default.
+
 All DeepSeek fast profiles default packed index storage and
 SIMD index scoring on; `persistent-packed` is an alias for `persistent-fast`.
 Explicit `DS4_V41_INDEX_FP4=0` or

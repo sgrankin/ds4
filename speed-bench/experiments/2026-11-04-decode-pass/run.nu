@@ -7,7 +7,7 @@ def main [out: path, stage: string = 'timing', --flag: string = 'DS4_METAL_V41_P
         error make {msg: 'Stage must be timing, smoke, quality, profile or timeline'}
     }
     if $only not-in ['both' 'baseline' 'candidate'] {
-        error make {msg: '--only must be both, baseline or short'}
+        error make {msg: '--only must be both, baseline or candidate'}
     }
     mkdir $out
     for key in ($env | columns | where {|key| $key | str starts-with 'DS4'}) { hide-env $key }

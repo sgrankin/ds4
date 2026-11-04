@@ -93,11 +93,16 @@ model-cache roundtrip alongside the leaf test when porting this technique.
 
 ## Consumers and bounded working storage
 
-Scalar attention decodes only selected rows into the existing F32 scratch and
-uses its existing attention algorithm by default. The separate
-`DS4_METAL_V41_PACKED_F16_GATHER=1` experiment selects half scratch and its
-eligible packed/M5 attention path. It is not needed for physical main packing;
-the existing F16-storage default remains unchanged.
+Scalar attention decodes only selected rows into scratch. The engine default
+for packed FP4 main storage uses F32 scratch; `resident-fast` and
+`persistent-fast` select half scratch with `DS4_METAL_V41_PACKED_F16_GATHER=1`.
+The half path can fuse staging and padding; native V4.1 still uses vector
+attention and the ordinary or heads-transform reduction. Set the flag to `0`
+to restore F32 gather. This choice does not alter stored KV or checkpoints.
+The existing F16-storage default is separate and remains unchanged. The
+[FP4-owner gather comparison](../speed-bench/experiments/2026-11-04-decode-pass/f16-gather.md)
+found exact tested logits and neutral to slightly favorable latency at 8K and
+32K; earlier F16-storage qualification does not establish this combination.
 
 Small compressed batches decode into the existing FlashAttention F16 staging
 buffer. Indexed batches decode four values at a time directly into existing
