@@ -3024,15 +3024,16 @@ static int check_tp_attention(void) {
 /* Compare the packed half4 attention reader with independently expanded rows.
  * The raw ring and selected IDs are identical for every comparison, including
  * the row order chosen by split decode or chronological prefill. */
-static int check_fp4_attention(bool benchmark) {
+static int check_fp4_attention(uint32_t benchmark_rows) {
     enum { D = 512, H = 64, K = 512, PACKED_ROW = 288 };
+    const bool benchmark = benchmark_rows != 0;
     const struct fp4_attention_case { uint32_t rows, heads; bool quality; } checks[] = {
         {1, 64, false}, /* Split decode. */
         {1, 32, true},  /* Sixteen-row decode staging. */
         {2, 64, false}, {33, 32, false}, /* Dual-head prefill. */
         {2, 32, true}, /* Ordinary eight-head prefill. */
         {3, 64, false} /* Start-zero prefill: raw windows of one to three rows. */
-    }, bench[] = {{2048, 64, false}};
+    }, bench[] = {{benchmark_rows, 64, false}};
     const struct fp4_attention_case *cases = benchmark ? bench : checks;
     const size_t case_count = benchmark ? sizeof(bench) / sizeof(*bench) : sizeof(checks) / sizeof(*checks);
     const uint32_t comp_rows = benchmark ? 8192 : 640;
@@ -3578,9 +3579,24 @@ int main(int argc, char **argv) {
         return ok ? 0 : 1;
     }
 #ifdef __APPLE__
-    if (argc == 2 && (!strcmp(argv[1], "--fp4-attention") ||
-                      !strcmp(argv[1], "--fp4-attention-bench"))) {
-        const int ok = ds4_gpu_init() && check_fp4_attention(!strcmp(argv[1], "--fp4-attention-bench"));
+    if (argc >= 2 && (!strcmp(argv[1], "--fp4-attention") ||
+                     !strcmp(argv[1], "--fp4-attention-bench"))) {
+        const bool benchmark = !strcmp(argv[1], "--fp4-attention-bench");
+        uint32_t rows = benchmark ? 2048 : 0;
+        if (argc > (benchmark ? 3 : 2)) {
+            fprintf(stderr, "usage: %s --fp4-attention | --fp4-attention-bench [rows]\n", argv[0]);
+            return 1;
+        }
+        if (benchmark && argc == 3) {
+            char *end;
+            const long parsed = strtol(argv[2], &end, 10);
+            if (*end || parsed < 2 || parsed > 8192) {
+                fprintf(stderr, "FP4 attention benchmark rows must be between 2 and 8192\n");
+                return 1;
+            }
+            rows = (uint32_t)parsed;
+        }
+        const int ok = ds4_gpu_init() && check_fp4_attention(rows);
         ds4_gpu_cleanup();
         return ok ? 0 : 1;
     }
