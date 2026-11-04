@@ -12,8 +12,12 @@ workloads, not a general autonomous-agent speed claim. The
 owns measurements, variation and qualification; the
 [session journal](lab/journal/2026-11-04-overnight-decode.md) explains the decisions.
 Final numerical and reasoning-enabled coding checks passed. The tested agent,
-server and benchmark binaries are installed locally; no follow-on experiment
-is selected.
+server and benchmark binaries are installed locally. The user authorized a new
+decode and prefill optimization session through 2026-11-06 18:31 Eastern,
+starting from published revision `364ceeab`. The
+[experiment queue](../speed-bench/ideas/next-experiments.md) owns its current
+one-hour question; the [session journal](lab/journal/2026-11-04-through-06-performance.md)
+records decisions. New changes remain local until another push request.
 The organized manuals and lab journal are available under the [documentation index](README.md).
 The initial adaptation omitted upstream functionality; the completion audit
 covered all 118 commits and integrated the missing paths. All upstream

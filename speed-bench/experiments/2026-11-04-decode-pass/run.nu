@@ -2,7 +2,7 @@
 # Run from the repository root under speed-bench/ideas/pressure_run.py.
 # Compare one selected environment setting against the adopted decode baseline.
 # Timing is profile-free; quality and profile stages are diagnostics only.
-def main [out: path, stage: string = 'timing', --flag: string = 'DS4_METAL_V41_PACKED_F16_GATHER', --control: string = '0', --candidate: string = '1', --cache: string = '64GB', --frontier: int = 0, --only: string = 'both', --samples: int = 5, --tokens: int = 0] {
+def main [out: path, stage: string = 'timing', --flag: string = 'DS4_METAL_V41_PACKED_F16_GATHER', --control: string = '0', --control-unset, --candidate: string = '1', --cache: string = '64GB', --frontier: int = 0, --only: string = 'both', --samples: int = 5, --tokens: int = 0] {
     if $stage not-in ['timing' 'smoke' 'quality' 'profile' 'timeline' 'cpu-profile'] {
         error make {msg: 'Stage must be timing, smoke, quality, profile, timeline or cpu-profile'}
     }
@@ -53,6 +53,11 @@ def main [out: path, stage: string = 'timing', --flag: string = 'DS4_METAL_V41_P
                 DS4_METAL_CB_TIMES: '1'
                 DS4_METAL_ENCODER_TIMELINE: ($dest | path join 'timeline.txt')
             } } else { {} })
+            # Presence-based flags are enabled even by "0". Their control
+            # must actually omit the variable; record the resulting map below.
+            let settings = if $arm == 'baseline' and $control_unset {
+                $settings | reject $flag
+            } else { $settings }
             let quality_args = if $stage == 'quality' {
                 let logits = $dest | path join 'logits'
                 mkdir $logits
