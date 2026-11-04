@@ -2,7 +2,7 @@
 # Run from the repository root under speed-bench/ideas/pressure_run.py.
 # Compare one selected environment setting against the adopted decode baseline.
 # Timing is profile-free; quality and profile stages are diagnostics only.
-def main [out: path, stage: string = 'timing', --flag: string = 'DS4_METAL_V41_PACKED_F16_GATHER', --control: string = '0', --control-unset, --candidate: string = '1', --cache: string = '64GB', --frontier: int = 0, --prefill-gap: string = '.90', --only: string = 'both', --samples: int = 5, --tokens: int = 0] {
+def main [out: path, stage: string = 'timing', --flag: string = 'DS4_METAL_V41_PACKED_F16_GATHER', --control: string = '0', --control-unset, --candidate: string = '1', --cache: string = '64GB', --frontier: int = 0, --prefill-gap: string = '.90', --only: string = 'both', --samples: int = 5, --tokens: int = 0, --extra-settings: path] {
     if $stage not-in ['timing' 'smoke' 'quality' 'profile' 'timeline' 'cpu-profile'] {
         error make {msg: 'Stage must be timing, smoke, quality, profile, timeline or cpu-profile'}
     }
@@ -11,6 +11,7 @@ def main [out: path, stage: string = 'timing', --flag: string = 'DS4_METAL_V41_P
     }
     mkdir $out
     for key in ($env | columns | where {|key| $key | str starts-with 'DS4'}) { hide-env $key }
+    let extra = if $extra_settings == null { {} } else { open $extra_settings }
     let common = {
         DS4_V41_COMPRESSED_KV_FP4: '1', DS4_V41_INDEX_FP4: '1', DS4_V41_INDEX_SIMD: '1'
         DS4_METAL_V41_SELECTED_TILE: '64', DS4_METAL_V41_SELECTED_LIMIT: '1024'
@@ -51,7 +52,7 @@ def main [out: path, stage: string = 'timing', --flag: string = 'DS4_METAL_V41_P
                 DS4_METAL_V41_DECODE_FLUSH_LAYERS: '1'
                 DS4_METAL_V41_PREFILL_ATTN_RB4: '1'
                 DS4_METAL_V41_ATTN_UNIT_SCALE: '1'
-            } | upsert $flag (if $arm == 'candidate' { $candidate } else { $control }) | merge (if $stage == 'timeline' { {
+            } | merge $extra | upsert $flag (if $arm == 'candidate' { $candidate } else { $control }) | merge (if $stage == 'timeline' { {
                 DS4_METAL_CB_TIMES: '1'
                 DS4_METAL_ENCODER_TIMELINE: ($dest | path join 'timeline.txt')
             } } else { {} })

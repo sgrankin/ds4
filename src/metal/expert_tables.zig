@@ -118,6 +118,12 @@ pub const Tables = struct {
         if (count < 6) return count;
         if (publish and (self.state.cache_batch_seq == 0 and self.state.cache_owned_seq == 0)) return 0;
         if (!self.ensureAddresses(input.layer)) return 0;
+        const reuse_setting = c.getenv("DS4_METAL_V41_RESIDENT_GPU_REUSE_ADDR");
+        const reuse_addresses = reuse_setting != null and std.mem.eql(u8, std.mem.span(reuse_setting), "1");
+        // Cache.install publishes addresses before valid; Cache.clear zeros
+        // them before retiring storage. With stable model/streaming settings,
+        // matching residents already have their addresses. The GPU mask excludes
+        // other slots, so reuse skips their writes too; every resident stays pinned.
         // The GPU may choose any published resident. Pin the whole set before
         // encoding it: later demand loads may evict other entries, but these
         // slots and address values survive until the existing completion fence.
@@ -125,11 +131,14 @@ pub const Tables = struct {
         var index: u32 = 0;
         for (mask, 0..) |value, expert| {
             if (value == 0) {
-                if (publish) self.zeroAddress(input.layer, @intCast(expert));
+                if (publish and !reuse_addresses) self.zeroAddress(input.layer, @intCast(expert));
                 continue;
             }
             const entry = &self.state.entries[input.layer][expert];
-            if (publish and (!self.setAddress(input.layer, @intCast(expert), entry.gate_buffer, entry.gate_inner, entry.up_buffer, entry.up_inner, entry.down_buffer, entry.down_inner) or !cache.mark(entry))) return 0;
+            if (publish) {
+                if (!reuse_addresses and !self.setAddress(input.layer, @intCast(expert), entry.gate_buffer, entry.gate_inner, entry.up_buffer, entry.up_inner, entry.down_buffer, entry.down_inner)) return 0;
+                if (!cache.mark(entry)) return 0;
+            }
             if (entries != null) entries[index] = entry;
             index += 1;
         }
