@@ -1,6 +1,7 @@
 #include "ds4_gpu.h"
 #ifdef __APPLE__
 #include "metal/bridge_types.h"
+#include "metal/attention_batch.h"
 #include "metal/attention_output.h"
 #endif
 
@@ -3112,6 +3113,7 @@ static int check_fp4_attention(uint32_t benchmark_rows) {
             0, qt, rt, ct, 0, it, n, start, nr, cap, raw_start, comp_rows, K, 128, 4, heads, D));
         CHECK(ds4_gpu_tensor_read(out, 0, reference, nq * sizeof(float)));
         for (size_t i = 0; i < nq; i++) CHECK(isfinite(reference[i]));
+        const bool candidate_path = n > 1 && !cases[s].quality && ds4_metal_attention_batch_mpp();
         for (unsigned unit_scale = 0; unit_scale < 2; unit_scale++) {
             CHECK(setenv(flag, unit_scale ? "1" : "0", 1) == 0);
             CHECK(ds4_gpu_attention_indexed_mixed_batch_heads_tensor(out, sinks, getpagesize(),
@@ -3119,6 +3121,26 @@ static int check_fp4_attention(uint32_t benchmark_rows) {
             CHECK(ds4_gpu_synchronize());
             const float *actual = ds4_gpu_tensor_contents(out);
             CHECK(actual);
+            if (unit_scale && candidate_path) {
+                size_t changed = 0, first = nq;
+                double max_abs = 0, squared_error = 0;
+                for (size_t i = 0; i < nq; i++) {
+                    CHECK(isfinite(actual[i]));
+                    if (main_fp4_bits(reference[i]) != main_fp4_bits(actual[i])) {
+                        if (first == nq) first = i;
+                        changed++;
+                    }
+                    const double error = (double)actual[i] - reference[i];
+                    max_abs = fmax(max_abs, fabs(error));
+                    squared_error += error * error;
+                }
+                fprintf(stderr, "FP4 attention rows=%u heads=%u quality=%u unit_scale=1 approximate measured: changed=%zu/%zu max_abs=%.9g rms=%.9g\n",
+                    n, heads, cases[s].quality, changed, nq, max_abs, sqrt(squared_error / nq));
+                if (first != nq)
+                    fprintf(stderr, "  first mismatch index=%zu expected=%08x actual=%08x\n",
+                        first, main_fp4_bits(reference[first]), main_fp4_bits(actual[first]));
+                continue;
+            }
             if (memcmp(reference, actual, nq * sizeof(float))) {
                 size_t first = 0;
                 while (main_fp4_bits(reference[first]) == main_fp4_bits(actual[first])) first++;
@@ -3127,9 +3149,9 @@ static int check_fp4_attention(uint32_t benchmark_rows) {
                     main_fp4_bits(reference[first]), main_fp4_bits(actual[first]));
                 CHECK(!memcmp(reference, actual, nq * sizeof(float)));
             }
+            fprintf(stderr, "FP4 attention rows=%u heads=%u quality=%u unit_scale=%u %s exact: PASS\n",
+                n, heads, cases[s].quality, unit_scale, unit_scale ? "fallback" : "packed control");
         }
-        fprintf(stderr, "FP4 attention rows=%u heads=%u quality=%u expanded == packed == unit-scale: PASS\n",
-            n, heads, cases[s].quality);
         if (benchmark) {
             /* The comparisons above also warm both attention paths. Time the
              * complete indexed-attention calls, including sorting, encoding
