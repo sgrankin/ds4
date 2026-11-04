@@ -1673,13 +1673,13 @@ static int check_output_b_rows4(void) {
     CHECK(!memcmp(ds4_gpu_tensor_contents(out[0]), ds4_gpu_tensor_contents(out[1]), VALUES * 4));
     fprintf(stderr, "output-B rows4 add-input fallback: bitwise PASS\n");
 
-    /* Warm both no-add paths again after the NSG2/fallback checks. Each timed
-     * sample includes encoding, submission and completion of CALLS projections
-     * in one command batch, with kernel counters disabled. */
+    /* Warm both no-add paths again after the NSG2/fallback checks, matching
+     * the timed batch size. Each timed sample includes encoding, submission and
+     * completion of CALLS projections, with kernel counters disabled. */
     ds4_gpu_test_set_flags(0);
     for (unsigned mode = 0; mode < 2; mode++) {
         CHECK(setenv(flag, mode ? "1" : "0", 1) == 0 && ds4_gpu_begin_commands());
-        for (unsigned repeat = 0; repeat < 8; repeat++)
+        for (unsigned repeat = 0; repeat < CALLS; repeat++)
             CHECK(ds4_gpu_dsv41_matmul_expand_rows(out[mode], model, wb, 0, IN, OUT, x, NULL, res, split, 4, 1));
         CHECK(ds4_gpu_end_commands() && ds4_gpu_synchronize());
     }

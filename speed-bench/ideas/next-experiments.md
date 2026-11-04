@@ -26,8 +26,10 @@ more accumulators and 512 instead of 256 bytes of reduction scratch. The numeric
 opt-in is `DS4_METAL_V41_OUTPUT_B_ROWS4`; other shapes and multirow work retain
 their existing paths. First use a bounded fixture, then five alternating samples
 at 8K and 32K, full-logit checks and a separate activation profile. Retain all
-samples and judge any small difference against variation. Do not change other
-kernel geometries during this experiment.
+samples and judge any small difference against variation. Before rejecting neutral total timing, compare the before/after profiles for
+reduced output-B work, changed overlap or a newly exposed stall. Carry useful
+groundwork into a separately measured follow-up if that evidence warrants it.
+Do not change other kernel geometries during this experiment.
 
 Raw evidence belongs under `.workspaces/hillclimb-20261104/08-decode-dependency/`.
 Only preparation that serves this selected decode outcome may run in parallel.

@@ -28,7 +28,13 @@ with alternating order. Retain every sample, including first runs, and report
 absolute values and variation as well as any relative change. Inspect paired
 changes and order effects; a small slowdown within noisy variation is not by
 itself a reason to reject a change. One-off timings are useful for smoke checks
-or diagnosis, not comparative speed claims. The [index layout follow-up](../../speed-bench/experiments/index-five-samples-20261027/README.md)
+or diagnosis, not comparative speed claims. If a change targets a stall or
+dependency but total time is neutral, compare the profiles before rejecting it.
+It may shorten the intended work and expose a different bottleneck. Preserve
+such useful groundwork for a bounded follow-up, then measure the combined
+changes against the original baseline. Distinguish an observed shift in work
+or waiting from a speculative future benefit; neutral timing alone establishes
+neither failure nor an unlocked improvement. The [index layout follow-up](../../speed-bench/experiments/index-five-samples-20261027/README.md)
 shows how an apparent slowdown can disappear in an alternating comparison.
 
 Define the timed scope before running. Startup, bootstrap and application
