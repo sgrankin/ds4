@@ -3030,7 +3030,8 @@ static int check_fp4_attention(bool benchmark) {
         {1, 64, false}, /* Split decode. */
         {1, 32, true},  /* Sixteen-row decode staging. */
         {2, 64, false}, {33, 32, false}, /* Dual-head prefill. */
-        {2, 32, true}  /* Ordinary eight-head prefill. */
+        {2, 32, true}, /* Ordinary eight-head prefill. */
+        {3, 64, false} /* Start-zero prefill: raw windows of one to three rows. */
     }, bench[] = {{2048, 64, false}};
     const struct fp4_attention_case *cases = benchmark ? bench : checks;
     const size_t case_count = benchmark ? sizeof(bench) / sizeof(*bench) : sizeof(checks) / sizeof(*checks);
@@ -3075,8 +3076,10 @@ static int check_fp4_attention(bool benchmark) {
     CHECK(ct && pt);
     for (size_t s = 0; s < case_count; s++) {
         const uint32_t n = cases[s].rows, heads = cases[s].heads;
-        const uint32_t nr = n + 127, cap = nr + 7, raw_start = 11;
-        const uint32_t start = benchmark ? 24576 : 2301;
+        const bool initial = !benchmark && n == 3;
+        const uint32_t nr = initial ? n : n + 127, cap = nr + 7;
+        const uint32_t raw_start = initial ? cap - 2 : 11;
+        const uint32_t start = initial ? 0 : benchmark ? 24576 : 2301;
         const size_t nq = (size_t)n * heads * D;
         float *q = malloc(nq * sizeof(float));
         float *raw = malloc((size_t)cap * D * sizeof(float));
