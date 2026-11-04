@@ -50,7 +50,11 @@ export fn ds4_gpu_dsv41_router_rows(selected: ?*Tensor, weights: ?*Tensor, probs
     const args = extern struct { n_expert: u32, top_k: u32, has_bias: u32, scale: f32 }{ .n_expert = experts, .top_k = top_k, .has_bias = 1, .scale = scale };
     var nth: u32 = 1;
     while (nth < experts) nth *= 2;
-    return dispatch("kernel_dsv41_router_one", &.{ arg(0, &args), buf(1, l.view), buf(2, bias.view), buf(3, p.view), buf(4, s.view), buf(5, w.view) }, .{ .y = rows, .tx = nth, .shared = (nth * 12 + 15 + 128) & ~@as(u32, 15) });
+    const simd_setting = c.getenv("DS4_METAL_V41_ROUTER_SIMD");
+    const simd = experts == 384 and top_k == 6 and rows == 1 and
+        simd_setting != null and std.mem.eql(u8, std.mem.span(simd_setting), "1");
+    const name: [*:0]const u8 = if (simd) "kernel_dsv41_router_one_simd" else "kernel_dsv41_router_one";
+    return dispatch(name, &.{ arg(0, &args), buf(1, l.view), buf(2, bias.view), buf(3, p.view), buf(4, s.view), buf(5, w.view) }, .{ .y = rows, .tx = nth, .shared = (nth * 12 + 15 + 128) & ~@as(u32, 15) });
 }
 export fn ds4_gpu_dsv41_router_one(selected: ?*Tensor, weights: ?*Tensor, probs: ?*Tensor, logits: ?*const Tensor, map: ?*const anyopaque, size: u64, bias: u64, experts: u32, k: u32, scale: f32) c_int {
     return ds4_gpu_dsv41_router_rows(selected, weights, probs, logits, map, size, bias, experts, k, scale, 1);

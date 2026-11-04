@@ -774,6 +774,7 @@ pub fn build(b: *std.Build) void {
     }
     inline for (.{
         .{ "steering-hc-test", "test-metal-steering-hc", "tests/test_metal_steering_hc.zig", "tests/steering_gpu_api.h", "steering_gpu_c" },
+        .{ "router-simd-test", "test-metal-router-simd", "tests/test_metal_router_simd.zig", "src/ds4_gpu.h", "router_gpu_c" },
         .{ "session-steering-test", "test-session-steering", "tests/test_session_steering.zig", "src/ds4.h", "steering_c" },
         .{ "checkpoint-capture-test", "test-checkpoint-capture", "tests/test_checkpoint_capture.zig", "src/ds4.h", "checkpoint_capture_c" },
         .{ "dspark-checkpoint-test", "test-dspark-checkpoint", "tests/test_dspark_checkpoint.zig", "tests/checkpoint_api.h", "checkpoint_c" },
