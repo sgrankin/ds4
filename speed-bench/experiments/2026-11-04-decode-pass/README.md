@@ -14,6 +14,7 @@ run's settings and arguments.
 | [Shared down during host routing](shared-down.md) | Adopted in the resident fast presets. Splitting the down/HC fusion gives a modest decode gain, with exact tested logits and no new command buffer or allocation. |
 | [SIMD exchanges in router sorting](router-simd.md) | Unadopted. Three five-pair batches, including longer decode, show no consistent throughput gain. This is not a demonstrated regression; the prototype remains in its experiment commit. |
 | [RoPE coefficients in the short query](query-rope-table.md) | Adopted as a small reuse change in the resident fast presets. Tested outputs are exact and timings are neutral to slightly favorable; the profile does not establish a shorter exposed query tail or a specific speed gain. |
+| [Clock checks during event polling](clock-stride.md) | Unadopted. Fewer deadline checks did not improve decode; stride 64 was slower in all five warm 32K pairs. The original loop remains. |
 
 The session is still active. Results from different baselines are not additive;
 a final comparison will measure the adopted combination against the starting

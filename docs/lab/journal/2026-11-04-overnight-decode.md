@@ -75,3 +75,13 @@ in the resident fast presets with an explicit off switch, without attributing
 a specific speed gain to it. The [coefficient report](../../../speed-bench/experiments/2026-11-04-decode-pass/query-rope-table.md)
 owns the samples, numerical checks and limits. The next investigation moves
 to host work in the remaining routing gaps.
+
+## Fewer deadline checks did not improve event polling
+
+A short CPU sample mostly observed the main thread waiting for selected expert
+IDs. Clock reads dominated those sampled stacks, but that is not removable
+model work. Checking the deadline every 16 or 64 polls preserved the measured
+logits yet failed to establish a decode benefit in five-pair comparisons.
+Stride 64 was slower in all five warm 32K pairs. The original polling loop
+remains; the [clock-stride report](../../../speed-bench/experiments/2026-11-04-decode-pass/clock-stride.md)
+preserves the measurements and the candidate revision.
