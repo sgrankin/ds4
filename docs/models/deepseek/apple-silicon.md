@@ -441,6 +441,20 @@ full-model pairs at each of 8K and 32K showed no clear change in total time. The
 is not an entire-state hash. See the [experiment report](../../../speed-bench/experiments/2026-11-04-attention-four-row/README.md)
 for settings and results.
 
+The separate `DS4_METAL_V41_ATTN_UNIT_SCALE=1` experiment requires four-row
+staging and skips output rescaling when the running softmax maximum is finite
+and unchanged. The old-output scale is then mathematically one. Removing that
+work changes floating-point rounding in the compiled kernel, however, and small
+attention differences can propagate through later quantization and routing.
+This is an opt-in approximation, not a fast-preset default. Five-pair tests
+reduced total inference time by about 1.1–1.5% at 8K and 32K, with nonzero
+distribution drift. A bounded activated coding task passed its independent
+oracle in both arms, but the candidate corrected a self-test and compacted once.
+The [rescaling report](../../../speed-bench/experiments/2026-11-04-attention-unit-rescale/README.md)
+records the quality tails, practical limits and next rounding question. Stored
+KV formats and scalar decode kernels are unchanged; altered prefill state can
+still affect subsequent decode behavior.
+
 ## Representing the history
 
 The existing publication boundary quantizes compressed rows before storing

@@ -5999,6 +5999,8 @@ static inline void dsv4_attend_shared_h4_row(
     // The candidate can add this row without rescaling the accumulated state.
     // New maxima, nonfinite maxima and unordered scores retain the original
     // arithmetic below. The default specialization has no feature branch.
+    // Removing a multiply can change compiler contraction and rounding; the
+    // shortcut is numerically approximate despite this algebraic identity.
     if (skip_unit_scale && isfinite(M) && score <= M) {
         const float row_scale = exp(score - M);
         S += row_scale;

@@ -84,3 +84,29 @@ and the added staging is temporary threadgroup memory. The
 owns the samples, activation limits and profile. The remaining per-row softmax
 recurrence still performs work when its rescaling factor is one, making that a
 candidate for the next bounded question.
+
+## Fifth question: skip a softmax scale of one
+
+The online softmax rescales accumulated output even when its maximum does not
+change. Skipping that identity operation reduced isolated attention time by
+about 9–10%. Five-pair full-model tests also improved: total inference fell
+from 64.33 to 63.37 seconds at 32K and from 35.99 to 35.59 seconds at 8K.
+The compiled shortcut changes rounding, however, and small attention errors
+propagated into nonzero model-distribution drift. Mean teacher likelihood moved
+slightly against the candidate at 8K and in its favor at 32K; neither direction
+establishes practical answer quality.
+
+An initial short coding prompt did not exercise this kernel. A longer repeat
+confirmed activation and both generated functions passed the independent
+207-case oracle. The candidate corrected an erroneous self-test expectation
+and compacted once before completing. Those observations remain visible rather
+than being reduced to a pass count. The separate profile confirmed dispatch,
+but its inflated timings do not provide another speed comparison.
+
+We retained the implementation as an opt-in approximation, without preset
+promotion. This is a useful measured tradeoff, not a rejection for differing
+bits. The next bounded question is whether explicitly preserving the rounded
+KV contribution retains the speed benefit while reducing drift. The
+[result report](../../../speed-bench/experiments/2026-11-04-attention-unit-rescale/README.md)
+owns samples, numerical tails, task details and the original failed exactness
+check. The four-row staging preset remains adopted independently.
