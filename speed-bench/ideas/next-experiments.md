@@ -6,21 +6,28 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: what is the next exposed decode dependency?**
+**Current question: can four output rows reduce the exposed output-B projection?**
 One-hour slice: November 4, 13:24–14:24 Eastern. The local baseline is the
 [qualified prefill package](../experiments/2026-11-04-combined-prefill/README.md):
 runtime `b9c9e77b`, with four-row staging and unit-rescale enabled by its recorded
 candidate settings. Its tested binaries are now installed locally; published
 main remains `364ceeab`.
 
-Return to decode. Inspect the existing 32K timeline for this runtime and collect
-a current profile if the evidence is insufficient. Trace the largest exposed
-cost or dependency to source, then select one concrete change. Use the existing
-fixture and benchmark infrastructure, five alternating samples per side, and
-quality checks suited to any arithmetic change. Keep all timing samples and
-interpret variation before accepting or rejecting the change. If no credible
-change fits the hour, preserve the narrowed dependency finding and choose a
-follow-up slice rather than building a new harness.
+The existing 32K profile identifies attention output-B plus HC expansion as
+about 3.7 ms of summed GPU time per steady token, almost entirely unoverlapped
+with other encoder intervals. Query projection is larger than its exposed part;
+router sorting is almost fully overlapped. These diagnostics rank opportunities
+without promising critical-path savings.
+
+Test four output rows per threadgroup instead of two for the literal 8192-to-5120
+output-B shape, keeping the same SIMD-group count and each row's K walk and
+reduction. This halves threadgroups and reuses activation loads at the cost of
+more accumulators and 512 instead of 256 bytes of reduction scratch. The numeric
+opt-in is `DS4_METAL_V41_OUTPUT_B_ROWS4`; other shapes and multirow work retain
+their existing paths. First use a bounded fixture, then five alternating samples
+at 8K and 32K, full-logit checks and a separate activation profile. Retain all
+samples and judge any small difference against variation. Do not change other
+kernel geometries during this experiment.
 
 Raw evidence belongs under `.workspaces/hillclimb-20261104/08-decode-dependency/`.
 Only preparation that serves this selected decode outcome may run in parallel.

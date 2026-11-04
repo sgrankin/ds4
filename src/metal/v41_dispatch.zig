@@ -363,13 +363,14 @@ export fn ds4_gpu_dsv41_matmul_expand_rows(out: ?*Tensor, map: ?*const anyopaque
     defer rs.deinit();
     const sp = Buffer.tensor(split);
     defer sp.deinit();
-    const nr: u32 = if (rows > 1) 4 else 2;
+    const literal = rows == 1 and width == 8192 and outputs == 5120 and add == null and c.ds4_metal_v41_on(c.DS4_GPU_V41_LITERAL_SHAPES) != 0;
+    const output_b_rows4 = literal and c.ds4_zig_metal_env_u64("DS4_METAL_V41_OUTPUT_B_ROWS4", 0, 0, 1) == 1;
+    const nr: u32 = if (rows > 1 or output_b_rows4) 4 else 2;
     const mv = Dense.mvArgs(width, outputs, rows, true, @intCast(nr));
     const args = extern struct { n_embd: u32, has_add: u32, split_stride: u32 }{ .n_embd = outputs, .has_add = @intFromBool(add != null), .split_stride = 24 };
     const nsg: u32 = @intCast(c.ds4_zig_metal_env_u64("DS4_METAL_Q8_MV_NSG", if (c.ds4_metal_dense_facts(false) & c.DS4_DENSE_TP_TWO != 0) 2 else 4, 1, 8));
-    const literal = rows == 1 and width == 8192 and outputs == 5120 and add == null and c.ds4_metal_v41_on(c.DS4_GPU_V41_LITERAL_SHAPES) != 0;
-    const name: [*:0]const u8 = if (rows > 1) "kernel_mul_mv_q8_0_f32_bf16io_hc_expand4_rows_seq4" else if (literal) "kernel_mul_mv_q8_0_f32_bf16io_hc_expand4_static" else "kernel_mul_mv_q8_0_f32_bf16io_hc_expand4";
-    return dispatch(name, &.{ arg(0, &mv), buf(1, weight.view), buf(2, src.view), buf(3, dst.view), arg(4, &args), buf(5, ad.view), buf(6, rs.view), buf(7, K.at(sp.view, 16)), buf(8, K.at(sp.view, 32)) }, .{ .x = (@as(u64, outputs) + nr - 1) / nr, .tx = 32, .ty = nsg, .nsg = @intCast(nsg), .shared = if (rows > 1) 512 else 256 });
+    const name: [*:0]const u8 = if (rows > 1) "kernel_mul_mv_q8_0_f32_bf16io_hc_expand4_rows_seq4" else if (output_b_rows4) "kernel_mul_mv_q8_0_f32_bf16io_hc_expand4_static_rows4" else if (literal) "kernel_mul_mv_q8_0_f32_bf16io_hc_expand4_static" else "kernel_mul_mv_q8_0_f32_bf16io_hc_expand4";
+    return dispatch(name, &.{ arg(0, &mv), buf(1, weight.view), buf(2, src.view), buf(3, dst.view), arg(4, &args), buf(5, ad.view), buf(6, rs.view), buf(7, K.at(sp.view, 16)), buf(8, K.at(sp.view, 32)) }, .{ .x = (@as(u64, outputs) + nr - 1) / nr, .tx = 32, .ty = nsg, .nsg = @intCast(nsg), .shared = if (rows > 1 or output_b_rows4) 512 else 256 });
 }
 export fn ds4_gpu_dsv41_shared_swiglu(mid: ?*Tensor, gate: ?*Tensor, up: ?*Tensor, map: ?*const anyopaque, size: u64, gate_offset: u64, up_offset: u64, width: u32, outputs: u32, x: ?*const Tensor, clamp: f32, rows: u32) c_int {
     return @import("router_shared.zig").shared(.{ .gate = gate, .up = up, .mid = mid, .map = map, .size = size, .gate_offset = gate_offset, .up_offset = up_offset, .width = width, .outputs = outputs, .x = x, .rows = rows, .clamp = clamp, .mode = .bf16_mid });
