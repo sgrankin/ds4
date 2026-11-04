@@ -30,6 +30,9 @@ localizes a slow append to a delay before routed expert GPU work starts. The
 [slab-size experiment](lab/journal/2026-11-03-expert-slabs.md) did not establish
 an append or whole-workload improvement; the 4 GiB default remains. Smaller
 buffers provide a first-decode-step tradeoff, with exact measured logits.
+The [short Q8 query experiment](lab/journal/2026-11-03-short-q8-query.md)
+adds a specialized scalar kernel but leaves presets unchanged: five-pair
+timings are neutral at 8K and suggest only a small, uncertain benefit at 32K.
 
 ## What we are building
 

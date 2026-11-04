@@ -35,6 +35,7 @@ command or speed is evidence at its recorded revision, not a current-build claim
 | [RoPE reuse in SSD streaming](journal/2026-11-03-stream-rope.md) | Extending the existing attention-head transform gives a modest, consistent 32K decode improvement with exact fixed-history logits; short-context and whole-phase results have narrower limits. |
 | [Profiling after RoPE reuse](journal/2026-11-03-post-rope-profile.md) | Slow selected-prefill waits occur before routed expert GPU work begins. This motivated the subsequent slab-size test; the query projection remains a separate decode candidate. |
 | [Expert-cache slab size](journal/2026-11-03-expert-slabs.md) | Smaller buffers shorten the first decode step but do not reliably improve append or whole-workload time; five-pair tests retain the 4 GiB default. |
+| [Short Q8 query projection](journal/2026-11-03-short-q8-query.md) | Sharing input loads and keeping a rotated output pair within one SIMD group preserves measured logits. Five-pair timing leaves the small kernel outside presets. |
 
 The [design folder](../design/README.md) preserves unselected ideas separately from
 measured conclusions. Original concise reports under `speed-bench/` own complete

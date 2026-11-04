@@ -211,9 +211,27 @@ existing paths; prefill arithmetic is unchanged.
 
 The [streaming RoPE experiment](../../../speed-bench/experiments/2026-11-03-stream-rope/README.md)
 records full-model numerical checks and five-pair comparisons at 8K and 32K.
-The projection still performs its matrix multiplication and reads its weights;
-the separate query projection and forward RoPE also remain unchanged. Reusing
-the rotation removes only part of the previously profiled work.
+The projection still performs its matrix multiplication and reads its weights.
+This table reuse does not change the separate query projection and forward
+RoPE; it removes only part of the previously profiled work.
+
+During decode, the generic Q8 matrix-vector kernel expands a 1,280-element
+activation into 32,768 query values for the attention heads, rounds them to
+BF16, and applies forward RoPE to encode position. An experimental fixed-shape
+kernel assigns each pair of adjacent output values to one SIMD group. It shares
+input loads between
+the two dot products, then rotates the pair without exchanging values between
+groups. It preserves the generic kernel's four logical accumulation chains,
+reduction order and BF16 rounding before and after RoPE. The weight layout and
+number of weight bytes read do not change.
+
+Set `DS4_METAL_V41_SHORT_Q8_QUERY=1` to select this kernel for the exact shape
+in single-rank attention. An explicit `DS4_METAL_Q8_MV_NSG` setting retains the
+generic path. The flag does not enable deferred hyper-connection work or change
+batched prefill. It remains outside presets: the
+[query experiment](../../../speed-bench/experiments/2026-11-03-short-q8-query/README.md)
+finds neutral 8K timing and a possible small 32K decode benefit whose size is
+uncertain. This is an unresolved performance result, not a numerical rejection.
 
 ### Resident expert substitution
 
