@@ -1,6 +1,10 @@
 # Project direction and current status
 
 Updated 2026-11-03. **The upstream port through `890898cf` is complete.**
+An authorized seven-hour decode optimization session is active until
+2026-11-04 06:55 Eastern. The [experiment queue](../speed-bench/ideas/next-experiments.md)
+records the current one-hour target; each completed result will update the
+owning manual and lab journal. Main will not be published during this session.
 The organized manuals and lab journal are available under the [documentation index](README.md).
 The initial adaptation omitted upstream functionality; the completion audit
 covered all 118 commits and integrated the missing paths. All upstream
