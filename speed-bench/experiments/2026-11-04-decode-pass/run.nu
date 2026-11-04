@@ -40,6 +40,7 @@ def main [out: path, stage: string = 'timing', --flag: string = 'DS4_METAL_V41_P
             } } else if $stage == 'quality' { {DS4_BENCH_DECODE_LOGITS_HASH: '1'} } else { {} }
             let settings = $common | merge $diagnostic | merge {
                 DS4_METAL_V41_ROUTE_SHARED_OVERLAP: '1'
+                DS4_METAL_V41_ROUTE_SHARED_DOWN: '1'
                 DS4_METAL_SELECTED_READBACK_SPIN_US: '2000'
                 DS4_METAL_V41_STREAMING_ROPE_TABLE: '1'
                 DS4_METAL_STREAMING_EXPERT_SLAB_MB: '4096'

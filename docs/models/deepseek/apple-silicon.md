@@ -179,6 +179,24 @@ merely because the shared work is still running. See the
 [overlap experiment](../../../speed-bench/experiments/2026-11-03-route-overlap/README.md)
 for eligibility, measurements and quality limits.
 
+The resident fast presets also move the shared expert's Q8 down projection
+into this routing interval with `DS4_METAL_V41_ROUTE_SHARED_DOWN=1`. It consumes
+the shared gate/up result and static weights, so it adds no expert-cache read
+after the event. The later join adds the routed result and expands the residual,
+preserving BF16 rounding at the projection input/output, sum and HC output.
+The graph records that down has been queued; event readiness does not imply
+that it has already finished on the GPU. Existing graph scratch holds its
+intermediate result until the join.
+
+This splits the previous down/HC fusion into two dispatches. It adds no command
+buffer or allocation, but moves projection preparation before router submission;
+that host work can consume some of the intended overlap. Tracing, FFN steering,
+unsupported weights and disabled expansion fusion keep the prior path. Eligible
+single-token prefill tails can use the change; batched prefill cannot. Explicit
+`DS4_METAL_V41_ROUTE_SHARED_DOWN=0` restores the fused tail. The
+[shared-down experiment](../../../speed-bench/experiments/2026-11-04-decode-pass/shared-down.md)
+records modest five-pair decode gains and exact tested logits at 8K and 32K.
+
 The resident fast presets also submit queued decode work after every eligible
 layer. This lets the GPU start the routed calculation while the CPU encodes
 the next layer, instead of retaining it until a later router submission.

@@ -73,6 +73,12 @@ router readiness for up to 2 ms before blocking. Set
 `DS4_METAL_SELECTED_READBACK_SPIN_US=0` to retain overlap with blocking waits.
 The [routing overlap experiment](../speed-bench/experiments/2026-11-03-route-overlap/README.md)
 records its decode gain and increased CPU use.
+They also run the Q8 shared down projection during that host routing interval,
+then join its queued result with routed expert output. This reuses existing
+kernels and scratch while preserving BF16 rounding; explicit
+`DS4_METAL_V41_ROUTE_SHARED_DOWN=0` restores the fused down/HC tail. The
+[shared-down comparison](../speed-bench/experiments/2026-11-04-decode-pass/shared-down.md)
+records the small measured gain and activation limits.
 Both presets submit queued decode work after every eligible layer, giving the
 GPU ready work sooner. `DS4_METAL_V41_DECODE_FLUSH_LAYERS=2` restores the ordinary
 two-layer cadence; `0` disables periodic submissions. The

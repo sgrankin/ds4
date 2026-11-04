@@ -30,3 +30,18 @@ Numerical checks matched at 8K, 32K, an unaligned prefix and a requested 16 GB c
 budget. The [cadence report](../../../speed-bench/experiments/2026-11-04-decode-pass/flush-cadence.md)
 owns complete samples, variation and the tradeoff curve. Other hardware and
 TP performance remain unmeasured. The session continues with a new profile.
+
+## Move shared down into the routing interval
+
+The next profile still showed an exposed shared-down/HC tail after routed
+expert work. Moving the existing down projection before the router-event wait
+and using a separate late join preserved all tested logits, including the
+unaligned prefix and tighter cache. Five-pair comparisons found a modest decode
+gain at both 8K and 32K, with variation and one slower warm 32K pair.
+
+The resident fast presets adopt this path with an explicit
+`DS4_METAL_V41_ROUTE_SHARED_DOWN=0` override. It adds a dispatch but no command
+buffer or allocation. Earlier host preparation consumes some potential overlap,
+so the profile's exposed tail was not a promised saving. The
+[result report](../../../speed-bench/experiments/2026-11-04-decode-pass/shared-down.md)
+owns the measurements, rounding/lifetime explanation and diagnostic limits.
