@@ -2,7 +2,7 @@
 # Run from the repository root under speed-bench/ideas/pressure_run.py.
 # Compare one selected environment setting against the adopted decode baseline.
 # Timing is profile-free; quality and profile stages are diagnostics only.
-def main [out: path, stage: string = 'timing', --flag: string = 'DS4_METAL_V41_PACKED_F16_GATHER', --control: string = '0', --control-unset, --candidate: string = '1', --cache: string = '64GB', --frontier: int = 0, --only: string = 'both', --samples: int = 5, --tokens: int = 0] {
+def main [out: path, stage: string = 'timing', --flag: string = 'DS4_METAL_V41_PACKED_F16_GATHER', --control: string = '0', --control-unset, --candidate: string = '1', --cache: string = '64GB', --frontier: int = 0, --prefill-gap: string = '.90', --only: string = 'both', --samples: int = 5, --tokens: int = 0] {
     if $stage not-in ['timing' 'smoke' 'quality' 'profile' 'timeline' 'cpu-profile'] {
         error make {msg: 'Stage must be timing, smoke, quality, profile, timeline or cpu-profile'}
     }
@@ -14,7 +14,7 @@ def main [out: path, stage: string = 'timing', --flag: string = 'DS4_METAL_V41_P
     let common = {
         DS4_V41_COMPRESSED_KV_FP4: '1', DS4_V41_INDEX_FP4: '1', DS4_V41_INDEX_SIMD: '1'
         DS4_METAL_V41_SELECTED_TILE: '64', DS4_METAL_V41_SELECTED_LIMIT: '1024'
-        DS4_METAL_V41_RESIDENT_ROUTE_GAP: '.90', DS4_METAL_V41_RESIDENT_PREFILL_GAP: '.90'
+        DS4_METAL_V41_RESIDENT_ROUTE_GAP: '.90', DS4_METAL_V41_RESIDENT_PREFILL_GAP: $prefill_gap
         DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS: '1'
         DS4_METAL_V41_RESIDENT_ROUTE_MAX_SUBS: '5', DS4_METAL_V41_RESIDENT_ROUTE_MAX_RANK: '64'
         DS4_METAL_V41_RESIDENT_ROUTE_MAX_MASS: '1', DS4_METAL_V41_RESIDENT_ROUTE_MAX_TOTAL_MASS: '1'

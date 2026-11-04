@@ -349,7 +349,12 @@ pub const Moe = struct {
         // loader hint. The following call must not inherit an old selected set.
         defer if (overlap_shared) c.ds4_gpu_stream_expert_batch_set_ready(null);
         if (ok and overlap_shared) {
-            ok = c.ds4_gpu_end_commands() != 0 and c.ds4_gpu_begin_commands() != 0;
+            // Resident prefill already completed the router, updated IDs on
+            // the CPU and reopened an empty batch. Native routing still needs
+            // this readiness boundary before shared work can overlap loading.
+            if (!graph.resident_prefill_active or graph.resident_route_gap <= 0) {
+                ok = c.ds4_gpu_end_commands() != 0 and c.ds4_gpu_begin_commands() != 0;
+            }
             if (ok) c.ds4_gpu_stream_expert_batch_set_ready(row.selected);
         }
         // Metal's shared owner is static layer parity. Spark-only balancing
