@@ -119,19 +119,23 @@ remain unchanged.
 The [resident-handoff prototype](../speed-bench/experiments/2026-11-04-resident-handoff/README.md)
 repairs missing IDs on the GPU using only pinned resident experts, retaining
 native slot weights but relaxing the preset's substitution limits. Periodic
-ordinary routing refreshes the cache. It remains opt-in: five-pair tests do not
-establish a speed gain, and warm 32K decode is consistently slower. Fixed-history
-drift is measurable, while one coding task per arm passes the independent checks.
+ordinary routing refreshes the cache. It remains opt-in. The initial five-pair
+tests found no speed gain and consistently slower warm 32K decode. Fixed-history
+drift was measurable, while one coding task per arm passed the independent checks.
 
 The dependency profile showed fewer routing handoffs, and CPU samples exposed
 redundant address-table writes. The
 [address-reuse follow-up](../speed-bench/experiments/2026-11-04-resident-address-reuse/README.md)
 removes those writes behind a second opt-in. It preserves all tested logits but
-does not establish an attribution speedup. The combined path has a small fresh
-8K decode benefit and retains the warm 32K slowdown. Keep it experimental while
-testing whether resident-only execution enables useful shared/routed branch
-concurrency. Detailed encoder profiling also changes batching and adds host
-overhead; its gap reduction is not a predicted ordinary-runtime saving. The
+does not establish an attribution speedup. The subsequent
+[concurrent-branch experiment](../speed-bench/experiments/2026-11-04-resident-parallel/README.md)
+uses the resident-only path to overlap shared and routed experts. Its combined
+comparison improves fresh decode at 8K and 32K and warm decode at 8K, with neutral
+warm 32K timing. The added concurrency preserves all tested serial-route logits;
+the GPU substitution policy remains approximate. Keep the route experimental
+while measuring refresh cadence's speed–quality tradeoff. Detailed encoder
+profiling changes batching and adds host overhead; its gap reduction is not a
+predicted ordinary-runtime saving. The
 [Apple Silicon manual](../docs/models/deepseek/apple-silicon.md#resident-expert-substitution)
 owns activation and lifetime details; neither fast preset enables this prototype.
 

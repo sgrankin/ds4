@@ -201,3 +201,22 @@ owns the samples, CPU diagnostic and clock limitations. The next bounded questio
 is whether resident-only execution enables useful overlap between shared and
 routed experts, using the existing concurrent FFN machinery with narrow cache
 ownership checks.
+
+## Eleventh question: overlap shared and resident routed experts
+
+The resident-only route removes the host load/readback interruption, allowing
+the existing parallel FFN machinery to overlap independent shared and routed
+branches. Narrow admission preserves cache addresses, pins, the producer barrier
+and cleanup. Activation checks exercised every eligible layer; all 512 paired
+logit rows and hashes matched serial GPU routing. This adds no measured drift
+to that route, but does not erase its approximation relative to CPU routing.
+
+Four five-pair comparisons found useful decode gains. Against ordinary CPU
+resident substitution, fresh decode improved at 8K and 32K, warm decode improved
+at 8K, and warm 32K timing was neutral. First-token outliers and prefill drift
+limit whole-workload conclusions. Retain concurrency as an explicit opt-in,
+without preset or installed-binary promotion. The
+[report](../../../speed-bench/experiments/2026-11-04-resident-parallel/README.md)
+owns all samples and qualification. This is a useful follow-on from an initially
+neutral dependency change; the next bounded question is the refresh interval's
+speed–quality curve before choosing a preset configuration.

@@ -6,39 +6,43 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: can resident-only execution overlap shared and routed experts?**
-One-hour slice: November 4, 15:40–16:40 Eastern. The fixed runtime baseline is
-`cc913524`, with GPU resident routing, address reuse and ordinary refresh every
-eight positions enabled. The [address-reuse report](../experiments/2026-11-04-resident-address-reuse/README.md)
-finds neutral attribution throughput despite removal of the sampled preparation
-work. The host mostly waits for GPU completion. The combined route retains a
-warm 32K slowdown, so neither experimental feature is promoted to presets.
+**Current question: which resident-routing refresh interval offers a useful tradeoff?**
+One-hour slice: November 4, 16:33–17:33 Eastern. Keep runtime `1b692d25`,
+GPU resident routing, address reuse and concurrent shared/routed execution fixed.
+The [concurrency report](../experiments/2026-11-04-resident-parallel/README.md)
+finds useful decode gains and matching logits against serial GPU routing. The
+combined route improves fresh decode and is neutral in warm 32K timing, while
+its substitution policy remains approximate. Presets and installed binaries
+remain unchanged.
 
-The existing parallel FFN machinery can overlap routed gate/up with shared
-gate/up, then their down projections after a producer barrier. Current gates
-exclude the streamed IQ2/Q2 V4.1 shape. Admit only the already validated,
-pinned resident-address path under a new explicit opt-in. Preserve address-table
-ownership, all cache pins and resource declarations, distinct output storage,
-BF16 boundaries, and finish/abort cleanup. Do not use `force_resident` to bypass
-streaming checks or map full model weights. Ordinary refresh/fallback keeps its
-existing route. No host readback, expert load/eviction or command flush may
-interrupt the concurrent scope.
+Compare ordinary CPU cap-five resident routing against GPU refresh intervals
+4, 8 and 16. More frequent ordinary routing both executes its less permissive
+policy and refreshes the expert cache; intervening GPU steps use only resident
+experts. Keep the 64 GB cache and other settings fixed. Do not change runtime
+code or mix in a cache-budget experiment.
 
-Verify activation and fixed-history numerical behavior first, including ordinary
-8K and 32K contexts. Use five alternating samples per side to isolate the
-concurrency change and compare the combined path against ordinary CPU resident
-routing. Preserve first-token and full-window costs. If timing is neutral,
-inspect whether intended overlap appeared before deciding. Detailed encoder
-timelines alter grouping and add host overhead; use them for structure, not as
-predictions of native latency. Measure quality differences rather than rejecting
-rounding changes automatically.
+Use five alternating performance samples per side at 32K for intervals 4 and
+16. Reuse interval 8's just-completed five-pair comparison at the same runtime
+and settings, clearly identifying that source; there is no new reason to repeat
+it. Preserve first-token, complete-window, append and steady decode results,
+all samples and order effects. Extend quality checks to 512 teacher tokens per
+phase at 32K for all three intervals, against the same ordinary policy. Report
+mean and tail delta-NLL, KL, top-choice changes and teacher perplexity ratio;
+these are not task-accuracy scores or automatic rejection thresholds.
+
+Plot a speed–quality tradeoff with separate fresh and warm cases, showing
+variation and paired ordinary controls. If a point looks useful, qualify it at
+8K with five timing pairs and a longer fixed-history quality check. Do not claim
+general agent quality or promote a preset from teacher metrics alone. At the
+hour boundary, choose whether to carry a point into combined package and task
+qualification, rather than adding another tuning axis.
 
 Raw evidence belongs under
-`.workspaces/hillclimb-20261104/11-resident-parallel/`. Reuse the existing driver
-with explicit settings. Only preparation/review serving this outcome may run in
-parallel; retain one guarded heavy job. Write one result report and one short
-[journal](../../docs/lab/journal/2026-11-04-through-06-performance.md) entry, keep
-raw output ignored, and do not publish.
+`.workspaces/hillclimb-20261104/12-resident-refresh/`. Reuse the existing driver
+with explicit settings and keep one guarded heavy job. Only preparation/review
+serving this outcome may run in parallel. Write one report, update the recipe
+conclusion and one short [journal](../../docs/lab/journal/2026-11-04-through-06-performance.md)
+entry, keep raw output ignored, and do not publish.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome

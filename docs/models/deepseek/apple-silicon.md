@@ -340,6 +340,20 @@ The [address-reuse experiment](../../../speed-bench/experiments/2026-11-04-resid
 preserved measured logits but did not establish a throughput gain from this
 preparation change. Both GPU routing and address reuse remain explicit opt-ins.
 
+`DS4_METAL_V41_RESIDENT_GPU_PARALLEL=1` can also overlap the shared expert with
+the six routed experts after resident preflight. Their gate/up projections run
+in a concurrent encoder; a barrier completes both intermediate activations
+before their down projections run. Closing that encoder protects the later
+hyper-connection join. The path retains expert-cache pins and indirect resource
+declarations rather than mapping full-model expert views. It admits only the
+384-expert, 5120/2304-wide IQ2/Q2 V4.1 shape with Q8 shared weights. Refresh and
+fallback steps retain their serial path, and the per-stage profiler is excluded
+because it splits command batches. The
+[concurrency experiment](../../../speed-bench/experiments/2026-11-04-resident-parallel/README.md)
+found decode benefits with matching measured logits against serial GPU routing;
+it does not remove the resident policy's quality tradeoff. Presets still leave
+this experimental route disabled.
+
 ### Executing the selected experts
 
 Metal uses batched routed matrix multiplication to group rows by expert. The
