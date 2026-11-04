@@ -5969,6 +5969,7 @@ static inline void dsv4_attend_shared_f32_row_as_f16_at(
                                       o0, o1, o2, o3);
 }
 
+template <bool skip_unit_scale = false>
 static inline void dsv4_attend_shared_h4_row(
         threadgroup const half4 *kv4,
         half4 q0,
@@ -5994,6 +5995,20 @@ static inline void dsv4_attend_shared_h4_row(
                   dot((float4)q3, (float4)k3);
     score = simd_sum(score) * scale;
 
+    // When a finite running maximum is unchanged, exp(M - M) is exactly one.
+    // The candidate can add this row without rescaling the accumulated state.
+    // New maxima, nonfinite maxima and unordered scores retain the original
+    // arithmetic below. The default specialization has no feature branch.
+    if (skip_unit_scale && isfinite(M) && score <= M) {
+        const float row_scale = exp(score - M);
+        S += row_scale;
+        o0 += (float4)k0 * row_scale;
+        o1 += (float4)k1 * row_scale;
+        o2 += (float4)k2 * row_scale;
+        o3 += (float4)k3 * row_scale;
+        return;
+    }
+
     const float old_m = M;
     const float new_m = max(M, score);
     const float old_scale = exp(old_m - new_m);
@@ -6012,6 +6027,7 @@ static inline void dsv4_attend_shared_h4_row(
     M = new_m;
 }
 
+template <bool skip_unit_scale = false>
 static inline void dsv4_attend_shared_h4_row_at(
         threadgroup const half4 *kv4,
         uint row_in_tg,
@@ -6027,7 +6043,7 @@ static inline void dsv4_attend_shared_h4_row_at(
         thread float4 &o1,
         thread float4 &o2,
         thread float4 &o3) {
-    dsv4_attend_shared_h4_row(kv4 + row_in_tg * 128u,
+    dsv4_attend_shared_h4_row<skip_unit_scale>(kv4 + row_in_tg * 128u,
                               q0, q1, q2, q3,
                               scale,
                               lane,
@@ -6294,7 +6310,8 @@ kernel void kernel_dsv4_indexed_mixed_attention_heads16_dual(
 // stage four rows between barriers. The host supplies complete sixteen-head
 // groups (32 or 64 heads) and 4 KiB of threadgroup storage. Selected slots stay
 // in sorted order; invalid slots are staged as zero and never enter softmax.
-kernel void kernel_dsv4_indexed_mixed_attention_heads16_rb4(
+template <bool skip_unit_scale>
+static inline void dsv4_indexed_mixed_attention_heads16_rb4(
         constant ds4_metal_args_dsv4_indexed_attention &args,
         device const char *q,
         device const char *raw_kv,
@@ -6302,11 +6319,11 @@ kernel void kernel_dsv4_indexed_mixed_attention_heads16_rb4(
         device const char *topk,
         device const char *sinks,
         device char *dst,
-        threadgroup half4 *kv_shared [[threadgroup(0)]],
-        uint2 tgpig [[threadgroup_position_in_grid]],
-        ushort tid [[thread_index_in_threadgroup]],
-        ushort lane [[thread_index_in_simdgroup]],
-        ushort sg [[simdgroup_index_in_threadgroup]]) {
+        threadgroup half4 *kv_shared,
+        uint2 tgpig,
+        ushort tid,
+        ushort lane,
+        ushort sg) {
     const uint token = tgpig.x;
     const uint head0 = tgpig.y*16u + (uint)sg;
     const uint head1 = head0 + 8u;
@@ -6358,10 +6375,10 @@ kernel void kernel_dsv4_indexed_mixed_attention_heads16_rb4(
             }
             threadgroup_barrier(mem_flags::mem_threadgroup);
             for (uint r = 0; r < n_rows; r++) {
-                dsv4_attend_shared_h4_row_at(kv_shared, r, qa0, qa1, qa2, qa3,
+                dsv4_attend_shared_h4_row_at<skip_unit_scale>(kv_shared, r, qa0, qa1, qa2, qa3,
                     args.scale, lane, Ma, Sa, ao0, ao1, ao2, ao3);
                 if (head1 < args.n_head) {
-                    dsv4_attend_shared_h4_row_at(kv_shared, r, qb0, qb1, qb2, qb3,
+                    dsv4_attend_shared_h4_row_at<skip_unit_scale>(kv_shared, r, qb0, qb1, qb2, qb3,
                         args.scale, lane, Mb, Sb, bo0, bo1, bo2, bo3);
                 }
             }
@@ -6397,10 +6414,10 @@ kernel void kernel_dsv4_indexed_mixed_attention_heads16_rb4(
                 stop = true;
                 break;
             }
-            dsv4_attend_shared_h4_row_at(kv_shared, r, qa0, qa1, qa2, qa3,
+            dsv4_attend_shared_h4_row_at<skip_unit_scale>(kv_shared, r, qa0, qa1, qa2, qa3,
                 args.scale, lane, Ma, Sa, ao0, ao1, ao2, ao3);
             if (head1 < args.n_head) {
-                dsv4_attend_shared_h4_row_at(kv_shared, r, qb0, qb1, qb2, qb3,
+                dsv4_attend_shared_h4_row_at<skip_unit_scale>(kv_shared, r, qb0, qb1, qb2, qb3,
                     args.scale, lane, Mb, Sb, bo0, bo1, bo2, bo3);
             }
         }
@@ -6425,6 +6442,40 @@ kernel void kernel_dsv4_indexed_mixed_attention_heads16_rb4(
         db[lane + 0] = bo0*ib; db[lane + 32] = bo1*ib;
         db[lane + 64] = bo2*ib; db[lane + 96] = bo3*ib;
     }
+}
+
+kernel void kernel_dsv4_indexed_mixed_attention_heads16_rb4(
+        constant ds4_metal_args_dsv4_indexed_attention &args,
+        device const char *q,
+        device const char *raw_kv,
+        device const char *comp_kv,
+        device const char *topk,
+        device const char *sinks,
+        device char *dst,
+        threadgroup half4 *kv_shared [[threadgroup(0)]],
+        uint2 tgpig [[threadgroup_position_in_grid]],
+        ushort tid [[thread_index_in_threadgroup]],
+        ushort lane [[thread_index_in_simdgroup]],
+        ushort sg [[simdgroup_index_in_threadgroup]]) {
+    dsv4_indexed_mixed_attention_heads16_rb4<false>(args, q, raw_kv, comp_kv,
+        topk, sinks, dst, kv_shared, tgpig, tid, lane, sg);
+}
+
+kernel void kernel_dsv4_indexed_mixed_attention_heads16_rb4_unit_scale(
+        constant ds4_metal_args_dsv4_indexed_attention &args,
+        device const char *q,
+        device const char *raw_kv,
+        device const char *comp_kv,
+        device const char *topk,
+        device const char *sinks,
+        device char *dst,
+        threadgroup half4 *kv_shared [[threadgroup(0)]],
+        uint2 tgpig [[threadgroup_position_in_grid]],
+        ushort tid [[thread_index_in_threadgroup]],
+        ushort lane [[thread_index_in_simdgroup]],
+        ushort sg [[simdgroup_index_in_threadgroup]]) {
+    dsv4_indexed_mixed_attention_heads16_rb4<true>(args, q, raw_kv, comp_kv,
+        topk, sinks, dst, kv_shared, tgpig, tid, lane, sg);
 }
 
 // Decode specialization of kernel_dsv4_indexed_mixed_attention_heads8.

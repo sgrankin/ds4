@@ -6,22 +6,27 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: can modest row blocking help without losing head reuse?**
-One-hour slice: November 4, 10:45–11:45 Eastern. Keep the current sixteen heads
-per group and stage four KV rows at a time, preserving arithmetic and row order.
-This differs from the rejected eight-head/sixteen-row kernel: it retains head
-reuse, uses only 4 KiB of threadgroup staging and avoids a private compacted-ID
-array in each lane. Start with the focused numerical fixture and five alternating
-operation samples. If promising, compare five alternating full-model timing
-pairs at 8K and 32K, including decode and full-vocabulary checks.
+**Current question: can attention skip rescaling by one?**
+One-hour slice: November 4, 11:22–12:22 Eastern. Baseline `e050fa0b` includes
+the adopted four-row staging kernel. Its fresh 32K profile still attributes
+9.33 seconds of GPU work to indexed attention. The per-row online softmax
+always computes two exponentials and rescales the output, even when the running
+maximum does not change and the old-output scale is exactly one.
 
-The cooperative FP4 reader was removed after mixed/neutral whole-model and
-operation timings. Its useful packed-versus-expanded correctness fixture remains.
-The starting runtime again has the published execution for this workload, with
-the readiness cleanup confined to batch overlap's existing opt-in path. Raw
-evidence for this question belongs under
-`.workspaces/hillclimb-20261104/04-attention-four-row/`; reuse the existing runner
-and keep intrusive profiling separate from timing.
+Try a bounded fast path for that case inside the four-row prefill kernel,
+preserving row order and the original path as control. Keep decode and other
+attention paths unchanged. Start with the six-shape numerical fixture and five
+alternating operation pairs at small and large prefill sizes. If promising,
+compare five full-model pairs at 8K and 32K and measure full-vocabulary quality.
+Approximate results may be useful; report drift rather than rejecting it solely
+for differing bits. Keep profile diagnostics separate from latency comparisons.
+
+Raw evidence belongs under
+`.workspaces/hillclimb-20261104/05-attention-unit-rescale/`. Reuse the existing
+runner and fixture rather than creating another harness. Four-row staging is
+enabled in the local resident fast source presets; whole-model timing did not
+establish a total-time change. The root compatibility binaries and published
+main remain at the starting package until a later combined qualification.
 
 Record one result report and a short
 [session journal](../../docs/lab/journal/2026-11-04-through-06-performance.md)

@@ -3038,10 +3038,15 @@ static int check_fp4_attention(uint32_t benchmark_rows) {
     const size_t case_count = benchmark ? sizeof(bench) / sizeof(*bench) : sizeof(checks) / sizeof(*checks);
     const uint32_t comp_rows = benchmark ? 8192 : 640;
     static const float levels[8] = {0, .5f, 1, 1.5f, 2, 3, 4, 6};
-    const char *flag = "DS4_METAL_V41_PREFILL_ATTN_RB4";
+    const char *flag = "DS4_METAL_V41_ATTN_UNIT_SCALE";
     const char *previous = getenv(flag);
     char *saved = previous ? strdup(previous) : NULL;
     CHECK(!previous || saved);
+    const char *rb4_flag = "DS4_METAL_V41_PREFILL_ATTN_RB4";
+    const char *previous_rb4 = getenv(rb4_flag);
+    char *saved_rb4 = previous_rb4 ? strdup(previous_rb4) : NULL;
+    CHECK(!previous_rb4 || saved_rb4);
+    CHECK(setenv(rb4_flag, "1", 1) == 0);
     float *sinks = NULL;
     CHECK(posix_memalign((void **)&sinks, getpagesize(), getpagesize()) == 0);
     for (unsigned h = 0; h < H; h++) sinks[h] = (float)(h % 7) * .125f - 2;
@@ -3107,8 +3112,8 @@ static int check_fp4_attention(uint32_t benchmark_rows) {
             0, qt, rt, ct, 0, it, n, start, nr, cap, raw_start, comp_rows, K, 128, 4, heads, D));
         CHECK(ds4_gpu_tensor_read(out, 0, reference, nq * sizeof(float)));
         for (size_t i = 0; i < nq; i++) CHECK(isfinite(reference[i]));
-        for (unsigned row_blocked = 0; row_blocked < 2; row_blocked++) {
-            CHECK(setenv(flag, row_blocked ? "1" : "0", 1) == 0);
+        for (unsigned unit_scale = 0; unit_scale < 2; unit_scale++) {
+            CHECK(setenv(flag, unit_scale ? "1" : "0", 1) == 0);
             CHECK(ds4_gpu_attention_indexed_mixed_batch_heads_tensor(out, sinks, getpagesize(),
                 0, qt, rt, pt, 2, it, n, start, nr, cap, raw_start, comp_rows, K, 128, 4, heads, D));
             CHECK(ds4_gpu_synchronize());
@@ -3117,13 +3122,13 @@ static int check_fp4_attention(uint32_t benchmark_rows) {
             if (memcmp(reference, actual, nq * sizeof(float))) {
                 size_t first = 0;
                 while (main_fp4_bits(reference[first]) == main_fp4_bits(actual[first])) first++;
-                fprintf(stderr, "FP4 attention rows=%u heads=%u quality=%u row_blocked=%u index=%zu expected=%08x actual=%08x\n",
-                    n, heads, cases[s].quality, row_blocked, first,
+                fprintf(stderr, "FP4 attention rows=%u heads=%u quality=%u unit_scale=%u index=%zu expected=%08x actual=%08x\n",
+                    n, heads, cases[s].quality, unit_scale, first,
                     main_fp4_bits(reference[first]), main_fp4_bits(actual[first]));
                 CHECK(!memcmp(reference, actual, nq * sizeof(float)));
             }
         }
-        fprintf(stderr, "FP4 attention rows=%u heads=%u quality=%u expanded == packed == rb4: PASS\n",
+        fprintf(stderr, "FP4 attention rows=%u heads=%u quality=%u expanded == packed == unit-scale: PASS\n",
             n, heads, cases[s].quality);
         if (benchmark) {
             /* The comparisons above also warm both attention paths. Time the
@@ -3133,8 +3138,8 @@ static int check_fp4_attention(uint32_t benchmark_rows) {
             puts("pair,arm,rows,heads,repetitions,seconds");
             for (unsigned pair = 1; pair <= 5; pair++) {
                 for (unsigned order = 0; order < 2; order++) {
-                    const unsigned row_blocked = pair % 2 ? order : 1 - order;
-                    CHECK(setenv(flag, row_blocked ? "1" : "0", 1) == 0);
+                    const unsigned unit_scale = pair % 2 ? order : 1 - order;
+                    CHECK(setenv(flag, unit_scale ? "1" : "0", 1) == 0);
                     CHECK(ds4_gpu_synchronize());
                     const double begin = monotonic_seconds();
                     for (unsigned repeat = 0; repeat < repetitions; repeat++)
@@ -3142,7 +3147,7 @@ static int check_fp4_attention(uint32_t benchmark_rows) {
                             0, qt, rt, pt, 2, it, n, start, nr, cap, raw_start, comp_rows, K, 128, 4, heads, D));
                     CHECK(ds4_gpu_synchronize());
                     const double seconds = monotonic_seconds() - begin;
-                    printf("%u,%s,%u,%u,%u,%.9f\n", pair, row_blocked ? "candidate" : "baseline",
+                    printf("%u,%s,%u,%u,%u,%.9f\n", pair, unit_scale ? "candidate" : "baseline",
                         n, heads, repetitions, seconds);
                     fflush(stdout);
                 }
@@ -3154,6 +3159,8 @@ static int check_fp4_attention(uint32_t benchmark_rows) {
     }
     CHECK((saved ? setenv(flag, saved, 1) : unsetenv(flag)) == 0);
     free(saved);
+    CHECK((saved_rb4 ? setenv(rb4_flag, saved_rb4, 1) : unsetenv(rb4_flag)) == 0);
+    free(saved_rb4);
     ds4_gpu_set_quality(false);
     ds4_gpu_tensor_free(ct); ds4_gpu_tensor_free(pt);
     ds4_gpu_cleanup();
