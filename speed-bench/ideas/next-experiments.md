@@ -6,37 +6,33 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: can four output rows reduce the exposed output-B projection?**
-One-hour slice: November 4, 13:24–14:24 Eastern. The local baseline is the
-[qualified prefill package](../experiments/2026-11-04-combined-prefill/README.md):
-runtime `b9c9e77b`, with four-row staging and unit-rescale enabled by its recorded
-candidate settings. Its tested binaries are now installed locally; published
-main remains `364ceeab`.
+**Current question: can resident expert addresses remove a routing handoff?**
+One-hour slice: November 4, 14:05–15:05 Eastern. The local runtime baseline is
+`02b7ae26`, the qualified prefill package. The four-row output-B experiment is
+closed and its variant removed; its [report](../experiments/2026-11-04-output-b-rows/README.md)
+records the neutral timing and unchanged dependency profile.
 
-The existing 32K profile identifies attention output-B plus HC expansion as
-about 3.7 ms of summed GPU time per steady token, almost entirely unoverlapped
-with other encoder intervals. Query projection is larger than its exposed part;
-router sorting is almost fully overlapped. These diagnostics rank opportunities
-without promising critical-path savings.
+Recent profiles still show roughly 5–6 ms per token of uncovered time between
+routing and routed experts. Earlier CPU samples were dominated by waiting, and
+clock/polling changes did not help. This slice investigates avoiding the handoff
+for resident work rather than tuning the wait itself. First trace existing GPU
+address tables, cache pinning and route policy. Identify a bounded path that can
+select and execute resident experts without host selection, with an explicit
+account of cache misses, refresh and approximation. Do not map the whole model
+or weaken cache lifetime rules as an incidental implementation shortcut.
 
-Test four output rows per threadgroup instead of two for the literal 8192-to-5120
-output-B shape, keeping the same SIMD-group count and each row's K walk and
-reduction. This halves threadgroups and reuses activation loads at the cost of
-more accumulators and 512 instead of 256 bytes of reduction scratch. The numeric
-opt-in is `DS4_METAL_V41_OUTPUT_B_ROWS4`; other shapes and multirow work retain
-their existing paths. First use a bounded fixture, then five alternating samples
-at 8K and 32K, full-logit checks and a separate activation profile. Retain all
-samples and judge any small difference against variation. Before rejecting neutral total timing, compare the before/after profiles for
-reduced output-B work, changed overlap or a newly exposed stall. Carry useful
-groundwork into a separately measured follow-up if that evidence warrants it.
-Do not change other kernel geometries during this experiment.
+If feasible within this slice, build the smallest opt-in prototype and measure
+its activation, fixed-history quality and at least five alternating timing pairs.
+Otherwise finish with a concrete feasibility result and a narrowly scoped next
+step. A neutral total time still requires inspection of dependency changes before
+adoption or rejection. Any further candidate must retain this baseline for a
+combined comparison. Raw evidence belongs under
+`.workspaces/hillclimb-20261104/09-resident-handoff/`.
 
-Raw evidence belongs under `.workspaces/hillclimb-20261104/08-decode-dependency/`.
-Only preparation that serves this selected decode outcome may run in parallel.
-Write one result report and a short
+Only parallel preparation and review serving this outcome may run. Keep one
+heavy job under the pressure guard, write one result report and one short
 [session journal](../../docs/lab/journal/2026-11-04-through-06-performance.md)
-entry. Do not publish; continue toward the November 6 deadline after deciding
-this bounded result.
+entry. Do not publish; continue sequential hill climbing toward the deadline.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome

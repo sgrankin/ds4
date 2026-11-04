@@ -1592,121 +1592,6 @@ static int check_literal_shapes(void) {
     return 1;
 }
 
-/* Change only the literal output-B row grouping. Keep each NSG reduction fixed
- * when comparing values; numerical differences are observations for this
- * experiment, while the original generic control and ineligible path stay exact. */
-static int check_output_b_rows4(void) {
-    enum { IN = 8192, OUT = 5120, VALUES = 4 * OUT, CALLS = 64 };
-    const char *flag = "DS4_METAL_V41_OUTPUT_B_ROWS4";
-    const char *nsg_flag = "DS4_METAL_Q8_MV_NSG";
-    const char *previous = getenv(flag), *previous_nsg = getenv(nsg_flag);
-    char *saved = previous ? strdup(previous) : NULL;
-    char *saved_nsg = previous_nsg ? strdup(previous_nsg) : NULL;
-    CHECK((!previous || saved) && (!previous_nsg || saved_nsg));
-    const char *baseline = "kernel_mul_mv_q8_0_f32_bf16io_hc_expand4_static";
-    const char *candidate = "kernel_mul_mv_q8_0_f32_bf16io_hc_expand4_static_rows4";
-    const char *generic = "kernel_mul_mv_q8_0_f32_bf16io_hc_expand4";
-    uint64_t wb = 0;
-    void *model = q8_weights(OUT, IN, &wb);
-    CHECK(model && ds4_gpu_set_model_map(model, wb));
-    ds4_gpu_tensor *x = upload(NULL, IN * 4), *res = upload(NULL, VALUES * 4);
-    ds4_gpu_tensor *split = upload(NULL, 24 * 4);
-    ds4_gpu_tensor *out[2] = {upload(NULL, VALUES * 4), upload(NULL, VALUES * 4)};
-    CHECK(x && res && split && out[0] && out[1]);
-    float *h = ds4_gpu_tensor_contents(x), *r = ds4_gpu_tensor_contents(res);
-    float *sp = ds4_gpu_tensor_contents(split);
-    CHECK(h && r && sp);
-    for (int i = 0; i < IN; i++) h[i] = random_value();
-    for (int i = 0; i < VALUES; i++) r[i] = random_value();
-    for (int i = 0; i < 24; i++) sp[i] = random_value() / 4.0f;
-    ds4_gpu_test_set_flags(DS4_GPU_TEST_COUNT_KERNELS);
-    const char *nsgs[] = {"4", "2"};
-    for (unsigned n = 0; n < sizeof(nsgs) / sizeof(*nsgs); n++) {
-        CHECK(setenv(nsg_flag, nsgs[n], 1) == 0 && setenv(flag, "0", 1) == 0);
-        LITERAL_PAIR(DS4_GPU_V41_LITERAL_SHAPES, baseline, out[0], VALUES * 4,
-            ds4_gpu_dsv41_matmul_expand_rows(out[0], model, wb, 0, IN, OUT, x, NULL, res, split, 4, 1));
-        CHECK(setenv(flag, "1", 1) == 0);
-        const uint64_t old_baseline = ds4_gpu_test_kernel_runs(baseline);
-        const uint64_t old_candidate = ds4_gpu_test_kernel_runs(candidate);
-        const uint64_t old_generic = ds4_gpu_test_kernel_runs(generic);
-        CHECK(ds4_gpu_begin_commands());
-        CHECK(ds4_gpu_dsv41_matmul_expand_rows(out[1], model, wb, 0, IN, OUT, x, NULL, res, split, 4, 1));
-        CHECK(ds4_gpu_end_commands() && ds4_gpu_synchronize());
-        CHECK(ds4_gpu_test_kernel_runs(candidate) == old_candidate + 1);
-        CHECK(ds4_gpu_test_kernel_runs(baseline) == old_baseline);
-        CHECK(ds4_gpu_test_kernel_runs(generic) == old_generic);
-        const float *reference = ds4_gpu_tensor_contents(out[0]), *actual = ds4_gpu_tensor_contents(out[1]);
-        CHECK(reference && actual);
-        size_t changed = 0, first = VALUES;
-        double max_abs = 0, squared_error = 0;
-        for (size_t i = 0; i < VALUES; i++) {
-            CHECK(isfinite(reference[i]) && isfinite(actual[i]));
-            if (main_fp4_bits(reference[i]) != main_fp4_bits(actual[i])) {
-                if (first == VALUES) first = i;
-                changed++;
-            }
-            const double error = (double)actual[i] - reference[i];
-            max_abs = fmax(max_abs, fabs(error));
-            squared_error += error * error;
-        }
-        fprintf(stderr, "output-B rows4 NSG=%s: changed=%zu/%u max_abs=%.9g rms=%.9g; original/generic control exact\n",
-            nsgs[n], changed, (unsigned)VALUES, max_abs, sqrt(squared_error / VALUES));
-        if (first != VALUES)
-            fprintf(stderr, "  first mismatch index=%zu expected=%08x actual=%08x\n",
-                first, main_fp4_bits(reference[first]), main_fp4_bits(actual[first]));
-    }
-    /* A non-null add input excludes the literal output-B specialization. The
-     * first OUT input values also make a bounded, nonzero add fixture. */
-    CHECK(setenv(nsg_flag, "4", 1) == 0);
-    for (unsigned mode = 0; mode < 2; mode++) {
-        CHECK(setenv(flag, mode ? "1" : "0", 1) == 0);
-        const uint64_t old_baseline = ds4_gpu_test_kernel_runs(baseline);
-        const uint64_t old_candidate = ds4_gpu_test_kernel_runs(candidate);
-        const uint64_t old_generic = ds4_gpu_test_kernel_runs(generic);
-        CHECK(ds4_gpu_begin_commands());
-        CHECK(ds4_gpu_dsv41_matmul_expand_rows(out[mode], model, wb, 0, IN, OUT, x, x, res, split, 4, 1));
-        CHECK(ds4_gpu_end_commands() && ds4_gpu_synchronize());
-        CHECK(ds4_gpu_test_kernel_runs(generic) == old_generic + 1);
-        CHECK(ds4_gpu_test_kernel_runs(baseline) == old_baseline);
-        CHECK(ds4_gpu_test_kernel_runs(candidate) == old_candidate);
-    }
-    CHECK(!memcmp(ds4_gpu_tensor_contents(out[0]), ds4_gpu_tensor_contents(out[1]), VALUES * 4));
-    fprintf(stderr, "output-B rows4 add-input fallback: bitwise PASS\n");
-
-    /* Warm both no-add paths again after the NSG2/fallback checks, matching
-     * the timed batch size. Each timed sample includes encoding, submission and
-     * completion of CALLS projections, with kernel counters disabled. */
-    ds4_gpu_test_set_flags(0);
-    for (unsigned mode = 0; mode < 2; mode++) {
-        CHECK(setenv(flag, mode ? "1" : "0", 1) == 0 && ds4_gpu_begin_commands());
-        for (unsigned repeat = 0; repeat < CALLS; repeat++)
-            CHECK(ds4_gpu_dsv41_matmul_expand_rows(out[mode], model, wb, 0, IN, OUT, x, NULL, res, split, 4, 1));
-        CHECK(ds4_gpu_end_commands() && ds4_gpu_synchronize());
-    }
-    puts("pair,arm,nsg,calls,seconds");
-    for (unsigned pair = 1; pair <= 5; pair++) {
-        for (unsigned order = 0; order < 2; order++) {
-            const unsigned mode = pair % 2 ? order : 1 - order;
-            CHECK(setenv(flag, mode ? "1" : "0", 1) == 0 && ds4_gpu_synchronize());
-            const double begin = monotonic_seconds();
-            CHECK(ds4_gpu_begin_commands());
-            for (unsigned repeat = 0; repeat < CALLS; repeat++)
-                CHECK(ds4_gpu_dsv41_matmul_expand_rows(out[mode], model, wb, 0, IN, OUT, x, NULL, res, split, 4, 1));
-            CHECK(ds4_gpu_end_commands() && ds4_gpu_synchronize());
-            printf("%u,%s,4,%u,%.9f\n", pair, mode ? "candidate" : "baseline", (unsigned)CALLS,
-                monotonic_seconds() - begin);
-            fflush(stdout);
-        }
-    }
-    CHECK((saved ? setenv(flag, saved, 1) : unsetenv(flag)) == 0);
-    CHECK((saved_nsg ? setenv(nsg_flag, saved_nsg, 1) : unsetenv(nsg_flag)) == 0);
-    free(saved); free(saved_nsg);
-    ds4_gpu_tensor_free(x); ds4_gpu_tensor_free(res); ds4_gpu_tensor_free(split);
-    ds4_gpu_tensor_free(out[0]); ds4_gpu_tensor_free(out[1]);
-    free(model);
-    return 1;
-}
-
 /* The HC collapse over 32 + 10 groups against one group, bitwise, fresh inputs on every call: the collapsed row and
  * its RMS norm. */
 static int check_split_collapse(void) {
@@ -3866,11 +3751,6 @@ int main(int argc, char **argv) {
     }
     if (argc == 2 && !strcmp(argv[1], "--literal-shapes")) {
         const int ok = ds4_gpu_init() && check_literal_shapes();
-        ds4_gpu_cleanup();
-        return ok ? 0 : 1;
-    }
-    if (argc == 2 && !strcmp(argv[1], "--output-b-rows4")) {
-        const int ok = ds4_gpu_init() && check_output_b_rows4();
         ds4_gpu_cleanup();
         return ok ? 0 : 1;
     }

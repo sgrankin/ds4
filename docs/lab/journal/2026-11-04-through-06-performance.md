@@ -145,3 +145,19 @@ practical evidence, rather than claiming identical task quality. The
 [combined report](../../../speed-bench/experiments/2026-11-04-combined-prefill/README.md)
 owns all samples, quality tails and the coding limitation. Further hill climbing
 uses this package as its local baseline; published main remains unchanged.
+
+## Eighth question: widen the exposed output projection
+
+Attention output-B contributes about 3.7 ms of almost entirely exposed GPU
+work per steady token in the diagnostic profile. We doubled its output rows
+per threadgroup, preserving each row's arithmetic while halving the group
+count. All 512 paired full-vocabulary positions at 8K and 32K matched exactly.
+Five-pair timings did not establish a whole-model gain; the final 8K candidate
+also coincided with a swap excursion and remains in the reported samples.
+
+Before rejecting the neutral result, we compared the dependency profiles.
+They showed neither less output-B work nor a useful newly exposed bottleneck.
+The variant and its temporary fixture were removed, with measured revisions
+preserved in the [report](../../../speed-bench/experiments/2026-11-04-output-b-rows/README.md).
+This is a decision about absent demonstrated benefit, not a claim that a small
+noisy difference proves a regression. The qualified preset package is unchanged.

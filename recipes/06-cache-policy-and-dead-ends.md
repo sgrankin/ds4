@@ -125,6 +125,14 @@ checks, so it was removed. The first shortcut remains a separately measured
 opt-in approximation; algebraic equivalence alone did not predict the compiler's
 rounding behavior.
 
+The [four-row output-B projection](../speed-bench/experiments/2026-11-04-output-b-rows/README.md)
+halved threadgroup count while preserving all 512 tested model-logit rows.
+Five-pair full-model timings did not establish a gain, and paired diagnostic
+profiles showed no reduction in the intended exposed projection or useful new
+bottleneck. The variant was removed. Check the changed dependency as well as
+total latency before discarding neutral results; here neither supplied evidence
+for a further improvement that required this geometry.
+
 * Two-layer expert-prefetch lookahead ran 87–94 tokens/s versus 128–130 controls,
   despite exact logits. Lower explicit read wait was offset by later GPU drain;
   page-residency/contention was a hypothesis, not a measured cause (§3).
