@@ -7,25 +7,23 @@ includes choosing the next bottleneck after each result; it does not authorize
 unrelated features or publishing main. Reserve the final slice for combined
 qualification and a concise account of adopted changes and unsuccessful attempts.
 
-**Current loop: use a cheaper clock for the selected-event spin deadline.**
-Started 2026-11-04 04:50 Eastern. Close by 05:20 if the ordinary and large-context
-comparisons answer the question; the one-hour ceiling is 05:50, but final combined
-qualification takes priority. The baseline includes five adopted overnight
-changes, most recently selected-KV gather reuse.
+**Current work: qualify the frozen five-change decode package.**
+Started 2026-11-04 05:14 Eastern. Finish within the authorized session ending
+06:55:26. No further runtime experiments start during this qualification.
 
-The earlier CPU sample observed many clock reads while waiting for GPU routing.
-Reducing their frequency did not help. This separate candidate keeps readiness
-and deadline checks on every poll and uses Darwin's sleep-inclusive raw monotonic
-nanosecond API only for the spin interval. The original clock still owns the
-60-second blocking timeout; timestamps from the two clocks are never mixed.
-Test the exact opt-in flag with five alternating pairs at 8K and 32K, fixed-history
-numerical checks, and a short separate CPU sample. Retain the original path if
-there is no useful gain. Evidence stays local under
-`.workspaces/overnight-decode-20261104/raw-clock/`.
+Compare the original `8971dfbd` executable and shaders, built in an isolated
+workspace, with the five adopted changes: direct F16 gather, every-layer
+submission, early shared down, query RoPE-table reuse and selected-KV reuse.
+Use five alternating pairs at 32K with 512-token decode windows, five at 8K,
+and five recorded coding-session replays. Separate fixed-history numerical
+captures and a reasoning-enabled coding smoke check qualify the result.
+The [combined driver](../experiments/2026-11-04-decode-pass/combined.nu) records
+both source roots, executable hashes, settings and commands. Raw results stay
+under `.workspaces/overnight-decode-20261104/combined/`.
 
-After this experiment, freeze runtime changes. The final comparison uses the
-original executable and shaders from `8971dfbd` against the adopted package,
-including longer decode and the recorded coding session. Main is not published.
+Update the [combined report](../experiments/2026-11-04-decode-pass/combined.md),
+manual/status summary and journal, then leave a clean local jj head. Main remains
+unchanged and unpublished. Prior experiment percentages are not additive.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome

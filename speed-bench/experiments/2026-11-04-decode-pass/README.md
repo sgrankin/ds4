@@ -16,6 +16,7 @@ run's settings and arguments.
 | [RoPE coefficients in the short query](query-rope-table.md) | Adopted as a small reuse change in the resident fast presets. Tested outputs are exact and timings are neutral to slightly favorable; the profile does not establish a shorter exposed query tail or a specific speed gain. |
 | [Clock checks during event polling](clock-stride.md) | Unadopted. Fewer deadline checks did not improve decode; stride 64 was slower in all five warm 32K pairs. The original loop remains. |
 | [Reuse selected KV within a layer group](selected-kv-reuse.md) | Adopted in the resident fast presets. Removes 30 duplicate gathers per token without new state; tested logits are exact, with small mixed timing differences. |
+| [Raw clock for event polling](raw-clock.md) | Unadopted. The 8K means improve, but all five warm 32K pairs favor the original clock. The simpler existing path remains. |
 
 The session is still active. Results from different baselines are not additive;
 a final comparison will measure the adopted combination against the starting

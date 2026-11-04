@@ -99,3 +99,14 @@ matched, including an odd prefix boundary. We adopted the simple reuse in the
 resident fast presets with an off switch, without promising the overlapped
 gather duration as latency savings. The [reuse report](../../../speed-bench/experiments/2026-11-04-decode-pass/selected-kv-reuse.md)
 owns the measurements and remaining limits.
+
+## A different polling clock trades short-context speed for warm 32K cost
+
+Replacing only the spin deadline's clock retained every-poll readiness checks
+and the existing overall timeout. Five-pair timings favored the candidate on
+average at 8K, but every warm 32K pair favored the original clock. A separate
+CPU sample confirmed the raw-clock path without establishing why the warm
+difference occurred. We left it unadopted for the large-context goal, avoiding
+an unsupported context-length switch. The [raw-clock report](../../../speed-bench/experiments/2026-11-04-decode-pass/raw-clock.md)
+records this tradeoff and the retained prototype. Runtime changes are now
+frozen for combined qualification of the five adopted improvements.

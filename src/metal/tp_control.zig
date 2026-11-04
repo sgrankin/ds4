@@ -300,23 +300,10 @@ fn awaitSelected(sequence: u64) bool {
     const spin_us = c.ds4_zig_metal_env_u64("DS4_METAL_SELECTED_READBACK_SPIN_US", 0, 0, 5000);
     if (spin_us == 0) return c.ds4_metal_tp_wait_selected(sequence, 60000);
     const start = c.ds4_metal_dense_now_ms();
-    const raw_clock = if (c.getenv("DS4_METAL_SELECTED_READBACK_RAW_CLOCK")) |value| std.mem.eql(u8, std.mem.span(value), "1") else false;
-    if (raw_clock) {
-        // Raw time measures only the spin; the overall timeout keeps its
-        // original monotonic start. Never subtract across these two clocks.
-        // A zero raw timestamp skips or ends the spin for the bounded wait.
-        const raw_start = c.clock_gettime_nsec_np(c.CLOCK_MONOTONIC_RAW);
-        while (raw_start != 0) {
-            if (c.ds4_metal_tp_selected_value() >= sequence) return true;
-            const now = c.clock_gettime_nsec_np(c.CLOCK_MONOTONIC_RAW);
-            if (now == 0 or now - raw_start >= spin_us * 1000) break;
-        }
-    } else {
-        const spin_until = start + @as(f64, @floatFromInt(spin_us)) / 1000.0;
-        while (true) {
-            if (c.ds4_metal_tp_selected_value() >= sequence) return true;
-            if (c.ds4_metal_dense_now_ms() >= spin_until) break;
-        }
+    const spin_until = start + @as(f64, @floatFromInt(spin_us)) / 1000.0;
+    while (true) {
+        if (c.ds4_metal_tp_selected_value() >= sequence) return true;
+        if (c.ds4_metal_dense_now_ms() >= spin_until) break;
     }
     // A delayed GPU falls back to blocking under the same overall deadline.
     // The bound avoids monopolizing a host core on a stalled command buffer.
