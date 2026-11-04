@@ -332,6 +332,7 @@ static ds4_metal_thread_owners ds4_metal_thread_capture(void) {
     id<MTLComputePipelineState> dsv4_indexed_attention_heads16_dual_pipeline;
     id<MTLComputePipelineState> dsv4_indexed_attention_heads16_rb4_pipeline;
     id<MTLComputePipelineState> dsv4_indexed_attention_heads16_rb4_unit_scale_pipeline;
+    id<MTLComputePipelineState> dsv4_indexed_attention_heads16_rb4_unit_scale_rounded_pipeline;
     id<MTLComputePipelineState> dsv4_indexed_attention_heads8_split_pipeline;
     id<MTLComputePipelineState> dsv4_indexed_attention_heads8_split_reduce_pipeline;
     id<MTLComputePipelineState> dsv4_softplus_sqrt_pipeline;
@@ -809,6 +810,7 @@ static void ds4_metal_thread_leave(ds4_metal_thread_scope *scope) {
 #define g_dsv4_indexed_attention_heads16_dual_pipeline (ds4_metal_context_current()->dsv4_indexed_attention_heads16_dual_pipeline)
 #define g_dsv4_indexed_attention_heads16_rb4_pipeline (ds4_metal_context_current()->dsv4_indexed_attention_heads16_rb4_pipeline)
 #define g_dsv4_indexed_attention_heads16_rb4_unit_scale_pipeline (ds4_metal_context_current()->dsv4_indexed_attention_heads16_rb4_unit_scale_pipeline)
+#define g_dsv4_indexed_attention_heads16_rb4_unit_scale_rounded_pipeline (ds4_metal_context_current()->dsv4_indexed_attention_heads16_rb4_unit_scale_rounded_pipeline)
 #define g_dsv4_indexed_attention_heads8_split_pipeline (ds4_metal_context_current()->dsv4_indexed_attention_heads8_split_pipeline)
 #define g_dsv4_indexed_attention_heads8_split_reduce_pipeline (ds4_metal_context_current()->dsv4_indexed_attention_heads8_split_reduce_pipeline)
 #define g_dsv4_softplus_sqrt_pipeline (ds4_metal_context_current()->dsv4_softplus_sqrt_pipeline)

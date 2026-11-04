@@ -3025,7 +3025,7 @@ static int check_tp_attention(void) {
 /* Compare the packed half4 attention reader with independently expanded rows.
  * The raw ring and selected IDs are identical for every comparison, including
  * the row order chosen by split decode or chronological prefill. */
-static int check_fp4_attention(uint32_t benchmark_rows) {
+static int check_fp4_attention(uint32_t benchmark_rows, unsigned candidate_mode) {
     enum { D = 512, H = 64, K = 512, PACKED_ROW = 288 };
     const bool benchmark = benchmark_rows != 0;
     const struct fp4_attention_case { uint32_t rows, heads; bool quality; } checks[] = {
@@ -3040,6 +3040,7 @@ static int check_fp4_attention(uint32_t benchmark_rows) {
     const uint32_t comp_rows = benchmark ? 8192 : 640;
     static const float levels[8] = {0, .5f, 1, 1.5f, 2, 3, 4, 6};
     const char *flag = "DS4_METAL_V41_ATTN_UNIT_SCALE";
+    const char *candidate_value = candidate_mode == 1 ? "1" : "2";
     const char *previous = getenv(flag);
     char *saved = previous ? strdup(previous) : NULL;
     CHECK(!previous || saved);
@@ -3114,8 +3115,9 @@ static int check_fp4_attention(uint32_t benchmark_rows) {
         CHECK(ds4_gpu_tensor_read(out, 0, reference, nq * sizeof(float)));
         for (size_t i = 0; i < nq; i++) CHECK(isfinite(reference[i]));
         const bool candidate_path = n > 1 && !cases[s].quality && ds4_metal_attention_batch_mpp();
-        for (unsigned unit_scale = 0; unit_scale < 2; unit_scale++) {
-            CHECK(setenv(flag, unit_scale ? "1" : "0", 1) == 0);
+        for (unsigned arm = 0; arm < 2; arm++) {
+            const unsigned unit_scale = arm ? candidate_mode : 0;
+            CHECK(setenv(flag, arm ? candidate_value : "0", 1) == 0);
             CHECK(ds4_gpu_attention_indexed_mixed_batch_heads_tensor(out, sinks, getpagesize(),
                 0, qt, rt, pt, 2, it, n, start, nr, cap, raw_start, comp_rows, K, 128, 4, heads, D));
             CHECK(ds4_gpu_synchronize());
@@ -3134,8 +3136,8 @@ static int check_fp4_attention(uint32_t benchmark_rows) {
                     max_abs = fmax(max_abs, fabs(error));
                     squared_error += error * error;
                 }
-                fprintf(stderr, "FP4 attention rows=%u heads=%u quality=%u unit_scale=1 approximate measured: changed=%zu/%zu max_abs=%.9g rms=%.9g\n",
-                    n, heads, cases[s].quality, changed, nq, max_abs, sqrt(squared_error / nq));
+                fprintf(stderr, "FP4 attention rows=%u heads=%u quality=%u unit_scale=%u candidate measured: changed=%zu/%zu max_abs=%.9g rms=%.9g\n",
+                    n, heads, cases[s].quality, unit_scale, changed, nq, max_abs, sqrt(squared_error / nq));
                 if (first != nq)
                     fprintf(stderr, "  first mismatch index=%zu expected=%08x actual=%08x\n",
                         first, main_fp4_bits(reference[first]), main_fp4_bits(actual[first]));
@@ -3157,11 +3159,12 @@ static int check_fp4_attention(uint32_t benchmark_rows) {
              * complete indexed-attention calls, including sorting, encoding
              * and completion; this is not isolated shader GPU time. */
             const unsigned repetitions = 4;
-            puts("pair,arm,rows,heads,repetitions,seconds");
+            puts("pair,arm,unit_scale,rows,heads,repetitions,seconds");
             for (unsigned pair = 1; pair <= 5; pair++) {
                 for (unsigned order = 0; order < 2; order++) {
-                    const unsigned unit_scale = pair % 2 ? order : 1 - order;
-                    CHECK(setenv(flag, unit_scale ? "1" : "0", 1) == 0);
+                    const unsigned arm = pair % 2 ? order : 1 - order;
+                    const unsigned unit_scale = arm ? candidate_mode : 0;
+                    CHECK(setenv(flag, arm ? candidate_value : "0", 1) == 0);
                     CHECK(ds4_gpu_synchronize());
                     const double begin = monotonic_seconds();
                     for (unsigned repeat = 0; repeat < repetitions; repeat++)
@@ -3169,8 +3172,8 @@ static int check_fp4_attention(uint32_t benchmark_rows) {
                             0, qt, rt, pt, 2, it, n, start, nr, cap, raw_start, comp_rows, K, 128, 4, heads, D));
                     CHECK(ds4_gpu_synchronize());
                     const double seconds = monotonic_seconds() - begin;
-                    printf("%u,%s,%u,%u,%u,%.9f\n", pair, unit_scale ? "candidate" : "baseline",
-                        n, heads, repetitions, seconds);
+                    printf("%u,%s,%u,%u,%u,%u,%.9f\n", pair, arm ? "candidate" : "baseline",
+                        unit_scale, n, heads, repetitions, seconds);
                     fflush(stdout);
                 }
             }
@@ -3612,11 +3615,12 @@ int main(int argc, char **argv) {
                      !strcmp(argv[1], "--fp4-attention-bench"))) {
         const bool benchmark = !strcmp(argv[1], "--fp4-attention-bench");
         uint32_t rows = benchmark ? 2048 : 0;
-        if (argc > (benchmark ? 3 : 2)) {
-            fprintf(stderr, "usage: %s --fp4-attention | --fp4-attention-bench [rows]\n", argv[0]);
+        unsigned candidate_mode = 2;
+        if (argc > (benchmark ? 4 : 3)) {
+            fprintf(stderr, "usage: %s --fp4-attention [mode] | --fp4-attention-bench [rows [mode]]\n", argv[0]);
             return 1;
         }
-        if (benchmark && argc == 3) {
+        if (benchmark && argc >= 3) {
             char *end;
             const long parsed = strtol(argv[2], &end, 10);
             if (*end || parsed < 2 || parsed > 8192) {
@@ -3625,7 +3629,17 @@ int main(int argc, char **argv) {
             }
             rows = (uint32_t)parsed;
         }
-        const int ok = ds4_gpu_init() && check_fp4_attention(rows);
+        const int mode_arg = benchmark ? 3 : 2;
+        if (argc > mode_arg) {
+            char *end;
+            const long parsed = strtol(argv[mode_arg], &end, 10);
+            if (*end || parsed < 1 || parsed > 2) {
+                fprintf(stderr, "FP4 attention candidate mode must be 1 or 2\n");
+                return 1;
+            }
+            candidate_mode = (unsigned)parsed;
+        }
+        const int ok = ds4_gpu_init() && check_fp4_attention(rows, candidate_mode);
         ds4_gpu_cleanup();
         return ok ? 0 : 1;
     }

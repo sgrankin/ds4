@@ -52,6 +52,7 @@ enum {
     DS4_ATTN_BATCH_INDEX_DECODE, DS4_ATTN_BATCH_INDEX_DUAL, DS4_ATTN_BATCH_INDEX,
     DS4_ATTN_BATCH_INDEX_DUAL_RB4,
     DS4_ATTN_BATCH_INDEX_DUAL_RB4_UNIT_SCALE,
+    DS4_ATTN_BATCH_INDEX_DUAL_RB4_UNIT_SCALE_ROUNDED,
 };
 ds4_metal_attention_pipeline ds4_metal_attention_batch_pipeline(uint32_t kind,
     uint32_t nsg, uint32_t nwg, bool pad, bool boundary_mask, bool has_sinks);

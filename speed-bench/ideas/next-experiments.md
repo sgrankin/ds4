@@ -6,27 +6,29 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: can attention skip rescaling by one?**
-One-hour slice: November 4, 11:22–12:22 Eastern. Baseline `e050fa0b` includes
-the adopted four-row staging kernel. Its fresh 32K profile still attributes
-9.33 seconds of GPU work to indexed attention. The per-row online softmax
-always computes two exponentials and rescales the output, even when the running
-maximum does not change and the old-output scale is exactly one.
+**Current question: can the rescaling shortcut preserve the old rounding?**
+One-hour slice: November 4, 12:09–13:09 Eastern. Baseline `1312c914` retains
+the approximate shortcut as opt-in, outside the presets. It reduced measured
+total inference time by 1.1–1.5%, with nonzero distribution drift and a passing
+but eventful coding check. Removing an identity multiplication may have changed
+which product the compiler contracts with an addition; that explanation remains
+a source-level hypothesis, not a generated-code finding.
 
-Try a bounded fast path for that case inside the four-row prefill kernel,
-preserving row order and the original path as control. Keep decode and other
-attention paths unchanged. Start with the six-shape numerical fixture and five
-alternating operation pairs at small and large prefill sizes. If promising,
-compare five full-model pairs at 8K and 32K and measure full-vocabulary quality.
-Approximate results may be useful; report drift rather than rejecting it solely
-for differing bits. Keep profile diagnostics separate from latency comparisons.
+Try an explicit rounded KV contribution inside the shortcut, using the existing
+block-local contraction controls and `fma(output, 1, contribution)`. Keep the
+original four-row kernel and the first shortcut available as measured controls.
+Start with the existing six-shape fixture and five alternating operation pairs
+at small and large sizes. If useful, measure five full-model pairs at 8K and
+32K, fixed-history quality and an activated reasoning-enabled coding task.
+Use enough context capacity to distinguish the arithmetic change from the
+previous small-context compaction event. Approximation remains acceptable;
+select the useful speed/quality tradeoff rather than requiring perfect equality.
 
 Raw evidence belongs under
-`.workspaces/hillclimb-20261104/05-attention-unit-rescale/`. Reuse the existing
-runner and fixture rather than creating another harness. Four-row staging is
-enabled in the local resident fast source presets; whole-model timing did not
-establish a total-time change. The root compatibility binaries and published
-main remain at the starting package until a later combined qualification.
+`.workspaces/hillclimb-20261104/06-attention-contribution-rounding/`. Reuse the
+runner and fixture. Four-row staging remains enabled in the local resident fast
+source presets; the rescaling shortcut is not. Root compatibility binaries and
+published main remain at the starting package until combined qualification.
 
 Record one result report and a short
 [session journal](../../docs/lab/journal/2026-11-04-through-06-performance.md)

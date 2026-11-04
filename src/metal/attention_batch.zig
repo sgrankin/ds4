@@ -539,10 +539,11 @@ fn indexed(problem: Problem) c_int {
     const row_block = row_block_env != null and c.atoi(row_block_env) != 0;
     // A separate specialization keeps the control's per-row arithmetic intact.
     const unit_scale_env = if (row_block) c.getenv("DS4_METAL_V41_ATTN_UNIT_SCALE") else null;
-    const unit_scale = unit_scale_env != null and c.atoi(unit_scale_env) != 0;
+    const unit_scale_mode = if (unit_scale_env != null) c.atoi(unit_scale_env) else 0;
+    const unit_scale = unit_scale_mode != 0;
     const splits: u32 = if (decode and !quality) 12 else 1;
     const split = splits > 1;
-    const attention = pipeline(if (split) c.DS4_ATTN_BATCH_INDEX_SPLIT else if (decode) c.DS4_ATTN_BATCH_INDEX_DECODE else if (unit_scale) c.DS4_ATTN_BATCH_INDEX_DUAL_RB4_UNIT_SCALE else if (row_block) c.DS4_ATTN_BATCH_INDEX_DUAL_RB4 else if (dual_heads) c.DS4_ATTN_BATCH_INDEX_DUAL else c.DS4_ATTN_BATCH_INDEX, 0, 0, false, false, true);
+    const attention = pipeline(if (split) c.DS4_ATTN_BATCH_INDEX_SPLIT else if (decode) c.DS4_ATTN_BATCH_INDEX_DECODE else if (unit_scale_mode == 2) c.DS4_ATTN_BATCH_INDEX_DUAL_RB4_UNIT_SCALE_ROUNDED else if (unit_scale) c.DS4_ATTN_BATCH_INDEX_DUAL_RB4_UNIT_SCALE else if (row_block) c.DS4_ATTN_BATCH_INDEX_DUAL_RB4 else if (dual_heads) c.DS4_ATTN_BATCH_INDEX_DUAL else c.DS4_ATTN_BATCH_INDEX, 0, 0, false, false, true);
     const reduce = if (split) pipeline(c.DS4_ATTN_BATCH_INDEX_REDUCE, 0, 0, false, false, true) else std.mem.zeroes(Pipeline);
     if (sort.handle == null or attention.handle == null or (split and reduce.handle == null)) return 0;
     if (problem.top_k > sort.threads) return api.reportError("ds4: Metal indexed attention top-k exceeds sort threadgroup limit");

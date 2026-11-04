@@ -56,6 +56,7 @@ ds4_metal_attention_pipeline ds4_metal_attention_batch_pipeline(uint32_t kind,
             case DS4_ATTN_BATCH_INDEX_DUAL: pso = ds4_gpu_hot_pipeline(g_dsv4_indexed_attention_heads16_dual_pipeline, "kernel_dsv4_indexed_mixed_attention_heads16_dual"); break;
             case DS4_ATTN_BATCH_INDEX_DUAL_RB4: pso = ds4_gpu_hot_pipeline(g_dsv4_indexed_attention_heads16_rb4_pipeline, "kernel_dsv4_indexed_mixed_attention_heads16_rb4"); break;
             case DS4_ATTN_BATCH_INDEX_DUAL_RB4_UNIT_SCALE: pso = ds4_gpu_hot_pipeline(g_dsv4_indexed_attention_heads16_rb4_unit_scale_pipeline, "kernel_dsv4_indexed_mixed_attention_heads16_rb4_unit_scale"); break;
+            case DS4_ATTN_BATCH_INDEX_DUAL_RB4_UNIT_SCALE_ROUNDED: pso = ds4_gpu_hot_pipeline(g_dsv4_indexed_attention_heads16_rb4_unit_scale_rounded_pipeline, "kernel_dsv4_indexed_mixed_attention_heads16_rb4_unit_scale_rounded"); break;
             case DS4_ATTN_BATCH_INDEX: pso = ds4_gpu_hot_pipeline(g_dsv4_indexed_attention_heads8_pipeline, "kernel_dsv4_indexed_mixed_attention_heads8"); break;
         }
         return (ds4_metal_attention_pipeline){
