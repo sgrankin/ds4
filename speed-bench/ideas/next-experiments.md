@@ -6,35 +6,29 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: can the rescaling shortcut preserve the old rounding?**
-One-hour slice: November 4, 12:09–13:09 Eastern. Baseline `1312c914` retains
-the approximate shortcut as opt-in, outside the presets. It reduced measured
-total inference time by 1.1–1.5%, with nonzero distribution drift and a passing
-but eventful coding check. Removing an identity multiplication may have changed
-which product the compiler contracts with an addition; that explanation remains
-a source-level hypothesis, not a generated-code finding.
+**Current question: should the unit-rescale shortcut join the fast presets?**
+One-hour slice: November 4, 12:26–13:26 Eastern. Compare the accumulated
+candidate against published `364ceeab`, using its frozen checkout and original
+settings. The candidate adds exact four-row attention staging and the approximate
+unit-rescale shortcut. The selected-prefill wait cleanup remains behind its
+existing opt-in flag and is not enabled in this comparison.
 
-Try an explicit rounded KV contribution inside the shortcut, using the existing
-block-local contraction controls and `fma(output, 1, contribution)`. Keep the
-original four-row kernel and the first shortcut available as measured controls.
-Start with the existing six-shape fixture and five alternating operation pairs
-at small and large sizes. If useful, measure five full-model pairs at 8K and
-32K, fixed-history quality and an activated reasoning-enabled coding task.
-Use enough context capacity to distinguish the arithmetic change from the
-previous small-context compaction event. Approximation remains acceptable;
-select the useful speed/quality tradeoff rather than requiring perfect equality.
+Use five alternating 32K timing pairs, full-vocabulary fixed-history quality,
+and a reasoning-enabled coding check with enough context capacity to avoid the
+previous reserve-triggered compaction. Inspect whether the recorded coding
+replay exercises the new kernel before selecting it as the normal-case workload.
+Use the existing combined runner, without changing the runtime during samples.
+Decide whether the practical speed and quality tradeoff warrants enabling the
+shortcut in the resident fast presets. Small numerical differences and noisy
+neutral timings are not automatic rejection criteria.
 
 Raw evidence belongs under
-`.workspaces/hillclimb-20261104/06-attention-contribution-rounding/`. Reuse the
-runner and fixture. Four-row staging remains enabled in the local resident fast
-source presets; the rescaling shortcut is not. Root compatibility binaries and
-published main remain at the starting package until combined qualification.
-
-Record one result report and a short
-[session journal](../../docs/lab/journal/2026-11-04-through-06-performance.md)
-entry, update the owning manual if adopted, then select the next target from
-measured dependencies. Periodically compare the accumulated package against
-its starting runtime; reserve the final session slice for combined qualification.
+`.workspaces/hillclimb-20261104/07-combined-prefill/`. Root compatibility binaries
+and published main remain at the starting package. Record one result report
+and a short [session journal](../../docs/lab/journal/2026-11-04-through-06-performance.md)
+entry; update the owning manual if promoted. Then return to the next measured
+prefill or decode dependency. Reserve the final session slice for another
+combined qualification.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome

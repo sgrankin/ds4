@@ -110,3 +110,21 @@ KV contribution retains the speed benefit while reducing drift. The
 [result report](../../../speed-bench/experiments/2026-11-04-attention-unit-rescale/README.md)
 owns samples, numerical tails, task details and the original failed exactness
 check. The four-row staging preset remains adopted independently.
+
+## Sixth question: preserve contribution rounding explicitly
+
+We tested a local contraction control and explicit FMA to preserve the rounded
+KV contribution while retaining the shortcut. It did not restore the original
+fixture values; more elements differed and RMS error increased. Five-pair
+operation measurements found no useful gain at 2048 rows and higher mean times
+at 512 and 8192 rows. The original shortcut still improved its separate paired
+2048-row comparison by about 9% with the same binary.
+
+The new variant was removed without proceeding to full-model measurements.
+It failed the intended numerical refinement and did not offer an operation-level
+advantage; this is not a judgment of practical task quality from fixture error,
+or a rejection based solely on a small noisy timing difference. The
+[report](../../../speed-bench/experiments/2026-11-04-attention-contribution-rounding/README.md)
+preserves all samples and the prototype revision. The first shortcut remains
+opt-in. Combined qualification is the next useful step before choosing whether
+to promote it, rather than continuing to chase exact rounding.

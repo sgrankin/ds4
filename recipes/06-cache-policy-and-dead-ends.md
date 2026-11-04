@@ -118,6 +118,13 @@ logical lane work, but can leave SIMD instruction issue and physical reads
 unchanged while adding a shuffle; that explanation is plausible, not measured
 at the hardware-counter level.
 
+An [explicit contribution-rounding variant](../speed-bench/experiments/2026-11-04-attention-contribution-rounding/README.md)
+did not make the attention rescaling shortcut match the original arithmetic.
+It increased fixture error and offered no operation-level benefit in five-pair
+checks, so it was removed. The first shortcut remains a separately measured
+opt-in approximation; algebraic equivalence alone did not predict the compiler's
+rounding behavior.
+
 * Two-layer expert-prefetch lookahead ran 87–94 tokens/s versus 128–130 controls,
   despite exact logits. Lower explicit read wait was offset by later GPU drain;
   page-residency/contention was a hypothesis, not a measured cause (§3).

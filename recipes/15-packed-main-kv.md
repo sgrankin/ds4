@@ -120,7 +120,7 @@ for measurements.
 An additional optional attention shortcut skips rescaling by one. It leaves the
 packed representation unchanged but changes compiled arithmetic and measured
 model outputs, so it must not be confused with lossless cache packing. It remains
-outside the presets while a narrower rounding variant is investigated; see the
+outside the presets pending combined qualification; see the
 [measured speed and quality tradeoff](../speed-bench/experiments/2026-11-04-attention-unit-rescale/README.md).
 
 Checkpoint conversion uses the existing 8 MiB host I/O buffer and bounded GPU

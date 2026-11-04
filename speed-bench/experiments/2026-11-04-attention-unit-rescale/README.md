@@ -250,9 +250,9 @@ in the fast presets yet. The candidate improved the measured isolated operation
 and both tested full-model prefill and inference totals. The fixed-history
 logits drift and one passing practical task define a limited quality picture,
 not general agent qualification. The bit differences alone are not grounds
-for rejection. A next bounded experiment will test whether preserving the
-original contribution rounding while skipping the identity exponential offers
-a different speed and quality tradeoff.
+for rejection. The subsequent [contribution-rounding experiment](../2026-11-04-attention-contribution-rounding/README.md)
+did not recover equality or retain the operation advantage, so that refinement
+was removed. The original shortcut awaits combined package qualification.
 
 ## Reproduction
 

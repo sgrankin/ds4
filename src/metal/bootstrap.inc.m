@@ -2139,8 +2139,6 @@ bool ds4_metal_bootstrap_remaining_pipelines(void) {
         ds4_gpu_get_pipeline("kernel_dsv4_indexed_mixed_attention_heads16_rb4");
     g_dsv4_indexed_attention_heads16_rb4_unit_scale_pipeline =
         ds4_gpu_get_pipeline("kernel_dsv4_indexed_mixed_attention_heads16_rb4_unit_scale");
-    g_dsv4_indexed_attention_heads16_rb4_unit_scale_rounded_pipeline =
-        ds4_gpu_get_pipeline("kernel_dsv4_indexed_mixed_attention_heads16_rb4_unit_scale_rounded");
     g_dsv4_indexed_attention_heads8_split_pipeline =
         ds4_gpu_get_pipeline("kernel_dsv4_indexed_mixed_attention_heads8_split");
     g_dsv4_indexed_attention_heads8_split_reduce_pipeline =
@@ -2294,7 +2292,6 @@ bool ds4_metal_bootstrap_remaining_pipelines(void) {
         !g_dsv4_indexed_attention_heads16_dual_pipeline ||
         !g_dsv4_indexed_attention_heads16_rb4_pipeline ||
         !g_dsv4_indexed_attention_heads16_rb4_unit_scale_pipeline ||
-        !g_dsv4_indexed_attention_heads16_rb4_unit_scale_rounded_pipeline ||
         !g_dsv4_indexed_attention_heads8_split_pipeline ||
         !g_dsv4_indexed_attention_heads8_split_reduce_pipeline ||
         !g_dsv4_softplus_sqrt_pipeline ||
@@ -2530,7 +2527,6 @@ void ds4_metal_bootstrap_retire_pipelines(void) {
     g_dsv4_indexed_attention_heads16_dual_pipeline = nil;
     g_dsv4_indexed_attention_heads16_rb4_pipeline = nil;
     g_dsv4_indexed_attention_heads16_rb4_unit_scale_pipeline = nil;
-    g_dsv4_indexed_attention_heads16_rb4_unit_scale_rounded_pipeline = nil;
     g_dsv4_indexed_attention_heads8_split_pipeline = nil;
     g_dsv4_indexed_attention_heads8_split_reduce_pipeline = nil;
     g_dsv4_softplus_sqrt_pipeline = nil;

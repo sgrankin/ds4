@@ -451,7 +451,7 @@ reduced total inference time by about 1.1–1.5% at 8K and 32K, with nonzero
 distribution drift. A bounded activated coding task passed its independent
 oracle in both arms, but the candidate corrected a self-test and compacted once.
 The [rescaling report](../../../speed-bench/experiments/2026-11-04-attention-unit-rescale/README.md)
-records the quality tails, practical limits and next rounding question. Stored
+records the quality tails and practical limits. Stored
 KV formats and scalar decode kernels are unchanged; altered prefill state can
 still affect subsequent decode behavior.
 
