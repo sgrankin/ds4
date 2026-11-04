@@ -1,13 +1,17 @@
 # Selected experiment
 
-**Completed 2026-11-03: test expert-cache allocation granularity.**
+**Selected 2026-11-03: standalone short-Q8 query kernel.**
 
-The [result report](../experiments/2026-11-03-expert-slabs/README.md) retains the
-4 GiB default after five alternating pairs at 8K and 32K. Smaller slabs shorten
-the first decode step, but do not establish an append or complete workload
-improvement. Numerical and cache-capacity checks passed. The standalone
-short-Q8 query kernel remains a separate, unstarted candidate for decode TPS;
-this completed experiment does not authorize starting it.
+One-hour budget starts at 22:25:16 Eastern. Runtime baseline `ab947bef`
+(documented through `05e78fdf`), Flash 1017 IQ2/Q2 on the M5 Max. Reuse the
+existing short-Q8 reduction for the scalar 1,280-to-32,768 query projection,
+preserving BF16 and RoPE semantics. Keep routing, packed KV, streaming RoPE,
+4 GiB expert slabs and total cache capacity fixed. Use an opt-in dispatch with
+the generic path as control and fallback. Validate focused GPU equivalence,
+then five alternating timing pairs and fixed-history logits at 32K and 8K.
+Use a separate profile to confirm activation and explain the measured effect.
+Adopt only after assessing decode, prefill and complete phase time together.
+Raw artifacts stay ignored under `.workspaces/short-q8-query-20261103/`.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome

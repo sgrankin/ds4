@@ -326,6 +326,15 @@ export fn ds4_gpu_dsv41_project_q(out: ?*Tensor, map: ?*const anyopaque, size: u
     defer dst.deinit();
     const mv = Dense.mvArgs(width, outputs, 1, true, 2);
     const rope = mvRope(512, pos, compressed, false);
+    const short_q8 = if (c.getenv("DS4_METAL_V41_SHORT_Q8_QUERY")) |value| std.mem.eql(u8, std.mem.span(value), "1") else false;
+    // The helper preserves the default NSG=4 reduction. Any explicit NSG
+    // override or non-single-rank execution keeps the generic dispatch.
+    if (short_q8 and width == 1280 and outputs == 32768 and
+        c.getenv("DS4_METAL_Q8_MV_NSG") == null and
+        c.ds4_metal_attention_get_facts().flags & c.DS4_ATTN_TP_SINGLE != 0)
+    {
+        return dispatch("kernel_dsv41_query_short_q8", &.{ arg(0, &mv), buf(1, weight.view), buf(2, src.view), buf(3, dst.view), arg(4, &rope) }, .{ .x = 4096, .tx = 32, .ty = 8, .shared = 8 * 4 });
+    }
     const nsg: u32 = @intCast(c.ds4_zig_metal_env_u64("DS4_METAL_Q8_MV_NSG", if (c.ds4_metal_dense_facts(false) & c.DS4_DENSE_TP_TWO != 0) 2 else 4, 1, 8));
     return dispatch("kernel_mul_mv_q8_0_f32_bf16_rope", &.{ arg(0, &mv), buf(1, weight.view), buf(2, src.view), buf(3, dst.view), arg(4, &rope) }, .{ .x = (@as(u64, outputs) + 1) / 2, .tx = 32, .ty = nsg, .nsg = @intCast(nsg), .shared = 256 });
 }

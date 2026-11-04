@@ -1369,6 +1369,36 @@ kernel void kernel_dsv41_deferred_collapse_norm(
     if (gid == 0) atomic_store_explicit(counter, 0u, memory_order_relaxed);
 }
 
+// Standalone 1280 -> 32768 query projection, using the deferred query's
+// geometry without changing the HC schedule. Eight physical SIMD groups own
+// eight adjacent output rows. The helper indexes group.x * 4 + simd, so pass
+// group.x * 2 to cover eight rows per threadgroup without overlap.
+// Its five K tiles retain the NSG=4 reference's four logical accumulators:
+// tile 4 adds to slot 0, then the same two SIMD reduction stages round to BF16.
+kernel void kernel_dsv41_query_short_q8(
+        constant ds4_metal_args_mul_mv &mv [[buffer(0)]],
+        device const char *weight [[buffer(1)]], device const char *x [[buffer(2)]],
+        device float *q [[buffer(3)]], constant ds4_metal_args_mv_rope &rope [[buffer(4)]],
+        threadgroup float *pairs [[threadgroup(0)]], uint3 group [[threadgroup_position_in_grid]],
+        ushort lane [[thread_index_in_simdgroup]], ushort simd [[simdgroup_index_in_threadgroup]]) {
+    const float value = ds4_q8_short_value<40, false>(mv, weight, x, uint3(group.x*2u,0,0), lane, simd);
+    if (lane == 0) pairs[simd] = value;
+    threadgroup_barrier(mem_flags::mem_threadgroup);
+    // Even SIMD groups consume adjacent BF16 row pairs. Preserve the forward
+    // RoPE multiply/FMA order and second BF16 rounding at each head's tail.
+    if (lane == 0 && (simd & 1u) == 0) {
+        const uint row = group.x * 8u + simd, col = row % rope.width;
+        const float re = pairs[simd], im = pairs[simd + 1u];
+        if (col >= rope.width - 64u) {
+            const float theta = float(rope.start) * rope.frequencies[(col - (rope.width - 64u)) >> 1u];
+            const float c = precise::cos(theta);
+            const float sn = precise::sin(theta);
+            q[row] = ds4_bf16_round(fma(re, c, -(im * sn)));
+            q[row + 1u] = ds4_bf16_round(fma(im, c, re * sn));
+        } else { q[row] = re; q[row + 1u] = im; }
+    }
+}
+
 kernel void kernel_dsv41_query_deferred_hc(
         constant ds4_metal_args_hc_norm_mix &hc [[buffer(0)]],
         constant ds4_metal_args_dsv4_hc_split_weighted_sum_norm &split_args [[buffer(1)]],

@@ -1208,6 +1208,68 @@ static void *q8_weights(uint32_t rows, uint32_t cols, uint64_t *bytes) {
     return model;
 }
 
+/* The standalone short-Q8 query preserves the generic projection's accumulation,
+ * BF16 rounding and RoPE order. An explicit NSG override must retain generic dispatch. */
+static int check_short_query(void) {
+    enum { WIDTH = 1280, OUTPUTS = 32768 };
+    const uint32_t positions[] = {0, 1, 8191, 1048575};
+    const char *candidate = "kernel_dsv41_query_short_q8";
+    const char *generic = "kernel_mul_mv_q8_0_f32_bf16_rope";
+    const char *old_short = getenv("DS4_METAL_V41_SHORT_Q8_QUERY");
+    const char *old_nsg = getenv("DS4_METAL_Q8_MV_NSG");
+    char *saved_short = old_short ? strdup(old_short) : NULL;
+    char *saved_nsg = old_nsg ? strdup(old_nsg) : NULL;
+    CHECK((!old_short || saved_short) && (!old_nsg || saved_nsg));
+    CHECK(unsetenv("DS4_METAL_Q8_MV_NSG") == 0);
+    uint64_t wb = 0;
+    void *model = q8_weights(OUTPUTS, WIDTH, &wb);
+    CHECK(model && ds4_gpu_set_model_map(model, wb));
+    ds4_gpu_tensor *x = upload(NULL, WIDTH * sizeof(float));
+    ds4_gpu_tensor *out[2] = {upload(NULL, OUTPUTS * sizeof(float)),
+                              upload(NULL, OUTPUTS * sizeof(float))};
+    CHECK(x && out[0] && out[1]);
+    float *input = ds4_gpu_tensor_contents(x);
+    ds4_gpu_test_set_flags(DS4_GPU_TEST_COUNT_KERNELS);
+    for (uint32_t compressed = 0; compressed < 2; compressed++) {
+        for (uint32_t p = 0; p < sizeof(positions) / sizeof(positions[0]); p++) {
+            for (uint32_t i = 0; i < WIDTH; i++) input[i] = random_value();
+            for (uint32_t mode = 0; mode < 2; mode++) {
+                CHECK(setenv("DS4_METAL_V41_SHORT_Q8_QUERY", mode ? "1" : "0", 1) == 0);
+                const uint64_t short_runs = ds4_gpu_test_kernel_runs(candidate);
+                const uint64_t generic_runs = ds4_gpu_test_kernel_runs(generic);
+                CHECK(ds4_gpu_begin_commands());
+                CHECK(ds4_gpu_dsv41_project_q(out[mode], model, wb, 0, WIDTH, OUTPUTS,
+                    x, positions[p], compressed));
+                CHECK(ds4_gpu_end_commands() && ds4_gpu_synchronize());
+                CHECK(ds4_gpu_test_kernel_runs(candidate) == short_runs + mode);
+                CHECK(ds4_gpu_test_kernel_runs(generic) == generic_runs + !mode);
+            }
+            CHECK(!memcmp(ds4_gpu_tensor_contents(out[0]), ds4_gpu_tensor_contents(out[1]),
+                OUTPUTS * sizeof(float)));
+        }
+    }
+    /* Even the generic default value, when explicit, takes precedence over opt-in. */
+    CHECK(setenv("DS4_METAL_Q8_MV_NSG", "4", 1) == 0);
+    const uint64_t short_runs = ds4_gpu_test_kernel_runs(candidate);
+    const uint64_t generic_runs = ds4_gpu_test_kernel_runs(generic);
+    CHECK(ds4_gpu_begin_commands());
+    CHECK(ds4_gpu_dsv41_project_q(out[1], model, wb, 0, WIDTH, OUTPUTS, x, 1048575, true));
+    CHECK(ds4_gpu_end_commands() && ds4_gpu_synchronize());
+    CHECK(ds4_gpu_test_kernel_runs(candidate) == short_runs);
+    CHECK(ds4_gpu_test_kernel_runs(generic) == generic_runs + 1);
+    CHECK(!memcmp(ds4_gpu_tensor_contents(out[0]), ds4_gpu_tensor_contents(out[1]),
+        OUTPUTS * sizeof(float)));
+    ds4_gpu_test_set_flags(0);
+    if (saved_short) { CHECK(setenv("DS4_METAL_V41_SHORT_Q8_QUERY", saved_short, 1) == 0); free(saved_short); }
+    else CHECK(unsetenv("DS4_METAL_V41_SHORT_Q8_QUERY") == 0);
+    if (saved_nsg) { CHECK(setenv("DS4_METAL_Q8_MV_NSG", saved_nsg, 1) == 0); free(saved_nsg); }
+    else CHECK(unsetenv("DS4_METAL_Q8_MV_NSG") == 0);
+    ds4_gpu_tensor_free(x); ds4_gpu_tensor_free(out[0]); ds4_gpu_tensor_free(out[1]);
+    free(model);
+    fprintf(stderr, "V4.1 short-Q8 query: bitwise parity at 0/1/8191/1048575, both frequency modes; activation and NSG override PASS\n");
+    return 1;
+}
+
 /* Exercise the pre-M5 exact kernels on any Apple GPU. Hardware selection
  * stays in the native owner; these checks compare the actual shader results,
  * including an odd final token and output bounds, against scalar dispatches. */
@@ -1564,6 +1626,7 @@ static int check_split_collapse(void) {
     return 1;
 }
 #else
+static int check_short_query(void) { return 1; }
 static int check_low_projection_rows(void) { return 1; }
 static int check_kslice_rows(void) { return 1; }
 static int check_rope_tab(void) { return 1; }
@@ -3429,6 +3492,11 @@ int main(int argc, char **argv) {
         ds4_gpu_cleanup();
         return ok ? 0 : 1;
     }
+    if (argc == 2 && !strcmp(argv[1], "--short-query")) {
+        const int ok = ds4_gpu_init() && check_short_query();
+        ds4_gpu_cleanup();
+        return ok ? 0 : 1;
+    }
     if (argc == 2 && !strcmp(argv[1], "--index-scores")) {
         const int ok = ds4_gpu_init() && check_indexer_batch();
         ds4_gpu_cleanup();
@@ -3506,7 +3574,7 @@ int main(int argc, char **argv) {
     }
     if (argc != 1) return 2;
     int ok = ds4_gpu_init() && ds4_gpu_test_v41_routed_policy() && check_router() && check_quantization() && check_engram() && check_rope_stride() &&
-             check_rope_quantize() && check_deferred_hc() && check_pool() && check_candidates() && check_candidates_batch(16449, 17, 16400) &&
+             check_rope_quantize() && check_deferred_hc() && check_short_query() && check_pool() && check_candidates() && check_candidates_batch(16449, 17, 16400) &&
              check_candidates_batch(17017, 17, 17000) && check_sparse_gather() && check_indexer_batch() &&
              check_index_score_wide() && check_index_candidates() && check_embedding() && check_index_projection() && check_general_topk() &&
              check_topk_select() && check_causal_topk() && check_indexer_all() && check_compact_carry() &&
