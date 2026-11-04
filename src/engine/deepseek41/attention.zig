@@ -395,6 +395,21 @@ pub const Attention = struct {
         const packed_kv = self.packedGather();
         const raw = self.rawPast(position, 127) + 1;
         const tracing = c.ds4_native_graph_trace_active();
+        // Scalar step visits every layer in order at one position and aborts
+        // on failure. Each index/KV publisher therefore gathers before its
+        // consumers; owner, row count and packed FP4->F16 format stay fixed
+        // within the group. selected_kv is separate scalar scratch: attention
+        // staging only reads it, and no batch/prefill work interleaves here.
+        // Requiring a nonempty selection keeps stale scratch unreachable at
+        // short contexts. Every new token refreshes at its first publisher.
+        const reuse_gather = compressed != 0 and attended != 0 and index > 2 and
+            graph.scalar_decode and graph.streaming and graph.tp_world == 1 and
+            !projected and !graph.quality and !tracing and
+            graph.compressed_kv_fp4 and packed_kv and
+            !policy.publishes_kv and !policy.publishes_index and
+            cacheOwner(index) == cacheOwner(index - 1) and
+            policy.compression_ratio == self.config.compress_ratios[index - 1] and
+            (if (c.getenv("DS4_METAL_V41_REUSE_SELECTED_KV")) |setting| c.strcmp(setting, "1") == 0 else false);
         const arm = !projected and !tracing and graph.tp_world == 1 and graph.rope_tab_pos == position + 1;
         if (arm) c.ds4_gpu_dsv41_heads_once_arm(graph.rope_tab, policy.compression_ratio != 0);
         const sinks = knownWeight(layer.attn_sinks).abs_offset + @as(u64, head_start) * 4;
@@ -403,7 +418,7 @@ pub const Attention = struct {
         const staged = compressed != 0 and !graph.compressed_kv_fp4 and !graph.compressed_kv_f16 and
             c.ds4_gpu_dsv41_attention_decode(graph.heads, self.model.map, self.model.size, sinks, graph.q, graph.window[index], raw, 128, (position + 1 - raw) % 128, graph.compressed[cacheOwner(index)], graph.selected_comp, graph.selected_kv, compressed, attended, heads, shape.n_head_dim) != 0;
         const decoded = staged or
-            ((compressed == 0 or self.gather(cacheOwner(index), compressed, attended, packed_kv)) and
+            ((compressed == 0 or reuse_gather or self.gather(cacheOwner(index), compressed, attended, packed_kv)) and
                 c.ds4_gpu_attention_decode_heads_tensor(graph.heads, self.model.map, self.model.size, sinks, graph.q, graph.window[index], raw, 128, (position + 1 - raw) % 128, graph.selected_kv, @intFromBool(packed_kv), attended, null, 0, heads, shape.n_head_dim) != 0);
         const transformed = arm and c.ds4_gpu_dsv41_heads_once_take() != 0;
         if (!decoded) return false;

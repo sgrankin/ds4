@@ -7,26 +7,25 @@ includes choosing the next bottleneck after each result; it does not authorize
 unrelated features or publishing main. Reserve the final slice for combined
 qualification and a concise account of adopted changes and unsuccessful attempts.
 
-**Current loop: profile host routing gaps and remove one preparation cost.**
-Started 2026-11-04 03:32 Eastern, with a one-hour budget ending 04:32. Baseline
-`a65c4fa6` includes the four adopted overnight changes. The latest GPU trace
-still shows about 5.6–5.9 ms/token uncovered between router completion and
-routed work. This interval is not all proven CPU execution time.
+**Current loop: reuse selected compressed KV within a scalar layer group.**
+Started 2026-11-04 04:20 Eastern, with a one-hour ceiling at 05:20. Baseline
+`81632aee` retains the four adopted changes and closes the clock-poll experiment.
+The current trace shows 30 compressed gathers whose selection and physical
+owner repeat within one token. Most gather duration overlaps query work, so
+removing those dispatches is not a prediction of an equivalent latency saving.
 
-Take a short CPU sample during steady 32K teacher decode, outside comparative
-timings. Separate event polling from command encoding, resource declarations
-and cache preparation. Select one concrete, simple cost from that evidence,
-implement it behind a flag, then use at least five alternating samples per side
-and appropriate quality/lifetime checks. If no useful host target emerges,
-record that outcome instead of expanding instrumentation indefinitely.
+Test a small opt-in guard that keeps the publisher gather and reuses its
+separate scalar scratch for consumers. Raw-window staging still runs per layer.
+Verify the lifetime proof independently, compare fixed-history logits at aligned
+and unaligned contexts, and measure five alternating pairs each at 8K and 32K.
+Use a separate profile to establish which dispatches disappeared. Adopt or
+remove the runtime guard based on the measured tradeoff and implementation cost.
 Raw evidence belongs under
-`.workspaces/overnight-decode-20261104/cpu-host-profile/`.
+`.workspaces/overnight-decode-20261104/selected-kv-reuse/`.
 
 The [session index](../experiments/2026-11-04-decode-pass/README.md) links four
-adopted changes and the unadopted router experiment. Coefficient reuse is a
-small low-risk adoption with neutral to slightly favorable timings, not an
-established kernel-speed gain. The final combination still needs measurement
-against the session's starting configuration.
+adoptions and two unadopted candidates. The original executable and shaders
+have been built in an isolated workspace for final combined qualification.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome
