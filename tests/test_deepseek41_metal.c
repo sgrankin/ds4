@@ -3024,24 +3024,31 @@ static int check_tp_attention(void) {
 /* Compare the packed half4 attention reader with independently expanded rows.
  * The raw ring and selected IDs are identical for every comparison, including
  * the row order chosen by split decode or chronological prefill. */
-static int check_fp4_attention(void) {
-    enum { D = 512, H = 64, K = 512, C = 640, PACKED_ROW = 288 };
-    const struct { uint32_t rows, heads; bool quality; } cases[] = {
+static int check_fp4_attention(bool benchmark) {
+    enum { D = 512, H = 64, K = 512, PACKED_ROW = 288 };
+    const struct fp4_attention_case { uint32_t rows, heads; bool quality; } checks[] = {
         {1, 64, false}, /* Split decode. */
         {1, 32, true},  /* Sixteen-row decode staging. */
         {2, 64, false}, {33, 32, false}, /* Dual-head prefill. */
         {2, 32, true}  /* Ordinary eight-head prefill. */
-    };
+    }, bench[] = {{2048, 64, false}};
+    const struct fp4_attention_case *cases = benchmark ? bench : checks;
+    const size_t case_count = benchmark ? sizeof(bench) / sizeof(*bench) : sizeof(checks) / sizeof(*checks);
+    const uint32_t comp_rows = benchmark ? 8192 : 640;
     static const float levels[8] = {0, .5f, 1, 1.5f, 2, 3, 4, 6};
+    const char *flag = "DS4_METAL_V41_PREFILL_ATTN_RB4";
+    const char *previous = getenv(flag);
+    char *saved = previous ? strdup(previous) : NULL;
+    CHECK(!previous || saved);
     float *sinks = NULL;
     CHECK(posix_memalign((void **)&sinks, getpagesize(), getpagesize()) == 0);
     for (unsigned h = 0; h < H; h++) sinks[h] = (float)(h % 7) * .125f - 2;
     CHECK(ds4_gpu_set_model_map(sinks, getpagesize()));
 
-    uint8_t *packed = calloc(C, PACKED_ROW);
-    float *expanded = malloc((size_t)C * D * sizeof(float));
+    uint8_t *packed = calloc(comp_rows, PACKED_ROW);
+    float *expanded = malloc((size_t)comp_rows * D * sizeof(float));
     CHECK(packed && expanded);
-    for (uint32_t row = 0; row < C; row++) {
+    for (uint32_t row = 0; row < comp_rows; row++) {
         uint8_t *p = packed + row * PACKED_ROW;
         for (uint32_t group = 0; group < D / 16; group++) {
             /* All finite nonnegative E4M3 scale codes, including zero and
@@ -3063,12 +3070,13 @@ static int check_fp4_attention(void) {
     }
     CHECK(main_fp4_bits(expanded[0]) == 0);
     CHECK(main_fp4_bits(expanded[8]) == 0x80000000u);
-    ds4_gpu_tensor *ct = upload(expanded, (size_t)C * D * sizeof(float));
-    ds4_gpu_tensor *pt = upload(packed, (size_t)C * PACKED_ROW);
+    ds4_gpu_tensor *ct = upload(expanded, (size_t)comp_rows * D * sizeof(float));
+    ds4_gpu_tensor *pt = upload(packed, (size_t)comp_rows * PACKED_ROW);
     CHECK(ct && pt);
-    for (size_t s = 0; s < sizeof(cases) / sizeof(*cases); s++) {
+    for (size_t s = 0; s < case_count; s++) {
         const uint32_t n = cases[s].rows, heads = cases[s].heads;
-        const uint32_t nr = n + 127, cap = nr + 7, start = 2301, raw_start = 11;
+        const uint32_t nr = n + 127, cap = nr + 7, raw_start = 11;
+        const uint32_t start = benchmark ? 24576 : 2301;
         const size_t nq = (size_t)n * heads * D;
         float *q = malloc(nq * sizeof(float));
         float *raw = malloc((size_t)cap * D * sizeof(float));
@@ -3079,37 +3087,69 @@ static int check_fp4_attention(void) {
         for (size_t i = 0; i < (size_t)cap * D; i++) raw[i] = bf16(random_value() / 16);
         for (uint32_t t = 0; t < n; t++)
             for (uint32_t j = 0; j < K; j++)
-                ids[t * K + j] = j < 4 ? (int32_t)j : j % 29 == 0 ? -1 :
-                    (int32_t)((j * 127 + t * 17) % C);
+                /* Timing scans 512 distinct visible keys; correctness cases
+                 * retain their negative and future selections. */
+                ids[t * K + j] = benchmark ? (int32_t)((j * 127 + t * 17) % (start / 4)) :
+                    j < 4 ? (int32_t)j : j % 29 == 0 ? -1 :
+                    (int32_t)((j * 127 + t * 17) % comp_rows);
         ds4_gpu_tensor *qt = upload(q, nq * sizeof(float));
         ds4_gpu_tensor *rt = upload(raw, (size_t)cap * D * sizeof(float));
         ds4_gpu_tensor *it = upload(ids, (size_t)n * K * sizeof(int32_t));
         ds4_gpu_tensor *out = upload(NULL, nq * sizeof(float));
         CHECK(qt && rt && it && out);
         ds4_gpu_set_quality(cases[s].quality);
+        CHECK(setenv(flag, "0", 1) == 0);
         CHECK(ds4_gpu_attention_indexed_mixed_batch_heads_tensor(out, sinks, getpagesize(),
-            0, qt, rt, ct, 0, it, n, start, nr, cap, raw_start, C, K, 128, 4, heads, D));
+            0, qt, rt, ct, 0, it, n, start, nr, cap, raw_start, comp_rows, K, 128, 4, heads, D));
         CHECK(ds4_gpu_tensor_read(out, 0, reference, nq * sizeof(float)));
         for (size_t i = 0; i < nq; i++) CHECK(isfinite(reference[i]));
-        CHECK(ds4_gpu_attention_indexed_mixed_batch_heads_tensor(out, sinks, getpagesize(),
-            0, qt, rt, pt, 2, it, n, start, nr, cap, raw_start, C, K, 128, 4, heads, D));
-        CHECK(ds4_gpu_synchronize());
-        const float *actual = ds4_gpu_tensor_contents(out);
-        CHECK(actual);
-        if (memcmp(reference, actual, nq * sizeof(float))) {
-            size_t first = 0;
-            while (main_fp4_bits(reference[first]) == main_fp4_bits(actual[first])) first++;
-            fprintf(stderr, "FP4 attention rows=%u heads=%u quality=%u index=%zu expected=%08x actual=%08x\n",
-                n, heads, cases[s].quality, first,
-                main_fp4_bits(reference[first]), main_fp4_bits(actual[first]));
-            CHECK(!memcmp(reference, actual, nq * sizeof(float)));
+        for (unsigned row_blocked = 0; row_blocked < 2; row_blocked++) {
+            CHECK(setenv(flag, row_blocked ? "1" : "0", 1) == 0);
+            CHECK(ds4_gpu_attention_indexed_mixed_batch_heads_tensor(out, sinks, getpagesize(),
+                0, qt, rt, pt, 2, it, n, start, nr, cap, raw_start, comp_rows, K, 128, 4, heads, D));
+            CHECK(ds4_gpu_synchronize());
+            const float *actual = ds4_gpu_tensor_contents(out);
+            CHECK(actual);
+            if (memcmp(reference, actual, nq * sizeof(float))) {
+                size_t first = 0;
+                while (main_fp4_bits(reference[first]) == main_fp4_bits(actual[first])) first++;
+                fprintf(stderr, "FP4 attention rows=%u heads=%u quality=%u row_blocked=%u index=%zu expected=%08x actual=%08x\n",
+                    n, heads, cases[s].quality, row_blocked, first,
+                    main_fp4_bits(reference[first]), main_fp4_bits(actual[first]));
+                CHECK(!memcmp(reference, actual, nq * sizeof(float)));
+            }
         }
-        fprintf(stderr, "FP4 attention rows=%u heads=%u quality=%u expanded == packed: PASS\n",
+        fprintf(stderr, "FP4 attention rows=%u heads=%u quality=%u expanded == packed == rb4: PASS\n",
             n, heads, cases[s].quality);
+        if (benchmark) {
+            /* The comparisons above also warm both attention paths. Time the
+             * complete indexed-attention calls, including sorting, encoding
+             * and completion; this is not isolated shader GPU time. */
+            const unsigned repetitions = 4;
+            puts("pair,arm,rows,heads,repetitions,seconds");
+            for (unsigned pair = 1; pair <= 5; pair++) {
+                for (unsigned order = 0; order < 2; order++) {
+                    const unsigned row_blocked = pair % 2 ? order : 1 - order;
+                    CHECK(setenv(flag, row_blocked ? "1" : "0", 1) == 0);
+                    CHECK(ds4_gpu_synchronize());
+                    const double begin = monotonic_seconds();
+                    for (unsigned repeat = 0; repeat < repetitions; repeat++)
+                        CHECK(ds4_gpu_attention_indexed_mixed_batch_heads_tensor(out, sinks, getpagesize(),
+                            0, qt, rt, pt, 2, it, n, start, nr, cap, raw_start, comp_rows, K, 128, 4, heads, D));
+                    CHECK(ds4_gpu_synchronize());
+                    const double seconds = monotonic_seconds() - begin;
+                    printf("%u,%s,%u,%u,%u,%.9f\n", pair, row_blocked ? "candidate" : "baseline",
+                        n, heads, repetitions, seconds);
+                    fflush(stdout);
+                }
+            }
+        }
         ds4_gpu_tensor_free(qt); ds4_gpu_tensor_free(rt);
         ds4_gpu_tensor_free(it); ds4_gpu_tensor_free(out);
         free(q); free(raw); free(reference); free(ids);
     }
+    CHECK((saved ? setenv(flag, saved, 1) : unsetenv(flag)) == 0);
+    free(saved);
     ds4_gpu_set_quality(false);
     ds4_gpu_tensor_free(ct); ds4_gpu_tensor_free(pt);
     ds4_gpu_cleanup();
@@ -3535,8 +3575,9 @@ int main(int argc, char **argv) {
         return ok ? 0 : 1;
     }
 #ifdef __APPLE__
-    if (argc == 2 && !strcmp(argv[1], "--fp4-attention")) {
-        const int ok = ds4_gpu_init() && check_fp4_attention();
+    if (argc == 2 && (!strcmp(argv[1], "--fp4-attention") ||
+                      !strcmp(argv[1], "--fp4-attention-bench"))) {
+        const int ok = ds4_gpu_init() && check_fp4_attention(!strcmp(argv[1], "--fp4-attention-bench"));
         ds4_gpu_cleanup();
         return ok ? 0 : 1;
     }

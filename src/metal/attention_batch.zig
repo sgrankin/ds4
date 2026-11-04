@@ -532,9 +532,14 @@ fn indexed(problem: Problem) c_int {
     const sort = pipeline(c.DS4_ATTN_BATCH_SORT, 0, 0, false, false, true);
     const decode = problem.rows == 1;
     const dual_heads = !decode and !quality and c.ds4_metal_attention_batch_mpp() and (problem.heads_count == 64 or problem.heads_count == 32) and problem.top_k == 512 and problem.window == 128 and problem.width == 512;
+    // Keep sixteen-head reuse while amortizing barriers across four KV rows.
+    // This only changes threadgroup staging; sorting and row arithmetic stay
+    // chronological, and the original kernel remains the explicit control.
+    const row_block_env = if (dual_heads) c.getenv("DS4_METAL_V41_PREFILL_ATTN_RB4") else null;
+    const row_block = row_block_env != null and c.atoi(row_block_env) != 0;
     const splits: u32 = if (decode and !quality) 12 else 1;
     const split = splits > 1;
-    const attention = pipeline(if (split) c.DS4_ATTN_BATCH_INDEX_SPLIT else if (decode) c.DS4_ATTN_BATCH_INDEX_DECODE else if (dual_heads) c.DS4_ATTN_BATCH_INDEX_DUAL else c.DS4_ATTN_BATCH_INDEX, 0, 0, false, false, true);
+    const attention = pipeline(if (split) c.DS4_ATTN_BATCH_INDEX_SPLIT else if (decode) c.DS4_ATTN_BATCH_INDEX_DECODE else if (row_block) c.DS4_ATTN_BATCH_INDEX_DUAL_RB4 else if (dual_heads) c.DS4_ATTN_BATCH_INDEX_DUAL else c.DS4_ATTN_BATCH_INDEX, 0, 0, false, false, true);
     const reduce = if (split) pipeline(c.DS4_ATTN_BATCH_INDEX_REDUCE, 0, 0, false, false, true) else std.mem.zeroes(Pipeline);
     if (sort.handle == null or attention.handle == null or (split and reduce.handle == null)) return 0;
     if (problem.top_k > sort.threads) return api.reportError("ds4: Metal indexed attention top-k exceeds sort threadgroup limit");
@@ -594,7 +599,7 @@ fn indexed(problem: Problem) c_int {
             c.ds4_metal_attention_index_reduce(command.token, reduce, &args, tmp.view, sinks.view, inputs.heads.view, rows) == 0) return 0;
     } else {
         const group_heads: u64 = if (dual_heads) 16 else 8;
-        const shared: u64 = @as(u64, if (decode) 16 else 1) * 128 * 4 * 2;
+        const shared: u64 = @as(u64, if (decode) 16 else if (row_block) 4 else 1) * 128 * 4 * 2;
         if (c.ds4_metal_attention_index_run(command.token, attention, &args, inputs.query.view, inputs.raw.view, inputs.comp.view, selected, sinks.view, inputs.heads.view, false, problem.rows, (@as(u64, problem.heads_count) + group_heads - 1) / group_heads, 1, shared) == 0) return 0;
     }
     return command.finish("graph indexed mixed attention heads");
