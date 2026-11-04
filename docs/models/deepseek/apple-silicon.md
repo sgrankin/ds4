@@ -473,6 +473,25 @@ to use F32 gather. This differs from the existing F16-storage gather default;
 the [FP4-owner comparison](../../../speed-bench/experiments/2026-11-04-decode-pass/f16-gather.md)
 records its measured behavior and quality limits.
 
+The selected compressed rows are shared by several consecutive layers. The
+index publisher chooses their IDs, and a gather expands those packed rows into
+separate half-precision scratch for attention. In scalar streaming execution,
+the resident fast presets keep that scratch until the next publisher instead
+of repeating the same gather for each consumer. Raw sliding-window KV remains
+layer-specific and is staged every layer. This removes 30 of 38 compressed
+gathers per token when the selection is full, without another allocation or a
+persistent cache entry.
+
+The ordered scalar executor refreshes the scratch at each group's publisher
+and aborts on failure. Reuse requires the same owner and compression ratio,
+nonempty rows, single-rank FP4 storage and half-precision gathering. Layer-major
+or projected batching, tracing, quality mode and other formats retain their
+existing gathers; token-by-token scalar prefill follows the same reuse rule.
+`DS4_METAL_V41_REUSE_SELECTED_KV=0` disables it. Five-pair timings were neutral
+to slightly favorable with variation in both directions; the
+[reuse report](../../../speed-bench/experiments/2026-11-04-decode-pass/selected-kv-reuse.md)
+records the numerical checks and measured limits.
+
 Fresh publication keeps the scale computed by the quantizer. Importing an old
 expanded main cache is different: only decoded values remain, and recomputing
 the original scale is not generally idempotent. The legacy repacker preserves

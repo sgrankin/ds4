@@ -107,6 +107,12 @@ Both resident presets select half-precision gather for packed FP4 main KV;
 found exact tested logits and neutral to slightly favorable latency at 8K and
 32K. This is separate from the F16-storage gather default.
 
+Within scalar layer groups, the resident presets also reuse gathered half
+scratch until the next KV or index publisher. Per-layer raw staging remains;
+there is no new persistent cache. `DS4_METAL_V41_REUSE_SELECTED_KV=0` restores
+the repeated gathers. The [reuse experiment](../speed-bench/experiments/2026-11-04-decode-pass/selected-kv-reuse.md)
+found exact tested logits and small, mixed timing changes at 8K and 32K.
+
 All DeepSeek fast profiles default packed index storage and
 SIMD index scoring on; `persistent-packed` is an alias for `persistent-fast`.
 Explicit `DS4_V41_INDEX_FP4=0` or

@@ -85,3 +85,17 @@ logits yet failed to establish a decode benefit in five-pair comparisons.
 Stride 64 was slower in all five warm 32K pairs. The original polling loop
 remains; the [clock-stride report](../../../speed-bench/experiments/2026-11-04-decode-pass/clock-stride.md)
 preserves the measurements and the candidate revision.
+
+## Keep selected KV scratch until its next publisher
+
+Several scalar layers use the same compressed KV selection. Reusing its
+separate half-precision scratch removes 30 of 38 gathers per token while raw
+window staging still runs per layer. The ordered executor and publisher
+boundaries make the lifetime explicit without another cache or validity field.
+
+Five pairs at each of 8K and 32K gave small, mixed timing differences; all five
+fresh 32K pairs favored reuse. The 768 tested logit rows and continuation hashes
+matched, including an odd prefix boundary. We adopted the simple reuse in the
+resident fast presets with an off switch, without promising the overlapped
+gather duration as latency savings. The [reuse report](../../../speed-bench/experiments/2026-11-04-decode-pass/selected-kv-reuse.md)
+owns the measurements and remaining limits.
