@@ -17,10 +17,18 @@ qualification before the deadline. Raw artifacts stay ignored under
 ## First question: shared work during selected prefill
 
 The earlier 32K profile showed long waits around selected routed-expert work
-in a 512-token append. Scalar shared-expert overlap is already enabled, while
-the analogous batch path has a separate opt-in setting. We are refreshing the
-current timeline and checking its resource lifetimes before selecting a change.
-The [earlier profile](2026-11-03-post-rope-profile.md) explains the observation;
-it does not establish the cause or a speedup from this next experiment.
+in a 512-token append. The batch overlap experiment found only a small shared
+branch available to hide, while large delays outside routed GPU execution
+remained. Five-pair comparisons were slightly favorable at 8K and inconclusive
+at 32K, where both arms varied substantially. One control was interrupted by
+the pressure guard; its unfinished pair was retried after pressure recovered.
 
-No new result has been adopted yet. Main remains at the starting revision.
+We retained a narrow cleanup in the existing opt-in path: resident prefill has
+already made the selected IDs ready, so it need not submit and wait for another
+empty command buffer. A diagnostic confirms 320 fewer empty submissions per
+512-token append, with unchanged GPU operation counts. Ordinary, native-routing
+and tight-cache quality checks matched exactly. The fast presets remain
+unchanged; there is no claimed speedup for this cleanup alone. The
+[result report](../../../speed-bench/experiments/2026-11-04-prefill-shared-overlap/README.md)
+owns the measurements, failure record and qualifications. Main remains at the
+starting revision.

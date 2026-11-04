@@ -6,14 +6,20 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: can shared-expert overlap shorten selected prefill?**
-First one-hour slice: November 4, 08:37–09:37 Eastern. Refresh the 32K profile,
-inspect the routing/shared-work dependencies and existing batch-overlap path,
-then compare one candidate at the ordinary 8K and larger 32K frontiers. Include
-fresh prefill, a 512-token append, full decode windows and numerical checks.
-Use five alternating timing pairs per side; keep profiling separate from timing.
-The first profile uses the existing overnight driver with all adopted settings.
-Raw evidence stays under `.workspaces/hillclimb-20261104/01-prefill-overlap/`.
+**Current question: can we shorten attention during large fresh prefill?**
+One-hour slice: November 4, 09:30–10:30 Eastern. The current 32K diagnostic
+attributes about 10 seconds to `indexed_mixed_attention_heads16_dual`, the
+largest individual prefill kernel total. Inspect its data dependencies and
+dispatch geometry, select one bounded change, and compare it at 8K and 32K.
+Include numerical checks and full decode windows so a prefill gain does not
+hide a later cost. Use at least five alternating timing samples per side.
+
+The starting runtime is `689c2d51` with batch shared overlap unset, preserving
+the published runtime's execution for this workload. The preceding overlap
+experiment is closed: its readiness cleanup remains in the existing opt-in
+path, with no preset promotion. Raw evidence for the new question belongs under
+`.workspaces/hillclimb-20261104/02-prefill-attention/`; reuse the existing runner
+and keep intrusive profiling separate from timing.
 
 Record one result report and a short
 [session journal](../../docs/lab/journal/2026-11-04-through-06-performance.md)

@@ -339,6 +339,22 @@ explains the allocation granularity, and the
 [dependency profile](../../../speed-bench/experiments/2026-11-03-post-rope-profile/README.md)
 distinguishes GPU computation from the delay before it starts.
 
+An independent opt-in, `DS4_METAL_V41_BATCH_SHARED_OVERLAP=1`, submits shared
+expert work before the host prepares selected expert buffers. The GPU can then
+compute the shared branch while the CPU prepares the routed branch on the same
+queue. When resident prefill has already completed the router and updated its
+selected IDs, the overlap path reuses that readiness boundary instead of
+submitting and waiting for another empty command buffer. Native routing keeps
+its readiness wait; the final wait protecting selected cache slots also remains.
+This flag is presence-based: unset it to disable it, since `0` also enables it.
+
+Batch overlap remains outside the fast presets. Five-pair comparisons found a
+small, uncertain 8K benefit and unresolved variation at 32K. The duplicate-wait
+cleanup is retained within this existing opt-in path, without a claimed speedup
+for the cleanup alone. The [selected-prefill experiment](../../../speed-bench/experiments/2026-11-04-prefill-shared-overlap/README.md)
+records the timing, pressure interruption and numerical checks. This is separate
+from the scalar routing overlap enabled by the resident fast presets.
+
 Small batches take a different route from wide prefill. For two to eight
 resident MXFP4 rows, the V4.1 decoder can first identify repeated expert IDs,
 then reuse a gate/up weight load across rows that selected the same expert.

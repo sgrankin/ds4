@@ -94,6 +94,15 @@ control drift. Measure bootstrap, small appends and growth separately.
 
 ## Other tested directions not promoted
 
+The November 4, 2026 [selected-prefill overlap experiment](../speed-bench/experiments/2026-11-04-prefill-shared-overlap/README.md)
+keeps batch overlap outside the fast presets: the small 8K mean improvement
+does not resolve the much larger 32K timing variation. The runtime retains a
+cleanup that removes redundant readiness waits inside the existing opt-in path.
+The diagnostic shared branch was too short to explain the multi-second routed
+waits; those waits need separate investigation. The report records all samples
+and the pressure interruption rather than treating the slower mean as a proven
+regression.
+
 * Two-layer expert-prefetch lookahead ran 87–94 tokens/s versus 128–130 controls,
   despite exact logits. Lower explicit read wait was offset by later GPU drain;
   page-residency/contention was a hypothesis, not a measured cause (§3).
