@@ -107,7 +107,8 @@ static inline float dsv4_e2m1fn_dequant(float x) {
 
 // V4.1 main rows: 256 E2M1 code bytes followed by 32 E4M3 scale bytes.
 // E2M1 * E4M3 products fit BF16 (and F16) exactly; this is the same value
-// published by mode3, with no additional quantization at the attention reader.
+// published by main-KV quantization mode3, with no additional quantization at
+// the attention reader.
 static inline float dsv41_main_fp4_value(device const char *packed,
                                         uint row, uint column) {
     device const uchar *p = (device const uchar *)packed + (ulong)row * 288u;
@@ -128,6 +129,33 @@ static inline half4 dsv41_main_fp4_half4(device const char *packed,
                                     dsv4_e2m1fn_values[code.w & 7u]);
     const float scale = dsv4_e4m3fn_value(p[256u + column4 / 4u]);
     return half4(copysign(magnitude, as_type<float4>((code & 8u) << 28u)) * scale);
+}
+
+// Indexed-attention loaders call this with column4 % 32 equal to the SIMD
+// lane. Each active group of four contiguous lanes reads four half4 columns
+// from the same row, so its first lane owns their common 16-value scale.
+// Callers must keep that leader active whenever another lane in its group is
+// active; the one-row and blocked loaders both stage complete 128-column rows.
+static inline half4 dsv41_main_fp4_half4_cooperative(device const char *packed,
+                                                   uint row, uint column4) {
+    device const uchar *p = (device const uchar *)packed + (ulong)row * 288u;
+    const uchar2 pair = *((device const uchar2 *)(p + column4 * 2u));
+    const uint4 code = uint4(pair.x & 15u, pair.x >> 4u, pair.y & 15u, pair.y >> 4u);
+    const uint4 magnitude = code & 7u;
+    // E2M1 magnitudes 0, 1/2, 1, 3/2, 2, 3, 4, 6 have exact half encodings.
+    // Codes 2..7 form a contiguous exponent/mantissa pattern; 0 and 1 do not.
+    const ushort4 bits = ushort4(select((magnitude + 28u) << 9u,
+                                        magnitude * 0x3800u, magnitude < 2u));
+    half scale = 0.0h;
+    if ((column4 & 3u) == 0u) {
+        // Preserve the existing decoder, including its ignored sign bit.
+        scale = half(dsv4_e4m3fn_value(p[256u + column4 / 4u]));
+    }
+    scale = simd_shuffle(scale, ushort(column4 & 28u));
+    // Finite E4M3 scales and these products fit half exactly. Apply the E2M1
+    // sign after multiplication so signed zero survives even a zero scale.
+    const half4 value = as_type<half4>(bits) * scale;
+    return as_type<half4>(as_type<ushort4>(value) | ushort4((code & 8u) << 12u));
 }
 
 // Quantizes the non-RoPE part of a KV row through E4M3FN and writes the

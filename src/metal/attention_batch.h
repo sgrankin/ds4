@@ -10,6 +10,8 @@ typedef struct {
 } ds4_metal_attention_block_args;
 typedef struct {
     uint32_t n_tokens, n_head, n_raw, raw_cap, raw_start, n_comp;
+    /* comp_kv_f16: 0 F32, 1 F16, 2 packed FP4, 3 cooperative packed-FP4
+     * reader. Mode 3 is internal dispatch metadata, not a storage format. */
     uint32_t top_k, pos0, window, ratio, comp_kv_f16, n_splits;
     uint64_t q_token_stride, q_head_stride, raw_row_stride, comp_row_stride;
     uint64_t topk_token_stride, dst_token_stride, dst_head_stride;

@@ -3021,6 +3021,112 @@ static int check_tp_attention(void) {
 
 
 #ifdef __APPLE__
+/* Compare the packed half4 attention reader with independently expanded rows.
+ * The raw ring and selected IDs are identical for every comparison, including
+ * the row order chosen by split decode or chronological prefill. */
+static int check_fp4_attention(void) {
+    enum { D = 512, H = 64, K = 512, C = 640, PACKED_ROW = 288 };
+    const struct { uint32_t rows, heads; bool quality; } cases[] = {
+        {1, 64, false}, /* Split decode. */
+        {1, 32, true},  /* Sixteen-row decode staging. */
+        {2, 64, false}, {33, 32, false}, /* Dual-head prefill. */
+        {2, 32, true}  /* Ordinary eight-head prefill. */
+    };
+    static const float levels[8] = {0, .5f, 1, 1.5f, 2, 3, 4, 6};
+    const char *flag = "DS4_METAL_V41_COOPERATIVE_FP4";
+    const char *previous = getenv(flag);
+    char *saved = previous ? strdup(previous) : NULL;
+    CHECK(!previous || saved);
+    float *sinks = NULL;
+    CHECK(posix_memalign((void **)&sinks, getpagesize(), getpagesize()) == 0);
+    for (unsigned h = 0; h < H; h++) sinks[h] = (float)(h % 7) * .125f - 2;
+    CHECK(ds4_gpu_set_model_map(sinks, getpagesize()));
+
+    uint8_t *packed = calloc(C, PACKED_ROW);
+    float *expanded = malloc((size_t)C * D * sizeof(float));
+    CHECK(packed && expanded);
+    for (uint32_t row = 0; row < C; row++) {
+        uint8_t *p = packed + row * PACKED_ROW;
+        for (uint32_t group = 0; group < D / 16; group++) {
+            /* All finite nonnegative E4M3 scale codes, including zero and
+             * subnormals, occur alongside every signed E2M1 nibble. */
+            const uint32_t scale_code = (row * 32 + group) % 127;
+            const float scale = scale_code < 8 ? ldexpf(scale_code, -9) :
+                ldexpf(1.0f + (scale_code & 7) * .125f, (int)(scale_code >> 3) - 7);
+            p[256 + group] = (uint8_t)scale_code;
+            for (uint32_t i = 0; i < 16; i++) {
+                const uint32_t col = group * 16 + i, code = (i + row) & 15;
+                p[col / 2] |= (uint8_t)(code << (4 * (col & 1)));
+                const float magnitude = levels[code & 7] * scale;
+                uint32_t bits;
+                memcpy(&bits, &magnitude, sizeof(bits));
+                bits |= (code & 8) << 28;
+                memcpy(expanded + row * D + col, &bits, sizeof(bits));
+            }
+        }
+    }
+    CHECK(main_fp4_bits(expanded[0]) == 0);
+    CHECK(main_fp4_bits(expanded[8]) == 0x80000000u);
+    ds4_gpu_tensor *ct = upload(expanded, (size_t)C * D * sizeof(float));
+    ds4_gpu_tensor *pt = upload(packed, (size_t)C * PACKED_ROW);
+    CHECK(ct && pt);
+    for (unsigned s = 0; s < sizeof(cases) / sizeof(*cases); s++) {
+        const uint32_t n = cases[s].rows, heads = cases[s].heads;
+        const uint32_t nr = n + 127, cap = nr + 7, start = 2301, raw_start = 11;
+        const size_t nq = (size_t)n * heads * D;
+        float *q = malloc(nq * sizeof(float));
+        float *raw = malloc((size_t)cap * D * sizeof(float));
+        float *reference = malloc(nq * sizeof(float));
+        int32_t *ids = malloc((size_t)n * K * sizeof(int32_t));
+        CHECK(q && raw && reference && ids);
+        for (size_t i = 0; i < nq; i++) q[i] = bf16(random_value() / 8192);
+        for (size_t i = 0; i < (size_t)cap * D; i++) raw[i] = bf16(random_value() / 16);
+        for (uint32_t t = 0; t < n; t++)
+            for (uint32_t j = 0; j < K; j++)
+                ids[t * K + j] = j < 4 ? (int32_t)j : j % 29 == 0 ? -1 :
+                    (int32_t)((j * 127 + t * 17) % C);
+        ds4_gpu_tensor *qt = upload(q, nq * sizeof(float));
+        ds4_gpu_tensor *rt = upload(raw, (size_t)cap * D * sizeof(float));
+        ds4_gpu_tensor *it = upload(ids, (size_t)n * K * sizeof(int32_t));
+        ds4_gpu_tensor *out = upload(NULL, nq * sizeof(float));
+        CHECK(qt && rt && it && out);
+        ds4_gpu_set_quality(cases[s].quality);
+        CHECK(setenv(flag, "0", 1) == 0);
+        CHECK(ds4_gpu_attention_indexed_mixed_batch_heads_tensor(out, sinks, getpagesize(),
+            0, qt, rt, ct, 0, it, n, start, nr, cap, raw_start, C, K, 128, 4, heads, D));
+        CHECK(ds4_gpu_tensor_read(out, 0, reference, nq * sizeof(float)));
+        for (size_t i = 0; i < nq; i++) CHECK(isfinite(reference[i]));
+        for (unsigned cooperative = 0; cooperative < 2; cooperative++) {
+            CHECK(setenv(flag, cooperative ? "1" : "0", 1) == 0);
+            CHECK(ds4_gpu_attention_indexed_mixed_batch_heads_tensor(out, sinks, getpagesize(),
+                0, qt, rt, pt, 2, it, n, start, nr, cap, raw_start, C, K, 128, 4, heads, D));
+            CHECK(ds4_gpu_synchronize());
+            const float *actual = ds4_gpu_tensor_contents(out);
+            CHECK(actual);
+            if (memcmp(reference, actual, nq * sizeof(float))) {
+                size_t first = 0;
+                while (main_fp4_bits(reference[first]) == main_fp4_bits(actual[first])) first++;
+                fprintf(stderr, "FP4 attention rows=%u heads=%u quality=%u cooperative=%u index=%zu expected=%08x actual=%08x\n",
+                    n, heads, cases[s].quality, cooperative, first,
+                    main_fp4_bits(reference[first]), main_fp4_bits(actual[first]));
+                CHECK(!memcmp(reference, actual, nq * sizeof(float)));
+            }
+        }
+        fprintf(stderr, "FP4 attention rows=%u heads=%u quality=%u expanded == packed == cooperative: PASS\n",
+            n, heads, cases[s].quality);
+        ds4_gpu_tensor_free(qt); ds4_gpu_tensor_free(rt);
+        ds4_gpu_tensor_free(it); ds4_gpu_tensor_free(out);
+        free(q); free(raw); free(reference); free(ids);
+    }
+    CHECK((saved ? setenv(flag, saved, 1) : unsetenv(flag)) == 0);
+    free(saved);
+    ds4_gpu_set_quality(false);
+    ds4_gpu_tensor_free(ct); ds4_gpu_tensor_free(pt);
+    ds4_gpu_cleanup();
+    free(sinks); free(packed); free(expanded);
+    return 1;
+}
+
 static float unpack_index_fp4(const uint8_t *row, uint32_t column) {
     static const float levels[8] = {0, .5f, 1, 1.5f, 2, 3, 4, 6};
     const uint8_t code = (row[column / 2] >> (4 * (column & 1))) & 15;
@@ -3438,6 +3544,13 @@ int main(int argc, char **argv) {
         ds4_gpu_cleanup();
         return ok ? 0 : 1;
     }
+#ifdef __APPLE__
+    if (argc == 2 && !strcmp(argv[1], "--fp4-attention")) {
+        const int ok = ds4_gpu_init() && check_fp4_attention();
+        ds4_gpu_cleanup();
+        return ok ? 0 : 1;
+    }
+#endif
     if (argc == 2 && (!strcmp(argv[1], "--attention-output") ||
                       !strcmp(argv[1], "--attention-output-large"))) {
         const int ok = ds4_gpu_init() && check_attention_output(
