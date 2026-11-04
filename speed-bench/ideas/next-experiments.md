@@ -7,25 +7,25 @@ includes choosing the next bottleneck after each result; it does not authorize
 unrelated features or publishing main. Reserve the final slice for combined
 qualification and a concise account of adopted changes and unsuccessful attempts.
 
-**Current loop: reuse selected compressed KV within a scalar layer group.**
-Started 2026-11-04 04:20 Eastern, with a one-hour ceiling at 05:20. Baseline
-`81632aee` retains the four adopted changes and closes the clock-poll experiment.
-The current trace shows 30 compressed gathers whose selection and physical
-owner repeat within one token. Most gather duration overlaps query work, so
-removing those dispatches is not a prediction of an equivalent latency saving.
+**Current loop: use a cheaper clock for the selected-event spin deadline.**
+Started 2026-11-04 04:50 Eastern. Close by 05:20 if the ordinary and large-context
+comparisons answer the question; the one-hour ceiling is 05:50, but final combined
+qualification takes priority. The baseline includes five adopted overnight
+changes, most recently selected-KV gather reuse.
 
-Test a small opt-in guard that keeps the publisher gather and reuses its
-separate scalar scratch for consumers. Raw-window staging still runs per layer.
-Verify the lifetime proof independently, compare fixed-history logits at aligned
-and unaligned contexts, and measure five alternating pairs each at 8K and 32K.
-Use a separate profile to establish which dispatches disappeared. Adopt or
-remove the runtime guard based on the measured tradeoff and implementation cost.
-Raw evidence belongs under
-`.workspaces/overnight-decode-20261104/selected-kv-reuse/`.
+The earlier CPU sample observed many clock reads while waiting for GPU routing.
+Reducing their frequency did not help. This separate candidate keeps readiness
+and deadline checks on every poll and uses Darwin's sleep-inclusive raw monotonic
+nanosecond API only for the spin interval. The original clock still owns the
+60-second blocking timeout; timestamps from the two clocks are never mixed.
+Test the exact opt-in flag with five alternating pairs at 8K and 32K, fixed-history
+numerical checks, and a short separate CPU sample. Retain the original path if
+there is no useful gain. Evidence stays local under
+`.workspaces/overnight-decode-20261104/raw-clock/`.
 
-The [session index](../experiments/2026-11-04-decode-pass/README.md) links four
-adoptions and two unadopted candidates. The original executable and shaders
-have been built in an isolated workspace for final combined qualification.
+After this experiment, freeze runtime changes. The final comparison uses the
+original executable and shaders from `8971dfbd` against the adopted package,
+including longer decode and the recorded coding session. Main is not published.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome
