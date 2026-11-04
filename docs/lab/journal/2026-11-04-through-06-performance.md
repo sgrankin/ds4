@@ -32,3 +32,18 @@ unchanged; there is no claimed speedup for this cleanup alone. The
 [result report](../../../speed-bench/experiments/2026-11-04-prefill-shared-overlap/README.md)
 owns the measurements, failure record and qualifications. Main remains at the
 starting revision.
+
+## Second question: stage more attention rows per barrier
+
+We tried the existing sixteen-row attention staging kernel during prefill,
+preserving each head's arithmetic and key order. The fixture and 8K model
+quality checks passed, but all five timing pairs at both 8K and 32K favored the
+original kernel. Fresh prefill rose from 49.34 to 53.25 seconds at 32K and from
+20.16 to 20.71 seconds at 8K. The candidate profile places the added work in
+attention; it does not isolate shared-memory occupancy from repeated KV loads.
+
+The selector was removed, while the existing decode kernel remains. Reducing
+barriers alone did not earn the extra staging memory and smaller head groups.
+The [result report](../../../speed-bench/experiments/2026-11-04-prefill-row-blocking/README.md)
+preserves all samples, the tested revision and the numerical checks. No preset
+or installed binary changed.
