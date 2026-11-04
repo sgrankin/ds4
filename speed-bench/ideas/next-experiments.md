@@ -6,47 +6,37 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: does the resident GPU package help agent work enough to promote?**
-One-hour slice: November 4, 17:26–18:26 Eastern. Keep runtime `1b692d25`
-and the selected configuration fixed: GPU resident routing, address reuse,
-concurrent shared/routed experts and an ordinary-route refresh every sixteen
-positions, with the existing 64 GB cache. The
-[refresh report](../experiments/2026-11-04-resident-refresh/README.md)
-finds repeatable fresh decode gains, smaller and noisier warm gains, and
-measurable fixed-history quality drift. Presets and installed binaries remain
-unchanged until this qualification has an outcome.
+**Current question: which part of the resident GPU package causes the coding failure?**
+One-hour slice: November 4, 18:33–19:33 Eastern. The
+[agent qualification](../experiments/2026-11-04-resident-agent-qualification/README.md)
+found repetitive reasoning without a layers implementation. Its arm-specific
+working directories also changed the prompt, so it cannot isolate the cause.
+Keep runtime `1b692d25`, the model and 64 GB expert cache fixed for current-code
+arms. Preserve installed binaries and presets.
 
-Compare the complete candidate package against published starting revision
-`364ceeab`, using its preserved checkout and original final settings. This is
-also the periodic check against the published baseline; attribution to the
-resident route remains in the preceding experiments. Build the replay binary
-from the current runtime before measuring, and run each binary in its matching
-source root so it loads the correct Metal code.
+Run the original topology task with reasoning enabled, temperature zero and a
+fixed 2,048-token call limit. Every arm uses the identical canonical working
+directory and task prompt; archive each result before recreating an empty task
+directory. Compare published `364ceeab` with its original settings, the current
+qualified CPU-route settings, and GPU refresh intervals four, eight and sixteen.
+Run each binary from its matching source root. Reuse the independent layers
+oracle and record arguments, settings, output and binary hashes. These single
+behavioral trials provide no comparative performance claim.
 
-Use five alternating, profile-free pairs of the recorded coding-session replay.
-Report prefill, decode, complete inference phases and process wall time with
-all samples, variation and order effects. Run one full-vocabulary replay pair
-for delta-NLL, KL and tails on its longer, changing history. Reuse the existing
-replay driver and analysis. No new runtime optimization belongs in this slice.
+Identify a concrete policy or numerical cause if evidence supports one; do not
+assume a missing file is an algorithm failure or disable reasoning to conceal
+it. A failing CPU-route arm would motivate isolating the earlier prefill settings.
+A refresh-dependent result would motivate a safer routing policy. Inspect the
+source in parallel for actual weight, residency or lifetime bugs, separating
+those from intentional approximation. Do not build asynchronous SSD machinery.
+If the controlled results resolve the question early, use the remaining slice
+for a narrow corroborating behavior check, not an unrelated experiment.
 
-Run the existing interval-merging agent task with reasoning enabled, including
-its list, iterator, generator and input-mutation checks. Add one small,
-independently checkable coding task only if it fits the hour without new harness
-machinery. Use the published and candidate agents with explicit settings and
-no encoder timeline. These are behavior checks, not comparative task-speed
-claims. Keep tool choices, errors and retries visible; do not require identical
-outputs or reject an approximation solely for nonzero divergence.
-
-At the boundary, decide whether the measured tradeoff warrants enabling the
-package in the resident fast presets, needs another specific qualification, or
-should remain opt-in. If promoted, preserve explicit overrides, update the owning
-manual/recipe and install only the qualified binaries. Do not publish or advance
-main. Raw evidence belongs under
-`.workspaces/hillclimb-20261104/13-resident-agent-qualification/`. Keep one guarded
-heavy job and pause builds and unrelated analysis during latency measurements.
-Only preparation or review for this outcome may run in parallel. Write one report
-and one short [journal](../../docs/lab/journal/2026-11-04-through-06-performance.md)
-entry, keeping generated output ignored.
+Write one report under `2026-11-04-resident-behavior/`; keep raw artifacts in
+`.workspaces/hillclimb-20261104/14-resident-behavior/`. Update the recipe conclusion
+and one short journal entry. The later GPU profiling question remains whether
+token-completion waits reflect execution or queue gaps; neutral replay timing
+does not erase the demonstrated reduction in host selection handoffs.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome

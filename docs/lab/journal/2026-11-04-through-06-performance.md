@@ -238,3 +238,21 @@ quality use different window lengths in the 32K sweep; the 8K follow-up matches
 them. The [report and tradeoff figure](../../../speed-bench/experiments/2026-11-04-resident-refresh/README.md)
 own all samples, variation and interpretation limits. Normal pressure and
 read-only system checks did not establish a cause for the timing outliers.
+
+## Thirteenth question: qualify the resident GPU package on agent work
+
+The selected sixteen-position refresh did not earn preset promotion. Five
+alternating recorded-session pairs against published `364ceeab` establish no
+complete inference gain. Mean fixed-history drift remains modest, but the
+candidate failed to produce one coding implementation within either tested
+budget; the longer retry repeated a reasoning sentence twenty-one times.
+The baseline passed, while both arms passed the other coding task. Different
+working-directory text prevents attributing this failure solely to routing.
+
+Native CPU samples nevertheless confirm the intended dependency change: most
+waiting moved from expert-selection handoffs to completion of submitted token
+work. Keep that groundwork and the GPU route as explicit opt-ins. The
+[qualification report](../../../speed-bench/experiments/2026-11-04-resident-agent-qualification/README.md)
+owns timing, quality, retry and diagnostic evidence. The next bounded question
+holds the full prompt and working directory fixed while comparing routing
+policies; GPU execution versus queue gaps remains a subsequent profiling target.

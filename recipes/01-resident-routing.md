@@ -139,7 +139,13 @@ qualification. It improves fresh decode at 32K and over longer 8K continuations;
 warm gains are smaller and less certain. Fixed-history quality has a modest
 average cost with larger local tails. The four-position option has lower
 measured drift but unresolved timing because of a retained slow sample.
-Keep the route experimental until the selected point is qualified on agent work.
+The [agent qualification](../speed-bench/experiments/2026-11-04-resident-agent-qualification/README.md)
+keeps the route experimental: five recorded-session pairs establish no complete
+inference gain, and one reasoning-enabled coding task produced repetitive thought
+without an implementation at both tested budgets. Fixed-history quality alone
+did not decide this outcome. Native CPU samples confirm that host waits shifted
+away from selection, preserving useful groundwork. A controlled comparison of
+routing policies must separate that behavioral failure from prompt differences.
 Detailed encoder
 profiling changes batching and adds host overhead; its gap reduction is not a
 predicted ordinary-runtime saving. The
