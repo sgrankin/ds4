@@ -228,8 +228,19 @@ pub const Moe = struct {
                     // Pending commands retain their static/shared resources.
                     var event: u64 = 0;
                     if (c.ds4_gpu_signal_selected_readback_ready(&event) == 0 or
-                        !self.sharedGateUp(layer, graph.shared_gate, graph.shared_up, graph.shared_mid, graph.norm, 1) or
-                        c.ds4_gpu_commit_and_wait_selected_readback(event, "resident route/shared overlap") == 0) return false;
+                        !self.sharedGateUp(layer, graph.shared_gate, graph.shared_up, graph.shared_mid, graph.norm, 1)) return false;
+                    const down_setting = c.getenv("DS4_METAL_V41_ROUTE_SHARED_DOWN");
+                    const overlap_down = down_setting != null and std.mem.eql(u8, std.mem.span(down_setting), "1") and
+                        !c.ds4_native_graph_trace_active() and graph.steering_ffn_scale == 0 and
+                        layer.ffn_down_shexp.*.type == c.DS4_TENSOR_Q8_0 and
+                        !present("DS4_METAL_DISABLE_V41_EXPAND_FUSION");
+                    // Down needs only shared_mid and static weights, so it can
+                    // also hide behind the host routing decision without adding
+                    // expert-cache readers after the event. Its BF16 input and
+                    // output boundaries move with it; the join stays pending.
+                    if (overlap_down and !self.sharedDown(layer, graph.shared, graph.shared_mid, 1)) return false;
+                    if (c.ds4_gpu_commit_and_wait_selected_readback(event, "resident route/shared overlap") == 0) return false;
+                    graph.shared_done = overlap_down;
                     // Earlier routed outputs feed this router, so every
                     // submitted expert-cache read precedes its event. Retire
                     // those reads only: otherwise conservative in-flight pins

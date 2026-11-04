@@ -7,20 +7,22 @@ includes choosing the next bottleneck after each result; it does not authorize
 unrelated features or publishing main. Reserve the final slice for combined
 qualification and a concise account of adopted changes and unsuccessful attempts.
 
-**Current loop: decode submission cadence.** Started 2026-11-04 00:33 Eastern,
-with a one-hour budget ending 01:33. Baseline `cc3b5bbc` includes direct F16
-KV gather. The profile shows that routed work submitted at a periodic layer
-flush starts sooner than work retained until the next router commit. Test
-`DS4_METAL_V41_DECODE_FLUSH_LAYERS=2` against `1`, then `0` as an opposite
-control. These settings predict 61, 80 and 41 command buffers per token; fewer
-buffers are not themselves the objective. Keep every router readback, expert
-retirement fence and the final head drain intact. Use five alternating 32K
-pairs per comparison, qualify the selected point at 8K, check logits and an
-unaligned tail, and inspect a separate profile. The same pressure guard and
-one-heavy-job rule apply. Raw evidence lives under
-`.workspaces/overnight-decode-20261104/flush-cadence/`.
+**Current loop: overlap the shared down projection with host routing.**
+Started 2026-11-04 01:21 Eastern, with a one-hour budget ending 02:21.
+Baseline `1efa1175` includes direct F16 gather and every-layer submission.
+The new cadence profile still leaves about 1.09 ms/token of exclusive coverage
+in the shared-down/HC tail, with about 6.34 ms/token available after shared
+gate/up and routing finish. These diagnostic intervals are an opportunity,
+not predicted savings. Move the existing Q8 shared down projection into that
+host wait, then use the existing add/BF16/HC join. Preserve rounding order,
+resource lifetimes and unsupported-path fallbacks; add no kernels or queues.
+Compare `DS4_METAL_V41_ROUTE_SHARED_DOWN=0` and `1`, with five alternating
+pairs at 32K and 8K, numerical checks including an unaligned prefix and a
+tighter cache, and a separate profile. Raw evidence lives under
+`.workspaces/overnight-decode-20261104/shared-down/`.
 
-The [first loop](../experiments/2026-11-04-decode-pass/f16-gather.md) is complete
+The [gather](../experiments/2026-11-04-decode-pass/f16-gather.md) and
+[cadence](../experiments/2026-11-04-decode-pass/flush-cadence.md) loops are complete
 and adopted. The [session index](../experiments/2026-11-04-decode-pass/README.md)
 links completed results.
 

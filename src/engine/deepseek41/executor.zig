@@ -105,8 +105,16 @@ pub const Executor = struct {
             if (!self.ops.expandPartials(graph, graph.residual, graph.after_attn, graph.ffn_split, index, c.DS4_TP_GATE_FFN)) return false;
             expanded = true;
         } else if (graph.tp_world == 1) {
-            if (!graph.shared_done and !c.ds4_native_graph_trace_active() and graph.steering_ffn_scale == 0 and layer.ffn_down_shexp.*.type == c.DS4_TENSOR_Q8_0 and c.getenv("DS4_METAL_DISABLE_V41_EXPAND_FUSION") == null)
-                expanded = c.ds4_gpu_dsv41_matmul_expand_rows(graph.residual, self.ops.model.map, self.ops.model.size, layer.ffn_down_shexp.*.abs_offset, @intCast(layer.ffn_down_shexp.*.dim[0]), @intCast(layer.ffn_down_shexp.*.dim[1]), graph.shared_mid, graph.routed, graph.after_attn, graph.ffn_split, shape.n_hc, 1) != 0;
+            if (!c.ds4_native_graph_trace_active() and graph.steering_ffn_scale == 0 and layer.ffn_down_shexp.*.type == c.DS4_TENSOR_Q8_0 and c.getenv("DS4_METAL_DISABLE_V41_EXPAND_FUSION") == null) {
+                if (!graph.shared_done) {
+                    expanded = c.ds4_gpu_dsv41_matmul_expand_rows(graph.residual, self.ops.model.map, self.ops.model.size, layer.ffn_down_shexp.*.abs_offset, @intCast(layer.ffn_down_shexp.*.dim[0]), @intCast(layer.ffn_down_shexp.*.dim[1]), graph.shared_mid, graph.routed, graph.after_attn, graph.ffn_split, shape.n_hc, 1) != 0;
+                } else if (graph.streaming and graph.scalar_decode) {
+                    // In scalar streaming, shared_done identifies the opt-in
+                    // early down projection. Preserve matmul-expand's shared
+                    // first addition and BF16 boundaries at the sum and HC output.
+                    expanded = c.ds4_gpu_hc_expand_split_add_bf16_tensor(graph.residual, graph.shared, graph.routed, graph.after_attn, graph.ffn_split, shape.n_embd, shape.n_hc) != 0;
+                }
+            }
             if (!expanded) {
                 if (!graph.shared_done and !self.sharedDown(graph.shared, graph.shared_mid, layer, 1)) return false;
                 if (c.ds4_gpu_add_tensor(graph.block, graph.routed, graph.shared, shape.n_embd) == 0 or
