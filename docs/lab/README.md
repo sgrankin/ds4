@@ -37,7 +37,7 @@ command or speed is evidence at its recorded revision, not a current-build claim
 | [Expert-cache slab size](journal/2026-11-03-expert-slabs.md) | Smaller buffers shorten the first decode step but do not reliably improve append or whole-workload time; five-pair tests retain the 4 GiB default. |
 | [Short Q8 query projection](journal/2026-11-03-short-q8-query.md) | Sharing input loads and keeping a rotated output pair within one SIMD group preserves measured logits. Adopted in resident fast presets despite uncertainty about the size of the speed benefit. |
 | [Overnight decode optimization](journal/2026-11-04-overnight-decode.md) | Five adopted changes raise measured 32K steady decode by about 7–8%; recorded coding replay inference takes 4.2% less time. Three other candidates remain unadopted. |
-| [Decode and prefill hill climbing](journal/2026-11-04-through-06-performance.md) | Active through November 6 at 18:31 Eastern: sequential experiments from the published overnight baseline, starting with selected-prefill dependencies. |
+| [Decode and prefill hill climbing](journal/2026-11-04-through-06-performance.md) | Active through November 6 at 18:31 Eastern: four-row staging and an approximate rescaling shortcut adopted after combined prefill, replay and quality checks; further decode/prefill experiments continue. |
 
 The [design folder](../design/README.md) preserves unselected ideas separately from
 measured conclusions. Original concise reports under `speed-bench/` own complete

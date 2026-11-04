@@ -16,6 +16,7 @@ def --wrapped main [...args: string] {
         DS4_METAL_V41_SHORT_Q8_QUERY_TABLE
         DS4_METAL_V41_PACKED_F16_GATHER DS4_METAL_V41_REUSE_SELECTED_KV DS4_METAL_V41_DECODE_FLUSH_LAYERS
         DS4_METAL_V41_PREFILL_ATTN_RB4
+        DS4_METAL_V41_ATTN_UNIT_SCALE
         DS4_AGENT_CONTEXT_SUFFIX_REUSE DS4_AGENT_CONTEXT_SUFFIX_PREROPE
         DS4_AGENT_CONTEXT_SUFFIX_FRESH_TAIL DS4_AGENT_CONTEXT_SUFFIX_RIGHT
         DS4_SERVER_CONTEXT_SUFFIX_REUSE DS4_SERVER_CONTEXT_SUFFIX_FRESH_TAIL
@@ -78,6 +79,7 @@ def main [] {
         DS4_METAL_V41_STREAMING_ROPE_TABLE: '' DS4_METAL_V41_SHORT_Q8_QUERY: '' DS4_METAL_V41_SHORT_Q8_QUERY_TABLE: '' DS4_METAL_V41_PACKED_F16_GATHER: '' DS4_METAL_V41_REUSE_SELECTED_KV: ''
         DS4_METAL_V41_DECODE_FLUSH_LAYERS: ''
         DS4_METAL_V41_PREFILL_ATTN_RB4: ''
+        DS4_METAL_V41_ATTN_UNIT_SCALE: ''
     })
     assert equal $agent_result.exit_code 0 $agent_result.stderr
     let agent = $agent_result.stdout | from json
@@ -99,12 +101,14 @@ def main [] {
     assert equal $agent.env.DS4_METAL_V41_REUSE_SELECTED_KV '1'
     assert equal $agent.env.DS4_METAL_V41_DECODE_FLUSH_LAYERS '1'
     assert equal $agent.env.DS4_METAL_V41_PREFILL_ATTN_RB4 '1'
+    assert equal $agent.env.DS4_METAL_V41_ATTN_UNIT_SCALE '1'
     let blocking_result = (call $launcher ($leading ++ ['persistent-fast'] ++ $requested) {
         DS4_METAL_V41_ROUTE_SHARED_OVERLAP: '0' DS4_METAL_SELECTED_READBACK_SPIN_US: '0'
         DS4_METAL_V41_ROUTE_SHARED_DOWN: '0'
         DS4_METAL_V41_STREAMING_ROPE_TABLE: '0' DS4_METAL_V41_SHORT_Q8_QUERY: '0' DS4_METAL_V41_SHORT_Q8_QUERY_TABLE: '0' DS4_METAL_V41_PACKED_F16_GATHER: '0' DS4_METAL_V41_REUSE_SELECTED_KV: '0'
         DS4_METAL_V41_DECODE_FLUSH_LAYERS: '2'
         DS4_METAL_V41_PREFILL_ATTN_RB4: '0'
+        DS4_METAL_V41_ATTN_UNIT_SCALE: '0'
     })
     assert equal $blocking_result.exit_code 0 $blocking_result.stderr
     let blocking = $blocking_result.stdout | from json
@@ -118,11 +122,13 @@ def main [] {
     assert equal $blocking.env.DS4_METAL_V41_REUSE_SELECTED_KV '0'
     assert equal $blocking.env.DS4_METAL_V41_DECODE_FLUSH_LAYERS '2'
     assert equal $blocking.env.DS4_METAL_V41_PREFILL_ATTN_RB4 '0'
+    assert equal $blocking.env.DS4_METAL_V41_ATTN_UNIT_SCALE '0'
     for profile in [context-fast resident-fast persistent-fast persistent-packed] {
         let packed_result = (call $launcher ($leading ++ [$profile] ++ $requested) {
             DS4_V41_INDEX_FP4: '' DS4_V41_INDEX_SIMD: '' DS4_METAL_V41_SHORT_Q8_QUERY: '' DS4_METAL_V41_SHORT_Q8_QUERY_TABLE: '' DS4_METAL_V41_PACKED_F16_GATHER: '' DS4_METAL_V41_REUSE_SELECTED_KV: ''
             DS4_METAL_V41_DECODE_FLUSH_LAYERS: ''
             DS4_METAL_V41_PREFILL_ATTN_RB4: ''
+            DS4_METAL_V41_ATTN_UNIT_SCALE: ''
             DS4_METAL_V41_ROUTE_SHARED_DOWN: ''
         })
         assert equal $packed_result.exit_code 0 $packed_result.stderr
@@ -136,11 +142,13 @@ def main [] {
         assert equal $packed.env.DS4_METAL_V41_REUSE_SELECTED_KV (if $profile == 'context-fast' { '' } else { '1' }) $profile
         assert equal $packed.env.DS4_METAL_V41_DECODE_FLUSH_LAYERS (if $profile == 'context-fast' { '' } else { '1' }) $profile
         assert equal ($packed.env.DS4_METAL_V41_PREFILL_ATTN_RB4? | default '') (if $profile == 'context-fast' { '' } else { '1' }) $profile
+        assert equal ($packed.env.DS4_METAL_V41_ATTN_UNIT_SCALE? | default '') (if $profile == 'context-fast' { '' } else { '1' }) $profile
         assert equal $packed.env.DS4_METAL_V41_ROUTE_SHARED_DOWN (if $profile == 'context-fast' { '' } else { '1' }) $profile
         let unpacked_result = (call $launcher ($leading ++ [$profile] ++ $requested) {
             DS4_V41_INDEX_FP4: '0' DS4_V41_INDEX_SIMD: '0' DS4_METAL_V41_SHORT_Q8_QUERY: '0' DS4_METAL_V41_SHORT_Q8_QUERY_TABLE: '0' DS4_METAL_V41_PACKED_F16_GATHER: '0' DS4_METAL_V41_REUSE_SELECTED_KV: '0'
             DS4_METAL_V41_DECODE_FLUSH_LAYERS: '0'
             DS4_METAL_V41_PREFILL_ATTN_RB4: '0'
+            DS4_METAL_V41_ATTN_UNIT_SCALE: '0'
             DS4_METAL_V41_ROUTE_SHARED_DOWN: '0'
         })
         assert equal $unpacked_result.exit_code 0 $unpacked_result.stderr
@@ -153,6 +161,7 @@ def main [] {
         assert equal $unpacked.env.DS4_METAL_V41_REUSE_SELECTED_KV '0' $profile
         assert equal $unpacked.env.DS4_METAL_V41_DECODE_FLUSH_LAYERS '0' $profile
         assert equal $unpacked.env.DS4_METAL_V41_PREFILL_ATTN_RB4 '0' $profile
+        assert equal $unpacked.env.DS4_METAL_V41_ATTN_UNIT_SCALE '0' $profile
         assert equal $unpacked.env.DS4_METAL_V41_ROUTE_SHARED_DOWN '0' $profile
     }
     assert equal $agent.env.DS4_AGENT_CONTEXT_SUFFIX_PREROPE '1'
@@ -174,6 +183,7 @@ def main [] {
         DS4_METAL_V41_SHORT_Q8_QUERY: '' DS4_METAL_V41_SHORT_Q8_QUERY_TABLE: '' DS4_METAL_V41_PACKED_F16_GATHER: '' DS4_METAL_V41_REUSE_SELECTED_KV: ''
         DS4_METAL_V41_DECODE_FLUSH_LAYERS: ''
         DS4_METAL_V41_PREFILL_ATTN_RB4: ''
+        DS4_METAL_V41_ATTN_UNIT_SCALE: ''
         DS4_METAL_V41_ROUTE_SHARED_DOWN: ''
     })
     assert equal $server_result.exit_code 0 $server_result.stderr
@@ -193,6 +203,7 @@ def main [] {
     assert equal $server.env.DS4_METAL_V41_REUSE_SELECTED_KV '1'
     assert equal $server.env.DS4_METAL_V41_DECODE_FLUSH_LAYERS '1'
     assert equal $server.env.DS4_METAL_V41_PREFILL_ATTN_RB4 '1'
+    assert equal $server.env.DS4_METAL_V41_ATTN_UNIT_SCALE '1'
     assert equal $server.env.DS4_METAL_V41_ROUTE_SHARED_DOWN '1'
     assert equal $server.env.DS4_SERVER_CONTEXT_BOUNDARY_POLICY 'anchors'
     assert equal $server.env.DS4_SERVER_CONTEXT_CAPTURE_IN_SWEEP '1'

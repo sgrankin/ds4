@@ -6,29 +6,28 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: should the unit-rescale shortcut join the fast presets?**
-One-hour slice: November 4, 12:26–13:26 Eastern. Compare the accumulated
-candidate against published `364ceeab`, using its frozen checkout and original
-settings. The candidate adds exact four-row attention staging and the approximate
-unit-rescale shortcut. The selected-prefill wait cleanup remains behind its
-existing opt-in flag and is not enabled in this comparison.
+**Current question: what is the next exposed decode dependency?**
+One-hour slice: November 4, 13:24–14:24 Eastern. The local baseline is the
+[qualified prefill package](../experiments/2026-11-04-combined-prefill/README.md):
+runtime `b9c9e77b`, with four-row staging and unit-rescale enabled by its recorded
+candidate settings. Its tested binaries are now installed locally; published
+main remains `364ceeab`.
 
-Use five alternating 32K timing pairs, full-vocabulary fixed-history quality,
-and a reasoning-enabled coding check with enough context capacity to avoid the
-previous reserve-triggered compaction. Inspect whether the recorded coding
-replay exercises the new kernel before selecting it as the normal-case workload.
-Use the existing combined runner, without changing the runtime during samples.
-Decide whether the practical speed and quality tradeoff warrants enabling the
-shortcut in the resident fast presets. Small numerical differences and noisy
-neutral timings are not automatic rejection criteria.
+Return to decode. Inspect the existing 32K timeline for this runtime and collect
+a current profile if the evidence is insufficient. Trace the largest exposed
+cost or dependency to source, then select one concrete change. Use the existing
+fixture and benchmark infrastructure, five alternating samples per side, and
+quality checks suited to any arithmetic change. Keep all timing samples and
+interpret variation before accepting or rejecting the change. If no credible
+change fits the hour, preserve the narrowed dependency finding and choose a
+follow-up slice rather than building a new harness.
 
-Raw evidence belongs under
-`.workspaces/hillclimb-20261104/07-combined-prefill/`. Root compatibility binaries
-and published main remain at the starting package. Record one result report
-and a short [session journal](../../docs/lab/journal/2026-11-04-through-06-performance.md)
-entry; update the owning manual if promoted. Then return to the next measured
-prefill or decode dependency. Reserve the final session slice for another
-combined qualification.
+Raw evidence belongs under `.workspaces/hillclimb-20261104/08-decode-dependency/`.
+Only preparation that serves this selected decode outcome may run in parallel.
+Write one result report and a short
+[session journal](../../docs/lab/journal/2026-11-04-through-06-performance.md)
+entry. Do not publish; continue toward the November 6 deadline after deciding
+this bounded result.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome

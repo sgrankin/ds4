@@ -117,11 +117,15 @@ See [the Metal backend](../docs/models/deepseek/apple-silicon.md#attention-histo
 for eligibility and the [experiment report](../speed-bench/experiments/2026-11-04-attention-four-row/README.md)
 for measurements.
 
-An additional optional attention shortcut skips rescaling by one. It leaves the
-packed representation unchanged but changes compiled arithmetic and measured
-model outputs, so it must not be confused with lossless cache packing. It remains
-outside the presets pending combined qualification; see the
-[measured speed and quality tradeoff](../speed-bench/experiments/2026-11-04-attention-unit-rescale/README.md).
+The resident fast presets also select an approximate attention shortcut that
+skips rescaling by one. It leaves the packed representation unchanged but changes
+compiled arithmetic and measured model outputs, so it must not be confused with
+lossless cache packing. Set `DS4_METAL_V41_ATTN_UNIT_SCALE=0` to disable it.
+[Combined qualification](../speed-bench/experiments/2026-11-04-combined-prefill/README.md)
+found a repeated 32K prefill gain, inconclusive recorded-session timing and modest
+fixed-history distribution drift. The practical coding check passed its original
+oracle but exposed an additional empty-generator failure in the candidate.
+The ordinary engine and `context-fast` defaults leave this shortcut off.
 
 Checkpoint conversion uses the existing 8 MiB host I/O buffer and bounded GPU
 tiles. Suffix repair uses at most 128 F32 rows, or 256 KiB, plus packed source

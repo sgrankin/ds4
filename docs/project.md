@@ -18,6 +18,13 @@ starting from published revision `364ceeab`. The
 [experiment queue](../speed-bench/ideas/next-experiments.md) owns its current
 one-hour question; the [session journal](lab/journal/2026-11-04-through-06-performance.md)
 records decisions. New changes remain local until another push request.
+The session has now adopted four-row indexed attention staging and an approximate
+unit-rescale shortcut in the local fast presets. Their
+[combined qualification](../speed-bench/experiments/2026-11-04-combined-prefill/README.md)
+shows a repeated 32K prefill benefit, inconclusive recorded-session timing and
+measured quality differences, including one extra coding edge-case failure.
+The qualified agent, server and benchmark binaries are installed locally;
+published main remains at `364ceeab`.
 The organized manuals and lab journal are available under the [documentation index](README.md).
 The initial adaptation omitted upstream functionality; the completion audit
 covered all 118 commits and integrated the missing paths. All upstream

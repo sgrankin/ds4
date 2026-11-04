@@ -1,5 +1,9 @@
 # Skipping unit rescaling in indexed prefill attention
 
+Later [combined qualification](../2026-11-04-combined-prefill/README.md) adopted
+the original shortcut in the named fast presets, with explicit numerical and
+practical limitations. The experiment below records its earlier decision.
+
 **Retain the candidate as an opt-in approximation; do not promote it to the fast presets yet.** This experiment asks whether skipping a redundant rescale in
 online softmax reduces indexed prefill attention time. The one-hour window is
 November 4, 2026, 11:22–12:22 Eastern. Baseline `e050fa0b` includes the

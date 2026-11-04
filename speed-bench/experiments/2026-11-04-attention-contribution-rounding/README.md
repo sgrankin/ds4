@@ -1,5 +1,9 @@
 # Preserving contribution rounding in indexed prefill attention
 
+Later [combined qualification](../2026-11-04-combined-prefill/README.md) adopted
+the original shortcut in the named fast presets, with explicit numerical and
+practical limitations. The experiment below records its earlier decision.
+
 **Remove the rounded-contribution prototype.** It increased fixture error and
 did not retain the isolated operation benefit of skipping unit rescaling.
 The one-hour window is November 4, 2026, 12:09–13:09 Eastern. The baseline is

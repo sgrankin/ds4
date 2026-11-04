@@ -128,3 +128,20 @@ or a rejection based solely on a small noisy timing difference. The
 preserves all samples and the prototype revision. The first shortcut remains
 opt-in. Combined qualification is the next useful step before choosing whether
 to promote it, rather than continuing to chase exact rounding.
+
+## Seventh question: does the package justify preset adoption?
+
+The 12:26–13:26 Eastern slice compared the four-row staging and unit-rescale
+shortcut together against published `364ceeab`. Five alternating pairs improved
+32K fresh prefill and inference total; the five-pair recorded coding replay was
+inconclusive, with a slow final candidate sample retained. Full-logit checks
+showed modest average drift with larger local tails. Both reasoning-enabled
+coding runs passed the existing 207-case oracle without compaction, but an added
+empty-generator probe failed on the candidate despite its iterable docstring.
+
+Adopt the shortcut in the resident fast presets, preserving explicit disablement
+and ordinary engine defaults. This accepts a measured approximation with limited
+practical evidence, rather than claiming identical task quality. The
+[combined report](../../../speed-bench/experiments/2026-11-04-combined-prefill/README.md)
+owns all samples, quality tails and the coding limitation. Further hill climbing
+uses this package as its local baseline; published main remains unchanged.

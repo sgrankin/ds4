@@ -441,19 +441,25 @@ full-model pairs at each of 8K and 32K showed no clear change in total time. The
 is not an entire-state hash. See the [experiment report](../../../speed-bench/experiments/2026-11-04-attention-four-row/README.md)
 for settings and results.
 
-The separate `DS4_METAL_V41_ATTN_UNIT_SCALE=1` experiment requires four-row
-staging and skips output rescaling when the running softmax maximum is finite
-and unchanged. The old-output scale is then mathematically one. Removing that
-work changes floating-point rounding in the compiled kernel, however, and small
-attention differences can propagate through later quantization and routing.
-This is an opt-in approximation, not a fast-preset default. Five-pair tests
-reduced total inference time by about 1.1–1.5% at 8K and 32K, with nonzero
-distribution drift. A bounded activated coding task passed its independent
-oracle in both arms, but the candidate corrected a self-test and compacted once.
-The [rescaling report](../../../speed-bench/experiments/2026-11-04-attention-unit-rescale/README.md)
-records the quality tails and practical limits. Stored
-KV formats and scalar decode kernels are unchanged; altered prefill state can
-still affect subsequent decode behavior.
+The resident fast presets also enable `DS4_METAL_V41_ATTN_UNIT_SCALE=1`.
+This requires four-row staging and skips output rescaling when the running
+softmax maximum is finite and unchanged: the old-output scale is then
+mathematically one. Removing that work changes floating-point rounding in the
+compiled kernel, however, and small attention differences can propagate through
+later quantization and routing. This is an approximation, unlike the exact
+packing and staging changes. Set the flag to `0` to retain four-row staging
+without the shortcut; ordinary engine defaults and `context-fast` leave it off.
+
+The [combined qualification](../../../speed-bench/experiments/2026-11-04-combined-prefill/README.md)
+found lower fresh prefill and total inference time in all five 32K pairs against
+published `364ceeab`. Recorded coding replay timing was inconclusive. Full-logit
+checks measured nonzero distribution drift. Both fresh coding runs passed the
+207-case list-input oracle, while an extra empty-generator probe exposed a
+candidate failure despite its broader docstring. These are limited quality
+checks, not evidence of uniformly equivalent answers or general agent speed.
+The [isolated rescaling experiment](../../../speed-bench/experiments/2026-11-04-attention-unit-rescale/README.md)
+explains the operation-level gain. Stored KV formats and scalar decode kernels
+are unchanged; altered prefill state can still affect subsequent decode behavior.
 
 ## Representing the history
 
