@@ -110,6 +110,14 @@ head groups. Every measured prefill pair was slower at both 8K and 32K, despite
 matching numerical checks. The experimental selector was removed; the report
 retains its measured revision for replication.
 
+The [cooperative packed-KV reader](../speed-bench/experiments/2026-11-04-packed-attention-reader/README.md)
+preserved all tested values but did not establish a useful speed gain, including
+in a five-pair attention-operation check without model or SSD loading. The
+original reader remains. Sharing one scale decode across four lanes reduces
+logical lane work, but can leave SIMD instruction issue and physical reads
+unchanged while adding a shuffle; that explanation is plausible, not measured
+at the hardware-counter level.
+
 * Two-layer expert-prefetch lookahead ran 87–94 tokens/s versus 128–130 controls,
   despite exact logits. Lower explicit read wait was offset by later GPU drain;
   page-residency/contention was a hypothesis, not a measured cause (§3).

@@ -306,3 +306,9 @@ attention accumulation/order, physical row layout and allocation unchanged.
 The existing all-scale/signed-zero GPU fixture and five alternating 32K pairs
 would qualify it. This is unimplemented and has no measured speed benefit;
 current packed storage is an accepted capacity/latency tradeoff.
+
+The [November 4 follow-up](../2026-11-04-packed-attention-reader/README.md)
+tested this reader proposal and retained the original implementation. Values
+matched, but whole-model and attention-operation comparisons did not establish
+a useful gain. It also added focused coverage for the half4 attention reader;
+the earlier scalar unpack/gather fixture did not exercise that helper.

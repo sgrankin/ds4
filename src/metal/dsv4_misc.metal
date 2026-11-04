@@ -6045,10 +6045,6 @@ static inline half4 dsv4_load_cache_h4(
     if (format == 2u) {
         return dsv41_main_fp4_half4(kv, row, col);
     }
-    // Internal reader mode 3 uses the same packed FP4 bytes as format 2.
-    if (format == 3u) {
-        return dsv41_main_fp4_half4_cooperative(kv, row, col);
-    }
     if (format == 1u) {
         return ((device const half4 *)base)[col];
     }

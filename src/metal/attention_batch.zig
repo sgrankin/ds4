@@ -556,10 +556,6 @@ fn indexed(problem: Problem) c_int {
         .nb0 = 4,
         .nb1 = @as(u64, problem.top_k) * 4,
     };
-    // Reader mode 3 is internal to this indexed-attention packet. Public
-    // formats remain F32/F16/packed FP4 (0/1/2), with unchanged row storage.
-    const cooperative_env = if (problem.comp_fp4) c.getenv("DS4_METAL_V41_COOPERATIVE_FP4") else null;
-    const cooperative_fp4 = cooperative_env != null and c.atoi(cooperative_env) != 0;
     const args = c.ds4_metal_attention_indexed_args{
         .n_tokens = problem.rows,
         .n_head = problem.heads_count,
@@ -571,7 +567,7 @@ fn indexed(problem: Problem) c_int {
         .pos0 = problem.pos0,
         .window = problem.window,
         .ratio = problem.ratio,
-        .comp_kv_f16 = if (problem.comp_fp4) (if (cooperative_fp4) @as(u32, 3) else 2) else @intFromBool(problem.comp_half),
+        .comp_kv_f16 = if (problem.comp_fp4) 2 else @intFromBool(problem.comp_half),
         .n_splits = splits,
         .q_token_stride = @as(u64, problem.heads_count) * row_bytes,
         .q_head_stride = row_bytes,

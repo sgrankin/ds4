@@ -6,21 +6,22 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: can cooperative FP4 decoding shorten indexed attention?**
-One-hour slice: November 4, 10:00–11:00 Eastern. The large-prefill attention
-profile and the earlier main-FP4 report identify the packed half4 reader as a
-remaining candidate. Inspect its repeated scale decoding and exact half-value
-construction, then test one bounded reader change while preserving the current
-head groups and key order. Include a focused packed-versus-expanded fixture,
-full-model numerical checks and five alternating timing pairs at 8K and 32K.
-Keep full decode windows to detect costs outside prefill.
+**Current question: can modest row blocking help without losing head reuse?**
+One-hour slice: November 4, 10:45–11:45 Eastern. Keep the current sixteen heads
+per group and stage four KV rows at a time, preserving arithmetic and row order.
+This differs from the rejected eight-head/sixteen-row kernel: it retains head
+reuse, uses only 4 KiB of threadgroup staging and avoids a private compacted-ID
+array in each lane. Start with the focused numerical fixture and five alternating
+operation samples. If promising, compare five alternating full-model timing
+pairs at 8K and 32K, including decode and full-vocabulary checks.
 
-The previous row-blocking selector was removed after consistent regressions at
-both frontiers. The starting runtime again has the published execution for
-this workload, with the earlier readiness cleanup confined to batch overlap's
-existing opt-in path. Raw evidence for this question belongs under
-`.workspaces/hillclimb-20261104/03-packed-attention-reader/`; reuse the existing
-runner and keep intrusive profiling separate from timing.
+The cooperative FP4 reader was removed after mixed/neutral whole-model and
+operation timings. Its useful packed-versus-expanded correctness fixture remains.
+The starting runtime again has the published execution for this workload, with
+the readiness cleanup confined to batch overlap's existing opt-in path. Raw
+evidence for this question belongs under
+`.workspaces/hillclimb-20261104/04-attention-four-row/`; reuse the existing runner
+and keep intrusive profiling separate from timing.
 
 Record one result report and a short
 [session journal](../../docs/lab/journal/2026-11-04-through-06-performance.md)

@@ -47,3 +47,22 @@ barriers alone did not earn the extra staging memory and smaller head groups.
 The [result report](../../../speed-bench/experiments/2026-11-04-prefill-row-blocking/README.md)
 preserves all samples, the tested revision and the numerical checks. No preset
 or installed binary changed.
+
+## Third question: share packed-cache scale decoding
+
+The packed KV reader repeated scale decoding across four neighboring lanes.
+We tried exact half-bit construction and a SIMD broadcast of one decoded scale,
+preserving storage, head groups and attention order. Focused GPU checks and
+512 full-model positions matched exactly. Five-pair whole-model timing was
+mixed and close: slightly favorable at 8K, slightly unfavorable at 32K, with
+neither establishing a useful gain. A warmed five-pair attention-operation
+comparison was also neutral, about 32.02 versus 32.05 ms per call.
+
+We restored the original reader because the additional implementation did not
+earn its complexity, rather than declaring a regression from a small timing
+difference. Fewer logical per-lane operations need not mean fewer SIMD
+instructions or physical reads: the lanes still execute together and request
+the same unique scale bytes. That remains a source-level explanation, not a
+hardware-counter finding. The new packed-versus-expanded numerical fixture
+is retained. The [report](../../../speed-bench/experiments/2026-11-04-packed-attention-reader/README.md)
+owns all samples and the temporary operation benchmark's reproduction details.

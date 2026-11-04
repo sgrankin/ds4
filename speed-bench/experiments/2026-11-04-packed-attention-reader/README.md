@@ -1,10 +1,12 @@
 # Cooperative packed FP4 attention reader
 
-**The 8K comparison has a small favorable mean; 32K shows no clear benefit.**
-The decision remains pending the 32K quality check and diagnostic profile.
-This experiment asks whether sharing the
-scale decode and constructing half-precision values directly can reduce the cost
-of reading packed FP4 rows in indexed attention. It retains the existing head
+**The cooperative reader was not retained.** The 8K comparison has a small
+favorable mean, while 32K and a focused operation comparison show no clear
+benefit. That is insufficient payoff for the added code and reader metadata;
+the measurements do not establish a regression.
+
+This experiment asked whether sharing the scale decode and constructing half-precision values directly can reduce the cost
+of reading packed FP4 rows in indexed attention. It retained the existing head
 groups, row staging and key order.
 
 ## Context and mechanism
@@ -16,14 +18,14 @@ values in 256 bytes, followed by 32 E4M3 scale bytes. Each scale applies to
 288 bytes. The original reader decodes each vector's four nibbles and its
 scale separately, so neighboring vectors repeat the scale decode.
 
-The opt-in cooperative reader constructs the exact E2M1 half bits and shares
-one decoded scale across four adjacent SIMD lanes, each responsible for one
-consecutive `half4`. This requires those four participating lanes to address
-the same row and the same 16-value scale group; the shuffle must execute with
-the source lane active. The scaled vectors feed the existing attention
-calculation. Internal packet mode 3 selects this reader while retaining the
-same packed storage; the original reader remains available for comparison.
-No new buffers or dispatches are planned. The implementation is in
+The tested opt-in cooperative reader constructed the exact E2M1 half bits
+and shared one decoded scale across four adjacent SIMD lanes, each responsible for one
+consecutive `half4`. This required those four participating lanes to address
+the same row and the same 16-value scale group; the shuffle had to execute with
+the source lane active. The scaled vectors fed the existing attention
+calculation. Internal packet mode 3 selected this reader while retaining the
+same packed storage. It added no buffers or dispatches. The runtime changes
+were reverted to the parent; the original reader remains. The tested source was in
 [`dsv4_kv.metal`](../../../src/metal/dsv4_kv.metal),
 [`dsv4_misc.metal`](../../../src/metal/dsv4_misc.metal), and
 [`attention_batch.zig`](../../../src/metal/attention_batch.zig).
@@ -40,9 +42,11 @@ original staging geometry.
 
 The selected experiment window is November 4, 2026, 10:00–11:00 Eastern.
 The parent baseline is `f965f844` and the prototype revision is `d2957118`.
-Both measured arms will use the same new binary with
+Both measured arms used the same new binary with
 `DS4_METAL_V41_COOPERATIVE_FP4` explicitly set to `0` or `1`. ReleaseFast
-builds of `ds4-bench` and `metal-test` passed. Timing commands are pending.
+builds of `ds4-bench` and `metal-test` passed. The runner and fixture commands
+below describe the historical prototype; the cooperative flag no longer
+selects a reader in the reverted runtime.
 
 The workload uses an M5 Max with 128 GiB memory and the DeepSeek V4.1 Flash
 1017 IQ2_XXS/Q2_K imatrix checkpoint. It requests a 64 GB expert cache, with
@@ -50,7 +54,7 @@ an 8192-token prefill chunk and 40960-token context allocation. At frontiers
 of 8192 and 32768 tokens, it runs 128 teacher-forced tokens, appends 512 tokens,
 and runs another 128 teacher-forced tokens. The OS file cache is not flushed;
 the process-local expert cache survives KV restore. The existing
-[runner](../2026-11-04-decode-pass/run.nu) will take five alternating timing
+[runner](../2026-11-04-decode-pass/run.nu) took five alternating timing
 pairs at each frontier, with fixed-history full-vocabulary comparisons. Raw
 output is local and ignored under
 `.workspaces/hillclimb-20261104/03-packed-attention-reader`.
@@ -78,8 +82,10 @@ stride, storage or lifetimes.
 
 At 8K, the fixed-history quality check found all 256 full-vocabulary rows
 byte-identical and all 256 post-evaluation hashes matching. Delta-NLL and KL
-were zero. Local evidence is `quality8k/quality-summary.json`. This checks the
-selected histories, not all possible inputs. Both timing comparisons are complete below; 32K quality is in progress.
+were zero. Local evidence is `quality8k/quality-summary.json`. At 32K, another
+256 full-vocabulary rows and 256 post-evaluation hashes also matched exactly, with zero delta-NLL and KL; see
+`quality32k/quality-summary.json`. Across both frontiers this is 512 rows and
+512 hashes. This checks the selected histories, not all possible inputs.
 
 ## 32K timing
 
@@ -106,7 +112,7 @@ first token. Each cell below is original / cooperative; the first arm alternates
 
 The first pair was faster than the remaining pairs for both arms. The local
 `timing32k/timing-samples.csv` and `timing-summary.json` retain unrounded
-calculations and other phases. A candidate profile is planned. Source analysis suggests possible explanations for a neutral
+calculations and other phases. The diagnostic profile below is a separate observation. Source analysis suggests possible explanations for a neutral
 result: each 32-lane group still addresses eight unique scale bytes, leader
 masking might leave issued decode instructions unchanged while adding a shuffle,
 and the compiler's lowering of magnitude lookup versus bit construction is
@@ -135,3 +141,43 @@ and sample standard deviation as the 32K comparison.
 The local `timing8k/timing-samples.csv` and `timing-summary.json` retain
 unrounded calculations and other phases. Both timing pressure guards completed
 normally.
+
+
+## Focused operation comparison and diagnostic
+
+The temporary operation benchmark at revision `b470caea` measured five
+alternating pairs in one process, with four complete calls per sample. It used
+a fixed warmed shape of 2048 rows, 64 heads, 512 valid keys and 8192
+compressed rows. Timing included sort, encoding and GPU completion, but no
+model, SSD expert loading or allocation. The original averaged 32.0187 ±
+0.0898 ms per call and the candidate 32.0472 ± 0.0137 ms, a 0.089% increase
+between means. This focused comparison does not show a useful reader payoff
+for this shape. The fixture also verified byte-identical expanded, original
+and cooperative results at this large shape.
+
+| Pair | First | Original (ms/call) | Cooperative (ms/call) |
+| --- | --- | ---: | ---: |
+| 1 | Original | 32.17700 | 32.04550 |
+| 2 | Cooperative | 32.00350 | 32.06750 |
+| 3 | Original | 31.96900 | 32.03525 |
+| 4 | Cooperative | 31.96300 | 32.05325 |
+| 5 | Original | 31.98100 | 32.03450 |
+
+Local `operation-timing.csv` and `operation-timing-summary.json` retain all
+samples. At `b470caea`, the historical command was
+`./zig-out/bin/test-deepseek41-metal --fp4-attention-bench` under the pressure
+guard. The temporary benchmark was removed along with the experimental reader;
+the retained `--fp4-attention` fixture covers packed versus expanded results.
+
+The separate candidate profile covers fresh 32K prefill with the same model
+and settings as the timing comparison. Its local evidence is
+`candidate-profile/1-candidate/decode-anatomy.json` under the artifact directory.
+It recorded 284 command buffers and 101542 encoders, a 45.180823-second
+envelope, 34.323765 seconds of encoder union and
+10.857059 seconds uncovered. The dual-attention kernel summed to 9.532333
+seconds; 72 large `8192 × 4 × 1` dispatches totaled 9.135597 seconds, ranging
+from 119.778 to 147.947 ms each. The
+[earlier diagnostic](../2026-11-04-prefill-row-blocking/README.md) at `689c2d51`
+recorded 10.6686 kernel seconds for fresh 32K prefill. These unpaired profiles are attribution observations,
+not evidence of a speedup. The paired operation check above is the stronger
+comparison for its fixed shape.
