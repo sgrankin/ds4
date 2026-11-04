@@ -49,6 +49,7 @@ def main [out: path, stage: string = 'timing', --flag: string = 'DS4_METAL_V41_P
                 DS4_METAL_V41_PACKED_F16_GATHER: '1'
                 DS4_METAL_V41_REUSE_SELECTED_KV: '1'
                 DS4_METAL_V41_DECODE_FLUSH_LAYERS: '1'
+                DS4_METAL_V41_PREFILL_ATTN_RB4: '1'
             } | upsert $flag (if $arm == 'candidate' { $candidate } else { $control }) | merge (if $stage == 'timeline' { {
                 DS4_METAL_CB_TIMES: '1'
                 DS4_METAL_ENCODER_TIMELINE: ($dest | path join 'timeline.txt')

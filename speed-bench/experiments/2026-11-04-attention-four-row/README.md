@@ -1,6 +1,10 @@
 # Four-row staging for indexed prefill attention
 
-**The decision is pending.** A focused operation comparison favored the candidate by 1.57%, while the 32K full-model comparison shows no clear change in fresh-prefill time. This experiment asks whether staging four
+**Retain the candidate and enable it in the resident-fast and persistent-fast
+source presets; the ordinary default remains off.** The focused operation
+comparison favored four-row staging by about 1.5% at all three tested sizes.
+The full-model measurements do not establish a whole-task speedup or a
+regression. This experiment asks whether staging four
 key/value rows at a time reduces indexed prefill attention time while retaining
 the baseline's reuse across 16 heads. The selected window is November 4, 2026,
 10:45–11:45 Eastern.
@@ -40,8 +44,8 @@ The candidate is opt-in through `DS4_METAL_V41_PREFILL_ATTN_RB4`. The intended
 dispatch is limited to multirow, non-quality attention with Metal Performance
 Primitives available, 32 or 64 heads, width 512, top-k 512 and window 128.
 Both arms use runtime revision `52d5e7a1` in the same binary, with the flag
-explicitly set to `0` or `1`. Fixture revision `578aa9a9` adds a tail case
-without changing the runtime. ReleaseFast `ds4-bench` and Metal fixture builds
+explicitly set to `0` or `1`. Fixture revision `578aa9a9` adds a tail case, and `b74e543c` adds an
+optional operation row count; neither changes the runtime. ReleaseFast `ds4-bench` and Metal fixture builds
 passed.
 
 The existing [decode-pass runner](../2026-11-04-decode-pass/run.nu)
@@ -73,7 +77,14 @@ possible histories.
 
 At 8K, all 256 fixed-history full-vocabulary rows and all 256 post-step full-vocabulary logit
 hashes matched byte for byte; delta-NLL and KL were zero. The local evidence is
-`quality8k/quality-summary.json`. The 32K quality check is pending.
+`quality8k/quality-summary.json`. The 32K check also matched all 256 rows
+and 256 post-step full-vocabulary logit hashes, with zero delta-NLL and KL.
+Across both frontiers, 512 rows and 512 hashes matched. Its local evidence is
+`quality32k/quality-summary.json`.
+
+Practical task quality was not separately tested for this candidate. The fixed
+teacher-history checks above establish agreement on those histories, not every
+possible response or the contents of every cache buffer.
 
 ## Focused operation comparison
 
@@ -93,7 +104,23 @@ for the isolated operation, not a whole-model speedup.
 | 4 | Candidate | 31.78075 | 31.33350 |
 | 5 | Baseline | 31.75825 | 31.31375 |
 
-Local `operation-timing.csv` and `operation-summary.json` retain the samples.
+The same comparison at 512 and 8192 rows also matched the expanded reference
+and favored the candidate in every pair. At 512 rows the baseline averaged
+8.3494 ± 0.0289 ms and the candidate 8.2222 ± 0.0220 ms, a 1.52% decrease;
+at 8192 rows the averages were 125.7937 ± 0.0820 and 123.8070 ± 0.0167 ms,
+a 1.58% decrease. The same timing scope includes overhead shared by both arms,
+so these are operation-level changes rather than isolated kernel timings.
+
+| Pair | First | 512 baseline / candidate (ms/call) | 8192 baseline / candidate (ms/call) |
+| --- | --- | --- | --- |
+| 1 | Baseline | 8.39950 / 8.24500 | 125.93875 / 123.79425 |
+| 2 | Candidate | 8.34875 / 8.24750 | 125.74150 / 123.81175 |
+| 3 | Baseline | 8.33375 / 8.20325 | 125.76375 / 123.81850 |
+| 4 | Candidate | 8.33450 / 8.20750 | 125.75175 / 123.82500 |
+| 5 | Baseline | 8.33050 / 8.20775 | 125.77250 / 123.78525 |
+
+Local `operation-timing.csv`, `operation512.csv`, `operation8192.csv` and
+their summaries retain the samples.
 
 ## 32K timing
 
@@ -125,8 +152,11 @@ Fresh prefill averaged 20.040 ± 0.316 seconds for the baseline and
 Inference totals were 35.267 ± 0.655 and 35.298 ± 0.731 seconds, a 0.09%
 increase. Append averaged 7.104 ± 0.327 and 7.271 ± 0.300 seconds. The
 candidate was faster for fresh prefill in four of five pairs. Append means were
-higher for the candidate at both tested frontiers, but the magnitude and
-cause remain uncertain; a focused 512-row operation check is underway.
+higher for the candidate at both frontiers, but in every pair at both frontiers
+the arm run second had the slower append. The diagnostic profile below shows
+that the measured append does not dispatch the candidate kernel. The separate
+512-row operation comparison exercises it directly but does not reproduce the
+whole append workload.
 
 | Pair | First | Fresh prefill baseline / candidate (s) | Inference total baseline / candidate (s) | Append baseline / candidate (s) |
 | --- | --- | --- | --- | --- |
@@ -141,7 +171,48 @@ warm steady decode 34.580 ± 0.816 / 34.398 ± 0.846 tokens/s, baseline /
 candidate. Local `timing8k` artifacts retain calculated samples and other
 phases. The timing scope and precision match the 32K comparison.
 
+## Diagnostic profile
+
+A separate candidate profile of fresh 32K prefill recorded 284 command buffers,
+101542 encoders, a 45.238377-second envelope, 34.339142 seconds of encoder
+union and 10.899235 seconds uncovered. The four-row kernel summed to 9.329778
+seconds across 94 dispatches; 72 large `8192 × 4 × 1` dispatches totaled
+8.943567 seconds, ranging from 117.694 to 140.820 ms each. All four-row kernel
+work was in fresh prefill. The `warm_prefill_and_restore` phase used vector F16
+attention (0.821957 seconds) and reduction (0.127524 seconds), with no four-row
+kernel dispatch. Thus the measured 512-token append does not exercise the
+candidate, although the focused 512-row operation fixture does. This is one
+profiled observation, not a paired performance comparison. Local evidence is
+`timeline32k` under the artifact directory.
+
 ## Decision
 
-The focused append-shape check, 32K quality check, diagnostic profile and
-retention decision remain pending.
+The consistent operation gain and absence of an established full-model
+regression justify retaining the opt-in kernel and enabling it in the two fast
+source presets. The default remains off. The measured full-model totals do
+not establish a whole-task speedup, and the append ordering pattern prevents
+attributing its higher candidate mean to the change. The separate profile confirms that the measured append uses a different
+attention path.
+
+## Reproduction
+
+Build with `./tools/zig-build -Doptimize=ReleaseFast ds4-bench metal-test -j4`.
+The focused benchmark accepts an optional row count at fixture revision
+`b74e543c`; use 512, 2048 and 8192 to reproduce the three measured shapes.
+Each invocation warms both arms and takes five alternating pairs.
+
+```sh
+python3 speed-bench/ideas/pressure_run.py .workspaces/rb4-fixture-guard \
+  -- ./zig-out/bin/test-deepseek41-metal --fp4-attention
+python3 speed-bench/ideas/pressure_run.py .workspaces/rb4-operation-guard \
+  -- ./zig-out/bin/test-deepseek41-metal --fp4-attention-bench 2048
+python3 speed-bench/ideas/pressure_run.py .workspaces/rb4-timing-guard \
+  -- nu speed-bench/experiments/2026-11-04-decode-pass/run.nu \
+  .workspaces/rb4-timing timing --flag DS4_METAL_V41_PREFILL_ATTN_RB4 --frontier 32768
+```
+
+Use a separate output directory and frontier 8192 for the shorter comparison.
+The same runner's `quality` and `timeline` stages produce separate diagnostics;
+the quality stage enables logit dumps, not the engine's quality mode that would
+disable this candidate. Historical settings and the binary revision above own
+this comparison; later runner defaults may include additional optimizations.

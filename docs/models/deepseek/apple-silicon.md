@@ -423,6 +423,24 @@ that additional narrowing remains separate from final attention. The
 and [attention](../../../src/engine/deepseek41/attention.zig) implements
 publication, scoring, selection and gathering.
 
+In indexed prefill, each query head attends to the visible raw window and the
+selected compressed KV rows. The 16-head Metal kernel stages one 512-value
+row in 1 KiB of threadgroup memory and reuses it across those heads. The
+four-row variant stages up to four rows in 4 KiB, then consumes them in the
+same order with the same attention math and half-precision boundary. It reduces
+synchronization between rows without adding a persistent buffer or dispatch.
+
+`resident-fast` and `persistent-fast` enable this variant for multirow,
+non-quality attention when Metal Performance Primitives are available and the
+shape has 32 or 64 heads, width 512, top-k 512 and window 128. The ordinary
+engine default remains off; set `DS4_METAL_V41_PREFILL_ATTN_RB4=0` to disable
+it in a preset. Five operation pairs for each of the 512-, 2,048- and
+8,192-row shapes showed about 1.5–1.6% lower operation time, while five
+full-model pairs at each of 8K and 32K showed no clear change in total time. The tested
+512 full-vocabulary rows and 512 post-step logit hashes matched exactly; this
+is not an entire-state hash. See the [experiment report](../../../speed-bench/experiments/2026-11-04-attention-four-row/README.md)
+for settings and results.
+
 ## Representing the history
 
 The existing publication boundary quantizes compressed rows before storing

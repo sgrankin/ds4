@@ -109,6 +109,14 @@ buffer. Indexed batches decode four values at a time directly into existing
 half tiles. There is no persistent context-sized F32 main-cache shadow.
 Projection, normalization and rotary activation scratch still exist.
 
+The resident fast presets also enable four-row staging for eligible indexed prefill,
+which reuses each staged row across 16 query heads. This changes the temporary
+threadgroup tile, not the packed owner or attention order. The operation-level
+improvement did not produce a clear full-model total-time change at 8K or 32K.
+See [the Metal backend](../docs/models/deepseek/apple-silicon.md#attention-history-and-retrieval)
+for eligibility and the [experiment report](../speed-bench/experiments/2026-11-04-attention-four-row/README.md)
+for measurements.
+
 Checkpoint conversion uses the existing 8 MiB host I/O buffer and bounded GPU
 tiles. Suffix repair uses at most 128 F32 rows, or 256 KiB, plus packed source
 scratch. Each standalone F32 destination blit must own a command batch: this

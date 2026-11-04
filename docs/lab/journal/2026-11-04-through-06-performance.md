@@ -66,3 +66,21 @@ the same unique scale bytes. That remains a source-level explanation, not a
 hardware-counter finding. The new packed-versus-expanded numerical fixture
 is retained. The [report](../../../speed-bench/experiments/2026-11-04-packed-attention-reader/README.md)
 owns all samples and the temporary operation benchmark's reproduction details.
+
+## Fourth question: modest staging without losing head reuse
+
+Keeping sixteen heads per group while staging four KV rows reduced the focused
+attention operation by about 1.5–1.6% at 512, 2048 and 8192 rows; all fifteen
+alternating pairs favored it. Five-pair full-model comparisons showed no clear
+change in total time at either 8K or 32K. Append differences followed run order, and the diagnostic confirmed
+that this workload's append did not use the new kernel. Numerical checks matched
+exactly across 512 full-vocabulary positions and their post-step logit hashes.
+
+We retained the kernel and enabled it in the resident fast source presets.
+This is a small operation-level improvement, not an established whole-task
+speedup. The original kernel remains available through an explicit override,
+and the added staging is temporary threadgroup memory. The
+[report](../../../speed-bench/experiments/2026-11-04-attention-four-row/README.md)
+owns the samples, activation limits and profile. The remaining per-row softmax
+recurrence still performs work when its rescaling factor is one, making that a
+candidate for the next bounded question.
