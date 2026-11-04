@@ -123,10 +123,15 @@ ordinary routing refreshes the cache. It remains opt-in: five-pair tests do not
 establish a speed gain, and warm 32K decode is consistently slower. Fixed-history
 drift is measurable, while one coding task per arm passes the independent checks.
 
-The dependency profile nevertheless shows substantially less routing handoff,
-and CPU samples expose redundant address-table writes in the new preparation
-path. Retain this groundwork for a bounded follow-up removing those writes,
-then compare the combined path with the original baseline. The
+The dependency profile showed fewer routing handoffs, and CPU samples exposed
+redundant address-table writes. The
+[address-reuse follow-up](../speed-bench/experiments/2026-11-04-resident-address-reuse/README.md)
+removes those writes behind a second opt-in. It preserves all tested logits but
+does not establish an attribution speedup. The combined path has a small fresh
+8K decode benefit and retains the warm 32K slowdown. Keep it experimental while
+testing whether resident-only execution enables useful shared/routed branch
+concurrency. Detailed encoder profiling also changes batching and adds host
+overhead; its gap reduction is not a predicted ordinary-runtime saving. The
 [Apple Silicon manual](../docs/models/deepseek/apple-silicon.md#resident-expert-substitution)
 owns activation and lifetime details; neither fast preset enables this prototype.
 

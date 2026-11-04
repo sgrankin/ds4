@@ -6,30 +6,39 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: can resident GPU routing reuse maintained address tables?**
-One-hour slice: November 4, 14:48–15:48 Eastern. The fixed local baseline is
-resident-handoff prototype `6549a33b`, with GPU routing enabled and ordinary
-refresh every eight positions. Its [report](../experiments/2026-11-04-resident-handoff/README.md)
-records neutral fresh and slower warm 32K decode, alongside a substantial
-reduction in the diagnostic routing handoff. CPU sampling found 85 of 1,278
-main-thread observations in redundant address publication/clearing.
+**Current question: can resident-only execution overlap shared and routed experts?**
+One-hour slice: November 4, 15:40–16:40 Eastern. The fixed runtime baseline is
+`cc913524`, with GPU resident routing, address reuse and ordinary refresh every
+eight positions enabled. The [address-reuse report](../experiments/2026-11-04-resident-address-reuse/README.md)
+finds neutral attribution throughput despite removal of the sampled preparation
+work. The host mostly waits for GPU completion. The combined route retains a
+warm 32K slowdown, so neither experimental feature is promoted to presets.
 
-Remove only those repeated writes: cache installation and eviction already
-maintain the address tables under the selected streaming configuration. Preserve
-identity validation, resident masks, every in-flight pin, GPU route policy and
-refresh cadence. Leave duplicate Metal resource declarations for a separate
-question. First verify the cache lifetime invariant and fixed-history equality
-against the original GPU prototype. Then use five alternating samples per side
-for the preparation change and for the combined path against ordinary routing.
-Keep first-token and full-window costs, inspect changed dependencies even if
-total time is neutral, and qualify ordinary 8K as well as 32K work.
+The existing parallel FFN machinery can overlap routed gate/up with shared
+gate/up, then their down projections after a producer barrier. Current gates
+exclude the streamed IQ2/Q2 V4.1 shape. Admit only the already validated,
+pinned resident-address path under a new explicit opt-in. Preserve address-table
+ownership, all cache pins and resource declarations, distinct output storage,
+BF16 boundaries, and finish/abort cleanup. Do not use `force_resident` to bypass
+streaming checks or map full model weights. Ordinary refresh/fallback keeps its
+existing route. No host readback, expert load/eviction or command flush may
+interrupt the concurrent scope.
+
+Verify activation and fixed-history numerical behavior first, including ordinary
+8K and 32K contexts. Use five alternating samples per side to isolate the
+concurrency change and compare the combined path against ordinary CPU resident
+routing. Preserve first-token and full-window costs. If timing is neutral,
+inspect whether intended overlap appeared before deciding. Detailed encoder
+timelines alter grouping and add host overhead; use them for structure, not as
+predictions of native latency. Measure quality differences rather than rejecting
+rounding changes automatically.
 
 Raw evidence belongs under
-`.workspaces/hillclimb-20261104/10-resident-address-reuse/`. Reuse the existing
-driver with explicit recorded settings. Only preparation/review serving this
-outcome may run in parallel; retain one guarded heavy job. Write one result
-report and one short [journal](../../docs/lab/journal/2026-11-04-through-06-performance.md)
-entry, keep raw output ignored, and do not publish.
+`.workspaces/hillclimb-20261104/11-resident-parallel/`. Reuse the existing driver
+with explicit settings. Only preparation/review serving this outcome may run in
+parallel; retain one guarded heavy job. Write one result report and one short
+[journal](../../docs/lab/journal/2026-11-04-through-06-performance.md) entry, keep
+raw output ignored, and do not publish.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome

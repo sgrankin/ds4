@@ -79,6 +79,31 @@ remain instrumented: use them for screening, then measure profile-off latency
 and practical tasks. Prompt-bootstrap intervals are descriptive and do not
 replace independent task coverage.
 
+## Metal dependency profiles
+
+`DS4_METAL_ENCODER_TIMELINE=PATH` records command-buffer and encoder intervals,
+but it changes the schedule it observes. The scheduler closes ordinary reused
+encoders between acquisitions so each pass can receive counter samples. Each
+command buffer also owns sample storage, and completion logging shares a mutex
+with pipeline submission. A candidate that submits fewer command buffers can
+therefore remove profiling overhead as well as runtime work. Use the trace to
+identify ordering, overlap and candidate dependencies; an instrumented gap
+reduction is not a predicted saving in ordinary execution. The implementation
+is in [command scheduling](../../src/metal/command_schedule.zig) and the
+[Metal timeline hooks](../../src/metal/ds4_metal.m).
+
+For a lighter check, use `DS4_METAL_CB_TIMES=1` without the encoder timeline,
+alongside a bounded CPU sample. This preserves ordinary encoder grouping and
+reads completed command buffers' driver and GPU timestamps. Detailed rows stop
+after 400 waits, so prefill can consume the allowance. The finish trace's
+`encode` field includes intervening flushes and waits; it is not pure CPU
+encoding time. Its relative `gpu start` field also compares a Metal timestamp
+with a host monotonic clock; observed clock offsets can make that value invalid
+as a queue-delay estimate. Use durations within one clock domain instead.
+`DS4_METAL_GPU_BUSY_PROFILE=1` reports accumulated command-buffer
+GPU spans, which are not hardware occupancy. These diagnostics help locate
+waiting, while profile-free alternating runs establish performance.
+
 ## Guarded execution
 
 Keep useful workspaces under `.workspaces/` and raw results under ignored

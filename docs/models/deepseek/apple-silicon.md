@@ -330,6 +330,16 @@ six residents retain the original path. It is not enabled by a preset. The
 records its measured dependency change, quality costs and remaining performance
 work; [MoE orchestration](../../../src/engine/deepseek41/moe.zig) owns eligibility.
 
+Within this prototype, `DS4_METAL_V41_RESIDENT_GPU_REUSE_ADDR=1` skips repeated
+publication of cached addresses. Streaming cache installation already publishes
+them when address tables are enabled, and eviction clears them before retiring
+storage. Identity checks, the resident mask and every in-flight pin remain.
+This assumes a stable model and streaming configuration: enabling address tables
+after warming a cache with them disabled requires clearing/reloading the cache.
+The [address-reuse experiment](../../../speed-bench/experiments/2026-11-04-resident-address-reuse/README.md)
+preserved measured logits but did not establish a throughput gain from this
+preparation change. Both GPU routing and address reuse remain explicit opt-ins.
+
 ### Executing the selected experts
 
 Metal uses batched routed matrix multiplication to group rows by expert. The

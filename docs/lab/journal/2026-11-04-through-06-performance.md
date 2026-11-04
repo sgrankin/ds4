@@ -180,3 +180,24 @@ presets or replacing the installed binaries. The
 [report](../../../speed-bench/experiments/2026-11-04-resident-handoff/README.md)
 owns the samples, numerical tails and profile limitations. Measure the follow-up
 and the combined path against their respective baselines before judging benefit.
+
+## Tenth question: reuse the resident cache's published addresses
+
+Cache installation and eviction already maintain GPU address tables under the
+selected streaming configuration. We skipped repeated writes while preserving
+identity checks and all in-flight pins. All 512 fixed-history logit rows and
+512 post-token hashes at 8K and 32K matched the previous GPU-routing prototype.
+Four five-pair timing comparisons separated this preparation change from the
+combined route. Address reuse alone did not establish a decode gain. The
+combined path improved fresh 8K steady decode slightly, but remained neutral
+overall and consistently slower in warm 32K decode.
+
+Retain the small preparation cleanup behind its explicit opt-in; do not promote
+the GPU route to presets. Source inspection also found that the detailed encoder
+timeline changes batching and serializes logging with submission, so its reduced
+gap cannot be treated as saved native latency. The
+[report](../../../speed-bench/experiments/2026-11-04-resident-address-reuse/README.md)
+owns the samples, CPU diagnostic and clock limitations. The next bounded question
+is whether resident-only execution enables useful overlap between shared and
+routed experts, using the existing concurrent FFN machinery with narrow cache
+ownership checks.
