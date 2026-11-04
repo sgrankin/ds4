@@ -36,7 +36,7 @@ command or speed is evidence at its recorded revision, not a current-build claim
 | [Profiling after RoPE reuse](journal/2026-11-03-post-rope-profile.md) | Slow selected-prefill waits occur before routed expert GPU work begins. This motivated the subsequent slab-size test; the query projection remains a separate decode candidate. |
 | [Expert-cache slab size](journal/2026-11-03-expert-slabs.md) | Smaller buffers shorten the first decode step but do not reliably improve append or whole-workload time; five-pair tests retain the 4 GiB default. |
 | [Short Q8 query projection](journal/2026-11-03-short-q8-query.md) | Sharing input loads and keeping a rotated output pair within one SIMD group preserves measured logits. Adopted in resident fast presets despite uncertainty about the size of the speed benefit. |
-| [Overnight decode optimization](journal/2026-11-04-overnight-decode.md) | Active seven-hour session: direct F16 gathering is adopted; subsequent targets come from measured dependency gaps. |
+| [Overnight decode optimization](journal/2026-11-04-overnight-decode.md) | Five adopted changes raise measured 32K steady decode by about 7–8%; recorded coding replay inference takes 4.2% less time. Three other candidates remain unadopted. |
 
 The [design folder](../design/README.md) preserves unselected ideas separately from
 measured conclusions. Original concise reports under `speed-bench/` own complete

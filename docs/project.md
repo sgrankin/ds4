@@ -1,11 +1,19 @@
 # Project direction and current status
 
-Updated 2026-11-03. **The upstream port through `890898cf` is complete.**
-An authorized seven-hour decode optimization session is active until
-2026-11-04 06:55 Eastern. The [experiment queue](../speed-bench/ideas/next-experiments.md)
-records the current one-hour target; each completed result will update the
-owning manual and [session journal](lab/journal/2026-11-04-overnight-decode.md).
-Main will not be published during this session.
+Updated 2026-11-04. **The upstream port through `890898cf` is complete.**
+The overnight decode session adopted five changes in `resident-fast` and
+`persistent-fast`: direct half-precision KV gathering, every-layer submission,
+earlier shared-expert down projection, query RoPE coefficient reuse and reuse
+of gathered KV between eligible layers. Five-pair combined comparisons improve
+32K steady decode from about 30 to 32–33 tokens/s and reduce recorded coding
+replay inference time from 183.80 to 176.16 seconds. These are distinct
+workloads, not a general autonomous-agent speed claim. The
+[combined report](../speed-bench/experiments/2026-11-04-decode-pass/combined.md)
+owns measurements, variation and qualification; the
+[session journal](lab/journal/2026-11-04-overnight-decode.md) explains the decisions.
+Final numerical and reasoning-enabled coding checks passed. The tested agent,
+server and benchmark binaries are installed locally; no follow-on experiment
+is selected.
 The organized manuals and lab journal are available under the [documentation index](README.md).
 The initial adaptation omitted upstream functionality; the completion audit
 covered all 118 commits and integrated the missing paths. All upstream
@@ -65,8 +73,8 @@ summarize, archive facts or run a compaction agent.
 
 ## Where we stand
 
-This describes the local stack after `main`, not a new upstream release.
-The completed work is installed locally; the stack has not been published.
+This describes our native serving stack, not a new upstream release.
+The completed work is installed locally.
 
 | Area | Current state | Detail |
 | --- | --- | --- |
@@ -95,8 +103,9 @@ is a separate capability. Unsupported in-sweep capture uses the older capture pa
 The useful directions below are alternatives, not an execution queue:
 
 1. **Use and qualify the current stack in a real agent workflow.** Establish
-   whether the accumulated changes improve representative work. Longer
-   append-only sessions have not received the latest five-pair comparison.
+   whether the accumulated changes improve representative autonomous work.
+   The latest five-pair comparison covers a recorded coding session, with
+   fixed model tokens and tool outputs; it does not measure fresh tool choices.
 2. **Complete multi-generator composition.** DS4 plus Flint in one process
    still needs model routing, aggregate admission and scheduling. Clef helpers
    alongside a generator do not establish this capability.

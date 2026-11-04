@@ -113,6 +113,12 @@ there is no new persistent cache. `DS4_METAL_V41_REUSE_SELECTED_KV=0` restores
 the repeated gathers. The [reuse experiment](../speed-bench/experiments/2026-11-04-decode-pass/selected-kv-reuse.md)
 found exact tested logits and small, mixed timing changes at 8K and 32K.
 
+The [combined overnight comparison](../speed-bench/experiments/2026-11-04-decode-pass/combined.md)
+measures these five additions together against the preceding runtime, rather
+than adding their individual percentages. It includes five-pair 8K and 32K
+decode tests and a recorded coding session; the latter fixes tool outputs and
+does not measure autonomous task completion.
+
 All DeepSeek fast profiles default packed index storage and
 SIMD index scoring on; `persistent-packed` is an alias for `persistent-fast`.
 Explicit `DS4_V41_INDEX_FP4=0` or

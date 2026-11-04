@@ -1,7 +1,15 @@
 # Overnight decode experiments
 
-The authorized decode session continues until 06:55 Eastern. Its first
-completed comparison tested gathering selected packed FP4 main KV rows directly
+The seven-hour session completed eight experiments and retained five changes
+in the resident fast presets. Its final comparison measures the whole package
+against the starting runtime, with five alternating pairs per workload. The
+[combined report](../../../speed-bench/experiments/2026-11-04-decode-pass/combined.md)
+owns the complete results and reproduction commands. The sections below explain
+what motivated each experiment and why we kept or declined it.
+
+## Gather packed KV directly into half-precision scratch
+
+The first comparison tested gathering selected packed FP4 main KV rows directly
 to half scratch. This can reduce intermediate traffic and fuse staging without
 changing stored KV or checkpoints. Five alternating pairs each at 8K and 32K
 showed neutral to slightly favorable latency overall, with phase variation in
@@ -29,7 +37,7 @@ Router waits, expert-cache retirement and the final drain are unchanged.
 Numerical checks matched at 8K, 32K, an unaligned prefix and a requested 16 GB cache
 budget. The [cadence report](../../../speed-bench/experiments/2026-11-04-decode-pass/flush-cadence.md)
 owns complete samples, variation and the tradeoff curve. Other hardware and
-TP performance remain unmeasured. The session continues with a new profile.
+TP performance remain unmeasured. The next experiment used a new profile.
 
 ## Move shared down into the routing interval
 
@@ -73,8 +81,8 @@ and all 768 tested full-model rows and continuation hashes matched. The separate
 profile did not show less exposed query work. We adopted the small reuse change
 in the resident fast presets with an explicit off switch, without attributing
 a specific speed gain to it. The [coefficient report](../../../speed-bench/experiments/2026-11-04-decode-pass/query-rope-table.md)
-owns the samples, numerical checks and limits. The next investigation moves
-to host work in the remaining routing gaps.
+owns the samples, numerical checks and limits. The next investigation examined
+host work in the remaining routing gaps.
 
 ## Fewer deadline checks did not improve event polling
 
@@ -108,5 +116,22 @@ average at 8K, but every warm 32K pair favored the original clock. A separate
 CPU sample confirmed the raw-clock path without establishing why the warm
 difference occurred. We left it unadopted for the large-context goal, avoiding
 an unsupported context-length switch. The [raw-clock report](../../../speed-bench/experiments/2026-11-04-decode-pass/raw-clock.md)
-records this tradeoff and the retained prototype. Runtime changes are now
-frozen for combined qualification of the five adopted improvements.
+records this tradeoff and the retained prototype. We then froze runtime changes
+for combined qualification of the five adopted improvements.
+
+## Qualify the adopted combination
+
+The final comparison used the original executable and shader sources in a
+separate checkout. The package improved steady decode in every pair at both
+8K and 32K; the longer 32K windows gained about 7–8% throughput. A recorded
+coding session took 4.2% less inference time, including its prefill work.
+This replay fixes tokens and tool outputs, so it does not establish a reduction
+in autonomous task completion time.
+
+All 4,651 checked full-vocabulary rows matched byte for byte across the text
+and coding histories. Both builds also completed one fresh, reasoning-enabled
+coding task; an independent oracle checked 207 inputs for each generated
+function. These are bounded quality checks, not a broad coding evaluation.
+All final runs completed under the pressure guard. The tested binaries are
+installed locally, the manuals describe activation and fallback conditions,
+and main remains unchanged. No further experiment starts automatically.

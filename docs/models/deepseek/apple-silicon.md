@@ -208,6 +208,13 @@ defaults remain unchanged. The [cadence experiment](../../../speed-bench/experim
 qualifies the every-layer choice on single-Mac text decode at 8K and 32K;
 other hardware and TP performance have not been measured.
 
+The [combined decode qualification](../../../speed-bench/experiments/2026-11-04-decode-pass/combined.md)
+measures submission cadence together with earlier shared down, direct F16
+gathering and the query/KV reuse described below. Its five-pair comparisons
+cover 8K and 32K text decode and a recorded coding session. This establishes
+the package's measured effect; results from the individual experiments use
+successive baselines and cannot be added.
+
 The ordinary scalar path combines the Q and KV projections of one activation,
 then normalizes both results together. Suitable matrix kernels round their
 outputs to BF16 before writing them, saving a separate rounding pass. For

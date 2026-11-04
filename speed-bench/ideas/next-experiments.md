@@ -1,29 +1,12 @@
 # Experiment queue
 
-The user authorized a seven-hour decode optimization session, from
-2026-11-03 23:55:26 to 2026-11-04 06:55:26 Eastern. Work proceeds through
-one-hour profile, target, implementation and measurement loops. This authorization
-includes choosing the next bottleneck after each result; it does not authorize
-unrelated features or publishing main. Reserve the final slice for combined
-qualification and a concise account of adopted changes and unsuccessful attempts.
-
-**Current work: qualify the frozen five-change decode package.**
-Started 2026-11-04 05:14 Eastern. Finish within the authorized session ending
-06:55:26. No further runtime experiments start during this qualification.
-
-Compare the original `8971dfbd` executable and shaders, built in an isolated
-workspace, with the five adopted changes: direct F16 gather, every-layer
-submission, early shared down, query RoPE-table reuse and selected-KV reuse.
-Use five alternating pairs at 32K with 512-token decode windows, five at 8K,
-and five recorded coding-session replays. Separate fixed-history numerical
-captures and a reasoning-enabled coding smoke check qualify the result.
-The [combined driver](../experiments/2026-11-04-decode-pass/combined.nu) records
-both source roots, executable hashes, settings and commands. Raw results stay
-under `.workspaces/overnight-decode-20261104/combined/`.
-
-Update the [combined report](../experiments/2026-11-04-decode-pass/combined.md),
-manual/status summary and journal, then leave a clean local jj head. Main remains
-unchanged and unpublished. Prior experiment percentages are not additive.
+**No experiment is currently selected.** The authorized seven-hour decode
+session is complete: eight experiments, five adopted changes, and final
+comparisons against the original runtime. The
+[combined report](../experiments/2026-11-04-decode-pass/combined.md) owns the
+measurements and qualification; the
+[session journal](../../docs/lab/journal/2026-11-04-overnight-decode.md) explains
+the decisions. The experiment session itself did not publish main.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome
