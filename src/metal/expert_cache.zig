@@ -648,7 +648,7 @@ pub const Cache = struct {
     pub fn clearAll(self: Cache, reset_statistics: bool) void {
         const state = self.state;
         c.ds4_metal_expert_pending_clear();
-        // Drop the queue's residency before any slot unlock or strong-buffer
+        // Drop slab residency before any slot unlock or strong-buffer
         // retirement, including cache-budget changes and engine shutdown.
         c.ds4_metal_expert_slab_residency_clear(state, timingSummary(), "cache clear");
         state.cache_done_seq = state.cache_cb_seq;

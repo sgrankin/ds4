@@ -563,6 +563,8 @@ bool ds4_metal_single_encode(ds4_metal_single_resources *opaque, void *command,
             if (!ds4_metal_single_mark(opaque, p->split.active_mask))
                 return false;
         }
+        if (masked || p->kind == DS4_SINGLE_ARRAY_PAIR || p->kind == DS4_SINGLE_ARRAY_SUM)
+            ds4_metal_expert_slab_residency_use(command);
         id<MTLComputeCommandEncoder> enc = ds4_gpu_compute_encoder(cb);
         [enc setComputePipelineState:pipeline];
 #define A(slot, field) [enc setBytes:&p->field length:sizeof(p->field) atIndex:slot]

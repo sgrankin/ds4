@@ -63,13 +63,13 @@ void ds4_metal_expert_zero_layer_address(uint32_t layer) {
     }
 }
 bool ds4_metal_expert_slab_residency_add(ds4_metal_expert_cache_state *state,
-        ds4_metal_expert_buffer_ref buffer, bool profile) {
+        ds4_metal_expert_buffer_ref buffer, bool queue, bool profile) {
     @autoreleasepool {
 #if TARGET_OS_OSX
         if (@available(macOS 15.0, *)) {
-            if (!g_device || !g_queue ||
+            if (!g_device || (queue && (!g_queue ||
                 ![g_queue respondsToSelector:@selector(addResidencySet:)] ||
-                ![g_queue respondsToSelector:@selector(removeResidencySet:)]) {
+                ![g_queue respondsToSelector:@selector(removeResidencySet:)]))) {
                 fprintf(stderr, "ds4: streaming expert slab residency queue unavailable; using ordinary slab declarations\n");
                 return false;
             }
@@ -86,26 +86,64 @@ bool ds4_metal_expert_slab_residency_add(ds4_metal_expert_cache_state *state,
                     return false;
                 }
             }
-            /* Commit only at slab allocation. Queue attachment carries this
-             * set into subsequent commands; existing encoder declarations
-             * still provide hazard tracking. No warmup or residency request. */
+            /* Commit actual slabs before publication. Mode 1 attaches here;
+             * mode 2 attaches at expert consumption, never CPU cache pinning.
+             * Existing declarations retain hazard tracking in both modes. */
             [set addAllocation:buffer];
             [set commit];
             if (!state->cache_slab_residency_set) {
                 state->cache_slab_residency_set = set;
-                [g_queue addResidencySet:set];
-                state->cache_slab_residency_attached = 1;
+                state->cache_slab_residency_uses = 0;
+                if (queue) {
+                    [g_queue addResidencySet:set];
+                    state->cache_slab_residency_attached = 1;
+                }
             }
             if (profile)
-                fprintf(stderr, "ds4: streaming expert slab residency add allocations=%llu bytes=%.2f GiB queue=1\n",
+                fprintf(stderr, "ds4: streaming expert slab residency add allocations=%llu bytes=%.2f GiB mode=%s\n",
                         (unsigned long long)set.allocationCount,
-                        (double)set.allocatedSize / 1073741824.0);
+                        (double)set.allocatedSize / 1073741824.0,
+                        state->cache_slab_residency_attached ? "queue" : "command");
             return true;
         }
 #endif
         fprintf(stderr, "ds4: streaming expert slab residency requires macOS 15 or newer; using ordinary slab declarations\n");
         return false;
     }
+}
+void ds4_metal_expert_slab_residency_use(void *command) {
+    ds4_metal_expert_cache_state *state = &g_expert_cache;
+    if (!state->cache_slab_residency_set || state->cache_slab_residency_attached || !command)
+        return;
+#if TARGET_OS_OSX
+    if (@available(macOS 15.0, *)) {
+        id<MTLCommandBuffer> cb = (__bridge id<MTLCommandBuffer>)command;
+        id<MTLResidencySet> set = state->cache_slab_residency_set;
+        if (![cb respondsToSelector:@selector(useResidencySet:)]) {
+            state->cache_slab_residency_disabled = 1;
+            ds4_metal_expert_slab_residency_clear(state,
+                ds4_gpu_stream_expert_timing_summary_enabled(), "command API unavailable");
+            return;
+        }
+        /* This covers the whole CB, including any earlier/later router work.
+         * Cache pins and useResource still own actual reads and hazards. The
+         * extra reference only keeps this set object alive across pressure
+         * clear when the caller opted into unretained command buffers. */
+        [cb useResidencySet:set];
+        if (!cb.retainedReferences) {
+            [cb addCompletedHandler:^(id<MTLCommandBuffer> completed) {
+                (void)completed;
+                __attribute__((objc_precise_lifetime)) id keepAlive = set;
+                (void)keepAlive;
+            }];
+        }
+        state->cache_slab_residency_uses++;
+        if (g_timeline_enabled && g_timeline_batch && cb == g_batch_cb &&
+            ds4_gpu_stream_expert_timing_summary_enabled())
+            fprintf(stderr, "ds4: streaming expert slab residency use seq=%llu mode=command\n",
+                    (unsigned long long)g_timeline_batch->seq);
+    }
+#endif
 }
 void ds4_metal_expert_slab_residency_clear(ds4_metal_expert_cache_state *state,
         bool profile, const char *reason) {
@@ -115,9 +153,11 @@ void ds4_metal_expert_slab_residency_clear(ds4_metal_expert_cache_state *state,
             id<MTLResidencySet> set = state->cache_slab_residency_set;
             if (set) {
                 if (profile)
-                    fprintf(stderr, "ds4: streaming expert slab residency clear reason=%s allocations=%llu bytes=%.2f GiB\n",
+                    fprintf(stderr, "ds4: streaming expert slab residency clear reason=%s allocations=%llu bytes=%.2f GiB mode=%s uses=%llu\n",
                             reason, (unsigned long long)set.allocationCount,
-                            (double)set.allocatedSize / 1073741824.0);
+                            (double)set.allocatedSize / 1073741824.0,
+                            state->cache_slab_residency_attached ? "queue" : "command",
+                            (unsigned long long)state->cache_slab_residency_uses);
                 if (state->cache_slab_residency_attached && g_queue &&
                     [g_queue respondsToSelector:@selector(removeResidencySet:)])
                     [g_queue removeResidencySet:set];
@@ -129,6 +169,7 @@ void ds4_metal_expert_slab_residency_clear(ds4_metal_expert_cache_state *state,
 #endif
         state->cache_slab_residency_attached = 0;
         state->cache_slab_residency_set = nil;
+        state->cache_slab_residency_uses = 0;
     }
 }
 void ds4_metal_expert_retire_slab(ds4_metal_expert_cache_state *state, uint32_t index) {

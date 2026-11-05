@@ -351,6 +351,8 @@ bool ds4_metal_routed_encode(ds4_metal_routed_resources *opaque, void *command,
              p->kind == DS4_ROUTED_ADDR_SUM) &&
             !ds4_metal_routed_mark(opaque))
             return false;
+        if (address || (p->kind == DS4_ROUTED_MM && p->cached))
+            ds4_metal_expert_slab_residency_use(command);
         id<MTLComputeCommandEncoder> enc = ds4_gpu_compute_encoder(cb);
         [enc setComputePipelineState:pipeline];
 #define B(slot, role, extra)                                                                       \

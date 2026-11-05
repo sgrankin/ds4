@@ -7600,6 +7600,7 @@ static int ds4_gpu_encode_mul_mm_id_addr_mapped_tile(
         return 0;
     }
 
+    ds4_metal_expert_slab_residency_use((__bridge void *)cb);
     id<MTLComputeCommandEncoder> enc = ds4_gpu_compute_encoder(cb);
     [enc setComputePipelineState:mm_pipeline];
     [enc setBytes:mm_args length:sizeof(*mm_args) atIndex:0];
@@ -11576,6 +11577,8 @@ int ds4_gpu_glm_routed_moe_one_tensor(
         double glm_stream_split_missing_load_ms = 0.0;
         double glm_stream_split_missing_wait_ms = 0.0;
 
+        if (use_stream_expert_addr_table)
+            ds4_metal_expert_slab_residency_use((__bridge void *)cb);
         id<MTLComputeCommandEncoder> enc = ds4_gpu_compute_encoder(cb);
         [enc setComputePipelineState:pair_pipeline];
         [enc setBytes:&args length:sizeof(args) atIndex:0];
@@ -11696,6 +11699,7 @@ int ds4_gpu_glm_routed_moe_one_tensor(
                 if (!cb) ok = 0;
             }
             if (ok) {
+                ds4_metal_expert_slab_residency_use((__bridge void *)cb);
                 enc = ds4_gpu_compute_encoder(cb);
                 [enc setComputePipelineState:pair_pipeline];
                 [enc setBytes:&args length:sizeof(args) atIndex:0];
@@ -12840,6 +12844,8 @@ static int ds4_gpu_glm_routed_moe_batch_tensor_impl(
             return 0;
         }
 
+        if (use_stream_expert_addr_table)
+            ds4_metal_expert_slab_residency_use((__bridge void *)cb);
         id<MTLComputeCommandEncoder> enc = ds4_gpu_compute_encoder(cb);
         [enc setComputePipelineState:pair_pipeline];
         [enc setBytes:&args length:sizeof(args) atIndex:0];

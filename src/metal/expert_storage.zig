@@ -180,12 +180,20 @@ pub const Storage = struct {
             if (owner.token == null or count == 0) return false;
             const residency = c.getenv("DS4_METAL_STREAMING_EXPERT_SLAB_RESIDENCY");
             if (state.cache_slab_residency_disabled == 0 and residency != null and
-                std.mem.eql(u8, std.mem.span(residency), "1"))
+                (std.mem.eql(u8, std.mem.span(residency), "1") or
+                    std.mem.eql(u8, std.mem.span(residency), "2")))
             {
                 // Register this actual allocation before publishing its slots.
                 // Failure leaves ordinary tracked declarations in force and
                 // disables further attempts until the cache is fully cleared.
-                if (!c.ds4_metal_expert_slab_residency_add(state, owner.buffer(), Cache.timingSummary()))
+                // 1 keeps the queue association; 2 associates only command
+                // buffers that encode cached expert work. Other values are off.
+                if (!c.ds4_metal_expert_slab_residency_add(
+                    state,
+                    owner.buffer(),
+                    std.mem.eql(u8, std.mem.span(residency), "1"),
+                    Cache.timingSummary(),
+                ))
                     self.cache.disableSlabResidency("creation failure");
             }
             slab = state.cache_slab_count;
