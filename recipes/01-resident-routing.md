@@ -253,6 +253,15 @@ missed adjacency, while both arms passed a separate long-background graph task.
 The package remains experimental; fixed replay speed and these limited behavior
 checks do not justify a general agent-speed claim or preset promotion.
 
+The [command-buffer residency test](../speed-bench/experiments/2026-11-05-scoped-residency/README.md)
+narrows slab association to buffers that read cached expert weights. Keep this
+compute-only policy unselected: it restores the large fresh-start delay, while
+steady decode is nearly unchanged. The trace confirms that it excludes pure
+shared/router buffers, but also the blits that initially populate the cache.
+The extra fresh-decode gap precedes the first associated expert buffer. Retain
+the opt-in groundwork for a test that also covers seed writes; the current
+result does not establish that narrower association cannot help.
+
 Detailed encoder profiling changes batching and adds host overhead; its gap reduction is not a
 predicted ordinary-runtime saving. The
 [Apple Silicon manual](../docs/models/deepseek/apple-silicon.md#resident-expert-substitution)

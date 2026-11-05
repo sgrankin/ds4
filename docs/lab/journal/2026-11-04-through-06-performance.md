@@ -543,3 +543,21 @@ of independent tasks. Keep the selected GPU package experimental and cached
 refresh parallelism off. The [report](../../../speed-bench/experiments/2026-11-05-long-session-qualification/README.md)
 owns samples, quality tails, oracle checks and reproduction details. No preset,
 installed-frontend or main change follows from this qualification.
+
+## Twenty-ninth question: associate slab residency only with expert computation
+
+Command-buffer association preserves the checked outputs and cache behavior,
+but restores the large fresh-start delay. Five alternating pairs at each of
+8K and 32K make fresh 128-token decode about 0.56 seconds longer; steady decode
+is nearly unchanged. All 768 paired quality rows match, including a smaller
+cache with actual evictions. That smaller-cache case repeats the 8K history.
+
+Keep the compute-only policy unselected and retain its opt-in groundwork.
+The trace shows the extra GPU gap before its first associated expert buffer;
+fresh prefill's separate cache-fill blits have no association. Mixed expert
+and router buffers still receive the set, so the change does not isolate every
+router handoff. These observations motivate a seed-write association test,
+without identifying a driver cause or claiming a future gain. The
+[report](../../../speed-bench/experiments/2026-11-05-scoped-residency/README.md)
+owns samples, profile boundaries, resource checks and reproduction. The selected
+package, presets, installed frontends and main remain unchanged.

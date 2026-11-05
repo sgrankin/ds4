@@ -6,36 +6,22 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: does the accumulated selected package help a recorded agent session?**
-One-hour slice: November 5, 05:04 through 06:04 Eastern. The
-[cached-refresh experiment](../experiments/2026-11-05-cached-refresh-parallel/README.md)
-retains its prototype opt-in but does not add it to the selected package.
-Qualify the experiment 25 package against published `364ceeab` before another
-runtime change. The current runtime is `c1982bc8`, recorded by closure
-`5c87f08e`; leave cached-refresh parallelism off. Use the existing
-[package settings](../experiments/2026-11-05-slab-event-interaction/candidate-settings.json)
-and the published baseline settings from the overnight decode report.
+**Completed question: associate residency only with expert computation.**
+The November 5, 06:00–07:00 Eastern budget produced runtime `cd42c5ac` and
+the [command-buffer residency report](../experiments/2026-11-05-scoped-residency/README.md).
+Keep the compute-only mode unselected. Five pairs at both context sizes show a
+longer fresh first step and complete generation, with nearly unchanged steady
+decode. All 768 paired quality rows match, including a smaller-cache eviction
+case. The selected experimental package, presets and installed frontends remain
+unchanged.
 
-Reuse the recorded `session-v1.txt` replay with five alternating timing pairs,
-then compare all 3,371 aligned full-vocabulary teacher rows. Keep initial
-prefill, appended prefill, complete decode, first-step behavior, total inference
-and process wall separate. Report every sample, variation and order effects.
-This trace fixes model tokens and tool results; it does not measure autonomous
-agent speed or large-context prefill. The existing interval-coding oracle is
-the primary practical check, preserving reasoning and the earlier adjacency
-failure. Run the existing long-background dependency-layer task if the budget
-allows, to exercise a full prefill chunk. Retain failures and noncompletion.
-
-Rebuild only the candidate replay and agent binaries. Execute both arms from
-their matching source roots, with explicit settings and recorded hashes. Keep
-one guarded heavy job, no builds during timing, and existing pressure checks.
-Reuse the prepared local drivers under
-`.workspaces/hillclimb-20261104/28-long-session/`; do not add another harness.
-Keep one report under `2026-11-05-long-session-qualification/`, with a short
-journal and owning-manual update at closure. Useful follow-up on the cached
-refresh preparation/submission dependency remains deferred until this result.
-No preset change, installed frontend replacement, main advancement or push is
-part of this qualification.
+The trace confirms a useful scope difference: fresh-prefill seed blits lack
+association, and the extra gap precedes the first associated expert buffer.
+This supports a bounded follow-up that covers seed writes, without establishing
+whether it will remove cost or move it into prefill. Select that next question
+and its budget before changing runtime source. The current report owns the
+complete evidence and causal limits; raw artifacts remain local under
+`.workspaces/hillclimb-20261104/29-scoped-residency/`.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. The current timed
