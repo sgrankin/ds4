@@ -7,7 +7,7 @@ This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
 **Current question: can SIMD shorten resident expert selection without changing its choices?**
-One-hour slice: November 4, 19:23–20:23 Eastern. Keep runtime `1b692d25`'s
+One-hour slice: November 4, 19:21–20:21 Eastern. Keep runtime `1b692d25`'s
 GPU resident policy, refresh sixteen, address reuse, parallel FFN and 64 GB
 expert cache fixed. The [behavior qualification](../experiments/2026-11-04-resident-behavior/README.md)
 retains a bounded completion failure and does not promote this package. This

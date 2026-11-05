@@ -72,7 +72,9 @@ export fn ds4_gpu_dsv41_resident_route_one(selected: ?*Tensor, probs: ?*const Te
     defer t.deinit();
     const args = extern struct { n_expert: u32, trace: u32 }{ .n_expert = experts, .trace = @intFromBool(trace != null) };
     const mask = Binding{ .index = 4, .view = zero_view, .bytes = resident, .length = experts };
-    return dispatch("kernel_dsv41_resident_route_one", &.{ arg(0, &args), buf(1, s.view), buf(2, p.view), buf(3, bias.view), mask, buf(5, t.view) }, .{ .tx = 32 });
+    const simd = if (c.getenv("DS4_METAL_V41_RESIDENT_GPU_SIMD")) |value| std.mem.eql(u8, std.mem.span(value), "1") else false;
+    const kernel: [*:0]const u8 = if (simd) "kernel_dsv41_resident_route_one_simd" else "kernel_dsv41_resident_route_one";
+    return dispatch(kernel, &.{ arg(0, &args), buf(1, s.view), buf(2, p.view), buf(3, bias.view), mask, buf(5, t.view) }, .{ .tx = 32 });
 }
 const QuantRope = extern struct { width: u32, start: u32, inverse: u32 = 0, mode: u32, frequencies: [32]f32 };
 const MvRope = extern struct { width: u32, start: u32, inverse: u32, frequencies: [32]f32 };

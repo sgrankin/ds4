@@ -277,6 +277,70 @@ kernel void kernel_dsv41_resident_route_one(
     }
 }
 
+// One 32-lane SIMD group searches the same candidates as the scalar repair.
+// Each lane keeps the six IDs locally: uniform reductions update every copy,
+// so subsequent slots exclude both native residents and earlier replacements.
+// Only lane 0 accumulates trace mass, in the scalar slot order. Mixture weights
+// are not bound here and retain their native values.
+kernel void kernel_dsv41_resident_route_one_simd(
+        constant uint2 &args [[buffer(0)]],
+        device int32_t *selected [[buffer(1)]],
+        device const float *probs [[buffer(2)]],
+        device const float *bias [[buffer(3)]],
+        constant uchar *resident [[buffer(4)]],
+        device uint32_t *trace [[buffer(5)]],
+        uint lane [[thread_index_in_simdgroup]]) {
+    int32_t ids[6];
+    float total = 0.0f, changed_mass = 0.0f;
+    uint changes = 0;
+    for (uint slot = 0; slot < 6; ++slot) {
+        ids[slot] = selected[slot];
+        if (lane == 0) {
+            if (args.y) trace[slot] = as_type<uint32_t>(ids[slot]);
+            total += probs[ids[slot]];
+        }
+    }
+    for (uint slot = 0; slot < 6; ++slot) {
+        if (resident[ids[slot]]) continue;
+        uint first = args.x, best = args.x;
+        float first_score = 0.0f, best_score = -INFINITY;
+        for (uint expert = lane; expert < args.x; expert += 32) {
+            if (!resident[expert]) continue;
+            bool included = false;
+            for (uint other = 0; other < 6; ++other) included |= ids[other] == (int)expert;
+            if (included) continue;
+            const float score = probs[expert] + bias[expert];
+            if (first == args.x) { first = expert; first_score = score; }
+            // Keep NaNs out of the max reduction, including with fast math.
+            const bool score_nan = (as_type<uint>(score) & 0x7fffffffu) > 0x7f800000u;
+            if (!score_nan && (score > best_score || (score == best_score && expert < best))) {
+                best = expert;
+                best_score = score;
+            }
+        }
+        const uint first_id = simd_min(first);
+        const float first_value = simd_broadcast(first_score, ushort(first_id & 31u));
+        const float max_score = simd_max(best_score);
+        best = simd_min(best_score == max_score ? best : args.x);
+        // Scalar selection accepts the first unused resident unconditionally:
+        // its NaN wins, while later NaNs never replace a finite first score.
+        // Six admitted residents guarantee first_id is a real candidate.
+        if ((as_type<uint>(first_value) & 0x7fffffffu) > 0x7f800000u) best = first_id;
+        if (lane == 0) {
+            changed_mass += probs[ids[slot]];
+            ++changes;
+        }
+        ids[slot] = (int)best;
+    }
+    if (lane == 0) {
+        for (uint slot = 0; slot < 6; ++slot) selected[slot] = ids[slot];
+        if (args.y) {
+            trace[6] = changes;
+            trace[7] = as_type<uint32_t>(changed_mass / max(total, 6.103515625e-5f));
+        }
+    }
+}
+
 struct ds4_metal_args_dsv41_rope {
     uint width, heads, rows, start, inverse, stride;
     float frequencies[32];
