@@ -107,28 +107,31 @@ to an `mlock` failure, then disables it until a full cache clear. Unsupported
 systems or set-creation failures retain ordinary resource declarations.
 
 Setting the same flag to `2` instead associates that set with each command
-buffer when it encodes kernels that read cached expert weights. Pure router or
-shared-work buffers can omit it; a buffer containing both expert work and a later
-router remains covered. The association applies to the whole command buffer, not an individual
-encoder. This mode changes neither command boundaries nor the set's allocations.
+buffer that encodes cached expert kernels or blits that populate the cache.
+Pure router or shared-work buffers can omit it; a buffer containing both expert
+work and a later router remains covered. The association applies to the whole
+command buffer, not an individual encoder. This mode changes neither command
+boundaries nor the set's allocations.
 It requires the macOS 15 command-buffer residency API and falls back to ordinary
 declarations if that API is unavailable.
-This compute-only policy omits the blits that populate the cache during fresh
-prefill and the synchronization buffers used by snapshot saving. They retain
-their ordinary resource handling; queue mode also associates the slab set with
-those buffers. The distinction matters when locating initialization costs.
+Seed buffers receive the association after their destination slabs are
+registered and before their existing blit encoder opens. Snapshot synchronization
+buffers still omit it; queue mode also associates the slab set with those
+buffers. These scope differences matter when locating initialization costs.
 
 Both modes preserve the existing cache pins and resource declarations. For
 unretained command buffers, mode `2` keeps an extra reference to the set through
 completion. That reference preserves the set object, not a snapshot of its
 allocations, and does not replace the existing ownership of in-flight buffers.
-The [command-buffer comparison](../../speed-bench/experiments/2026-11-05-scoped-residency/README.md)
-tests this narrower association with the refresh schedule held fixed.
-The compute-only policy remains unselected: five pairs at both tested context
-sizes show a longer fresh first step and complete generation, with little steady
-decode change. Its trace places the extra gap before the first associated
-expert buffer and confirms that fresh-prefill seed buffers were unassociated.
-That identifies a bounded initialization follow-up, not a proven driver cause.
+The [first command-buffer comparison](../../speed-bench/experiments/2026-11-05-scoped-residency/README.md)
+covered only compute reads. It restored a large fresh-start gap, which motivated
+the [seed-write extension](../../speed-bench/experiments/2026-11-05-seed-residency/README.md).
+The extended mode confirms association on seed buffers and no longer shows
+that large gap in the tested comparison, with matching checked outputs. Five
+pairs per context still show mixed phase costs without establishing a
+whole-workload gain.
+Keep mode `2` as unselected groundwork; the experimental latency package retains
+queue mode `1`. These observations do not establish a driver-level cause.
 
 This option remains off in ordinary runtime behavior and fast presets. Its cost
 depends on the refresh schedule. With the selected-ID shared-event overlap

@@ -262,6 +262,15 @@ The extra fresh-decode gap precedes the first associated expert buffer. Retain
 the opt-in groundwork for a test that also covers seed writes; the current
 result does not establish that narrower association cannot help.
 
+The [seed-write extension](../speed-bench/experiments/2026-11-05-seed-residency/README.md)
+adds association to those existing initialization blits. The large historical
+first-compute gap is absent in this comparison, and all checked outputs match.
+Five pairs at both contexts still show mixed phase costs without establishing
+an overall gain.
+Retain extended mode `2` as groundwork while the selected experimental package
+stays on queue mode `1`. This preserves a narrower resource association for a
+later scheduling test without claiming that initialization work became free.
+
 Detailed encoder profiling changes batching and adds host overhead; its gap reduction is not a
 predicted ordinary-runtime saving. The
 [Apple Silicon manual](../docs/models/deepseek/apple-silicon.md#resident-expert-substitution)

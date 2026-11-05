@@ -561,3 +561,21 @@ without identifying a driver cause or claiming a future gain. The
 [report](../../../speed-bench/experiments/2026-11-05-scoped-residency/README.md)
 owns samples, profile boundaries, resource checks and reproduction. The selected
 package, presets, installed frontends and main remain unchanged.
+
+## Thirtieth question: associate residency with cache-seed writes too
+
+One existing helper call extends command-buffer association to the blits that
+populate the cache. The trace confirms all 40 seed buffers are covered and the
+previous large first-compute gap is absent. The old compute-only mode is a
+historical reference, not a concurrent third arm; this does not isolate a
+driver cause. All 768 paired output rows match, including the repeated 8K
+history with a smaller cache and actual evictions.
+
+Keep the extended mode as unselected groundwork. Five pairs at each context
+show mixed phase costs without establishing an overall gain over queue
+residency. In a separate full-token diagnostic pair, the increase is not
+confined to refresh tokens; that pair does not explain the comparative variation. The
+[report](../../../speed-bench/experiments/2026-11-05-seed-residency/README.md)
+owns the timing, scope and causal limits. The narrower association is now ready
+for a scheduling follow-up; the selected package, presets, installed frontends
+and main remain unchanged.

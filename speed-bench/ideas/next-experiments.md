@@ -6,22 +6,20 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Completed question: associate residency only with expert computation.**
-The November 5, 06:00–07:00 Eastern budget produced runtime `cd42c5ac` and
-the [command-buffer residency report](../experiments/2026-11-05-scoped-residency/README.md).
-Keep the compute-only mode unselected. Five pairs at both context sizes show a
-longer fresh first step and complete generation, with nearly unchanged steady
-decode. All 768 paired quality rows match, including a smaller-cache eviction
-case. The selected experimental package, presets and installed frontends remain
-unchanged.
+**Completed question: include cache-seed writes in command-buffer residency.**
+The [seed-write comparison](../experiments/2026-11-05-seed-residency/README.md)
+uses runtime `d4c0d297`. The new helper call covers all 40 recorded seed buffers;
+the large historical first-compute gap is absent in this comparison. Five pairs
+at both contexts still show mixed phase costs without establishing an overall
+gain over queue residency. All 768 paired quality rows match, including a
+smaller-cache eviction case. Retain the extended mode as unselected groundwork.
+The experimental package stays on queue mode 1; presets leave slab residency
+off. Installed frontends and main remain unchanged.
 
-The trace confirms a useful scope difference: fresh-prefill seed blits lack
-association, and the extra gap precedes the first associated expert buffer.
-This supports a bounded follow-up that covers seed writes, without establishing
-whether it will remove cost or move it into prefill. Select that next question
-and its budget before changing runtime source. The current report owns the
-complete evidence and causal limits; raw artifacts remain local under
-`.workspaces/hillclimb-20261104/29-scoped-residency/`.
+The narrowed association is now ready for a bounded test of shared-expert
+overlap. Select that next question and its budget before starting another job.
+Current evidence and scope limits belong to the report; local artifacts are in
+`.workspaces/hillclimb-20261104/30-seed-residency/`.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. The current timed
