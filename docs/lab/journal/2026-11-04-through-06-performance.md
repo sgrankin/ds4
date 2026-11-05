@@ -460,3 +460,23 @@ off while a bounded follow-up tests queue association with the shared-event
 handoff disabled. That uses an existing control to distinguish the interaction
 before adding another mechanism. Ordinary presets, installed binaries and
 published main remain unchanged.
+
+## Twenty-fifth question: combine queue residency with a different refresh schedule
+
+The failed queue-residency attempt removed the original first-step gaps but
+introduced waits near shared events. Disabling shared-expert overlap also
+changes the placement and fusion of shared work; the combined path avoids
+those diagnostic waits. Against the original pre-residency package, complete
+fresh 128-token decode and total inference improved in all five pairs at both
+8K and 32K. All 512 fixed-history logit rows and post-token hashes matched.
+
+Retain the combination as an experimental latency candidate. It has a real
+recurring cost: throughput after the first token fell in every pair, and warm
+decode did not share the clear fresh-session benefit. A small benchmark
+diagnostic using existing full-evaluation timestamps attributes most of the
+fresh phase's extra time to periodic CPU refreshes in one pair; the warm phase
+also has ordinary-step variation. This supplies a next target, not proof of a
+driver cause. The [report](../../../speed-bench/experiments/2026-11-05-slab-event-interaction/README.md)
+owns the samples and scope limits. Queue residency replaces the unsuccessful
+request-only implementation behind the existing opt-in flag. CPU presets,
+installed frontends and published main remain unchanged.

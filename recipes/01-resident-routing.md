@@ -197,7 +197,8 @@ registered the actual streaming buffers with a Metal residency set attached to
 the command queue. It consistently shortened the first decode step after fresh
 prefill, yet made complete fresh and warm decode slower in all five pairs at
 both 8K and 32K.
-Do not enable this form. Its profile still supplies useful groundwork: gaps
+Do not combine this form with the tested shared-event overlap schedule. Its
+profile still supplies useful groundwork: gaps
 between command buffers largely disappear, while new waits appear near the
 router's shared-event boundary. Preserve that evidence for a bounded test of
 residency policy instead of concluding that residency itself cannot help.
@@ -213,6 +214,16 @@ The useful distinction is between a request to prepare residency and associating
 the whole set with command execution. The results support testing that
 association's interaction with the existing shared-event handoff, without
 claiming that the driver mechanism has been identified.
+
+The [combined follow-up](../speed-bench/experiments/2026-11-05-slab-event-interaction/README.md)
+retains queue residency with shared-event overlap disabled as an experimental
+latency candidate. Fresh 128-token decode and total inference improved in all
+five pairs at both 8K and 32K. The first-step saving outweighs a small recurring
+cost in these workloads: throughput after the first token is lower, and warm
+decode does not share the clear gain. All 512 fixed-history logit rows matched.
+Disabling overlap also changes shared-expert scheduling and fusion, so this
+does not isolate event signaling as the cause. CPU-routing presets remain
+unchanged; the complete report owns the measured tradeoff and its limits.
 
 Detailed encoder profiling changes batching and adds host overhead; its gap reduction is not a
 predicted ordinary-runtime saving. The

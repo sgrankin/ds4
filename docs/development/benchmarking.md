@@ -118,6 +118,15 @@ after 400 waits, so prefill can consume the allowance. The finish trace's
 encoding time. Its relative `gpu start` field also compares a Metal timestamp
 with a host monotonic clock; observed clock offsets can make that value invalid
 as a queue-delay estimate. Use durations within one clock domain instead.
+The batch creation timestamp resets at each full end/begin. If a token uses
+several such scopes, the last batch log covers only the final scope, not the
+whole token. For complete scalar evaluations, set
+`DS4_BENCH_DECODE_TOKEN_TIMES=1` in `ds4-bench`. It prints the existing
+start-to-end evaluation interval with the frontier and step number, without
+changing Metal encoder grouping. Printing happens after the measured interval
+but can perturb pacing between tokens; these rows are diagnostic. The variable
+is presence-based and must be unset to disable it. Speculative cycles are not
+reported by this scalar diagnostic.
 `DS4_METAL_GPU_BUSY_PROFILE=1` reports accumulated command-buffer
 GPU spans, which are not hardware occupancy. These diagnostics help locate
 waiting, while profile-free alternating runs establish performance.

@@ -6,35 +6,36 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: can a standing slab-residency request preserve the fresh-step gain without refresh stalls?**
-One-hour slice: November 5, 02:04 through 03:04 Eastern. The queue-attached
-candidate at runtime `5efd342f` reduced the fresh first step but slowed complete
-decode in every pair at 8K and 32K. Its profile replaced large gaps between
-command buffers with repeated waits near shared-event boundaries. Normal encoder
-grouping confirmed the shift; the driver mechanism remains unresolved.
+**Current question: can queue-attached slab residency help when the shared-event handoff is disabled?**
+One-hour slice: November 5, 02:40 through 03:40 Eastern. The queue-attached
+experiment reduced the fresh first step but added repeated waits near shared
+events; a standing request removed those extra waits but restored the original
+gaps. Both results are retained. Now test the interaction using the existing
+`DS4_METAL_V41_ROUTE_SHARED_OVERLAP` switch, without adding another mechanism.
 
-Change only the residency policy: replace queue attachment with one standing
-`requestResidency` after initial set creation. Later slab additions still commit
-into that set. Keep existing resource declarations, pins, selected-ID overlap,
-cache policy and pressure teardown. Remove the unused queue-attachment state
-rather than adding another permanent mode. The existing flag remains opt-in;
-its value `1` now selects the candidate policy at the new recorded revision.
-Apple exposes standing requests separately from queue attachment; do not assume
-that either guarantees residency under all memory pressure.
+Run the already-built queue-attached runtime `5efd342f` in a matching frozen
+workspace, with its recorded binary hash. First take a diagnostic pair holding
+queue residency on while changing shared overlap from `1` to `0`.
+This switch also moves shared gate/up and down work on CPU-refresh layers;
+interpret it as a schedule comparison, not a pure event toggle. Then qualify
+the combined candidate (queue residency on, overlap off) against the selected
+pre-residency package (residency off, overlap on), using the same binary on both
+sides. Hold GPU resident routing, refresh interval 16, four-layer submissions,
+model, 64 GB cache, 4 GiB slabs, 8K chunks and workload fixed.
 
-Use the unchanged experimental GPU settings from
-`2026-11-05-first-decode-admission/candidate-settings.json`, with the new flag
-`0` versus `1`. Hold the model, 64 GB cache, 4 GiB slabs, 8K chunks and four-layer
-submissions fixed. Run the bounded cache-lifetime fixture, fixed-history quality,
-and at least five alternating pairs each at 8K and 32K. Check fresh and warm
-first steps, full decode, prefill, inference totals and process wall. Compare the
-profile with the previous candidate to determine whether the new wait disappears
-or simply moves. No unrelated builds during timing; one guarded heavy job.
+Use fixed-history quality and at least five alternating pairs at 8K and 32K.
+Inspect fresh and warm first steps, complete 128-token decode, prefill, total
+inference and process wall. Separate diagnostic scope from comparative timing;
+do not infer a driver mechanism from an event-adjacent gap alone. Preserve
+existing cache pins, declarations, admission and pressure handling. One guarded
+heavy job at a time; no builds during timing. Current source and installed
+frontends need not change for this configuration experiment.
 
-Keep raw artifacts under `.workspaces/hillclimb-20261104/24-standing-slab-residency/`
-and one concise report under `2026-11-05-standing-slab-residency/`. Update the
-owning storage manual, recipe conclusion and short journal entry. No main
-advancement, push or preset promotion is authorized by a diagnostic result alone.
+Keep raw artifacts under `.workspaces/hillclimb-20261104/25-slab-event-interaction/`
+and one concise report under `2026-11-05-slab-event-interaction/`. Record which
+comparison isolates overlap and which qualifies the combined package against
+the original baseline. Update owning documentation and one journal entry when
+closing. No main advancement or push is authorized.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. The current timed

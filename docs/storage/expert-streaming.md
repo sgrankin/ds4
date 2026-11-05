@@ -96,32 +96,35 @@ append. The default remains 4,096 MiB. This is a measured latency tradeoff, not
 evidence that every operation benefits from smaller resources.
 
 An experimental `DS4_METAL_STREAMING_EXPERT_SLAB_RESIDENCY=1` registers the
-actual slab buffers in an engine-owned Metal residency set. It issues one
-standing residency request after the first allocation is committed; later slab
-additions commit into the same set. Metal may defer the request under pressure.
+actual slab buffers in an engine-owned Metal residency set attached to the
+runtime command queue. Each new slab is committed to that set before its slots
+are published. The association includes the whole set in the queue's command
+buffers; it does not guarantee permanent residency under pressure.
 Existing resource declarations and expert-cache pins still govern accesses,
-and the set covers unused slots within those allocations too. The cache ends
-the request and clears the set before trimming, unlocking slots or responding
+and the set covers unused slots within those allocations too. The cache detaches
+and clears the set before trimming, unlocking slots or responding
 to an `mlock` failure, then disables it until a full cache clear. Unsupported
 systems or set-creation failures retain ordinary resource declarations.
 
-This option remains off in presets and ordinary runtime behavior. An earlier
-[queue-attached residency experiment](../../speed-bench/experiments/2026-11-05-streaming-slab-residency/README.md)
-included the whole slab set in each command buffer on the shared runtime queue. It
-shortened the first scalar evaluation after fresh prefill but made complete
-128-token decode slower in its five-pair comparisons at 8K and 32K. The profile
-shows a useful change in
-waiting: large gaps between command buffers shrink, while new gaps appear
-near shared-event boundaries within refresh buffers. That supports further
-investigation of residency policy; it does not establish a driver root cause
-or justify enabling that queue-attached form. The
-[standing-request follow-up](../../speed-bench/experiments/2026-11-05-standing-slab-residency/README.md)
-found no added refresh waits in its separate diagnostics, but the original fresh
-first-step gaps remained. Five-pair timings at 8K and 32K are mixed and do not establish an
-overall gain, so the standing request remains unselected. This preserves the
-resource-lifetime implementation for further bounded tests of the queue/event
-interaction. Co-resident helper performance and older Apple hardware have not
-been qualified.
+This option remains off in ordinary runtime behavior and fast presets. Its cost
+depends on the refresh schedule. With the selected-ID shared-event overlap
+enabled, the [first comparison](../../speed-bench/experiments/2026-11-05-streaming-slab-residency/README.md)
+shortened the fresh first step but slowed complete decode. A
+[standing request without queue attachment](../../speed-bench/experiments/2026-11-05-standing-slab-residency/README.md)
+avoided the new refresh waits but retained the original first-step gaps; that
+policy is no longer the implementation behind this flag.
+
+The [combined scheduling comparison](../../speed-bench/experiments/2026-11-05-slab-event-interaction/README.md)
+pairs queue residency with `DS4_METAL_V41_ROUTE_SHARED_OVERLAP=0` in the
+experimental GPU-routing package. CPU refreshes then use full waits and the
+existing shared-down/HC-expansion fusion, while ordinary GPU-routing steps keep
+their existing kernels. Five pairs at each frontier show faster fresh
+128-token decode and total inference, but lower throughput after the first
+token. Warm decode was mixed at 8K and slower in four of five pairs at 32K.
+This is a latency tradeoff, not a general steady-throughput gain. All 512
+fixed-history logit rows matched.
+The driver cause of the event-adjacent waits remains unproven. Co-resident helper
+performance and older Apple hardware have not been qualified.
 
 ## M5 Max measurements
 
