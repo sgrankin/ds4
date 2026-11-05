@@ -219,10 +219,11 @@ fn parallelValid(q: *const Request, f: *const Facts, add_in: bool, p: Policy) bo
     // fused producer -> direct-sum consumer pair has explicit level barriers.
     const common = f.parallel_mode == 2 and !add_in and
         absent("DS4_METAL_MOE_WRITE_CLAMPED_ACT") and p.fused and p.direct;
-    // This layer-scoped override is armed only after resident preflight pins
-    // every possible GPU selection. Prove the later slots/address branch here:
-    // no full-model views, host selection, loads or stage flushes may intervene.
-    const resident_address = f.resident_only and f.resident_layer == q.layer and
+    // Both proofs are layer-scoped: GPU routing pins every possible selection;
+    // CPU refresh pins its exact IDs and retains normal accounting/upload.
+    // Neither may enter full-model views, loads or stage flushes.
+    const resident_address = ((f.resident_only and f.resident_layer == q.layer) or
+        (f.cached_parallel and f.cached_parallel_layer == q.layer)) and
         f.parallel_stage == 0 and has(b, c.DS4_ROUTED_SSD) and !has(b, c.DS4_ROUTED_QUALITY) and !q.force_resident and
         q.rows == 1 and q.gate_type == iq2 and q.down_type == q2 and q.used_experts == 6 and q.total_experts == 384 and
         q.input_width == 5120 and q.middle_width == 2304 and q.output_width == 5120 and
@@ -244,6 +245,15 @@ fn parallelValid(q: *const Request, f: *const Facts, add_in: bool, p: Policy) bo
         ((b.world == 1 and b.first_expert == 0 and b.bound_experts == q.total_experts) or
             (b.world == 2 and ((b.rank == 0 and b.first_expert == 0) or (b.rank == 1 and b.first_expert +% b.bound_experts == q.total_experts))));
     return common and (q.force_resident or !has(b, c.DS4_ROUTED_SSD)) and (iq2_route or mx_route);
+}
+// Preflight uses the same arithmetic and shape admission as the real request,
+// before arming a concurrent encoder. No rejected configuration changes pins.
+pub fn cachedParallelSupported(q: *const Request, f: *const Facts) bool {
+    const gate = Batch.mvArgs(q, &f.batch, false);
+    const down = Batch.mvArgs(q, &f.batch, true);
+    if (!parallelValid(q, f, false, specialize(q, f, false, gate, down))) return false;
+    const p = choose(q, f, false, gate, down, q.total_experts * q.gate_expert_bytes, q.total_experts * q.down_expert_bytes) orelse return false;
+    return p.slots_iq2 and !p.address and !p.table and !p.boundary();
 }
 fn groupSize(total: u32) u32 {
     var size: u32 = 32;
@@ -507,6 +517,16 @@ pub fn checkV41Selections() bool {
     if (!resident.slots_iq2 or resident.address or resident.table or resident.boundary()) return false;
     f.resident_only = false;
     if (parallelValid(&q, &f, false, resident)) return false;
+    f.cached_parallel = true;
+    f.cached_parallel_layer = q.layer;
+    if (!cachedParallelSupported(&q, &f)) return false;
+    f.cached_parallel_layer += 1;
+    if (parallelValid(&q, &f, false, resident)) return false;
+    f.cached_parallel_layer = q.layer;
+    f.parallel_stage = 1;
+    if (parallelValid(&q, &f, false, resident)) return false;
+    f.parallel_stage = 0;
+    f.cached_parallel = false;
     f.resident_only = true;
     f.resident_layer += 1;
     if (parallelValid(&q, &f, false, resident)) return false;

@@ -2945,6 +2945,12 @@ int ds4_gpu_glm_routed_moe_batch_direct_scalar_q4_tensor(
         uint32_t                mid_token_stride);
 
 int ds4_gpu_routed_moe_set_selected_override(const int32_t *selected, uint32_t n_selected);
+/* CPU-refresh preflight: exact cached IDs only, pinned in the current batch.
+ * Keeps normal selected preparation/accounting; zero declines without an override. */
+#ifdef __APPLE__
+int ds4_gpu_routed_moe_cached_selected_parallel_ready(const ds4_gpu_stream_expert_table *table,
+        const int32_t *selected, uint32_t n_selected);
+#endif
 void ds4_gpu_routed_moe_set_resident_only(uint32_t layer, bool enabled);
 void ds4_gpu_set_glm_mtp_verify_mode(bool enabled);
 #ifdef DS4_ROCM_BUILD

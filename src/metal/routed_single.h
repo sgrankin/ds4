@@ -2,6 +2,7 @@
 #define DS4_METAL_ROUTED_SINGLE_H
 #include <errno.h>
 #include "routed_batch.h"
+#include "expert_cache.h"
 
 /* Three original shader packets, declared once for C and native callers. */
 typedef struct {
@@ -55,7 +56,9 @@ typedef struct {
     bool parallel_pending;
     bool full_expert_bind;
     bool resident_only;
+    bool cached_parallel;
     uint32_t resident_layer;
+    uint32_t cached_parallel_layer;
     int32_t parallel_mode;
     int32_t parallel_stage;
     const ds4_metal_hc_pipeline *cached[DS4_SINGLE_PIPELINE_COUNT];
@@ -173,8 +176,12 @@ typedef struct {
     uint32_t count;
     uint32_t resident_layer;
     bool resident_only;
+    uint32_t cached_parallel_layer;
+    bool cached_parallel;
 } ds4_metal_selected_override;
 ds4_metal_selected_override *ds4_metal_single_override_state(void);
+int ds4_native_metal_cached_selected_parallel_ready(ds4_metal_expert_cache_state *state,
+        bool streaming, const ds4_gpu_stream_expert_table *table, const int32_t *ids, uint32_t count);
 void **ds4_metal_single_diagnostics_slot(void);
 void ds4_native_metal_selected_diagnostics_cleanup(void);
 #endif

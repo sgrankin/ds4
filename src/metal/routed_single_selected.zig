@@ -12,17 +12,69 @@ fn overrideState() *c.ds4_metal_selected_override {
 }
 pub fn setOverride(ids: [*c]const i32, count: u32) c_int {
     if (count > 8 or (ids == null and count != 0)) return 0;
+    overrideState().cached_parallel = false;
     for (0..count) |slot| overrideState().ids[slot] = ids[slot];
     overrideState().count = count;
     return 1;
 }
 pub fn clearOverride() void {
     overrideState().count = 0;
+    overrideState().cached_parallel = false;
 }
 fn takeOverride(ids: *[8]i32, count: u32) bool {
     if (overrideState().count != count) return false;
     @memcpy(ids[0..count], overrideState().ids[0..count]);
-    overrideState().count = 0;
+    clearOverride();
+    return true;
+}
+pub fn cachedParallelReady(state: *c.ds4_metal_expert_cache_state, streaming: bool, maybe_table: ?*const c.ds4_gpu_stream_expert_table, ids: [*c]const i32, count: u32) bool {
+    const Cache = @import("expert_cache.zig");
+    const table = maybe_table orelse return false;
+    const cache = Cache.Cache{ .state = state, .streaming = streaming };
+    // Replay and alternate preparation modes can replace IDs or submit work.
+    // This proof covers only the ordinary CPU-selected cache-address path.
+    if (count != 6 or ids == null or !streaming or c.ds4_gpu_commands_active() == 0 or
+        state.cache_batch_seq == 0 or cache.effectiveCap(table.n_total_expert, count) == 0 or
+        !addrRequested(cache.splitReady()) or
+        present("DS4_MOE_REPLAY_SELECTED_IDS") or present("DS4_METAL_ENABLE_STREAMING_FULL_EXPERT_ADDR_TABLE") or
+        present("DS4_METAL_ENABLE_STREAMING_COMPACT_ADDR") or present("DS4_METAL_ENABLE_STREAMING_EXPERT_HIT_VALIDATOR") or
+        present("DS4_METAL_V41_STAGED_EXPERT_LOAD")) return false;
+    var facts: c.ds4_metal_single_facts = undefined;
+    c.ds4_metal_single_get_facts(table.n_total_expert, &facts);
+    if (facts.parallel_pending or facts.resident_only) return false;
+    facts.parallel_pending = true;
+    facts.parallel_mode = 2;
+    facts.parallel_stage = 0;
+    facts.cached_parallel = true;
+    facts.cached_parallel_layer = table.layer;
+    var q = std.mem.zeroes(c.ds4_metal_routed_request);
+    q.layer = table.layer;
+    q.rows = 1;
+    q.gate_type = c.DS4_METAL_TENSOR_IQ2_XXS;
+    q.down_type = c.DS4_METAL_TENSOR_Q2_K;
+    q.input_width = 5120;
+    q.middle_width = 2304;
+    q.output_width = 5120;
+    q.gate_row_bytes = 1320;
+    q.down_row_bytes = 756;
+    q.gate_expert_bytes = table.gate_expert_bytes;
+    q.down_expert_bytes = table.down_expert_bytes;
+    q.total_experts = table.n_total_expert;
+    q.used_experts = count;
+    if (!@import("routed_single_policy.zig").cachedParallelSupported(&q, &facts)) return false;
+    var resident: [6]u8 = undefined;
+    if (!cache.snapshot(table, ids[0..count], &resident)) return false;
+    for (resident) |hit| if (hit == 0) {
+        if (present("DS4_METAL_V41_RESIDENT_GPU_PARALLEL_PROFILE"))
+            _ = c.fprintf(c.__stderrp, "ds4: cached refresh parallel layer=%u fallback=miss\n", table.layer);
+        return false;
+    };
+    // No loads or cache mutation intervene on this foreground-only path.
+    // Validate the complete set first; pin only it, without a second peek.
+    for (ids[0..count]) |id| if (!cache.mark(&state.entries[table.layer][@intCast(id)])) return false;
+    if (setOverride(ids, count) == 0) return false;
+    overrideState().cached_parallel_layer = table.layer;
+    overrideState().cached_parallel = true;
     return true;
 }
 fn now() f64 {
@@ -185,6 +237,9 @@ pub const State = struct {
             }
         }
         if (self.cache) {
+            // Preflight pins these exact identities. Recheck before any load,
+            // split or concurrent GPU consumption; normal peek accounting stays.
+            if (f.cached_parallel and (!ids_from_host or self.missing != 0 or self.resident != 0x3f)) return false;
             const current_ready = c.ds4_metal_single_split_ready();
             self.address = ((p.slots_iq2 and
                 addrRequested(current_ready) and
@@ -247,6 +302,10 @@ pub const State = struct {
             }
             if (self.address and !self.compact and ids_from_host and !c.ds4_metal_single_host_ids(resource, &self.ids)) return Dispatch.silent(33239);
         }
+        // With all six present, both address forms emit one fused producer and
+        // one direct down sum (masked uses 0x3f). Both bind q.mid, which the
+        // existing parallel first-stage barrier protects before either down.
+        if (f.cached_parallel and (!self.cache or !self.address or self.compact or self.split_deferred or self.staged_gate)) return false;
         const bind_ms = if (timing) now() - started else 0;
         if (timing) c.ds4_metal_single_note_selected(sync_ms, copy_ms, bind_ms, self.resident, self.missing, self.cache);
         if (p.selected_profile) {

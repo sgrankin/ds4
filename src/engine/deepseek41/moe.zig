@@ -338,11 +338,33 @@ pub const Moe = struct {
             layer.ffn_gate_shexp.*.type == c.DS4_TENSOR_Q8_0 and layer.ffn_up_shexp.*.type == c.DS4_TENSOR_Q8_0 and
             layer.ffn_down_shexp.*.type == c.DS4_TENSOR_Q8_0 and
             !present("DS4_METAL_DISABLE_V41_CONCURRENT_FFN") and !present("DS4_METAL_MOE_ONE_STAGE_PROFILE");
+        const cached_setting = c.getenv("DS4_METAL_V41_CACHED_REFRESH_PARALLEL");
+        const cached_candidate = early and !overlap_shared and shared_here and graph.scalar_decode and
+            !graph.hc_ffn_deferred and !graph.predict_load.active and !services.oracle_deferred and
+            !present("DS4_V41_ROUTE_ORACLE") and cached_setting != null and
+            std.mem.eql(u8, std.mem.span(cached_setting), "1") and
+            shape.n_expert == 384 and shape.n_expert_used == 6 and shape.n_embd == 5120 and shape.n_ff_exp == 2304 and
+            gate_row == 1320 and down_row == 756 and
+            layer.ffn_gate_exps.*.type == c.DS4_TENSOR_IQ2_XXS and layer.ffn_down_exps.*.type == c.DS4_TENSOR_Q2_K and
+            layer.ffn_gate_shexp.*.type == c.DS4_TENSOR_Q8_0 and layer.ffn_up_shexp.*.type == c.DS4_TENSOR_Q8_0 and
+            layer.ffn_down_shexp.*.type == c.DS4_TENSOR_Q8_0 and
+            !present("DS4_METAL_DISABLE_V41_CONCURRENT_FFN") and !present("DS4_METAL_MOE_ONE_STAGE_PROFILE");
+        const cached_ready = if (comptime @hasDecl(c, "ds4_gpu_routed_moe_cached_selected_parallel_ready")) cached_candidate and
+            c.ds4_gpu_routed_moe_cached_selected_parallel_ready(&table, &selected_ids, shape.n_expert_used) != 0 else false;
+        defer if (cached_ready) {
+            _ = c.ds4_gpu_routed_moe_set_selected_override(null, 0);
+        };
         // Resident preflight already pins every possible expert. Start closes
         // the router/repair encoder; the existing two-stage join then barriers
-        // both mid buffers before their down projections. Refreshes stay serial.
-        const concurrent = (resident_parallel or (concurrent_eligible and graph.tp_world != 2)) and
+        // both mid buffers before their down projections. CPU refresh preflight
+        // instead pins its exact six; normal preparation still accounts/uploads.
+        const concurrent = (resident_parallel or cached_ready or (concurrent_eligible and graph.tp_world != 2)) and
             c.ds4_gpu_parallel_ffn_start_bf16(graph.shared_gate, graph.shared_up, graph.shared_mid, graph.shared, model.map, model.size, layer.ffn_gate_shexp.*.abs_offset, layer.ffn_up_shexp.*.abs_offset, layer.ffn_down_shexp.*.abs_offset, shape.n_embd, shape.n_ff_exp, graph.norm, shape.swiglu_clamp_exp) != 0;
+        const cached_parallel = cached_ready and concurrent;
+        if (cached_ready and !cached_parallel)
+            _ = c.ds4_gpu_routed_moe_set_selected_override(&selected_ids, shape.n_expert_used);
+        if (cached_candidate and present("DS4_METAL_V41_RESIDENT_GPU_PARALLEL_PROFILE"))
+            _ = c.fprintf(c.__stderrp, "ds4: cached refresh parallel pos=%u layer=%u ready=%u armed=%u\n", graph.pos, index, @as(c_uint, @intFromBool(cached_ready)), @as(c_uint, @intFromBool(cached_parallel)));
         const concurrent_tp = concurrent_eligible and shared_split and balanced and
             !present("DS4_METAL_DISABLE_V41_TP_CONCURRENT_FFN") and !present("DS4_METAL_DISABLE_V41_TP_FIXED_ROUTE") and
             c.ds4_gpu_parallel_ffn_start_bf16_kslice(graph.shared_gate, graph.shared_up, graph.shared_mid, graph.shared, model.map, model.size, layer.ffn_gate_shexp.*.abs_offset, layer.ffn_up_shexp.*.abs_offset, layer.ffn_down_shexp.*.abs_offset, shape.n_embd, shape.n_ff_exp, graph.tp_rank * shared_dim, shared_dim, graph.norm, shape.swiglu_clamp_exp) != 0;
@@ -367,7 +389,9 @@ pub const Moe = struct {
                 return false;
             }
         }
-        if (early and ((!overlap_shared and c.ds4_gpu_flush_commands() == 0) or
+        // The parallel join must stay in its original batch. A declined proof
+        // or failed start keeps the existing shared submission and serial route.
+        if (early and !cached_parallel and ((!overlap_shared and c.ds4_gpu_flush_commands() == 0) or
             c.ds4_gpu_routed_moe_set_selected_override(&selected_ids, shape.n_expert_used) == 0)) return false;
         if (balanced) c.ds4_gpu_tp_full_expert_bind(1);
         const routed_ok = c.ds4_gpu_routed_moe_one_tensor(routed, graph.gate, graph.up, graph.mid, graph.experts, model.map, model.size, layer.ffn_gate_exps.*.abs_offset, layer.ffn_up_exps.*.abs_offset, layer.ffn_down_exps.*.abs_offset, layer.ffn_gate_exps.*.type, layer.ffn_down_exps.*.type, table.gate_expert_bytes, gate_row, table.down_expert_bytes, down_row, shape.n_embd, shape.n_ff_exp, shape.n_embd, if (balanced) graph.selected_half else graph.selected, if (balanced) graph.route_weights_half else graph.route_weights, shape.n_expert, if (balanced) shape.n_expert_used / 2 else shape.n_expert_used, shape.swiglu_clamp_exp, graph.norm, null, index, !graph.streaming) != 0;
@@ -380,6 +404,8 @@ pub const Moe = struct {
             graph.shared_done = true;
             if (resident_parallel and complete and present("DS4_METAL_V41_RESIDENT_GPU_PARALLEL_PROFILE"))
                 _ = c.fprintf(c.__stderrp, "ds4: resident parallel pos=%u layer=%u joined=1\n", graph.pos, index);
+            if (cached_parallel and present("DS4_METAL_V41_RESIDENT_GPU_PARALLEL_PROFILE"))
+                _ = c.fprintf(c.__stderrp, "ds4: cached refresh parallel pos=%u layer=%u joined=%u\n", graph.pos, index, @as(c_uint, @intFromBool(complete)));
         }
         // Half-width shared down projections remain F32 until the rank sum;
         // whole shared projections preserve their BF16 output boundary.

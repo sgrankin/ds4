@@ -69,6 +69,9 @@ export fn ds4_gpu_routed_moe_one_tensor(
 export fn ds4_gpu_routed_moe_set_selected_override(ids: [*c]const i32, count: u32) c_int {
     return @import("routed_single_selected.zig").setOverride(ids, count);
 }
+export fn ds4_native_metal_cached_selected_parallel_ready(state: *c.ds4_metal_expert_cache_state, streaming: bool, table: ?*const c.ds4_gpu_stream_expert_table, ids: [*c]const i32, count: u32) c_int {
+    return @intFromBool(@import("routed_single_selected.zig").cachedParallelReady(state, streaming, table, ids, count));
+}
 export fn ds4_gpu_routed_moe_set_resident_only(layer: u32, enabled: bool) void {
     const state: *c.ds4_metal_selected_override = c.ds4_metal_single_override_state();
     state.resident_layer = layer;

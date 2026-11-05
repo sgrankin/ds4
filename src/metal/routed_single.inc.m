@@ -1,5 +1,10 @@
 void **ds4_metal_single_diagnostics_slot(void) { return &ds4_metal_context_current()->native_diagnostics; }
 ds4_metal_selected_override *ds4_metal_single_override_state(void) { return &ds4_metal_context_current()->selected_override; }
+int ds4_gpu_routed_moe_cached_selected_parallel_ready(const ds4_gpu_stream_expert_table *table,
+                                                     const int32_t *ids, uint32_t count) {
+    return ds4_native_metal_cached_selected_parallel_ready(&g_expert_cache, g_ssd_streaming_mode,
+                                                          table, ids, count);
+}
 /* ARC resource leaves for the complete native single-token routed owner.
  * Cache/table operations are explicit existing whole libraries. This file
  * contains no routed-path selection or old encode-controller forwarding. */
@@ -30,6 +35,8 @@ void ds4_metal_single_get_facts(uint32_t total, ds4_metal_single_facts *out) {
         const ds4_metal_selected_override *selected = ds4_metal_single_override_state();
         out->resident_only = selected->resident_only;
         out->resident_layer = selected->resident_layer;
+        out->cached_parallel = selected->cached_parallel && selected->count == 6;
+        out->cached_parallel_layer = selected->cached_parallel_layer;
         out->parallel_mode = g_parallel_ffn_mode;
         out->parallel_stage = g_parallel_ffn_stage;
 #define P(key, value)                                                                              \
