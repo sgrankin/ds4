@@ -58,6 +58,22 @@ pub const BatchAttention = struct {
             (!round or c.ds4_gpu_dsv41_quantize(out, @truncate(weight.dim[1]), count, c.DS4_V41_BF16) != 0);
     }
 
+    fn projectIndexQuery(self: *const BatchAttention, out: ?*Tensor, weight: *const Weight, input: ?*const Tensor, count: u32) bool {
+        const option = c.getenv("DS4_METAL_V41_PREFILL_INDEX_Q_MPP");
+        const matrix = option != null and c.atoi(option) != 0 and
+            weight.type == c.DS4_TENSOR_F16 and weight.dim[0] == 1280 and weight.dim[1] == 4096 and
+            count >= 32 and count % 32 == 0 and self.graph.tp_world == 1 and
+            !self.graph.quality and !self.ops.exactDenseRows() and c.ds4_gpu_dsv41_tensor_ops_available() != 0;
+        // Change only this transient query's reduction; publication still uses
+        // row-exact projections. Query differences can change selected keys and
+        // later state. Ordinary F16 dispatch prefers direct-RHS MPP, retaining
+        // its generic matrix fallback, which rounds F32 inputs to half.
+        return if (matrix)
+            self.ops.matmulBatch(out, weight, input, count, true)
+        else
+            self.projectRows(out, weight, input, count, true);
+    }
+
     // Decoder preparation may publish a view of only part of the workspace.
     // Accept that actual row record instead of assuming graph.batch's extent.
     pub fn publish(self: *const BatchAttention, batch: *Row, layer: *const Layer, layer_index: u32, start: u32, count: u32) bool {
@@ -148,7 +164,7 @@ pub const BatchAttention = struct {
                     c.ds4_gpu_dsv41_quantize(row.index_q, 128, shape.n_indexer_head, c.DS4_V41_FP4_E8M0) == 0 or
                     !self.ops.matmul(row.index_weights, knownWeight(layer.indexer_proj), row.norm, true)) return false;
             }
-        } else if (!self.projectRows(batch.index_q, knownWeight(layer.indexer_attn_q_b), batch.qr, count, true) or
+        } else if (!self.projectIndexQuery(batch.index_q, knownWeight(layer.indexer_attn_q_b), batch.qr, count) or
             c.ds4_gpu_dsv41_rope(batch.index_q, shape.n_indexer_head_dim, shape.n_indexer_head, count, start, true, false) == 0 or
             c.ds4_gpu_dsv41_quantize(batch.index_q, shape.n_indexer_head_dim, count * shape.n_indexer_head, c.DS4_V41_FP4_E8M0) == 0 or
             !self.projectRows(batch.index_weights, knownWeight(layer.indexer_proj), batch.norm, count, true)) return false;

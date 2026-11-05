@@ -12,12 +12,22 @@ qualified RB4/unit-rescale settings, the opt-in prefill BF16/RoPE fusion,
 8,192-token chunks and a 64 GB expert cache. Keep GPU resident routing, SIMD,
 router fusion, address reuse, parallel FFN and refresh sixteen fixed.
 
-The previous fresh 32K trace recorded 4.442 seconds of summed F16 matrix-vector
-encoder spans, with overlapping calls; that is not an additive latency saving.
-Large 8,192-row calls occur beside compressor pooling. Trace their exact caller,
-shape and numerical contract, then select one existing matrix kernel or narrow
-batch specialization. Establish why the current dispatch chose matrix-vector
-execution before changing it. Do not introduce a new model format or loader.
+Source inspection explains the scalar choice: published compressor and index
+keys must preserve their projection results across bulk prefill and suffix
+replay. The selected candidate changes only the temporary indexer-query
+projection, F16 weights of shape 1,280 → 4,096. Twelve 8,192-row calls account
+for about 1.3 seconds of summed encoder spans in the prior traces; this is not
+an additive latency saving.
+
+`DS4_METAL_V41_PREFILL_INDEX_Q_MPP=1` will use the existing ordinary matrix
+path for that projection when TensorOps, shape, alignment, single-rank and
+non-quality conditions hold, with no exact-prefill override. Other projections
+retain their current dispatch. Keep BF16 rounding, RoPE, FP4 conversion and
+causal selection in order. The matrix reduction may change quantization and
+selected rows; measure this approximation rather than demanding identical
+logits. Published-key projection contracts stay unchanged, but query changes
+can indirectly alter later layer state. No new model format, loader or public
+backend interface is part of this slice.
 
 By twenty minutes into the slice, select the concrete implementation or record
 why the suspected opportunity is invalid. Check activation and fixed-history
