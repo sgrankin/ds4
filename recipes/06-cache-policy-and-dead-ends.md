@@ -137,18 +137,27 @@ The [prefill output-transform fusion](../speed-bench/experiments/2026-11-04-pref
 reuses an existing kernel to combine BF16 rounding and inverse RoPE. In five
 isolated 8,192-row pairs, the fused operation was faster; tested outputs matched
 exactly. Full-model comparisons at 8K and 32K were inconclusive. Retain the small
-opt-in implementation for its local reduction; it has not earned preset promotion
-or established a whole-prefill saving.
+implementation for its local reduction. Its isolated result did not establish
+a whole-prefill saving; the subsequent combined qualification below supports
+including it in the fast presets.
 
 The [temporary indexer-query matrix projection](../speed-bench/experiments/2026-11-04-prefill-f16-projections/README.md)
 uses the existing matrix backend for a large F16 query projection that previously
 ran as independent rows. Fresh prefill was faster in every measured pair at
 8K and 32K, while append and decode remained noisy. The changed reduction is an
 approximation: fixed-history logits differ, and both generated coding solutions
-passed a limited independent oracle. Retain it as an opt-in candidate for the
-next combined qualification. Keep published-key projections row-exact; this
-result does not justify changing every F16 projection or enabling the fast preset
-before measuring the accumulated package.
+passed a limited independent oracle. Keep published-key projections row-exact;
+this result does not justify changing every F16 projection.
+
+The [CPU-routing preset qualification](../speed-bench/experiments/2026-11-04-prefill-preset-qualification/README.md)
+adopted the query matrix path and fused transform together in `resident-fast`
+and `persistent-fast`, with explicit zero overrides. Fresh prefill improved in
+all 15 measured pairs and total inference phases in 14. Both generated coding
+solutions passed the independent oracle. The approximation changes predictions,
+and ordinary-prefill warm decode was consistently slower in its five pairs;
+the diagnostic did not explain the full difference. The decision accepts that
+bounded tradeoff rather than claiming every phase improves. It does not promote
+the separate experimental GPU resident-routing policy.
 
 * Two-layer expert-prefetch lookahead ran 87–94 tokens/s versus 128–130 controls,
   despite exact logits. Lower explicit read wait was offset by later GPU drain;

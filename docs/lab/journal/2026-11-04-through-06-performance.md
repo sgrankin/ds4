@@ -375,3 +375,21 @@ owns timings, quality tails, the failed implementation and unchanged publication
 status. The next slice separately qualifies the new prefill selectors with the
 current CPU-routing fast preset, rather than making their adoption depend on
 the experimental GPU policy.
+
+## Twentieth question: qualify the prefill options for fast presets
+
+The exact rounding/RoPE fusion and approximate temporary-query matrix path
+were measured together with the ordinary CPU resident policy. Across five pairs
+each at 8K, 32K and 8K without prefill substitutions, fresh prefill improved in
+every pair and the inference-phase sum improved in fourteen of fifteen. Both
+reasoning-enabled coding solutions passed the independent oracle. Fixed-history
+quality checks retain the changed prediction distributions and their tails.
+
+Adopt both selectors in `resident-fast` and `persistent-fast`, preserving explicit
+zero overrides. This accepts a measured tradeoff: warm decode after ordinary
+prefill was slower in all five pairs. A bounded diagnostic found different
+expert selections but did not explain the full slowdown; the report preserves
+that uncertainty. The [qualification report](../../../speed-bench/experiments/2026-11-04-prefill-preset-qualification/README.md)
+owns the evidence, activation limits and installed binary hashes. Launcher tests
+and the server build passed; the qualified binaries are installed locally.
+GPU resident routing remains experimental, and published main is unchanged.

@@ -6,35 +6,41 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: does the accumulated package improve recorded agent work?**
-One-hour slice: November 4, 22:27–23:27 Eastern. Compare published `364ceeab`
-with runtime `909faab5`, using the newly rebuilt replay binary, the same model,
-64 GB expert cache and 8,192-token prefill chunks. Keep each binary in its
-matching source root. The candidate combines the qualified RB4/unit-rescale
-settings with GPU resident routing, address reuse, concurrent shared/routed
-experts, refresh sixteen, SIMD selection, router fusion, prefill BF16/RoPE fusion
-and the temporary indexer-query matrix projection. No runtime change is selected
-in this slice.
+**Current question: should the new prefill options join the existing fast presets?**
+One-hour slice: November 4, 23:13 through November 5, 00:13 Eastern. Both arms
+use runtime `909faab5` at checkout `7a43e7eb`, the same current benchmark binary,
+64 GB expert cache and 8,192-token chunks. Keep the ordinary CPU resident policy
+and qualified RB4/unit-rescale settings fixed. GPU resident routing and its
+dependent options remain off in both arms.
 
-Use the existing recorded-session driver for five alternating profile-free
-pairs and a separate full-vocabulary teacher-logit pair. Retain every phase,
-first-step samples, outliers and order effects. Check one additional controlled
-reasoning-enabled coding task with the existing independent oracle; match its
-working directory, prompt, time, sampling and fresh prefix-cache conditions.
-This behavior check is not a task-latency comparison or a general accuracy
-estimate. The recent long-prompt task remains separate attribution evidence.
+The candidate enables only `DS4_METAL_V41_PREFILL_ROPE_BF16=1` and
+`DS4_METAL_V41_PREFILL_INDEX_Q_MPP=1`. The first preserves tested values and
+removes a local transform pass; the second changes the temporary indexer-query
+reduction and has measured numerical drift. Their prior timing held experimental
+GPU routing enabled. The recent recorded-session comparison did not exercise the
+query matrix path, so it cannot decide this separate preset choice.
 
-The outcome is a package qualification decision, not the sum of prior isolated
-percentage gains. Numerical differences are measured tradeoffs. If replay is
-neutral, retain useful local improvements and select the next dependency target
-from the profile rather than declaring their work useless. Do not change presets,
-installed binaries or published main during measurement; any promotion needs a
-concrete conclusion in the report.
+Take five alternating profile-free pairs at 8K and 32K, separate full-vocabulary
+quality pairs, and one controlled reasoning-enabled long-prompt coding pair.
+The two presets differ in prefill substitution: `resident-fast` leaves it off,
+while `persistent-fast` enables it. Add five 8K pairs and a 32K quality pair with
+the prefill gap set to zero before deciding whether to enable both presets.
+Reuse the existing drivers and oracle; match task path, time, sampling and fresh
+prefix-cache conditions. Keep first-step and complete phase timings, all samples
+and variation. Preserve any coding failure. Do not equate mean distribution
+drift with task accuracy or reject an approximation merely for differing output.
+
+The outcome is an explicit adoption decision for the two prefill selectors.
+If the combined evidence supports them, enable them in the two resident fast
+presets, preserve explicit zero overrides, build the normal binaries and install
+the qualified local package. Otherwise leave the selectors available explicitly
+and record why. No GPU policy promotion or published-main advancement is part
+of this slice.
 
 Keep one guarded model job and pause builds during final timing. Write one report
-under `2026-11-04-package-requalification/`, with raw artifacts under
-`.workspaces/hillclimb-20261104/19-package-requalification/`, then add one short
-journal entry and update an owning manual only if the qualification changes it.
+under `2026-11-04-prefill-preset-qualification/`, with raw artifacts under
+`.workspaces/hillclimb-20261104/20-prefill-preset-qualification/`, then update the
+owning manual, recipe conclusion and a short journal entry.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. The current timed

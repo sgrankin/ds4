@@ -552,7 +552,8 @@ The [prefill fusion experiment](../../../speed-bench/experiments/2026-11-04-pref
 found exact outputs in its hardware fixtures and all 512 tested model-logit rows.
 Five isolated 8,192-row pairs consistently shortened the transform, while the
 512-row case was noisy and full-model comparisons at 8K and 32K did not establish a
-whole-prefill gain. The small fusion remains opt-in; presets are unchanged.
+whole-prefill gain. The fast presets now include this small fusion alongside
+the query projection below, after their combined CPU-routing qualification.
 
 The indexer query is another temporary prefill value: a projection expands each
 1,280-value query representation to 32 heads of 128 values, which score the
@@ -570,7 +571,18 @@ remain row-exact so that their projection contract is independent of sweep
 size; changed queries can still influence later model state. No new workspace
 or cache representation is needed. The [query projection experiment](../../../speed-bench/experiments/2026-11-04-prefill-f16-projections/README.md)
 records the numerical and task-quality tradeoff and five-pair prefill results.
-The selector remains opt-in and is not enabled by the fast presets.
+The `resident-fast` and `persistent-fast` presets enable both prefill options;
+explicit zero overrides select the original paths. Ordinary engine defaults and
+`context-fast` leave them off. The
+[preset qualification](../../../speed-bench/experiments/2026-11-04-prefill-preset-qualification/README.md)
+held ordinary CPU resident routing fixed and found faster fresh prefill in all
+15 alternating pairs across 8K, 32K and the two prefill-routing policies. Overall
+inference phases improved in 14 pairs. Warm decode after ordinary prefill was
+slower in all five pairs, however; the diagnostic did not establish its cause.
+The report preserves that tradeoff, fixed-history distribution drift and a
+reasoning-enabled coding pair whose two solutions passed the independent oracle.
+These measurements used 8,192-token chunks; they do not establish the same benefit
+for the launcher's default 512-token chunks or every agent workload.
 
 ## Representing the history
 

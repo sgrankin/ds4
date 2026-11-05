@@ -25,6 +25,12 @@ shows a repeated 32K prefill benefit, inconclusive recorded-session timing and
 measured quality differences, including one extra coding edge-case failure.
 The qualified agent, server and benchmark binaries are installed locally;
 published main remains at `364ceeab`.
+The fast presets also include fused prefill rounding/RoPE and the temporary
+indexer-query matrix path. Their
+[CPU-routing qualification](../speed-bench/experiments/2026-11-04-prefill-preset-qualification/README.md)
+found consistent fresh-prefill gains with measured numerical drift and a small
+warm-decode regression in one configuration. The separate GPU resident-routing
+package remains experimental.
 The organized manuals and lab journal are available under the [documentation index](README.md).
 The initial adaptation omitted upstream functionality; the completion audit
 covered all 118 commits and integrated the missing paths. All upstream
