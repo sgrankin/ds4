@@ -407,6 +407,13 @@ pub const Moe = struct {
             if (cached_parallel and present("DS4_METAL_V41_RESIDENT_GPU_PARALLEL_PROFILE"))
                 _ = c.fprintf(c.__stderrp, "ds4: cached refresh parallel pos=%u layer=%u joined=%u\n", graph.pos, index, @as(c_uint, @intFromBool(complete)));
         }
+        // Separate outgoing CPU-routed expert work from the next router/event.
+        // GPU-routed layers never enter overlap_shared, so keep their cadence.
+        if (overlap_shared) {
+            const flush_setting = c.getenv("DS4_METAL_V41_CPU_EXPERT_FLUSH");
+            if (flush_setting != null and std.mem.eql(u8, std.mem.span(flush_setting), "1") and
+                c.ds4_gpu_flush_commands() == 0) return false;
+        }
         // Half-width shared down projections remain F32 until the rank sum;
         // whole shared projections preserve their BF16 output boundary.
         return !shared_owner or !shared_here or c.ds4_gpu_add_tensor_tp_flag(routed, routed, graph.shared, shape.n_embd, index, c.DS4_TP_GATE_FFN) != 0;
