@@ -295,3 +295,20 @@ owns the isolated and combined comparisons, every sample and the retained slow
 cases. Presets and installed binaries remain unchanged. The next selected slice
 will inspect the updated dependency profile before choosing another change;
 removing this search cost does not itself identify the next bottleneck.
+
+## Sixteenth question: fuse native selection and resident repair
+
+The updated profile found substantial submitted GPU work and completion waiting.
+It also exposed a narrow serial boundary between native expert selection and
+SIMD resident repair. Combining them removes one dispatch while preserving the
+tested probabilities, mixture weights and selected IDs; all 512 fixed-history
+logit rows and hashes match. Repeated isolated tests reduce GPU work for missing
+experts and CPU encoding cost, while first-pair all-hit variation remains visible.
+
+Retain this small exact fusion as an opt-in. Five alternating model pairs at
+both 8K and 32K establish no whole-workload gain or regression, and no further
+unlocked improvement has yet been identified. Presets and installed binaries
+remain unchanged. The [report](../../../speed-bench/experiments/2026-11-04-post-simd-profile/README.md)
+owns all samples, profile limitations and the two microbenchmark series. The
+next slice returns to prefill: inspect its remaining work and dependencies, then
+select one bounded change rather than extrapolating isolated routing savings.

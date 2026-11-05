@@ -378,6 +378,15 @@ records hardware checks and the cost of all-hit as well as missing-expert cases.
 This flag changes execution of the existing approximate policy, not the policy
 itself; unset or `0` retains the scalar search.
 
+With that SIMD path enabled, `DS4_METAL_V41_RESIDENT_GPU_FUSED=1` can combine
+native selection and resident repair into one dispatch. The host validates and
+pins the resident candidates before selection; the GPU computes the same native
+probabilities and rounded weights, synchronizes the threadgroup, then repairs
+only the IDs in its first SIMD group. Refresh steps and ineligible layers keep
+their original route. This removes one dispatch without changing the FFN join
+or cache ownership. The [fusion experiment](../../../speed-bench/experiments/2026-11-04-post-simd-profile/README.md)
+owns its qualification; the path remains opt-in.
+
 ### Executing the selected experts
 
 Metal uses batched routed matrix multiplication to group rows by expert. The

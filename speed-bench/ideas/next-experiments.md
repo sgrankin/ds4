@@ -6,41 +6,31 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: what limits decode after SIMD resident selection, and can one small change shorten it?**
-One-hour slice: November 4, 20:17–21:17 Eastern. Fix runtime `e5d12861`,
-GPU resident routing with SIMD, refresh sixteen, address reuse, parallel FFN,
-the existing prefill settings and 64 GB expert cache. The
-[SIMD report](../experiments/2026-11-04-resident-simd/README.md) retains the exact
-execution change as an opt-in, with mixed attribution timings and no GPU-policy
-promotion. Keep policy and sampling fixed during this follow-up.
+**Current question: what remaining prefill work or dependency can one small change shorten?**
+One-hour slice: November 4, 21:05–22:05 Eastern. Fix runtime `b006c4cf`, the
+qualified RB4/unit-rescale prefill settings, 8,192-token chunks and a 64 GB expert
+cache. Keep the experimental GPU resident route, SIMD, address reuse, parallel
+FFN and refresh sixteen fixed; fusion remains enabled in this experimental
+package. None of those decode-only changes implies a prefill benefit.
 
-First inspect a bounded 32K scalar-versus-SIMD diagnostic with native command
-grouping. Existing cumulative GPU spans and host completion records can separate
-submitted GPU work from host waits, but neither is a GPU-utilization counter.
-Detailed command-buffer records stop after 400 rows; do not claim they cover
-warm decode if prefill consumed the limit. Use existing controls and a bounded
-CPU stack sample. A separate encoder timeline may rank operations, with its
-known batching and logging interference stated explicitly.
+Inspect existing profiles first and use one bounded fresh diagnostic only if
+needed. By twenty minutes into the slice, select one prefill kernel or dependency
+change, informed by the earlier rejected RB16 and shared-overlap attempts. If
+no justified candidate emerges, retain the profile and a concrete next question.
+Do not grow a profiler or change sampling and routing policy in this slice.
 
-By about twenty minutes into the slice, choose one concrete kernel or dependency
-change from that evidence. Parallel source inspection and fixture preparation
-must serve that choice. Preserve exact routing; do not add a new cache policy,
-loader or profiling framework. If no justified implementation emerges, record
-the profile and a specific next question rather than inventing a change.
+For a candidate, check activation and fixed-history logits, then run at least
+five alternating profile-free pairs at 32K and 8K. Retain complete phases,
+first-token latency, steady rates, all samples and variation. If total time is
+neutral, inspect whether the intended work or dependency changed before deciding
+what to retain. A later package comparison must still measure against published
+`364ceeab`; no installed-binary or preset promotion is part of this slice.
 
-For a candidate, check activation and fixed-history logits, then measure at least
-five alternating profile-free samples per side at 32K and, if time permits, 8K.
-Retain first-token, complete-phase and steady timing, every sample and variation.
-If the total is neutral, inspect whether the intended dependency changed before
-deciding whether it supports a useful follow-on. A later combined comparison
-must still establish benefit against the original baseline.
-
-Keep one guarded model job, builds paused during final timing, and installed
-binaries and presets unchanged. Write one result report under
-`2026-11-04-post-simd-profile/`, raw artifacts under
-`.workspaces/hillclimb-20261104/16-post-simd-profile/`, then update the owning
-manual or recipe conclusion and one short journal entry. Publication remains a
-separate decision.
+Keep one guarded model job and pause builds during final timing. Record one
+report under `2026-11-04-prefill-followup/`, with raw artifacts under
+`.workspaces/hillclimb-20261104/17-prefill-followup/`, then update the owning
+manual or recipe conclusion and one short journal entry. Publication remains
+separate.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome

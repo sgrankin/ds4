@@ -160,8 +160,12 @@ fresh 32K decode in all five attribution pairs. Shorter-context results are mixe
 including slower complete fresh decode, and total inference remains inconclusive.
 Keep this exact execution change behind its opt-in; it does not qualify or
 promote the approximate GPU routing package.
-Detailed encoder
-profiling changes batching and adds host overhead; its gap reduction is not a
+The [native-router fusion](../speed-bench/experiments/2026-11-04-post-simd-profile/README.md)
+combines selection and repair without additional drift on the tested histories.
+Repeated isolated tests reduce work when experts are missing, but five-pair
+model timings at both context sizes establish no whole-workload benefit. It
+remains opt-in; this does not promote the GPU routing policy.
+Detailed encoder profiling changes batching and adds host overhead; its gap reduction is not a
 predicted ordinary-runtime saving. The
 [Apple Silicon manual](../docs/models/deepseek/apple-silicon.md#resident-expert-substitution)
 owns activation and lifetime details; neither fast preset enables this prototype.
