@@ -332,6 +332,124 @@ static int check_resident_router(void) {
     return 1;
 }
 
+/* Compare the complete native-router + SIMD-repair sequence with its fused
+ * dispatch. The resident mask is derived from that same native selection, so
+ * ties exercise the native bitonic order before the ordered repair policy. */
+static int check_resident_router_fused(void) {
+    enum { N = 1024, K = 6 };
+    const unsigned counts[] = {6, 31, 33, 256, 257, 384, 1024};
+    const unsigned misses[] = {0, 3, 6, 6};
+    const char *patterns[] = {"ordinary", "ties", "extremes", "boundaries", "tiny-mass", "zero-mass"};
+    const char *kernels[] = {"kernel_dsv41_router_one", "kernel_dsv41_resident_route_one_simd",
+                             "kernel_dsv41_router_resident_one"};
+    const char *old = getenv("DS4_METAL_V41_RESIDENT_GPU_SIMD");
+    char *saved = old ? strdup(old) : NULL;
+    CHECK(!old || saved);
+    CHECK(setenv("DS4_METAL_V41_RESIDENT_GPU_SIMD", "1", 1) == 0);
+    const size_t model_bytes = (size_t)getpagesize();
+    float *bias = NULL;
+    CHECK(model_bytes >= N * sizeof(float));
+    CHECK(posix_memalign((void **)&bias, model_bytes, model_bytes) == 0);
+    memset(bias, 0, model_bytes);
+    CHECK(ds4_gpu_set_model_map(bias, model_bytes));
+    float logits[N], original_bias[N];
+    ds4_gpu_tensor *x = upload(NULL, sizeof(logits));
+    ds4_gpu_tensor *p[2], *ids[2], *weights[2];
+    CHECK(x);
+    for (unsigned arm = 0; arm < 2; ++arm) {
+        p[arm] = upload(NULL, N * sizeof(float));
+        ids[arm] = upload(NULL, K * sizeof(int32_t));
+        weights[arm] = upload(NULL, K * sizeof(float));
+        CHECK(p[arm] && ids[arm] && weights[arm]);
+    }
+    ds4_gpu_test_set_flags(DS4_GPU_TEST_COUNT_KERNELS);
+    for (unsigned ci = 0; ci < sizeof(counts) / sizeof(*counts); ++ci) {
+        const unsigned n = counts[ci];
+        for (unsigned pattern = 0; pattern < sizeof(patterns) / sizeof(*patterns); ++pattern) {
+            const float poly_boundary = logf(0.03125f);
+            const float boundary[] = {nextafterf(20, -INFINITY), 20, nextafterf(20, INFINITY),
+                nextafterf(poly_boundary, -INFINITY), poly_boundary, nextafterf(poly_boundary, INFINITY), -80, 40};
+            for (unsigned e = 0; e < N; ++e) {
+                logits[e] = (float)((e * 37) % 193) / 16.0f - 6.0f;
+                bias[e] = (float)(e % 7) * 0.125f;
+                if (pattern == 1) { logits[e] = 0; bias[e] = 0; }
+                if (pattern == 2) logits[e] = e % 2 ? -80 : 40;
+                if (pattern == 3) logits[e] = boundary[e % 8];
+                if (pattern >= 4) { logits[e] = pattern == 4 ? -40 : -1000; bias[e] = 0; }
+            }
+            memcpy(original_bias, bias, sizeof(original_bias));
+            CHECK(ds4_gpu_tensor_write(x, 0, logits, sizeof(logits)));
+            CHECK(ds4_gpu_dsv41_router_one(ids[0], weights[0], p[0], x,
+                bias, model_bytes, 0, n, K, 1.5f));
+            int32_t native[K]; float native_weights[K], native_probs[N];
+            CHECK(ds4_gpu_tensor_read(ids[0], 0, native, sizeof(native)));
+            CHECK(ds4_gpu_tensor_read(weights[0], 0, native_weights, sizeof(native_weights)));
+            CHECK(ds4_gpu_tensor_read(p[0], 0, native_probs, n * sizeof(float)));
+            for (unsigned mode = 0; mode < sizeof(misses) / sizeof(*misses); ++mode) {
+                if (n < 12 && mode) continue;
+                uint8_t resident[N], original_resident[N];
+                memset(resident, 0, sizeof(resident));
+                resident_router_mask(resident, n, native, misses[mode], mode == 3);
+                memcpy(original_resident, resident, sizeof(resident));
+                int32_t expected[K], actual[2][K]; uint32_t ignored[8];
+                memcpy(expected, native, sizeof(expected));
+                resident_router_reference(expected, native_probs, bias, resident, n, ignored);
+                for (unsigned arm = 0; arm < 2; ++arm) {
+                    uint64_t runs[3];
+                    for (unsigned k = 0; k < 3; ++k) runs[k] = ds4_gpu_test_kernel_runs(kernels[k]);
+                    CHECK(ds4_gpu_begin_commands());
+                    if (arm) {
+                        CHECK(ds4_gpu_dsv41_router_resident_one(ids[arm], weights[arm], p[arm], x,
+                            bias, model_bytes, 0, n, K, 1.5f, resident));
+                    } else {
+                        CHECK(ds4_gpu_dsv41_router_one(ids[arm], weights[arm], p[arm], x,
+                            bias, model_bytes, 0, n, K, 1.5f));
+                        CHECK(ds4_gpu_dsv41_resident_route_one(ids[arm], p[arm], bias,
+                            model_bytes, 0, n, K, resident, NULL));
+                    }
+                    CHECK(ds4_gpu_end_commands());
+                    for (unsigned k = 0; k < 3; ++k)
+                        CHECK(ds4_gpu_test_kernel_runs(kernels[k]) == runs[k] + (arm ? k == 2 : k < 2));
+                    float actual_weights[K], actual_probs[N], actual_logits[N];
+                    CHECK(ds4_gpu_tensor_read(ids[arm], 0, actual[arm], sizeof(actual[arm])));
+                    CHECK(ds4_gpu_tensor_read(weights[arm], 0, actual_weights, sizeof(actual_weights)));
+                    CHECK(ds4_gpu_tensor_read(p[arm], 0, actual_probs, n * sizeof(float)));
+                    CHECK(ds4_gpu_tensor_read(x, 0, actual_logits, sizeof(actual_logits)));
+                    if (memcmp(expected, actual[arm], sizeof(expected)) ||
+                        memcmp(native_weights, actual_weights, sizeof(native_weights)) ||
+                        memcmp(native_probs, actual_probs, n * sizeof(float)))
+                        fprintf(stderr, "fused resident router n=%u pattern=%s misses=%u exact_six=%d fused=%u\n",
+                            n, patterns[pattern], misses[mode], mode == 3, arm);
+                    CHECK(!memcmp(expected, actual[arm], sizeof(expected)));
+                    CHECK(!memcmp(native_weights, actual_weights, sizeof(native_weights)));
+                    CHECK(!memcmp(native_probs, actual_probs, n * sizeof(float)));
+                    CHECK(!memcmp(logits, actual_logits, sizeof(logits)));
+                    CHECK(!memcmp(original_bias, bias, sizeof(original_bias)));
+                    CHECK(!memcmp(original_resident, resident, sizeof(resident)));
+                    for (unsigned k = 0; k < K; ++k) {
+                        CHECK(isfinite(actual_weights[k]));
+                        CHECK(actual[arm][k] >= 0 && actual[arm][k] < (int32_t)n && resident[actual[arm][k]]);
+                        for (unsigned j = 0; j < k; ++j) CHECK(actual[arm][k] != actual[arm][j]);
+                    }
+                }
+                CHECK(!memcmp(actual[0], actual[1], sizeof(actual[0])));
+            }
+        }
+    }
+    CHECK(saved ? setenv("DS4_METAL_V41_RESIDENT_GPU_SIMD", saved, 1) == 0 :
+                  unsetenv("DS4_METAL_V41_RESIDENT_GPU_SIMD") == 0);
+    free(saved);
+    ds4_gpu_test_set_flags(0);
+    for (unsigned arm = 0; arm < 2; ++arm) {
+        ds4_gpu_tensor_free(p[arm]); ds4_gpu_tensor_free(ids[arm]); ds4_gpu_tensor_free(weights[arm]);
+    }
+    ds4_gpu_tensor_free(x);
+    ds4_gpu_cleanup(); free(bias);
+    CHECK(ds4_gpu_init());
+    fprintf(stderr, "Fused resident router: exact native probabilities/weights and repaired IDs, activation counters, unchanged inputs, ties/extremes/transform boundaries/tiny/zero mass PASS\n");
+    return 1;
+}
+
 /* Each dispatch has its own selected-ID tensor. Restore all native IDs before
  * every sample, outside timing: repeatedly repairing one tensor would measure
  * only the first miss and then a different, all-resident workload. GPU batch
@@ -3849,6 +3967,11 @@ int main(int argc, char **argv) {
     }
     if (argc == 2 && !strcmp(argv[1], "--resident-router-bench")) {
         const int ok = ds4_gpu_init() && bench_resident_router();
+        ds4_gpu_cleanup();
+        return ok ? 0 : 1;
+    }
+    if (argc == 2 && !strcmp(argv[1], "--resident-router-fused")) {
+        const int ok = ds4_gpu_init() && check_resident_router_fused();
         ds4_gpu_cleanup();
         return ok ? 0 : 1;
     }

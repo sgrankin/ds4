@@ -37,6 +37,14 @@ int ds4_gpu_dsv41_resident_route_one(ds4_gpu_tensor *selected, const ds4_gpu_ten
                                      const void *model_map, uint64_t model_size, uint64_t bias_offset,
                                      uint32_t n_expert, uint32_t top_k, const uint8_t *resident,
                                      ds4_gpu_tensor *trace);
+/* Fused native six-expert router and the same resident ID repair. Native
+ * probabilities and mixture weights are preserved; the caller owns the same
+ * resident protection as above. At least six resident mask entries are needed. */
+int ds4_gpu_dsv41_router_resident_one(ds4_gpu_tensor *selected, ds4_gpu_tensor *weights,
+                                      ds4_gpu_tensor *probs, const ds4_gpu_tensor *logits,
+                                      const void *model_map, uint64_t model_size, uint64_t bias_offset,
+                                      uint32_t n_expert, uint32_t top_k, float scale,
+                                      const uint8_t *resident);
 /* The same for a few rows (Metal only), and the rows' F32 logits with the
  * single-row matvec's reduction. */
 int ds4_gpu_dsv41_router_rows(ds4_gpu_tensor *selected, ds4_gpu_tensor *weights,

@@ -201,10 +201,29 @@ pub const Moe = struct {
             if (graph.selected_half == null or graph.route_weights_half == null) return false;
         }
         graph.shared_done = false;
+        const table = self.streamTable(layer, index, gate_row *% shape.n_ff_exp, down_row *% shape.n_embd);
+        var resident_mask: [c.DS4_MAX_EXPERT]u8 = undefined;
+        var resident_gpu = false;
         const bias = if (self.ops.imageAt(graph, graph.pos) != null) layer.ffn_exp_probs_vl else layer.ffn_exp_probs_b;
         if (bias == null or !self.router(layer, index)) return false;
-        const routed_one = !present("DS4_METAL_DISABLE_V41_ROUTER_ONE") and
-            c.ds4_gpu_dsv41_router_one(graph.selected, graph.route_weights, graph.route_probs, graph.route_logits, model.map, model.size, bias.*.abs_offset, shape.n_expert, shape.n_expert_used, shape.expert_weight_scale) != 0;
+        const fused_setting = c.getenv("DS4_METAL_V41_RESIDENT_GPU_FUSED");
+        const simd_setting = if (fused_setting != null) c.getenv("DS4_METAL_V41_RESIDENT_GPU_SIMD") else null;
+        const early_resident_check = fused_setting != null and std.mem.eql(u8, std.mem.span(fused_setting), "1") and
+            simd_setting != null and std.mem.eql(u8, std.mem.span(simd_setting), "1") and
+            !present("DS4_METAL_DISABLE_V41_ROUTER_ONE") and self.residentGpuRequested(layer);
+        var fused_router = false;
+        if (early_resident_check) {
+            // Fusion needs the immutable residency mask before native selection.
+            // Preflight only validates and pins existing entries: no load or
+            // eviction occurs between this snapshot and routed consumption.
+            resident_gpu = c.ds4_gpu_stream_expert_cache_resident_ready(&table, &resident_mask) >= shape.n_expert_used;
+            if (resident_gpu) {
+                if (c.ds4_gpu_dsv41_router_resident_one(graph.selected, graph.route_weights, graph.route_probs, graph.route_logits, model.map, model.size, bias.*.abs_offset, shape.n_expert, shape.n_expert_used, shape.expert_weight_scale, &resident_mask) == 0) return false;
+                fused_router = true;
+            }
+        }
+        const routed_one = fused_router or (!present("DS4_METAL_DISABLE_V41_ROUTER_ONE") and
+            c.ds4_gpu_dsv41_router_one(graph.selected, graph.route_weights, graph.route_probs, graph.route_logits, model.map, model.size, bias.*.abs_offset, shape.n_expert, shape.n_expert_used, shape.expert_weight_scale) != 0);
         if (!routed_one and c.ds4_gpu_router_select_tensor(graph.selected, graph.route_weights, graph.route_probs, model.map, model.size, bias.*.abs_offset, 0, 0, token, shape.n_expert, shape.n_expert_used, shape.expert_weight_scale, 0, 0, true, false, graph.route_logits) == 0) return false;
 
         // Baseline: resolve SSD reads before shared work to overlap their I/O.
@@ -214,16 +233,14 @@ pub const Moe = struct {
             graph.image_count == 0 and graph.tp_world == 1 and
             !present("DS4_METAL_DISABLE_V41_SHORT_OPTIMIZATIONS");
         const asynchronous = eligible and present("DS4_METAL_V41_ASYNC_EXPERT_LOAD");
-        const table = self.streamTable(layer, index, gate_row *% shape.n_ff_exp, down_row *% shape.n_embd);
-        var resident_mask: [c.DS4_MAX_EXPERT]u8 = undefined;
-        const resident_gpu = self.residentGpuRequested(layer) and
+        if (!early_resident_check) resident_gpu = self.residentGpuRequested(layer) and
             c.ds4_gpu_stream_expert_cache_resident_ready(&table, &resident_mask) >= shape.n_expert_used;
         if (resident_gpu) {
             // Readiness pins every candidate until queued GPU reads retire.
             // The repair changes IDs only: original native mixture weights stay
             // attached to their slots. All six repaired IDs must be resident;
             // this deliberately relaxes the CPU policy's cap/gap/rank limits.
-            if (c.ds4_gpu_dsv41_resident_route_one(graph.selected, graph.route_probs, model.map, model.size, bias.*.abs_offset, shape.n_expert, shape.n_expert_used, &resident_mask, null) == 0) return false;
+            if (!fused_router and c.ds4_gpu_dsv41_resident_route_one(graph.selected, graph.route_probs, model.map, model.size, bias.*.abs_offset, shape.n_expert, shape.n_expert_used, &resident_mask, null) == 0) return false;
             c.ds4_gpu_routed_moe_set_resident_only(index, true);
         }
         defer if (resident_gpu) c.ds4_gpu_routed_moe_set_resident_only(index, false);

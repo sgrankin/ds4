@@ -172,18 +172,15 @@ struct ds4_metal_args_dsv41_router {
 // kernel_argsort_f32_i32_desc (padding indices sort last), and the weights
 // normalised as the generic chain does: gather, SIMD sum over the top_k lanes,
 // clamp, divide, scale. Threadgroup memory holds nth ints and 2 * nth floats.
-kernel void kernel_dsv41_router_one(
+static inline void dsv41_router_one_body(
         constant ds4_metal_args_dsv41_router &args,
         device const float *logits,
         device const float *bias,
         device float *probs,
         device int32_t *selected,
         device float *weights,
-        threadgroup int32_t *shmem_i32 [[threadgroup(0)]],
-        uint2 tg [[threadgroup_position_in_grid]],
-        uint2 tpos [[thread_position_in_threadgroup]],
-        uint2 tsize [[threads_per_threadgroup]]) {
-    const uint col = tpos.x, ntg = tsize.x;
+        threadgroup int32_t *shmem_i32,
+        uint2 tg, uint col, uint ntg) {
     const int width = (int)args.n_expert;
     logits += tg.y * args.n_expert;   /* one threadgroup per row */
     probs += tg.y * args.n_expert;
@@ -227,6 +224,21 @@ kernel void kernel_dsv41_router_one(
         *quotient = w / total;
         weights[col] = *quotient * args.scale;
     }
+}
+
+kernel void kernel_dsv41_router_one(
+        constant ds4_metal_args_dsv41_router &args,
+        device const float *logits,
+        device const float *bias,
+        device float *probs,
+        device int32_t *selected,
+        device float *weights,
+        threadgroup int32_t *shmem_i32 [[threadgroup(0)]],
+        uint2 tg [[threadgroup_position_in_grid]],
+        uint2 tpos [[thread_position_in_threadgroup]],
+        uint2 tsize [[threads_per_threadgroup]]) {
+    dsv41_router_one_body(args, logits, bias, probs, selected, weights,
+                         shmem_i32, tg, tpos.x, tsize.x);
 }
 
 // This opt-in approximation retains the native router's six mixture weights.
@@ -282,14 +294,14 @@ kernel void kernel_dsv41_resident_route_one(
 // so subsequent slots exclude both native residents and earlier replacements.
 // Only lane 0 accumulates trace mass, in the scalar slot order. Mixture weights
 // are not bound here and retain their native values.
-kernel void kernel_dsv41_resident_route_one_simd(
-        constant uint2 &args [[buffer(0)]],
-        device int32_t *selected [[buffer(1)]],
-        device const float *probs [[buffer(2)]],
-        device const float *bias [[buffer(3)]],
-        constant uchar *resident [[buffer(4)]],
-        device uint32_t *trace [[buffer(5)]],
-        uint lane [[thread_index_in_simdgroup]]) {
+static inline void dsv41_resident_route_one_simd_body(
+        uint2 args,
+        device int32_t *selected,
+        device const float *probs,
+        device const float *bias,
+        constant uchar *resident,
+        device uint32_t *trace,
+        uint lane) {
     int32_t ids[6];
     float total = 0.0f, changed_mass = 0.0f;
     uint changes = 0;
@@ -338,6 +350,45 @@ kernel void kernel_dsv41_resident_route_one_simd(
             trace[6] = changes;
             trace[7] = as_type<uint32_t>(changed_mass / max(total, 6.103515625e-5f));
         }
+    }
+}
+
+kernel void kernel_dsv41_resident_route_one_simd(
+        constant uint2 &args [[buffer(0)]],
+        device int32_t *selected [[buffer(1)]],
+        device const float *probs [[buffer(2)]],
+        device const float *bias [[buffer(3)]],
+        constant uchar *resident [[buffer(4)]],
+        device uint32_t *trace [[buffer(5)]],
+        uint lane [[thread_index_in_simdgroup]]) {
+    dsv41_resident_route_one_simd_body(args, selected, probs, bias, resident, trace, lane);
+}
+
+// Preserve the native bitonic ordering and rounded mixture weights, then
+// repair only its selected IDs without a second dispatch. All native output
+// writes must be visible before the first SIMD group reads IDs/probabilities.
+kernel void kernel_dsv41_router_resident_one(
+        constant ds4_metal_args_dsv41_router &args [[buffer(0)]],
+        device const float *logits [[buffer(1)]],
+        device const float *bias [[buffer(2)]],
+        device float *probs [[buffer(3)]],
+        device int32_t *selected [[buffer(4)]],
+        device float *weights [[buffer(5)]],
+        constant uchar *resident [[buffer(6)]],
+        threadgroup int32_t *shmem_i32 [[threadgroup(0)]],
+        uint2 tg [[threadgroup_position_in_grid]],
+        uint2 tpos [[thread_position_in_threadgroup]],
+        uint2 tsize [[threads_per_threadgroup]],
+        uint lane [[thread_index_in_simdgroup]]) {
+    dsv41_router_one_body(args, logits, bias, probs, selected, weights,
+                         shmem_i32, tg, tpos.x, tsize.x);
+    threadgroup_barrier(mem_flags::mem_device);
+    // The native next-power-of-two geometry can have fewer than 32 threads.
+    // Then all expert IDs fit in the active lanes, so stride-32 scans and the
+    // first-candidate broadcast remain valid without changing router geometry.
+    if (tpos.x < 32) {
+        dsv41_resident_route_one_simd_body(uint2(args.n_expert, 0u), selected,
+                probs, bias, resident, (device uint32_t *)selected, lane);
     }
 }
 

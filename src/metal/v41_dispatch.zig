@@ -55,6 +55,29 @@ export fn ds4_gpu_dsv41_router_rows(selected: ?*Tensor, weights: ?*Tensor, probs
 export fn ds4_gpu_dsv41_router_one(selected: ?*Tensor, weights: ?*Tensor, probs: ?*Tensor, logits: ?*const Tensor, map: ?*const anyopaque, size: u64, bias: u64, experts: u32, k: u32, scale: f32) c_int {
     return ds4_gpu_dsv41_router_rows(selected, weights, probs, logits, map, size, bias, experts, k, scale, 1);
 }
+export fn ds4_gpu_dsv41_router_resident_one(selected: ?*Tensor, weights: ?*Tensor, probs: ?*Tensor, logits: ?*const Tensor, map: ?*const anyopaque, size: u64, bias_offset: u64, experts: u32, top_k: u32, scale: f32, resident: [*c]const u8) c_int {
+    if (experts < 6 or experts > 1024 or top_k != 6 or resident == null or
+        !fits(logits, @as(u64, experts) * 4) or !fits(probs, @as(u64, experts) * 4) or
+        !fits(selected, 24) or !fits(weights, 24)) return 0;
+    var count: u32 = 0;
+    for (resident[0..experts]) |present| count += @intFromBool(present != 0);
+    if (count < top_k or c.ds4_gpu_init() == 0) return 0;
+    const bias = K.model(map, size, bias_offset, @as(u64, experts) * 4) orelse return 0;
+    defer bias.deinit();
+    const l = Buffer.tensor(logits);
+    defer l.deinit();
+    const p = Buffer.tensor(probs);
+    defer p.deinit();
+    const s = Buffer.tensor(selected);
+    defer s.deinit();
+    const w = Buffer.tensor(weights);
+    defer w.deinit();
+    const args = extern struct { n_expert: u32, top_k: u32, has_bias: u32, scale: f32 }{ .n_expert = experts, .top_k = top_k, .has_bias = 1, .scale = scale };
+    const mask = Binding{ .index = 6, .view = zero_view, .bytes = resident, .length = experts };
+    var nth: u32 = 1;
+    while (nth < experts) nth *= 2;
+    return dispatch("kernel_dsv41_router_resident_one", &.{ arg(0, &args), buf(1, l.view), buf(2, bias.view), buf(3, p.view), buf(4, s.view), buf(5, w.view), mask }, .{ .tx = nth, .shared = (nth * 12 + 15 + 128) & ~@as(u32, 15) });
+}
 export fn ds4_gpu_dsv41_resident_route_one(selected: ?*Tensor, probs: ?*const Tensor, map: ?*const anyopaque, size: u64, bias_offset: u64, experts: u32, top_k: u32, resident: [*c]const u8, trace: ?*Tensor) c_int {
     if (experts < 6 or experts > 1024 or top_k != 6 or resident == null or
         !fits(selected, 24) or !fits(probs, @as(u64, experts) * 4) or
