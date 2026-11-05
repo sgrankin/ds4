@@ -62,8 +62,87 @@ void ds4_metal_expert_zero_layer_address(uint32_t layer) {
         }
     }
 }
+bool ds4_metal_expert_slab_residency_add(ds4_metal_expert_cache_state *state,
+        ds4_metal_expert_buffer_ref buffer, bool profile) {
+    @autoreleasepool {
+#if TARGET_OS_OSX
+        if (@available(macOS 15.0, *)) {
+            if (!g_device || !g_queue ||
+                ![g_queue respondsToSelector:@selector(addResidencySet:)] ||
+                ![g_queue respondsToSelector:@selector(removeResidencySet:)]) {
+                fprintf(stderr, "ds4: streaming expert slab residency queue unavailable; using ordinary slab declarations\n");
+                return false;
+            }
+            id<MTLResidencySet> set = state->cache_slab_residency_set;
+            if (!set) {
+                MTLResidencySetDescriptor *desc = [[MTLResidencySetDescriptor alloc] init];
+                desc.label = @"ds4_stream_expert_slabs";
+                desc.initialCapacity = DS4_METAL_STREAM_EXPERT_CACHE_MAX_SLABS;
+                NSError *error = nil;
+                set = [g_device newResidencySetWithDescriptor:desc error:&error];
+                if (!set) {
+                    fprintf(stderr, "ds4: streaming expert slab residency creation failed: %s\n",
+                            [[error localizedDescription] UTF8String]);
+                    return false;
+                }
+            }
+            /* Commit only at slab allocation. Queue attachment carries this
+             * set into subsequent commands; existing encoder declarations
+             * still provide hazard tracking. No warmup or residency request. */
+            [set addAllocation:buffer];
+            [set commit];
+            if (!state->cache_slab_residency_set) {
+                state->cache_slab_residency_set = set;
+                [g_queue addResidencySet:set];
+                state->cache_slab_residency_attached = 1;
+            }
+            if (profile)
+                fprintf(stderr, "ds4: streaming expert slab residency add allocations=%llu bytes=%.2f GiB queue=1\n",
+                        (unsigned long long)set.allocationCount,
+                        (double)set.allocatedSize / 1073741824.0);
+            return true;
+        }
+#endif
+        fprintf(stderr, "ds4: streaming expert slab residency requires macOS 15 or newer; using ordinary slab declarations\n");
+        return false;
+    }
+}
+void ds4_metal_expert_slab_residency_clear(ds4_metal_expert_cache_state *state,
+        bool profile, const char *reason) {
+    @autoreleasepool {
+#if TARGET_OS_OSX
+        if (@available(macOS 15.0, *)) {
+            id<MTLResidencySet> set = state->cache_slab_residency_set;
+            if (set) {
+                if (profile)
+                    fprintf(stderr, "ds4: streaming expert slab residency clear reason=%s allocations=%llu bytes=%.2f GiB\n",
+                            reason, (unsigned long long)set.allocationCount,
+                            (double)set.allocatedSize / 1073741824.0);
+                if (state->cache_slab_residency_attached && g_queue &&
+                    [g_queue respondsToSelector:@selector(removeResidencySet:)])
+                    [g_queue removeResidencySet:set];
+                [set endResidency];
+                [set removeAllAllocations];
+                [set commit];
+            }
+        }
+#endif
+        state->cache_slab_residency_attached = 0;
+        state->cache_slab_residency_set = nil;
+    }
+}
 void ds4_metal_expert_retire_slab(ds4_metal_expert_cache_state *state, uint32_t index) {
-    @autoreleasepool { state->cache_slabs[index] = nil; }
+    @autoreleasepool {
+#if TARGET_OS_OSX
+        if (@available(macOS 15.0, *)) {
+            if (state->cache_slab_residency_set && state->cache_slabs[index]) {
+                [state->cache_slab_residency_set removeAllocation:state->cache_slabs[index]];
+                [state->cache_slab_residency_set commit];
+            }
+        }
+#endif
+        state->cache_slabs[index] = nil;
+    }
 }
 bool ds4_metal_expert_install_address(uint32_t layer, uint32_t expert,
         ds4_metal_expert_buffer_ref gate, uintptr_t gate_inner,

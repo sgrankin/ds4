@@ -6,31 +6,31 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: can we remove the first-decode admission delay?**
-One-hour slice: November 5, 00:49 through 01:49 Eastern. Start from runtime
-`909faab5` at closure `0dff6c76`, holding the selected experimental GPU package
-(including four-layer submissions), model, 64 GB expert cache and 8K chunks fixed.
-The latest normal-grouping trace still spends about 0.8 seconds on the first
-scalar evaluation after fresh prefill. This is not request time to first token.
+**Current question: can bounded streaming-slab residency remove first-decode gaps?**
+One-hour slice: November 5, 01:27 through 02:27 Eastern. Start from runtime
+`909faab5` at closure `7435eca0`, holding the selected experimental GPU package
+from `2026-11-05-first-decode-admission/candidate-settings.json` fixed. The model,
+64 GB expert cache, 4 GiB slabs, 8K chunks and four-layer submissions remain fixed.
+Early address dispatch did not remove the roughly 0.8-second first scalar
+step after prefill. Resource admission is a hypothesis, not an established cause.
 
-First identify the exposed delay using existing command, expert-cache and read
-profiles. The earlier 4 GiB versus 512 MiB slab experiment already traded a
-shorter first step for slower later decode; do not repeat it. Prefill already
-seeds cache slots through GPU blits, so do not assume this is their first GPU use.
-Inspect compute resource admission, cache lifetimes and the difference between
-first, ordinary and refresh tokens. Keep timestamp-domain and profiler limits
-explicit. Then select one small intervention supported by the evidence.
+Test one opt-in, engine-owned Metal residency set containing only the actual
+streaming slab buffers. Retain existing resource declarations and cache pins.
+Release the set before cache pressure relief or trimming so it cannot defeat
+memory reclamation; clear it during engine teardown. Do not map the whole model,
+add a warm-up kernel or change the resident-expert policy in this slice.
+The shared Metal queue means co-resident helper behavior remains a qualification
+limit. Measure full prefill, complete decode and process wall to catch shifted
+cost, alongside the first-step interval and a separate dependency profile.
 
-Qualify any candidate with at least five alternating pairs, fresh and warm
-phases, fixed-history logits, total inference and process wall. An improvement
-must remove or overlap cost, not merely move it into startup, prefill or later
-steps. Neutral results can be useful if they remove a dependency that the changed
-profile exposes; record that evidence before retaining or rejecting the change.
-Keep runtime behavior opt-in and preserve expert-cache pins, the admission lock
-and pressure guard. One heavy model job, no unrelated build during timing.
+Use at least five alternating pairs at 8K and 32K, fresh and warm phases, plus
+fixed-history logits. Neutral results can justify a bounded follow-up only when
+the changed profile shows useful work or waiting removed. Preserve the admission
+lock and pressure guard; run one heavy model job, with no unrelated builds during
+timing. Keep runtime behavior opt-in, and close this question within the slice.
 
-Keep raw artifacts under `.workspaces/hillclimb-20261104/22-first-decode-admission/`
-and one concise report under `2026-11-05-first-decode-admission/`. Update the
+Keep raw artifacts under `.workspaces/hillclimb-20261104/23-slab-residency/`
+and one concise report under `2026-11-05-streaming-slab-residency/`. Update the
 owning manual, recipe conclusion and short journal entry. No main advancement
 or push is authorized.
 

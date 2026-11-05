@@ -255,6 +255,7 @@ pub const Cache = struct {
         if (range.slab >= state.cache_slab_count or state.cache_slabs[range.slab] == null or state.cache_slab_slot_bytes == 0 or range.base > std.math.maxInt(usize)) return false;
         const memory = c.ds4_metal_expert_buffer_storage(state.cache_slabs[range.slab]);
         if (memory.data == null) return false;
+        if (state.cache_slab_residency_set != null) self.disableSlabResidency("slab unlock");
         const pointer: [*]u8 = @ptrCast(memory.data.?);
         if (c.munlock(pointer + @as(usize, @intCast(range.base)), @intCast(state.cache_slab_slot_bytes)) != 0) return false;
         state.cache_slab_slot_locked[slot] = 0;
@@ -562,11 +563,18 @@ pub const Cache = struct {
         };
         return count;
     }
+    pub fn disableSlabResidency(self: Cache, reason: [*:0]const u8) void {
+        // A set covers whole buffers, so it must not keep unlocked slots or a
+        // partially trimmed slab resident. Re-enable only after full clear.
+        self.state.cache_slab_residency_disabled = 1;
+        c.ds4_metal_expert_slab_residency_clear(self.state, timingSummary(), reason);
+    }
     pub fn releaseMargin(self: Cache, protect_layer: u32, protect: []const i32) u32 {
         const state = self.state;
         if (state.cache_mlock_relief_applied != 0 or state.cache_slab_slot_bytes == 0) return 0;
         const locked_before = self.lockedCount();
         if (locked_before == 0) return 0;
+        self.disableSlabResidency("mlock relief");
         const target = (locked_before + 9) / 10;
         var released: u32 = 0;
         while (released < target) {
@@ -604,6 +612,7 @@ pub const Cache = struct {
         for (&state.entries) |*layer| for (layer) |*entry| {
             if (entry.valid != 0 and (entry.slab_backed == 0 or self.inflight(entry))) return false;
         };
+        self.disableSlabResidency("cache trim");
         for (&state.entries, 0..) |*layer_entries, layer| for (layer_entries, 0..) |*entry, expert| {
             if (entry.valid != 0 and entry.slab_slot >= count) self.clear(@intCast(layer), @intCast(expert), true, false, null);
         };
@@ -639,6 +648,9 @@ pub const Cache = struct {
     pub fn clearAll(self: Cache, reset_statistics: bool) void {
         const state = self.state;
         c.ds4_metal_expert_pending_clear();
+        // Drop the queue's residency before any slot unlock or strong-buffer
+        // retirement, including cache-budget changes and engine shutdown.
+        c.ds4_metal_expert_slab_residency_clear(state, timingSummary(), "cache clear");
         state.cache_done_seq = state.cache_cb_seq;
         state.cache_batch_seq = 0;
         state.cache_owned_seq = 0;
@@ -670,6 +682,7 @@ pub const Cache = struct {
         state.cache_slab_total_slots = 0;
         state.cache_free_slot_count = 0;
         state.cache_slab_slot_bytes = 0;
+        state.cache_slab_residency_disabled = 0;
         @memset(&state.cache_slab_slot_locked, 0);
         if (reset_statistics) self.resetStatistics();
     }

@@ -98,6 +98,7 @@ pub const Storage = struct {
         state.cache_mlock_failures +%= 1;
         state.cache_mlock_fail_bytes +|= memory.bytes;
         const err = if (memory.data != null and memory.bytes != 0) c.__error().* else 0;
+        self.cache.disableSlabResidency("mlock failure");
         self.capToLocked();
         self.warnMlock(memory.bytes, err);
         if (present("DS4_METAL_STREAMING_EXPERT_BUFFER_MLOCK_PROFILE")) _ = c.fprintf(c.__stderrp, "ds4: Metal streaming expert buffer mlock failed len=%.2f MiB: %s\n", @as(f64, @floatFromInt(memory.bytes)) / 1048576, if (err != 0) c.strerror(err) else @as([*c]const u8, "mlock unavailable"));
@@ -125,8 +126,10 @@ pub const Storage = struct {
         }
         state.cache_mlock_failures +%= 1;
         state.cache_mlock_fail_bytes +|= state.cache_slab_slot_bytes;
+        const err = c.__error().*;
+        self.cache.disableSlabResidency("slab mlock failure");
         self.capToLocked();
-        self.warnMlock(state.cache_slab_slot_bytes, c.__error().*);
+        self.warnMlock(state.cache_slab_slot_bytes, err);
         return false;
     }
     pub fn slotBuffers(self: Storage, slot: u32, gate: u64, down: u64, out: *Reuse) bool {
@@ -175,6 +178,16 @@ pub const Storage = struct {
                 }
             }
             if (owner.token == null or count == 0) return false;
+            const residency = c.getenv("DS4_METAL_STREAMING_EXPERT_SLAB_RESIDENCY");
+            if (state.cache_slab_residency_disabled == 0 and residency != null and
+                std.mem.eql(u8, std.mem.span(residency), "1"))
+            {
+                // Register this actual allocation before publishing its slots.
+                // Failure leaves ordinary tracked declarations in force and
+                // disables further attempts until the cache is fully cleared.
+                if (!c.ds4_metal_expert_slab_residency_add(state, owner.buffer(), Cache.timingSummary()))
+                    self.cache.disableSlabResidency("creation failure");
+            }
             slab = state.cache_slab_count;
             state.cache_slab_count +%= 1;
             c.ds4_metal_expert_slab_assign(state, slab, owner.buffer());

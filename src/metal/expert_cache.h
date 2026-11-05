@@ -192,6 +192,15 @@ typedef struct {
     DS4_EXPERT_STRONG ds4_metal_expert_buffer_ref cache_up_addr_buffers[DS4_METAL_STREAM_EXPERT_CACHE_MAX_LAYER];
     DS4_EXPERT_STRONG ds4_metal_expert_buffer_ref cache_down_addr_buffers[DS4_METAL_STREAM_EXPERT_CACHE_MAX_LAYER];
     DS4_EXPERT_STRONG ds4_metal_expert_buffer_ref cache_slabs[DS4_METAL_STREAM_EXPERT_CACHE_MAX_SLABS];
+    /* Only the existing slab allocations join this engine-owned set. Native
+     * policy controls admission; ARC leaves own the handle and queue link. */
+#ifdef __OBJC__
+    __strong id cache_slab_residency_set;
+#else
+    void *cache_slab_residency_set;
+#endif
+    uint8_t cache_slab_residency_attached;
+    uint8_t cache_slab_residency_disabled;
     uint32_t cache_slab_start_slot[DS4_METAL_STREAM_EXPERT_CACHE_MAX_SLABS];
     uint32_t cache_slab_slot_count[DS4_METAL_STREAM_EXPERT_CACHE_MAX_SLABS];
     uint32_t cache_slab_slots_used[DS4_METAL_STREAM_EXPERT_CACHE_MAX_SLABS];
@@ -232,6 +241,8 @@ ds4_metal_expert_buffer_memory ds4_metal_expert_buffer_storage(ds4_metal_expert_
 void ds4_metal_expert_zero_address(uint32_t layer, uint32_t expert);
 void ds4_metal_expert_full_layer_retire(uint32_t layer);
 void ds4_metal_expert_zero_layer_address(uint32_t layer);
+bool ds4_metal_expert_slab_residency_add(ds4_metal_expert_cache_state *, ds4_metal_expert_buffer_ref, bool profile);
+void ds4_metal_expert_slab_residency_clear(ds4_metal_expert_cache_state *, bool profile, const char *reason);
 void ds4_metal_expert_retire_slab(ds4_metal_expert_cache_state *, uint32_t index);
 bool ds4_metal_expert_install_address(uint32_t layer, uint32_t expert, ds4_metal_expert_buffer_ref, uintptr_t, ds4_metal_expert_buffer_ref, uintptr_t, ds4_metal_expert_buffer_ref, uintptr_t);
 void ds4_metal_expert_pending_clear(void);
