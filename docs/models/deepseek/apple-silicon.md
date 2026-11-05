@@ -395,6 +395,18 @@ conclusion. One fresh coding solution also missed integer-interval adjacency.
 These results support further optimization without establishing general agent
 quality or promoting the GPU policy into the fast presets.
 
+For this experimental GPU package, the
+[submission-cadence qualification](../../../speed-bench/experiments/2026-11-05-gpu-submit-cadence/README.md)
+selects `DS4_METAL_V41_DECODE_FLUSH_LAYERS=4`. The first layer still submits
+immediately; subsequent submissions group four layers. Its diagnostic reduced
+ordinary-token command buffers from 40 to 11 and refresh-token buffers from
+80 to 51, while completion proofs continue to protect expert-cache pins.
+Five-pair checks at each of 8K and 32K found small fresh-decode savings with
+matching tested logits; warm results remained mixed. Normal-grouping diagnostics
+did not establish lower host latency, so fewer submissions are not themselves a
+speed claim. The ordinary CPU-routing fast presets retain interval one. The
+report's settings file records the selected experimental combination.
+
 ### Executing the selected experts
 
 Metal uses batched routed matrix multiplication to group rows by expert. The

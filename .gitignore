@@ -184,6 +184,8 @@ speed-bench/ideas/artifacts/
 !/speed-bench/experiments/2026-11-04-post-simd-profile/*-settings.json
 !/speed-bench/experiments/2026-11-04-package-requalification/candidate-settings.json
 !/speed-bench/experiments/2026-11-04-prefill-preset-qualification/candidate-settings.json
+!/speed-bench/experiments/2026-11-05-gpu-submit-cadence/decode-tradeoff.svg
+!/speed-bench/experiments/2026-11-05-gpu-submit-cadence/candidate-settings.json
 !/speed-bench/experiments/*/*.c
 !/speed-bench/experiments/upstream-selected-read-20261023/candidate.patch
 !/speed-bench/experiments/integer-prefill-20261027/*.patch

@@ -393,3 +393,20 @@ that uncertainty. The [qualification report](../../../speed-bench/experiments/20
 owns the evidence, activation limits and installed binary hashes. Launcher tests
 and the server build passed; the qualified binaries are installed locally.
 GPU resident routing remains experimental, and published main is unchanged.
+
+## Twenty-first question: revisit submissions after removing CPU handoffs
+
+GPU-resident routing changed the dependency graph behind the earlier every-layer
+submission choice. Comparing intervals one, two and four favored four in nine of
+ten measured fresh complete-decode pairs across 8K and 32K, with small differences.
+Warm results remained mixed, including occasional large
+append and first-token stalls. All samples remain in the
+[report](../../../speed-bench/experiments/2026-11-05-gpu-submit-cadence/README.md).
+
+Select interval four for the experimental GPU package. All 512 checked
+predictions and post-token hashes matched. The diagnostic confirms 40 to 11
+command buffers on ordinary tokens and 80 to 51 on refreshes; normal encoder
+grouping did not show lower host latency. This is a small measured scheduling
+gain, not proof that every removed submission reduces elapsed time. CPU-routing
+presets, installed binaries and published main remain unchanged. The large
+first-decode gap remains a separate candidate for investigation.

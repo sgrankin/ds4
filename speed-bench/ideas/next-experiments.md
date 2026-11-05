@@ -6,41 +6,30 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: should the new prefill options join the existing fast presets?**
-One-hour slice: November 4, 23:13 through November 5, 00:13 Eastern. Both arms
-use runtime `909faab5` at checkout `7a43e7eb`, the same current benchmark binary,
-64 GB expert cache and 8,192-token chunks. Keep the ordinary CPU resident policy
-and qualified RB4/unit-rescale settings fixed. GPU resident routing and its
-dependent options remain off in both arms.
+**Current question: does GPU-resident decode benefit from fewer submissions?**
+One-hour slice: November 5, 00:02 through 01:02 Eastern. Use runtime
+`909faab5` at checkout `bdcf85a5`, the current benchmark binary and the full
+experimental GPU-resident package from the package-requalification settings.
+The previous every-layer submission choice was measured with CPU routing;
+removing those CPU handoffs changes the dependency graph. Its recent diagnostic
+still showed approximately forty command buffers per ordinary GPU-resident token.
 
-The candidate enables only `DS4_METAL_V41_PREFILL_ROPE_BF16=1` and
-`DS4_METAL_V41_PREFILL_INDEX_Q_MPP=1`. The first preserves tested values and
-removes a local transform pass; the second changes the temporary indexer-query
-reduction and has measured numerical drift. Their prior timing held experimental
-GPU routing enabled. The recent recorded-session comparison did not exercise the
-query matrix path, so it cannot decide this separate preset choice.
+Hold routing, refresh interval sixteen, parallel shared/routed FFN, cache size,
+packing and prefill settings fixed. Compare the existing
+`DS4_METAL_V41_DECODE_FLUSH_LAYERS=1` with `2` and `4`. No new runtime selector or
+kernel is needed. First check fixed-history logits, then take five alternating
+32K pairs for each candidate and five 8K pairs for a useful candidate. Inspect
+command-buffer counts and dependencies separately from profile-free timing.
+Keep first-token, steady and complete decode costs; preserve noisy or neutral
+results and check whether a removed submission exposes another useful target.
 
-Take five alternating profile-free pairs at 8K and 32K, separate full-vocabulary
-quality pairs, and one controlled reasoning-enabled long-prompt coding pair.
-The two presets differ in prefill substitution: `resident-fast` leaves it off,
-while `persistent-fast` enables it. Add five 8K pairs and a 32K quality pair with
-the prefill gap set to zero before deciding whether to enable both presets.
-Reuse the existing drivers and oracle; match task path, time, sampling and fresh
-prefix-cache conditions. Keep first-step and complete phase timings, all samples
-and variation. Preserve any coding failure. Do not equate mean distribution
-drift with task accuracy or reject an approximation merely for differing output.
-
-The outcome is an explicit adoption decision for the two prefill selectors.
-If the combined evidence supports them, enable them in the two resident fast
-presets, preserve explicit zero overrides, build the normal binaries and install
-the qualified local package. Otherwise leave the selectors available explicitly
-and record why. No GPU policy promotion or published-main advancement is part
-of this slice.
-
-Keep one guarded model job and pause builds during final timing. Write one report
-under `2026-11-04-prefill-preset-qualification/`, with raw artifacts under
-`.workspaces/hillclimb-20261104/20-prefill-preset-qualification/`, then update the
-owning manual, recipe conclusion and a short journal entry.
+The outcome is a scheduling choice for the experimental GPU package, not its
+promotion into ordinary presets. A useful exact setting may be retained even
+when a noisy workload is neutral; regressions and changed logits need explanation.
+Use the existing driver and pressure guard, one model job at a time. Keep raw
+artifacts under `.workspaces/hillclimb-20261104/21-gpu-submit-cadence/` and one
+report under `2026-11-05-gpu-submit-cadence/`. Finish with the owning manual,
+recipe conclusion and one short journal entry. Do not advance main or push.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. The current timed

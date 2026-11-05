@@ -175,6 +175,14 @@ coding solution fails the oracle's integer-adjacency cases. Retain the useful
 kernel work and the failed trace; keep the approximate policy opt-in rather
 than treating either one task or mean drift as a general quality verdict.
 
+The [submission-cadence follow-up](../speed-bench/experiments/2026-11-05-gpu-submit-cadence/README.md)
+selects four-layer submission for the experimental package. Removing CPU
+handoffs made it worth revisiting the earlier every-layer choice. Complete fresh
+decode improved slightly in nine of ten pairs across 8K and 32K, and all 512
+checked predictions matched. Warm results were mixed. The profile confirms fewer
+command buffers but does not show lower native host latency; retain the small
+measured gain without extrapolating it to every phase or promoting GPU routing.
+
 Detailed encoder profiling changes batching and adds host overhead; its gap reduction is not a
 predicted ordinary-runtime saving. The
 [Apple Silicon manual](../docs/models/deepseek/apple-silicon.md#resident-expert-substitution)
