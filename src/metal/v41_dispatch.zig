@@ -410,8 +410,14 @@ export fn ds4_gpu_dsv41_matmul_expand_rows(out: ?*Tensor, map: ?*const anyopaque
     const nr: u32 = if (rows > 1) 4 else 2;
     const mv = Dense.mvArgs(width, outputs, rows, true, @intCast(nr));
     const args = extern struct { n_embd: u32, has_add: u32, split_stride: u32 }{ .n_embd = outputs, .has_add = @intFromBool(add != null), .split_stride = 24 };
-    const nsg: u32 = @intCast(c.ds4_zig_metal_env_u64("DS4_METAL_Q8_MV_NSG", if (c.ds4_metal_dense_facts(false) & c.DS4_DENSE_TP_TWO != 0) 2 else 4, 1, 8));
     const literal = rows == 1 and width == 8192 and outputs == 5120 and add == null and c.ds4_metal_v41_on(c.DS4_GPU_V41_LITERAL_SHAPES) != 0;
+    const output_nsg2_setting = c.getenv("DS4_METAL_V41_OUTPUT_Q8_NSG2");
+    const output_nsg2 = literal and c.getenv("DS4_METAL_Q8_MV_NSG") == null and
+        c.ds4_metal_attention_get_facts().flags & c.DS4_ATTN_TP_SINGLE != 0 and
+        output_nsg2_setting != null and std.mem.eql(u8, std.mem.span(output_nsg2_setting), "1");
+    // Only the dot-product grouping changes; the existing BF16 boundaries
+    // and HC accumulation order remain. Specialization and geometry agree.
+    const nsg: u32 = if (output_nsg2) 2 else @intCast(c.ds4_zig_metal_env_u64("DS4_METAL_Q8_MV_NSG", if (c.ds4_metal_dense_facts(false) & c.DS4_DENSE_TP_TWO != 0) 2 else 4, 1, 8));
     const name: [*:0]const u8 = if (rows > 1) "kernel_mul_mv_q8_0_f32_bf16io_hc_expand4_rows_seq4" else if (literal) "kernel_mul_mv_q8_0_f32_bf16io_hc_expand4_static" else "kernel_mul_mv_q8_0_f32_bf16io_hc_expand4";
     return dispatch(name, &.{ arg(0, &mv), buf(1, weight.view), buf(2, src.view), buf(3, dst.view), arg(4, &args), buf(5, ad.view), buf(6, rs.view), buf(7, K.at(sp.view, 16)), buf(8, K.at(sp.view, 32)) }, .{ .x = (@as(u64, outputs) + nr - 1) / nr, .tx = 32, .ty = nsg, .nsg = @intCast(nsg), .shared = if (rows > 1) 512 else 256 });
 }
