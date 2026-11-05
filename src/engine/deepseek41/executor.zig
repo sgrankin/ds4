@@ -29,6 +29,7 @@ pub const Executor = struct {
     graph: *Graph,
     weights: *const Weights,
     services: Services,
+    direct_pre: bool = false,
 
     fn routing(self: *const Executor) Routes.Transaction {
         return .{ .ops = self.ops, .graph = self.graph };
@@ -58,8 +59,9 @@ pub const Executor = struct {
             if ((!copied and !self.ops.matmul(graph.engram_kv, layer.engram_kv, rows, true)) or
                 c.ds4_gpu_dsv41_engram_add(graph.residual, graph.engram_kv, graph.engram_q_norm[owner], graph.engram_k_norm[owner], null, shape.n_embd, 1, shape.rms_eps) == 0) return false;
         }
+        const split_pre = self.direct_pre and index != 0;
         return self.capture(index, graph.pos, graph.residual, 1) and
-            self.ops.hcInput(graph, layer, false);
+            self.ops.hcInput(graph, layer, false, if (split_pre) graph.ffn_split else graph.pre, split_pre);
     }
 
     /// Publish the residual first; steering acts on every complete HC stream.
@@ -88,7 +90,7 @@ pub const Executor = struct {
         else
             self.expand(graph.after_attn, graph.block, graph.residual, graph.attn_split, index, 1, false);
         graph.attn_expanded = false;
-        return expanded and self.ops.hcInput(graph, layer, true);
+        return expanded and self.ops.hcInput(graph, layer, true, graph.attn_split, true);
     }
 
     pub fn beforeMoe(self: *const Executor, layer: *const Layer, index: u32) bool {
@@ -126,7 +128,11 @@ pub const Executor = struct {
             @import("steering_capture.zig").capture(graph, graph.residual, index, 1, shape.n_embd, shape.n_hc, true)
         else
             self.expand(graph.residual, graph.block, graph.after_attn, graph.ffn_split, index, 1, true);
-        return ok and c.ds4_gpu_tensor_copy(graph.pre, 0, graph.ffn_split, 0, @as(u64, shape.n_hc) * 4) != 0;
+        // The next attention HC reads this FFN split before its own FFN HC
+        // overwrites it. Publish the final PRE for logits and saved state;
+        // the persistent graph.pre handle and first-layer initialization stay.
+        return ok and ((self.direct_pre and index + 1 < shape.n_layer) or
+            c.ds4_gpu_tensor_copy(graph.pre, 0, graph.ffn_split, 0, @as(u64, shape.n_hc) * 4) != 0);
     }
 
     fn sharedDown(self: *const Executor, out: ?*Tensor, mid: ?*Tensor, layer: *const Layer, count: u32) bool {
@@ -267,6 +273,16 @@ pub const Executor = struct {
         if (output != null and graph.rope_tab != null and graph.tp_world == 1 and (!graph.streaming or streaming_rope) and !graph.quality and
             (c.ds4_gpu_v41_off() & c.DS4_GPU_V41_ROPE_TABLE) == 0 and c.ds4_gpu_commands_active() != 0 and
             c.ds4_gpu_dsv41_rope_coeff_table(graph.rope_tab, graph.pos) != 0) graph.rope_tab_pos = graph.pos + 1;
+        // Keep one decision for both copy suppression and its next consumer.
+        // Benchmark logits/hash logging and Metal profiling do not change
+        // this admission; graph trace capture and alternate executors do.
+        const direct_pre_setting = c.getenv("DS4_METAL_V41_DIRECT_PRE");
+        var scalar = self.*;
+        scalar.direct_pre = direct_pre_setting != null and c.strcmp(direct_pre_setting, "1") == 0 and
+            queue and graph.streaming and graph.tp_world == 1 and !graph.quality and graph.imatrix == null and
+            graph.image_count == 0 and graph.dspark == null and !graph.verify_prefix and graph.decoder_replay_floor == 0 and
+            graph.steering_attn_scale == 0 and graph.steering_ffn_scale == 0 and !graph.steering_capture_enabled and shape.n_hc == 4 and
+            !graph.predict_active and !oracle_active and !c.ds4_native_graph_trace_active();
         for (self.weights.layer[0..shape.n_layer], 0..) |*weights, index| {
             if (!ok) break;
             const layer_index: u32 = @intCast(index);
@@ -283,7 +299,7 @@ pub const Executor = struct {
                 ok = loaded and c.ds4_gpu_tensor_write(input, 0, &graph.rows[owner], @sizeOf(@TypeOf(graph.rows[owner]))) != 0;
             }
             if (ok) ok = self.routing().oraclePrefetch(weights, layer_index);
-            if (ok) ok = self.runLayer(weights, layer_index, @intCast(token));
+            if (ok) ok = scalar.runLayer(weights, layer_index, @intCast(token));
             const drain = !queue or (graph.tp_world == 2 and index == 13) or index + 1 == shape.n_layer;
             if (ok and queued_head and index + 1 == shape.n_layer) ok = self.encodeLogits();
             if (drain and c.ds4_gpu_end_commands() == 0) ok = false;

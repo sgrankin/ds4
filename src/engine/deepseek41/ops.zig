@@ -172,14 +172,13 @@ pub const Ops = struct {
 
     /// The HC projection and the collapse consume the same residual but
     /// different mixer weights: collapse uses the preceding sublayer's PRE.
-    pub fn hcInput(self: *const Ops, graph: *Graph, layer: *const Layer, ffn: bool) bool {
+    pub fn hcInput(self: *const Ops, graph: *Graph, layer: *const Layer, ffn: bool, previous: ?*const Tensor, split_pre: bool) bool {
         const shape = &self.config.shape;
         const projection = if (ffn) layer.hc_ffn_fn else layer.hc_attn_fn;
         const scale = if (ffn) layer.hc_ffn_scale else layer.hc_attn_scale;
         const base = if (ffn) layer.hc_ffn_base else layer.hc_attn_base;
         const norm_weight = if (ffn) layer.ffn_norm else layer.attn_norm;
         const residual = if (ffn) graph.after_attn else graph.residual;
-        const previous = if (ffn) graph.attn_split else graph.pre;
         const split = if (ffn) graph.ffn_split else graph.attn_split;
         if (ffn) graph.hc_ffn_deferred = false else graph.hc_attn_deferred = false;
         // The previous mixer can collapse this residual immediately; the new
@@ -196,8 +195,8 @@ pub const Ops = struct {
             return true;
         }
         if (projection.*.type == c.DS4_TENSOR_F16 and !present("DS4_METAL_DISABLE_V41_HC_BLOCK_INPUT") and
-            c.ds4_gpu_dsv41_hc_block_input_rows(graph.mix, graph.x, graph.norm, split, residual, previous, self.model.map, self.model.size, projection.*.abs_offset, scale.*.abs_offset, base.*.abs_offset, norm_weight.*.abs_offset, shape.n_hc * shape.n_embd, 24, shape.n_embd, shape.n_hc, shape.n_hc_sinkhorn_iter, shape.hc_eps, shape.rms_eps, 1, if (ffn) 24 else shape.n_hc) != 0) return true;
-        return self.hcMix(graph, layer, ffn) and self.hcNorm(graph.x, graph.norm, residual, previous, ffn, norm_weight, 1);
+            c.ds4_gpu_dsv41_hc_block_input_rows(graph.mix, graph.x, graph.norm, split, residual, previous, self.model.map, self.model.size, projection.*.abs_offset, scale.*.abs_offset, base.*.abs_offset, norm_weight.*.abs_offset, shape.n_hc * shape.n_embd, 24, shape.n_embd, shape.n_hc, shape.n_hc_sinkhorn_iter, shape.hc_eps, shape.rms_eps, 1, if (split_pre) 24 else shape.n_hc) != 0) return true;
+        return self.hcMix(graph, layer, ffn) and self.hcNorm(graph.x, graph.norm, residual, previous, split_pre, norm_weight, 1);
     }
 
     pub fn hcMix(self: *const Ops, graph: *Graph, layer: *const Layer, ffn: bool) bool {
