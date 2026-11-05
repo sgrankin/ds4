@@ -725,6 +725,7 @@ fn run(cfg: *Options) c_int {
         null;
     defer if (hash_values) |values| allocator.free(values);
     if (hash_values != null) report("ds4-bench: per-step logits hash/dump is diagnostic and perturbs timing\n", .{});
+    const decode_token_times = c.getenv("DS4_BENCH_DECODE_TOKEN_TIMES") != null;
     var maybe_session: ?*Session = null;
     if (c.ds4_session_create(&maybe_session, engine, cfg.ctx_alloc) != 0) {
         report("ds4-bench: failed to create session\n", .{});
@@ -863,6 +864,10 @@ fn run(cfg: *Options) c_int {
             }
             const token_end = nowSeconds();
             if (!speculative) {
+                // Full ds4_session_eval scope; printing is outside the measured interval.
+                if (decode_token_times) report("ds4-bench: decode-time frontier=%d step=%d tokens=1 ms=%.3f\n", .{
+                    frontier, generated_count, (token_end - token_start) * 1000.0,
+                });
                 if (hash_values) |values| {
                     if (!decodeLogitsDiagnostic(session, frontier, generated_count, values)) {
                         report("ds4-bench: failed to hash/dump decoder logits at %d step %d\n", .{ frontier, generated_count });
