@@ -349,3 +349,29 @@ owns all samples, distribution drift and the retained tool-recovery trace.
 Presets, installed binaries and published main remain unchanged. The next slice
 compares the accumulated package against published `364ceeab` on recorded agent
 work, rather than adding isolated percentage gains.
+
+## Nineteenth question: requalify the accumulated package
+
+Five alternating recorded-session pairs against published `364ceeab` gave the
+candidate a lower mean time and less variation, with four pairs favoring it.
+Most of the mean saving came from decode. An unusually fast first baseline
+limits the conclusion; all samples remain. The replay's small, exact prefill
+path does not exercise the new indexer-query matrix projection, so its earlier
+large-prefill result remains separate evidence.
+
+The 3,371 full-vocabulary predictions match the earlier GPU candidate byte for
+byte: recent exact kernel changes add no drift on this replay. The package's
+existing difference from published routing remains. Both fresh coding agents
+finished, but the candidate treated adjacency as requiring touching endpoints,
+missing consecutive integer intervals and failing 30 oracle evaluations across
+10 cases. This is one
+generated solution per arm, not 30 independent failures or a diagnosis of the
+responsible runtime change.
+
+Keep the accumulated GPU package opt-in and retain the useful local reductions;
+do not promote the policy from this evidence. The
+[report](../../../speed-bench/experiments/2026-11-04-package-requalification/README.md)
+owns timings, quality tails, the failed implementation and unchanged publication
+status. The next slice separately qualifies the new prefill selectors with the
+current CPU-routing fast preset, rather than making their adoption depend on
+the experimental GPU policy.

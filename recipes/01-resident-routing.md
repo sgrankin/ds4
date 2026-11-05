@@ -147,8 +147,8 @@ did not decide this outcome. Native CPU samples confirm that host waits shifted
 away from selection, preserving useful groundwork. A controlled comparison of
 routing policies must separate that behavioral failure from prompt differences.
 The [controlled follow-up](../speed-bench/experiments/2026-11-04-resident-behavior/README.md)
-finds that completion varied across prompt and sampling conditions: all GPU
-intervals pass both controlled greedy prompts, while normal sampling retains
+finds that completion varied across prompt and sampling conditions: all three GPU
+refresh configurations passed both controlled greedy prompts, while normal sampling retains
 one GPU failure among five seeds versus none for current CPU routing. This
 narrow evidence neither identifies the earlier failure's cause nor establishes
 general coding accuracy. The policy remains experimental while exact kernel
@@ -163,8 +163,18 @@ promote the approximate GPU routing package.
 The [native-router fusion](../speed-bench/experiments/2026-11-04-post-simd-profile/README.md)
 combines selection and repair without additional drift on the tested histories.
 Repeated isolated tests reduce work when experts are missing, but five-pair
-model timings at both context sizes establish no whole-workload benefit. It
+model timings at both context sizes did not establish a whole-workload benefit. It
 remains opt-in; this does not promote the GPU routing policy.
+
+The [later package qualification](../speed-bench/experiments/2026-11-04-package-requalification/README.md)
+finds a lower five-pair recorded-session mean and less variation, with the
+candidate faster in four pairs. The fast first baseline remains in the result,
+so the size and repeatability of the gain are uncertain. Recent exact changes
+preserve the earlier candidate's full replay logits, while a fresh candidate
+coding solution fails the oracle's integer-adjacency cases. Retain the useful
+kernel work and the failed trace; keep the approximate policy opt-in rather
+than treating either one task or mean drift as a general quality verdict.
+
 Detailed encoder profiling changes batching and adds host overhead; its gap reduction is not a
 predicted ordinary-runtime saving. The
 [Apple Silicon manual](../docs/models/deepseek/apple-silicon.md#resident-expert-substitution)

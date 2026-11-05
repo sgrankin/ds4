@@ -387,6 +387,14 @@ their original route. This removes one dispatch without changing the FFN join
 or cache ownership. The [fusion experiment](../../../speed-bench/experiments/2026-11-04-post-simd-profile/README.md)
 owns its qualification; the path remains opt-in.
 
+The [accumulated package comparison](../../../speed-bench/experiments/2026-11-04-package-requalification/README.md)
+produced byte-identical logits to the earlier GPU candidate at all 3,371
+recorded decode positions. Against published CPU routing, its five-pair mean time was
+lower and less variable, but an unusually fast first baseline limits the speed
+conclusion. One fresh coding solution also missed integer-interval adjacency.
+These results support further optimization without establishing general agent
+quality or promoting the GPU policy into the fast presets.
+
 ### Executing the selected experts
 
 Metal uses batched routed matrix multiplication to group rows by expert. The

@@ -6,47 +6,40 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: can the large batched F16 projections use a more efficient matrix path?**
-One-hour slice: November 4, 21:43–22:43 Eastern. Fix runtime `d904029c`, the
-qualified RB4/unit-rescale settings, the opt-in prefill BF16/RoPE fusion,
-8,192-token chunks and a 64 GB expert cache. Keep GPU resident routing, SIMD,
-router fusion, address reuse, parallel FFN and refresh sixteen fixed.
+**Current question: does the accumulated package improve recorded agent work?**
+One-hour slice: November 4, 22:27–23:27 Eastern. Compare published `364ceeab`
+with runtime `909faab5`, using the newly rebuilt replay binary, the same model,
+64 GB expert cache and 8,192-token prefill chunks. Keep each binary in its
+matching source root. The candidate combines the qualified RB4/unit-rescale
+settings with GPU resident routing, address reuse, concurrent shared/routed
+experts, refresh sixteen, SIMD selection, router fusion, prefill BF16/RoPE fusion
+and the temporary indexer-query matrix projection. No runtime change is selected
+in this slice.
 
-Source inspection explains the scalar choice: published compressor and index
-keys must preserve their projection results across bulk prefill and suffix
-replay. The selected candidate changes only the temporary indexer-query
-projection, F16 weights of shape 1,280 → 4,096. Twelve 8,192-row calls account
-for about 1.3 seconds of summed encoder spans in the prior traces; this is not
-an additive latency saving.
+Use the existing recorded-session driver for five alternating profile-free
+pairs and a separate full-vocabulary teacher-logit pair. Retain every phase,
+first-step samples, outliers and order effects. Check one additional controlled
+reasoning-enabled coding task with the existing independent oracle; match its
+working directory, prompt, time, sampling and fresh prefix-cache conditions.
+This behavior check is not a task-latency comparison or a general accuracy
+estimate. The recent long-prompt task remains separate attribution evidence.
 
-`DS4_METAL_V41_PREFILL_INDEX_Q_MPP=1` will use the existing ordinary matrix
-path for that projection when TensorOps, shape, alignment, single-rank and
-non-quality conditions hold, with no exact-prefill override. Other projections
-retain their current dispatch. Keep BF16 rounding, RoPE, FP4 conversion and
-causal selection in order. The matrix reduction may change quantization and
-selected rows; measure this approximation rather than demanding identical
-logits. Published-key projection contracts stay unchanged, but query changes
-can indirectly alter later layer state. No new model format, loader or public
-backend interface is part of this slice.
+The outcome is a package qualification decision, not the sum of prior isolated
+percentage gains. Numerical differences are measured tradeoffs. If replay is
+neutral, retain useful local improvements and select the next dependency target
+from the profile rather than declaring their work useless. Do not change presets,
+installed binaries or published main during measurement; any promotion needs a
+concrete conclusion in the report.
 
-By twenty minutes into the slice, select the concrete implementation or record
-why the suspected opportunity is invalid. Check activation and fixed-history
-quality, then take at least five alternating profile-free pairs at 32K and 8K.
-Retain full phases, first-step latency, steady rates, every sample and variation.
-If timing is neutral, inspect the intended operation and dependency before
-choosing what to retain. Numerical differences are measured tradeoffs, not an
-automatic rejection. A later package comparison must still measure against
-published `364ceeab`; installed binaries and presets stay unchanged here.
-
-Keep one guarded model job and pause builds during final timing. Write one
-report under `2026-11-04-prefill-f16-projections/`, with raw artifacts under
-`.workspaces/hillclimb-20261104/18-prefill-f16-projections/`, then update the
-owning manual or recipe conclusion and one short journal entry. Publication
-remains separate.
+Keep one guarded model job and pause builds during final timing. Write one report
+under `2026-11-04-package-requalification/`, with raw artifacts under
+`.workspaces/hillclimb-20261104/19-package-requalification/`, then add one short
+journal entry and update an owning manual only if the qualification changes it.
 
 [Project direction and current status](../../docs/project.md) records the goals,
-implemented features and a few possible next milestones. Choose an outcome
-with the user before scheduling another experiment. Ideas are not work orders.
+implemented features and a few possible next milestones. The current timed
+authorization permits choosing the next bounded performance question; outside
+that authorization, choose an outcome with the user before starting new work.
 
 When work resumes, record only the selected question, fixed baseline, one-hour
 budget and decision criterion here. Keep results in one linked report and move
