@@ -205,6 +205,15 @@ All 512 checked predictions matched, and existing cache-pressure relief remains
 in force. The [storage manual](../docs/storage/expert-streaming.md#how-metal-stores-cached-experts)
 owns the resource-lifetime explanation.
 
+A [standing request without queue attachment](../speed-bench/experiments/2026-11-05-standing-slab-residency/README.md)
+avoids those added refresh waits, but brings back the original gaps before
+expert work. Five-pair comparisons at both context sizes are mixed and close
+to baseline; they do not establish an overall gain. Leave this policy off too.
+The useful distinction is between a request to prepare residency and associating
+the whole set with command execution. The results support testing that
+association's interaction with the existing shared-event handoff, without
+claiming that the driver mechanism has been identified.
+
 Detailed encoder profiling changes batching and adds host overhead; its gap reduction is not a
 predicted ordinary-runtime saving. The
 [Apple Silicon manual](../docs/models/deepseek/apple-silicon.md#resident-expert-substitution)

@@ -443,3 +443,20 @@ shared event. This does not prove a driver cause, but supports a bounded follow-
 that requests residency without attaching the whole slab set to every command
 buffer. Keep the implementation off by default for that follow-up; ordinary
 presets, installed binaries and published main remain unchanged.
+
+## Twenty-fourth question: request slab residency without queue attachment
+
+A standing request, with no queue association, showed no added refresh waits in
+its separate diagnostics, but the original fresh first-step gaps remained.
+All 512 checked predictions and hashes matched, and the cache-lifetime
+and forced-lock-failure checks passed. Five-pair timing at 8K and 32K was mixed
+and close to baseline. Do not select this policy: the targeted stall remains,
+and no overall gain is established. Small uncertain timing differences alone
+are not the reason for that decision.
+
+The [report](../../../speed-bench/experiments/2026-11-05-standing-slab-residency/README.md)
+records the samples and the changed profiles. Keep the residency infrastructure
+off while a bounded follow-up tests queue association with the shared-event
+handoff disabled. That uses an existing control to distinguish the interaction
+before adding another mechanism. Ordinary presets, installed binaries and
+published main remain unchanged.
