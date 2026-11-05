@@ -201,6 +201,7 @@ typedef struct {
 #endif
     uint8_t cache_slab_residency_attached;
     uint8_t cache_slab_residency_disabled;
+    uint8_t cache_slab_residency_used_batch;
     uint64_t cache_slab_residency_uses;
     uint32_t cache_slab_start_slot[DS4_METAL_STREAM_EXPERT_CACHE_MAX_SLABS];
     uint32_t cache_slab_slot_count[DS4_METAL_STREAM_EXPERT_CACHE_MAX_SLABS];

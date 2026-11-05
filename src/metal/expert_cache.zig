@@ -179,6 +179,8 @@ pub const Cache = struct {
     }
     pub fn batchCreated(self: Cache) void {
         self.state.cache_batch_seq = self.nextSequence();
+        // Both ordinary submissions and selected-event handoffs enter here.
+        self.state.cache_slab_residency_used_batch = 0;
     }
     pub fn batchCommitted(self: Cache) void {
         self.state.cache_pending_max_seq = @max(self.state.cache_pending_max_seq, self.state.cache_batch_seq);

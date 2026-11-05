@@ -91,6 +91,7 @@ bool ds4_metal_expert_slab_residency_add(ds4_metal_expert_cache_state *state,
              * Existing declarations retain hazard tracking in both modes. */
             [set addAllocation:buffer];
             [set commit];
+            state->cache_slab_residency_used_batch = 0;
             if (!state->cache_slab_residency_set) {
                 state->cache_slab_residency_set = set;
                 state->cache_slab_residency_uses = 0;
@@ -119,6 +120,13 @@ void ds4_metal_expert_slab_residency_use(void *command) {
     if (@available(macOS 15.0, *)) {
         id<MTLCommandBuffer> cb = (__bridge id<MTLCommandBuffer>)command;
         id<MTLResidencySet> set = state->cache_slab_residency_set;
+        const char *once_setting = getenv("DS4_METAL_STREAMING_EXPERT_SLAB_RESIDENCY_ONCE");
+        const bool once = cb == g_batch_cb && once_setting && !strcmp(once_setting, "1");
+        /* The active batch's creation hook resets this marker, so no raw CB
+         * identity survives its lifetime. Standalone CBs keep ordinary use;
+         * set commits/clear conservatively invalidate the current proof. */
+        if (once && state->cache_slab_residency_used_batch)
+            return;
         if (![cb respondsToSelector:@selector(useResidencySet:)]) {
             state->cache_slab_residency_disabled = 1;
             ds4_metal_expert_slab_residency_clear(state,
@@ -137,6 +145,8 @@ void ds4_metal_expert_slab_residency_use(void *command) {
                 (void)keepAlive;
             }];
         }
+        if (once)
+            state->cache_slab_residency_used_batch = 1;
         state->cache_slab_residency_uses++;
         if (g_timeline_enabled && g_timeline_batch && cb == g_batch_cb &&
             ds4_gpu_stream_expert_timing_summary_enabled())
@@ -169,6 +179,7 @@ void ds4_metal_expert_slab_residency_clear(ds4_metal_expert_cache_state *state,
 #endif
         state->cache_slab_residency_attached = 0;
         state->cache_slab_residency_set = nil;
+        state->cache_slab_residency_used_batch = 0;
         state->cache_slab_residency_uses = 0;
     }
 }
@@ -179,6 +190,7 @@ void ds4_metal_expert_retire_slab(ds4_metal_expert_cache_state *state, uint32_t 
             if (state->cache_slab_residency_set && state->cache_slabs[index]) {
                 [state->cache_slab_residency_set removeAllocation:state->cache_slabs[index]];
                 [state->cache_slab_residency_set commit];
+                state->cache_slab_residency_used_batch = 0;
             }
         }
 #endif
