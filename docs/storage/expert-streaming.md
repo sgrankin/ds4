@@ -126,6 +126,16 @@ fixed-history logit rows matched.
 The driver cause of the event-adjacent waits remains unproven. Co-resident helper
 performance and older Apple hardware have not been qualified.
 
+With shared-event overlap disabled, the refresh path still submits shared
+gate/up work before the routed handler prepares its cache entries and GPU
+addresses. Shared GPU execution can overlap that CPU preparation even when the
+selected experts are cached. The
+[submission-removal experiment](../../speed-bench/experiments/2026-11-05-refresh-shared-flush/README.md)
+reduced refresh command buffers without establishing a whole-workload gain;
+the separate submission remains. Putting both sets of work in one batch does
+not itself enable parallel FFN: the current streaming parallel path also
+requires its resident-only selection and cache-pin proof.
+
 ## M5 Max measurements
 
 On a 128 GB M5 Max, with automatic cache sizing and no speculative decoding:

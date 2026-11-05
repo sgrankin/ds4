@@ -6,36 +6,42 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: can queue-attached slab residency help when the shared-event handoff is disabled?**
-One-hour slice: November 5, 02:40 through 03:40 Eastern. The queue-attached
-experiment reduced the fresh first step but added repeated waits near shared
-events; a standing request removed those extra waits but restored the original
-gaps. Both results are retained. Now test the interaction using the existing
-`DS4_METAL_V41_ROUTE_SHARED_OVERLAP` switch, without adding another mechanism.
+**Current question: can refreshes avoid a separate shared-expert submission?**
+One-hour slice: November 5, 03:26 through 04:26 Eastern. The
+[residency/schedule combination](../experiments/2026-11-05-slab-event-interaction/README.md)
+reduces fresh first-step and complete-workload time but adds a small recurring
+decode cost. A full-token diagnostic places most of the fresh phase's added
+time in the seven later CPU refreshes; ordinary-step variation remains too.
 
-Run the already-built queue-attached runtime `5efd342f` in a matching frozen
-workspace, with its recorded binary hash. First take a diagnostic pair holding
-queue residency on while changing shared overlap from `1` to `0`.
-This switch also moves shared gate/up and down work on CPU-refresh layers;
-interpret it as a schedule comparison, not a pure event toggle. Then qualify
-the combined candidate (queue residency on, overlap off) against the selected
-pre-residency package (residency off, overlap on), using the same binary on both
-sides. Hold GPU resident routing, refresh interval 16, four-layer submissions,
-model, 64 GB cache, 4 GiB slabs, 8K chunks and workload fixed.
+The overlap-off refresh path submits shared gate/up work before entering routed
+expert execution. Check the data and resource dependencies, then test skipping
+that flush behind one opt-in selector. Selected expert I/O already starts before
+shared encoding. Removing the flush may help cache hits while losing useful I/O
+overlap on misses, so retain a constrained-cache or other actual-miss check.
+Do not change selected experts, numerical boundaries, cache pins or pressure
+relief. Keep the old path as the control; do not change other model families.
 
-Use fixed-history quality and at least five alternating pairs at 8K and 32K.
-Inspect fresh and warm first steps, complete 128-token decode, prefill, total
-inference and process wall. Separate diagnostic scope from comparative timing;
-do not infer a driver mechanism from an event-adjacent gap alone. Preserve
-existing cache pins, declarations, admission and pressure handling. One guarded
-heavy job at a time; no builds during timing. Current source and installed
-frontends need not change for this configuration experiment.
+Baseline runtime is `8bf87bbd`, closure `d0af7acc`, using the experiment 25
+candidate settings: queue residency on, shared-event overlap off, GPU resident
+routing, refresh interval 16, four-layer submissions, 64 GB cache, 4 GiB slabs
+and 8K chunks. Use the same new binary with the selector off/on. Inspect whether
+refresh command-buffer count falls from 91 toward 51 while ordinary steps stay
+at 11. The native per-token timer can distinguish refresh and ordinary cost
+without changing encoder grouping; it remains diagnostic.
 
-Keep raw artifacts under `.workspaces/hillclimb-20261104/25-slab-event-interaction/`
-and one concise report under `2026-11-05-slab-event-interaction/`. Record which
-comparison isolates overlap and which qualifies the combined package against
-the original baseline. Update owning documentation and one journal entry when
-closing. No main advancement or push is authorized.
+Use fixed-history quality and five alternating timing pairs at 8K and 32K,
+retaining first-step, complete decode, prefill/append, inference and wall scopes.
+If the main comparison is useful, include a bounded miss-heavy qualification;
+any performance conclusion there still needs five pairs. One guarded heavy
+job at a time, no builds during timing. Profile neutral results for shifted
+dependencies before deciding. Reuse existing drivers and stop at an answer.
+
+Keep raw artifacts under `.workspaces/hillclimb-20261104/26-refresh-shared-flush/`
+and one concise report under `2026-11-05-refresh-shared-flush/`. Update the owning
+manual, recipe conclusion and one short journal entry at closure. The selected
+experimental package still needs a periodic long-session comparison against
+published `364ceeab`; reserve a subsequent slice for that qualification.
+No main advancement or push is authorized.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. The current timed

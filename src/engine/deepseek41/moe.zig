@@ -249,10 +249,6 @@ pub const Moe = struct {
         const overlap_shared = early and graph.scalar_decode and graph.resident_route_gap > 0 and
             !graph.hc_ffn_deferred and !graph.predict_load.active and !services.oracle_deferred and
             overlap_setting != null and std.mem.eql(u8, std.mem.span(overlap_setting), "1");
-        const skip_shared_load_flush = early and !overlap_shared and graph.scalar_decode and
-            !graph.hc_ffn_deferred and !graph.predict_load.active and !services.oracle_deferred and
-            !present("DS4_V41_ROUTE_ORACLE") and
-            (if (c.getenv("DS4_METAL_V41_SKIP_SHARED_LOAD_FLUSH")) |value| std.mem.eql(u8, std.mem.span(value), "1") else false);
         var load = std.mem.zeroes(c.metal_graph_selected_async_load);
         var selected_ids: [c.DS4_MAX_EXPERT_USED]i32 = undefined;
         // Unlike the old C early exit after a failed predicted-load join,
@@ -371,10 +367,7 @@ pub const Moe = struct {
                 return false;
             }
         }
-        // Selected preads are already running and need no GPU completion. Keep
-        // shared work queued through their join; routed reads retain their pins
-        // and the later HC join consumes shared_mid in order. Misses can lose I/O overlap.
-        if (early and ((!overlap_shared and !skip_shared_load_flush and c.ds4_gpu_flush_commands() == 0) or
+        if (early and ((!overlap_shared and c.ds4_gpu_flush_commands() == 0) or
             c.ds4_gpu_routed_moe_set_selected_override(&selected_ids, shape.n_expert_used) == 0)) return false;
         if (balanced) c.ds4_gpu_tp_full_expert_bind(1);
         const routed_ok = c.ds4_gpu_routed_moe_one_tensor(routed, graph.gate, graph.up, graph.mid, graph.experts, model.map, model.size, layer.ffn_gate_exps.*.abs_offset, layer.ffn_up_exps.*.abs_offset, layer.ffn_down_exps.*.abs_offset, layer.ffn_gate_exps.*.type, layer.ffn_down_exps.*.type, table.gate_expert_bytes, gate_row, table.down_expert_bytes, down_row, shape.n_embd, shape.n_ff_exp, shape.n_embd, if (balanced) graph.selected_half else graph.selected, if (balanced) graph.route_weights_half else graph.route_weights, shape.n_expert, if (balanced) shape.n_expert_used / 2 else shape.n_expert_used, shape.swiglu_clamp_exp, graph.norm, null, index, !graph.streaming) != 0;

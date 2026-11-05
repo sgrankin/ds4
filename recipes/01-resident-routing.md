@@ -225,6 +225,16 @@ Disabling overlap also changes shared-expert scheduling and fusion, so this
 does not isolate event signaling as the cause. CPU-routing presets remain
 unchanged; the complete report owns the measured tradeoff and its limits.
 
+The [next scheduling test](../speed-bench/experiments/2026-11-05-refresh-shared-flush/README.md)
+removed the separate shared-work submission on CPU refreshes. It reduced
+command-buffer count but did not establish an overall gain; complete fresh
+decode was slower in nine of ten pairs. The standalone selector was removed.
+Quality remained exact at both primary frontiers and with a smaller cache that
+performed actual scalar expert reads. The useful follow-up is an explicit
+all-hit admission path for parallel shared/routed work, with preserved pins
+and serial miss fallback. The submission change alone does not establish that
+capability or explain the measured slowdown.
+
 Detailed encoder profiling changes batching and adds host overhead; its gap reduction is not a
 predicted ordinary-runtime saving. The
 [Apple Silicon manual](../docs/models/deepseek/apple-silicon.md#resident-expert-substitution)

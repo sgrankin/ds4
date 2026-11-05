@@ -480,3 +480,26 @@ driver cause. The [report](../../../speed-bench/experiments/2026-11-05-slab-even
 owns the samples and scope limits. Queue residency replaces the unsuccessful
 request-only implementation behind the existing opt-in flag. CPU presets,
 installed frontends and published main remain unchanged.
+
+## Twenty-sixth question: omit the shared-work submission on refreshes
+
+Skipping one flush keeps shared gate/up and routed work in the same command
+buffer, reducing refresh submissions with matching measured kernels, cache
+counters and selected-load sequences in the diagnostics. It did not establish
+an overall gain: complete fresh decode was
+slower in nine of ten pairs across 8K and 32K. Remove the standalone selector;
+all 768 paired logit rows across the primary and smaller-cache configurations
+matched, including a case with confirmed scalar reads and cache evictions.
+The [report](../../../speed-bench/experiments/2026-11-05-refresh-shared-flush/README.md)
+retains every timing sample and the scope of those checks.
+
+The dependency inspection remains useful. The old flush can overlap shared GPU
+work with CPU cache/address preparation. The measured bind subtotal covers only
+part of that preparation and cannot establish the cause of the timing
+difference. Keeping both computations in one
+batch removes a boundary needed for parallel FFN, yet the current parallel path
+also requires a resident-only selection proof. A bounded follow-up must admit
+only an exact cached selection, preserve its pins and use the serial path on
+misses. Neither fewer submissions nor neutral timing establishes that future
+gain. The prior queue-residency latency candidate remains available; presets,
+installed frontends and main are unchanged.
