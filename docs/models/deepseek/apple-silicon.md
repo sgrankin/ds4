@@ -366,6 +366,18 @@ found decode benefits with matching measured logits against serial GPU routing;
 it does not remove the resident policy's quality tradeoff. Presets still leave
 this experimental route disabled.
 
+Within GPU routing, `DS4_METAL_V41_RESIDENT_GPU_SIMD=1` distributes the search
+for each missing expert across one 32-lane SIMD group. The slots are still
+repaired in order: every lane keeps the same six IDs, excluding both native
+residents and earlier replacements. A maximum-score reduction followed by a
+minimum-ID reduction preserves the scalar search's tie rule. The first eligible
+candidate's NaN behavior and the trace's accumulation order are also preserved;
+native mixture weights are untouched. The
+[SIMD experiment](../../../speed-bench/experiments/2026-11-04-resident-simd/README.md)
+records hardware checks and the cost of all-hit as well as missing-expert cases.
+This flag changes execution of the existing approximate policy, not the policy
+itself; unset or `0` retains the scalar search.
+
 ### Executing the selected experts
 
 Metal uses batched routed matrix multiplication to group rows by expert. The

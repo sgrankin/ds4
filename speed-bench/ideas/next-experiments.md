@@ -6,36 +6,41 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: can SIMD shorten resident expert selection without changing its choices?**
-One-hour slice: November 4, 19:21–20:21 Eastern. Keep runtime `1b692d25`'s
-GPU resident policy, refresh sixteen, address reuse, parallel FFN and 64 GB
-expert cache fixed. The [behavior qualification](../experiments/2026-11-04-resident-behavior/README.md)
-retains a bounded completion failure and does not promote this package. This
-item changes kernel execution, not that policy or sampling.
+**Current question: what limits decode after SIMD resident selection, and can one small change shorten it?**
+One-hour slice: November 4, 20:17–21:17 Eastern. Fix runtime `e5d12861`,
+GPU resident routing with SIMD, refresh sixteen, address reuse, parallel FFN,
+the existing prefill settings and 64 GB expert cache. The
+[SIMD report](../experiments/2026-11-04-resident-simd/README.md) retains the exact
+execution change as an opt-in, with mixed attribution timings and no GPU-policy
+promotion. Keep policy and sampling fixed during this follow-up.
 
-First measure the existing resident-repair kernel, which searches experts on
-one GPU lane. Use existing Metal fixtures and bounded diagnostics. Implement an
-explicit SIMD search preserving native slot weights, replacement order, unique
-resident choices and lower-ID tie breaking. Check ordinary all-hit cases as
-well as partial and all-missing cases, supported expert counts and numerical
-boundaries. Repeated microbenchmarks must restore the original selected IDs;
-otherwise the first repair makes later iterations trivial.
+First inspect a bounded 32K scalar-versus-SIMD diagnostic with native command
+grouping. Existing cumulative GPU spans and host completion records can separate
+submitted GPU work from host waits, but neither is a GPU-utilization counter.
+Detailed command-buffer records stop after 400 rows; do not claim they cover
+warm decode if prefill consumed the limit. Use existing controls and a bounded
+CPU stack sample. A separate encoder timeline may rank operations, with its
+known batching and logging interference stated explicitly.
 
-Compare scalar and SIMD operation cost with at least five alternating samples
-per side. Then use five alternating profile-free 32K model pairs to separate
-attribution within the GPU route from its combined result against ordinary CPU
-routing. Include 8K if the slice permits, full-vocabulary fixed-history checks
-and first-step/complete-phase timing. Keep every sample and variation. If the
-model result is neutral, inspect whether the repair cost fell and exposed another
-GPU dependency before deciding what to keep. Detailed encoder timelines alter
-batching; do not treat their gaps as native latency savings.
+By about twenty minutes into the slice, choose one concrete kernel or dependency
+change from that evidence. Parallel source inspection and fixture preparation
+must serve that choice. Preserve exact routing; do not add a new cache policy,
+loader or profiling framework. If no justified implementation emerges, record
+the profile and a specific next question rather than inventing a change.
 
-Use a temporary opt-in for the candidate, with installed binaries and presets
-unchanged until measured. Keep one guarded model job; pause builds during final
-timing. Write one report under `2026-11-04-resident-simd/`, raw artifacts under
-`.workspaces/hillclimb-20261104/15-resident-simd/`, and update the recipe conclusion
-and one short journal entry. No unrelated quality-policy or loader work in this
-slice. New experiments and publication remain separate decisions.
+For a candidate, check activation and fixed-history logits, then measure at least
+five alternating profile-free samples per side at 32K and, if time permits, 8K.
+Retain first-token, complete-phase and steady timing, every sample and variation.
+If the total is neutral, inspect whether the intended dependency changed before
+deciding whether it supports a useful follow-on. A later combined comparison
+must still establish benefit against the original baseline.
+
+Keep one guarded model job, builds paused during final timing, and installed
+binaries and presets unchanged. Write one result report under
+`2026-11-04-post-simd-profile/`, raw artifacts under
+`.workspaces/hillclimb-20261104/16-post-simd-profile/`, then update the owning
+manual or recipe conclusion and one short journal entry. Publication remains a
+separate decision.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. Choose an outcome

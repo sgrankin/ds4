@@ -275,3 +275,23 @@ to performance work without changing routing policy. The
 owns the settings and results; the benchmarking guide now explains the prompt,
 cache and sampling controls. The next target is the resident kernel's single-lane
 search, preserving its existing selections while measuring a SIMD alternative.
+
+## Fifteenth question: parallelize resident expert selection
+
+The resident repair kernel searched all experts on one GPU lane. A 32-lane
+search preserves its replacement order, tie rules and native mixture weights,
+including the scalar implementation's numerical edge cases. Hardware fixtures
+and all 512 fixed-history logit rows and hashes matched. Repeated isolated tests
+found much cheaper searches when experts were missing, with a small all-hit
+cost. This changes execution of the existing approximate GPU policy, not its
+quality tradeoff against CPU routing.
+
+Retain the small SIMD implementation as an explicit opt-in. Five-pair 32K
+attribution improved fresh decode in every pair; 8K fresh complete decode was
+slower in four of five, while warm results were more favorable. First-token and
+append variation prevent a general complete-workload improvement claim. The
+[report](../../../speed-bench/experiments/2026-11-04-resident-simd/README.md)
+owns the isolated and combined comparisons, every sample and the retained slow
+cases. Presets and installed binaries remain unchanged. The next selected slice
+will inspect the updated dependency profile before choosing another change;
+removing this search cost does not itself identify the next bottleneck.

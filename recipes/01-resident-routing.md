@@ -153,6 +153,13 @@ one GPU failure among five seeds versus none for current CPU routing. This
 narrow evidence neither identifies the earlier failure's cause nor establishes
 general coding accuracy. The policy remains experimental while exact kernel
 optimization continues.
+The [SIMD search follow-up](../speed-bench/experiments/2026-11-04-resident-simd/README.md)
+preserves the GPU policy's tested choices while distributing each missing-expert
+search across 32 lanes. It substantially reduces isolated repair cost and improves
+fresh 32K decode in all five attribution pairs. Shorter-context results are mixed,
+including slower complete fresh decode, and total inference remains inconclusive.
+Keep this exact execution change behind its opt-in; it does not qualify or
+promote the approximate GPU routing package.
 Detailed encoder
 profiling changes batching and adds host overhead; its gap reduction is not a
 predicted ordinary-runtime saving. The
