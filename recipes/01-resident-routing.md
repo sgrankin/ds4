@@ -146,6 +146,13 @@ without an implementation at both tested budgets. Fixed-history quality alone
 did not decide this outcome. Native CPU samples confirm that host waits shifted
 away from selection, preserving useful groundwork. A controlled comparison of
 routing policies must separate that behavioral failure from prompt differences.
+The [controlled follow-up](../speed-bench/experiments/2026-11-04-resident-behavior/README.md)
+finds that completion varied across prompt and sampling conditions: all GPU
+intervals pass both controlled greedy prompts, while normal sampling retains
+one GPU failure among five seeds versus none for current CPU routing. This
+narrow evidence neither identifies the earlier failure's cause nor establishes
+general coding accuracy. The policy remains experimental while exact kernel
+optimization continues.
 Detailed encoder
 profiling changes batching and adds host overhead; its gap reduction is not a
 predicted ordinary-runtime saving. The

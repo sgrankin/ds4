@@ -330,6 +330,18 @@ six residents retain the original path. It is not enabled by a preset. The
 records its measured dependency change, quality costs and remaining performance
 work; [MoE orchestration](../../../src/engine/deepseek41/moe.zig) owns eligibility.
 
+Here, a refresh means running the configured CPU routing policy, not restoring
+all six native choices. With cap five, substitution occurs before demand loading;
+the strongest native contributor is protected, but replaced missing experts
+need not enter the cache. GPU-only steps also skip selected-expert hotness and
+recency updates while the token-aging clock continues. Changing the refresh
+interval can therefore change both immediate substitution and the cache's later
+eviction choices. Each layer still takes a fresh residency snapshot and pins
+its candidates; the interval does not make the address mask stale. These policy
+differences matter when evaluating quality on newly generated agent histories,
+as the [controlled behavior study](../../../speed-bench/experiments/2026-11-04-resident-behavior/README.md)
+explains.
+
 Within this prototype, `DS4_METAL_V41_RESIDENT_GPU_REUSE_ADDR=1` skips repeated
 publication of cached addresses. Streaming cache installation already publishes
 them when address tables are enabled, and eviction clears them before retiring

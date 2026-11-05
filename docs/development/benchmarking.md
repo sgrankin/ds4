@@ -79,6 +79,24 @@ remain instrumented: use them for screening, then measure profile-off latency
 and practical tasks. Prompt-bootstrap intervals are descriptive and do not
 replace independent task coverage.
 
+## Generated agent checks
+
+An identical user task is not necessarily an identical model prompt. For
+controlled noninteractive comparisons, reuse one empty `--chdir` directory,
+archive its output between arms, and keep manifests and logs outside it. Set
+the same `DS4_AGENT_TEST_TIME` and `TZ` to hold the injected session time fixed.
+Use a fresh `DS4_AGENT_CACHE_DIR` per arm so the automatic system-prefix
+checkpoint does not carry activations across configurations. The
+[controlled routing study](../../speed-bench/experiments/2026-11-04-resident-behavior/README.md)
+shows why these controls matter.
+
+State the sampling settings and budget. Greedy generation (`--temp 0`) is useful
+for a controlled probe but differs from ordinary agent sampling; include normal
+sampling with recorded seeds when assessing practical behavior. The agent's
+`--tokens` limit applies to each model call, so an interrupted tool call can be
+recovered later. Judge the completed artifact and transcript, not an interim
+log line, and distinguish oracle case coverage from independent task trials.
+
 ## Metal dependency profiles
 
 `DS4_METAL_ENCODER_TIMELINE=PATH` records command-buffer and encoder intervals,

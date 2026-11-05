@@ -256,3 +256,22 @@ work. Keep that groundwork and the GPU route as explicit opt-ins. The
 owns timing, quality, retry and diagnostic evidence. The next bounded question
 holds the full prompt and working directory fixed while comparing routing
 policies; GPU execution versus queue gaps remains a subsequent profiling target.
+
+## Fourteenth question: isolate the coding completion failure
+
+Holding the task directory, injected time and visible files fixed, with fresh
+system-prefix caches, changed the picture. All five routing configurations
+passed the longer greedy prompt. With the background removed, both CPU-routing
+controls produced no file while all three GPU configurations passed. At normal
+sampling over five matched seeds, current CPU routing passed five times and GPU
+refresh sixteen passed four; its remaining run exhausted its call budget planning.
+Every completed implementation passed the independent oracle.
+
+These are limited trajectories on one problem, not a general accuracy estimate
+or a diagnosis of the earlier failure. No weight, address or lifetime defect was
+found. Keep the GPU package experimental, retain the failed traces and return
+to performance work without changing routing policy. The
+[controlled report](../../../speed-bench/experiments/2026-11-04-resident-behavior/README.md)
+owns the settings and results; the benchmarking guide now explains the prompt,
+cache and sampling controls. The next target is the resident kernel's single-lane
+search, preserving its existing selections while measuring a SIMD alternative.

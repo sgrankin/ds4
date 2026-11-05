@@ -155,7 +155,9 @@ pub const Moe = struct {
             "DS4_METAL_DISABLE_IQ2_SELECTED_EXPERT_VIEWS", "DS4_METAL_DISABLE_STREAMING_EXPERT_ADDR_TABLE", "DS4_METAL_ENABLE_STREAMING_FULL_EXPERT_ADDR_TABLE",
             "DS4_METAL_MOE_WRITE_CLAMPED_ACT",             "DS4_METAL_DISABLE_ROUTED_PAIR_SWIGLU_FUSION",
         }) |name| if (present(name)) return false;
-        // The ordinary route/load step refreshes the expert cache periodically.
+        // The configured ordinary route/load step refreshes the cache periodically.
+        // It still applies CPU substitution before loading: cap five protects
+        // the strongest native choice but need not admit all six native experts.
         // Other steps use only resident experts, accepting weaker substitutions
         // in exchange for avoiding the per-layer selected-ID readback. Position
         // makes the cadence reproducible across checkpoint restores.
