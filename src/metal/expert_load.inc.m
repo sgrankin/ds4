@@ -92,6 +92,9 @@ bool ds4_metal_expert_seed_blit(const ds4_metal_expert_copy_sources *sources,
                                 uint32_t count, uint64_t gate_bytes, uint64_t down_bytes) {
     @autoreleasepool {
         ds4_gpu_close_batch_encoder();
+        /* Seeding writes the same slabs later read by routed kernels. Associate
+         * their set here too, while initialization is already doing GPU work. */
+        ds4_metal_expert_slab_residency_use((__bridge void *)g_batch_cb);
         id<MTLBlitCommandEncoder> blit =
             ds4_gpu_blit_encoder(g_batch_cb, "expert_cache_fill", count * 3u);
         if (!blit)
