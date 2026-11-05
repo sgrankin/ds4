@@ -668,3 +668,17 @@ without explaining it. The [report](../../../speed-bench/experiments/2026-11-05-
 retains all samples, outliers, ownership checks and limits. This closes the
 callback investigation for now; the selected package, presets, installed
 frontends and main remain unchanged.
+
+## Thirty-sixth question: read the preceding PRE directly
+
+Reading the prior FFN split directly removed 39 tiny PRE blits per scalar
+token. All 768 checked output rows matched, and fused and fallback session
+checks passed. Five-pair 8K and 32K timings were mixed; a direct 8K comparison
+against the frozen selected runtime did not confirm the small initial gain.
+This does not establish a meaningful slowdown either.
+
+The profile confirmed the removed boundaries, but its gap sums were not an
+additive latency breakdown. Source review found no simple fusion unlocked by
+the selector: the next HC input already fuses its main work. Remove this
+prototype and preserve the [report](../../../speed-bench/experiments/2026-11-05-direct-pre/README.md)
+and tested revision for future work. The selected package remains unchanged.

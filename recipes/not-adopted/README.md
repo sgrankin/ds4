@@ -6,6 +6,7 @@ not every possible version of the idea.
 
 | Idea | Why it was not adopted | Detail |
 |---|---|---|
+| Direct PRE input between scalar layers | Removed 39 blits per token with exact checked logits, but five-pair comparisons found mixed decode timing and a frozen-runtime comparison did not confirm the small 8K gain. No simple follow-up fusion required the selector. Prototype removed; sampled gap sums were not recoverable elapsed time. | [Direct PRE experiment](../../speed-bench/experiments/2026-11-05-direct-pre/README.md) |
 | Transient INT8 IQ2 prefill | Five samples per side: first version adds 34.06% prefill/35.09% task time; activation reuse saves 105 MiB scratch but still adds 18.49% prefill/34.70% task time. All 40 answers pass; the rejection is performance, not exactness. Runtime hooks removed; patches retained. | [Integer arithmetic experiment](integer-prefill.md) |
 | Segmented LRU expert eviction | A.73% replay gain became 6.45% fresh/1.77% restored actual-agent regressions. Runtime support was removed; the offline simulator is not a deployable flag. | [Cache-policy chapter](../06-cache-policy-and-dead-ends.md#route-frequency-aging) |
 | Two-layer prefetch lookahead |87–94 tokens/s versus 128–130 controls despite exact logits; reduced explicit wait did not mean lower completion time. | [Other scheduling directions](../06-cache-policy-and-dead-ends.md#other-tested-directions-not-promoted) |

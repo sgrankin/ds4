@@ -227,6 +227,13 @@ their result with residual expansion. When steering or tracing needs the
 intermediate result, the applicable path falls back to separate operations.
 The deferred hyper-connection mixer still requires non-streaming execution,
 among its other eligibility checks.
+Scalar decode still copies the FFN's four PRE weights into the persistent PRE
+tensor between layers. Reading the preceding FFN split directly removed 39
+blits per token in a tested prototype, with exact checked outputs, but did not
+establish a useful native latency gain. The
+[direct PRE experiment](../../../speed-bench/experiments/2026-11-05-direct-pre/README.md)
+also found no simple fusion that required keeping the selector. Its runtime
+prototype was removed; fewer sampled encoder gaps alone did not justify it.
 The [upstream performance account](upstream-performance.md) explains the
 bottlenecks and upstream measurements; the
 [catch-up journal](../../lab/journal/2026-11-02-upstream-catchup.md) records

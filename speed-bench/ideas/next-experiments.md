@@ -6,21 +6,16 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Experiment 35 closed: deferred residency-set ownership.**
-The November 5, 11:16–12:16 Eastern slice implemented and tested runtime
-`1e0e5841`. It removes per-command set captures while retaining cleared sets
-through the existing full drain. Focused fixtures and paired quality checks pass,
-but primary and direct five-pair comparisons do not establish a consistent net
-benefit. Leave the combined settings unselected and keep package 32 unchanged.
-The [report](../experiments/2026-11-05-deferred-set-release/README.md) owns the
-samples, outliers, profile and native diagnostic, lifetime evidence and limits.
-The scratch correctness repair from experiment 34 remains retained.
+**Completed question: avoid intermediate four-float PRE blits in scalar decode.**
+The November 5, 12:16–13:16 Eastern budget closed with no adoption. The
+[report](../experiments/2026-11-05-direct-pre/README.md) preserves exact output
+checks, five-pair timing comparisons, the removed boundaries and the lack of a
+concrete follow-up fusion. The prototype was removed; source matches `a31acf97`
+and the selected package 32 settings remain unchanged. No model job is running.
 
-The next candidate is scalar decode's repeated four-float PRE publication:
-profiles show gaps around these tiny blits, and a direct consumer may avoid
-closing the compute encoder. Source review must preserve all consumers and
-first/final state publication before implementation. No new experiment or
-runtime edit has started yet. Main and installed frontends remain unchanged.
+Select the next bounded target from the remaining compute costs before editing
+runtime code. The user's timed authorization remains active; this completed
+experiment does not pause it. Presets, installed frontends and main are unchanged.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. The current timed
