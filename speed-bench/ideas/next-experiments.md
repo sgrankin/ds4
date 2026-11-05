@@ -6,16 +6,17 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Completed question: avoid intermediate four-float PRE blits in scalar decode.**
-The November 5, 12:16–13:16 Eastern budget closed with no adoption. The
-[report](../experiments/2026-11-05-direct-pre/README.md) preserves exact output
-checks, five-pair timing comparisons, the removed boundaries and the lack of a
-concrete follow-up fusion. The prototype was removed; source matches `a31acf97`
-and the selected package 32 settings remain unchanged. No model job is running.
+**Completed question: two SIMD groups for scalar Q8 output projection.**
+The November 5, 13:10–14:10 Eastern budget closed early with no adoption.
+The [report](../experiments/2026-11-05-output-q8/README.md) preserves the verified
+activation, numerical drift, five-pair timing results and profiling limits.
+The selector was removed; source matches `f7549a01`, which restores `a31acf97`.
+Selected package 32 remains fixed, with deduplicated residency, unretained
+command buffers and deferred set release off. No model job is running.
 
-Select the next bounded target from the remaining compute costs before editing
-runtime code. The user's timed authorization remains active; this completed
-experiment does not pause it. Presets, installed frontends and main are unchanged.
+Review the prior row-layout experiments before selecting the next bounded
+target. The timed authorization remains active; this closure does not pause it.
+Presets, installed frontends and main remain unchanged.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. The current timed

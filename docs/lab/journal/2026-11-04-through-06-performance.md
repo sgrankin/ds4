@@ -682,3 +682,18 @@ additive latency breakdown. Source review found no simple fusion unlocked by
 the selector: the next HC input already fuses its main work. Remove this
 prototype and preserve the [report](../../../speed-bench/experiments/2026-11-05-direct-pre/README.md)
 and tested revision for future work. The selected package remains unchanged.
+
+## Thirty-seventh question: two SIMD groups for the output projection
+
+Reducing the scalar Q8 output-B projection from four SIMD groups to two reused
+the existing kernel but changed dot-product association. The local selector
+activated as intended; fixed-history drift was modest with the larger cache
+and materially larger with the smaller cache. No practical task check was run.
+
+Remove the selector. Five-pair comparisons did not establish a consistent
+decode gain, and the profile showed neither lower target spans nor a newly
+exposed dependency. This is a measured tradeoff that did not earn its cost,
+not a requirement for exact output. The
+[report](../../../speed-bench/experiments/2026-11-05-output-q8/README.md)
+preserves all samples, numerical tails and the tested revision. Package 32,
+presets, installed frontends and main remain unchanged.

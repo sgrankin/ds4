@@ -234,6 +234,12 @@ establish a useful native latency gain. The
 [direct PRE experiment](../../../speed-bench/experiments/2026-11-05-direct-pre/README.md)
 also found no simple fusion that required keeping the selector. Its runtime
 prototype was removed; fewer sampled encoder gaps alone did not justify it.
+The scalar Q8 output-B projection normally uses four SIMD groups per output
+pair on a single host. A [local two-group trial](../../../speed-bench/experiments/2026-11-05-output-q8/README.md)
+changed the dot-product reduction order without improving the recorded target
+kernel spans. Five-pair decode results were mixed, with larger numerical drift
+under a smaller expert cache. The local selector was removed; explicit global
+NSG overrides retain their existing behavior.
 The [upstream performance account](upstream-performance.md) explains the
 bottlenecks and upstream measurements; the
 [catch-up journal](../../lab/journal/2026-11-02-upstream-catchup.md) records
