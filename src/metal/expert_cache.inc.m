@@ -67,10 +67,9 @@ bool ds4_metal_expert_slab_residency_add(ds4_metal_expert_cache_state *state,
     @autoreleasepool {
 #if TARGET_OS_OSX
         if (@available(macOS 15.0, *)) {
-            if (!g_device || !g_queue ||
-                ![g_queue respondsToSelector:@selector(addResidencySet:)] ||
-                ![g_queue respondsToSelector:@selector(removeResidencySet:)]) {
-                fprintf(stderr, "ds4: streaming expert slab residency queue unavailable; using ordinary slab declarations\n");
+            if (!g_device ||
+                ![g_device respondsToSelector:@selector(newResidencySetWithDescriptor:error:)]) {
+                fprintf(stderr, "ds4: streaming expert slab residency device unavailable; using ordinary slab declarations\n");
                 return false;
             }
             id<MTLResidencySet> set = state->cache_slab_residency_set;
@@ -86,18 +85,18 @@ bool ds4_metal_expert_slab_residency_add(ds4_metal_expert_cache_state *state,
                     return false;
                 }
             }
-            /* Commit only at slab allocation. Queue attachment carries this
-             * set into subsequent commands; existing encoder declarations
-             * still provide hazard tracking. No warmup or residency request. */
+            /* Commit only at slab allocation. A single standing request covers
+             * later additions without attaching every slab to each command.
+             * Existing encoder declarations still provide actual-use residency
+             * and hazard tracking if Metal defers the request under pressure. */
             [set addAllocation:buffer];
             [set commit];
             if (!state->cache_slab_residency_set) {
+                [set requestResidency];
                 state->cache_slab_residency_set = set;
-                [g_queue addResidencySet:set];
-                state->cache_slab_residency_attached = 1;
             }
             if (profile)
-                fprintf(stderr, "ds4: streaming expert slab residency add allocations=%llu bytes=%.2f GiB queue=1\n",
+                fprintf(stderr, "ds4: streaming expert slab residency add allocations=%llu bytes=%.2f GiB mode=request-only\n",
                         (unsigned long long)set.allocationCount,
                         (double)set.allocatedSize / 1073741824.0);
             return true;
@@ -115,19 +114,15 @@ void ds4_metal_expert_slab_residency_clear(ds4_metal_expert_cache_state *state,
             id<MTLResidencySet> set = state->cache_slab_residency_set;
             if (set) {
                 if (profile)
-                    fprintf(stderr, "ds4: streaming expert slab residency clear reason=%s allocations=%llu bytes=%.2f GiB\n",
+                    fprintf(stderr, "ds4: streaming expert slab residency clear reason=%s allocations=%llu bytes=%.2f GiB mode=request-only\n",
                             reason, (unsigned long long)set.allocationCount,
                             (double)set.allocatedSize / 1073741824.0);
-                if (state->cache_slab_residency_attached && g_queue &&
-                    [g_queue respondsToSelector:@selector(removeResidencySet:)])
-                    [g_queue removeResidencySet:set];
                 [set endResidency];
                 [set removeAllAllocations];
                 [set commit];
             }
         }
 #endif
-        state->cache_slab_residency_attached = 0;
         state->cache_slab_residency_set = nil;
     }
 }

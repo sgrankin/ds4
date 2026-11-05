@@ -193,13 +193,12 @@ typedef struct {
     DS4_EXPERT_STRONG ds4_metal_expert_buffer_ref cache_down_addr_buffers[DS4_METAL_STREAM_EXPERT_CACHE_MAX_LAYER];
     DS4_EXPERT_STRONG ds4_metal_expert_buffer_ref cache_slabs[DS4_METAL_STREAM_EXPERT_CACHE_MAX_SLABS];
     /* Only the existing slab allocations join this engine-owned set. Native
-     * policy controls admission; ARC leaves own the handle and queue link. */
+     * policy controls admission; ARC leaves own the handle and standing request. */
 #ifdef __OBJC__
     __strong id cache_slab_residency_set;
 #else
     void *cache_slab_residency_set;
 #endif
-    uint8_t cache_slab_residency_attached;
     uint8_t cache_slab_residency_disabled;
     uint32_t cache_slab_start_slot[DS4_METAL_STREAM_EXPERT_CACHE_MAX_SLABS];
     uint32_t cache_slab_slot_count[DS4_METAL_STREAM_EXPERT_CACHE_MAX_SLABS];

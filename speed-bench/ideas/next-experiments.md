@@ -6,33 +6,35 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: can bounded streaming-slab residency remove first-decode gaps?**
-One-hour slice: November 5, 01:27 through 02:27 Eastern. Start from runtime
-`909faab5` at closure `7435eca0`, holding the selected experimental GPU package
-from `2026-11-05-first-decode-admission/candidate-settings.json` fixed. The model,
-64 GB expert cache, 4 GiB slabs, 8K chunks and four-layer submissions remain fixed.
-Early address dispatch did not remove the roughly 0.8-second first scalar
-step after prefill. Resource admission is a hypothesis, not an established cause.
+**Current question: can a standing slab-residency request preserve the fresh-step gain without refresh stalls?**
+One-hour slice: November 5, 02:04 through 03:04 Eastern. The queue-attached
+candidate at runtime `5efd342f` reduced the fresh first step but slowed complete
+decode in every pair at 8K and 32K. Its profile replaced large gaps between
+command buffers with repeated waits near shared-event boundaries. Normal encoder
+grouping confirmed the shift; the driver mechanism remains unresolved.
 
-Test one opt-in, engine-owned Metal residency set containing only the actual
-streaming slab buffers. Retain existing resource declarations and cache pins.
-Release the set before cache pressure relief or trimming so it cannot defeat
-memory reclamation; clear it during engine teardown. Do not map the whole model,
-add a warm-up kernel or change the resident-expert policy in this slice.
-The shared Metal queue means co-resident helper behavior remains a qualification
-limit. Measure full prefill, complete decode and process wall to catch shifted
-cost, alongside the first-step interval and a separate dependency profile.
+Change only the residency policy: replace queue attachment with one standing
+`requestResidency` after initial set creation. Later slab additions still commit
+into that set. Keep existing resource declarations, pins, selected-ID overlap,
+cache policy and pressure teardown. Remove the unused queue-attachment state
+rather than adding another permanent mode. The existing flag remains opt-in;
+its value `1` now selects the candidate policy at the new recorded revision.
+Apple exposes standing requests separately from queue attachment; do not assume
+that either guarantees residency under all memory pressure.
 
-Use at least five alternating pairs at 8K and 32K, fresh and warm phases, plus
-fixed-history logits. Neutral results can justify a bounded follow-up only when
-the changed profile shows useful work or waiting removed. Preserve the admission
-lock and pressure guard; run one heavy model job, with no unrelated builds during
-timing. Keep runtime behavior opt-in, and close this question within the slice.
+Use the unchanged experimental GPU settings from
+`2026-11-05-first-decode-admission/candidate-settings.json`, with the new flag
+`0` versus `1`. Hold the model, 64 GB cache, 4 GiB slabs, 8K chunks and four-layer
+submissions fixed. Run the bounded cache-lifetime fixture, fixed-history quality,
+and at least five alternating pairs each at 8K and 32K. Check fresh and warm
+first steps, full decode, prefill, inference totals and process wall. Compare the
+profile with the previous candidate to determine whether the new wait disappears
+or simply moves. No unrelated builds during timing; one guarded heavy job.
 
-Keep raw artifacts under `.workspaces/hillclimb-20261104/23-slab-residency/`
-and one concise report under `2026-11-05-streaming-slab-residency/`. Update the
-owning manual, recipe conclusion and short journal entry. No main advancement
-or push is authorized.
+Keep raw artifacts under `.workspaces/hillclimb-20261104/24-standing-slab-residency/`
+and one concise report under `2026-11-05-standing-slab-residency/`. Update the
+owning storage manual, recipe conclusion and short journal entry. No main
+advancement, push or preset promotion is authorized by a diagnostic result alone.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. The current timed
