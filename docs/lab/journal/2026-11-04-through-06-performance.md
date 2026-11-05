@@ -524,3 +524,22 @@ CPU preparation, but the diagnostics do not establish a complete cause.
 The [report](../../../speed-bench/experiments/2026-11-05-cached-refresh-parallel/README.md)
 owns every sample and scope limit. The next slice qualifies the accumulated
 selected package against published `364ceeab` before another runtime change.
+
+## Twenty-eighth question: qualify the accumulated package on a recorded session
+
+Five alternating pairs against published `364ceeab` give a modest gain:
+recorded-session model time averages 178.68 to 175.63 seconds, with the candidate
+faster in four pairs. Retain the unusually fast first baseline and the
+phase-specific regressions. This fixed replay excludes sampling and tool work;
+it also lacks the short benchmark's intermediate snapshot saves. Only about
+64 ms of the mean 1.53-second decode saving comes from phase-first evaluations.
+
+Both full-vocabulary captures match experiment 19 at all 3,371 positions.
+Later changes therefore add no measured drift on this history; the earlier
+difference from published CPU routing remains. The interval-coding trial again
+fails adjacency in the candidate, while both arms pass the long-background
+dependency-layer task. Those are two generated solutions per arm, not hundreds
+of independent tasks. Keep the selected GPU package experimental and cached
+refresh parallelism off. The [report](../../../speed-bench/experiments/2026-11-05-long-session-qualification/README.md)
+owns samples, quality tails, oracle checks and reproduction details. No preset,
+installed-frontend or main change follows from this qualification.

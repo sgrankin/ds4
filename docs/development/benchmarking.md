@@ -18,6 +18,11 @@ Each prefill rate covers only the newly added interval; generation is a fixed
 greedy, non-EOS probe. The program normally restores a memory snapshot after
 each probe. Network TP, pipeline runs and snapshots beyond its memory limit
 instead replay the prefix; replay time is not continued-prefill speed.
+When another frontier remains, the snapshot is saved after prefill and before
+generation, then restored after the probe. Save and restore are outside the
+reported inference windows. A recorded-session replay that saves only at the
+end has a different sequence of state transitions; first-step effects need
+direct measurement in that workload too.
 `--step-mul F` selects exponential spacing. CSV includes prefill and generation
 rates and snapshot size where available. The prompt is the cleaned public-domain
 *I Promessi Sposi* in [speed-bench](../../speed-bench/README.md).

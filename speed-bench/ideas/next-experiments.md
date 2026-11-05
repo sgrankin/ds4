@@ -6,45 +6,36 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: can exact cached CPU selections use parallel shared/routed FFN?**
-One-hour slice: November 5, 04:09 through 05:09 Eastern. The
-[submission-removal experiment](../experiments/2026-11-05-refresh-shared-flush/README.md)
-did not establish a speed gain and its standalone selector was removed. It did
-identify a real batch-boundary obstacle to parallel FFN. Removing that boundary
-alone is insufficient: the existing parallel path assumes a GPU-selected,
-resident-only set whose possible entries are already pinned.
+**Current question: does the accumulated selected package help a recorded agent session?**
+One-hour slice: November 5, 05:04 through 06:04 Eastern. The
+[cached-refresh experiment](../experiments/2026-11-05-cached-refresh-parallel/README.md)
+retains its prototype opt-in but does not add it to the selected package.
+Qualify the experiment 25 package against published `364ceeab` before another
+runtime change. The current runtime is `c1982bc8`, recorded by closure
+`5c87f08e`; leave cached-refresh parallelism off. Use the existing
+[package settings](../experiments/2026-11-05-slab-event-interaction/candidate-settings.json)
+and the published baseline settings from the overnight decode report.
 
-Implement one opt-in path for the normal CPU-selected six experts only when
-all selected weights are already cached. Preserve the CPU routing policy,
-selected-ID upload, native mixture weights, normal cache accounting and pins.
-Establish the exact-selected proof before consuming cached addresses; do not
-reuse the broader resident-only override or merely widen a Boolean. Misses,
-split/staged loads and unsupported modes must keep the existing serial path.
-Use the existing shared/routed two-stage join, without a separate flush that
-would reset its state. Document the changed shared-down/HC join boundary and
-qualify numerical behavior. Keep the interface narrow and the experiment small.
+Reuse the recorded `session-v1.txt` replay with five alternating timing pairs,
+then compare all 3,371 aligned full-vocabulary teacher rows. Keep initial
+prefill, appended prefill, complete decode, first-step behavior, total inference
+and process wall separate. Report every sample, variation and order effects.
+This trace fixes model tokens and tool results; it does not measure autonomous
+agent speed or large-context prefill. The existing interval-coding oracle is
+the primary practical check, preserving reasoning and the earlier adjacency
+failure. Run the existing long-background dependency-layer task if the budget
+allows, to exercise a full prefill chunk. Retain failures and noncompletion.
 
-Baseline runtime source is `8bf87bbd`, restored by closure `b479686a`, with the
-experiment 25 candidate settings: queue residency on, shared-event overlap off,
-GPU resident routing, refresh interval 16, four-layer submissions, requested
-64 GB cache, 4 GiB slabs and 8K chunks. Use the same new binary with the new
-selector off/on. Prove activation and serial fallback in a bounded diagnostic;
-do not infer either from the environment flag alone.
-
-Use fixed-history quality and five alternating timing pairs at 8K and 32K,
-retaining first-step, complete decode, prefill/append, inference and wall scopes.
-Include the requested 16 GB cache case, which previously admitted 958 experts
-and produced actual scalar reads. Verify miss fallback and pins there; any speed
-claim still requires five pairs. One guarded heavy job at a time, no builds
-during timing. Profile neutral results for shifted dependencies before deciding.
-Reuse existing drivers and stop at an answer or the slice boundary.
-
-Keep raw artifacts under `.workspaces/hillclimb-20261104/27-cached-refresh-parallel/`
-and one concise report under `2026-11-05-cached-refresh-parallel/`. Update the
-owning manual, recipe conclusion and one short journal entry at closure. The
-next slice is reserved for periodic long-session qualification against published
-`364ceeab`; do not keep adding experiments before that comparison.
-No main advancement or push is authorized.
+Rebuild only the candidate replay and agent binaries. Execute both arms from
+their matching source roots, with explicit settings and recorded hashes. Keep
+one guarded heavy job, no builds during timing, and existing pressure checks.
+Reuse the prepared local drivers under
+`.workspaces/hillclimb-20261104/28-long-session/`; do not add another harness.
+Keep one report under `2026-11-05-long-session-qualification/`, with a short
+journal and owning-manual update at closure. Useful follow-up on the cached
+refresh preparation/submission dependency remains deferred until this result.
+No preset change, installed frontend replacement, main advancement or push is
+part of this qualification.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. The current timed

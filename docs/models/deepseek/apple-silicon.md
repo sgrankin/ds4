@@ -407,13 +407,16 @@ their original route. This removes one dispatch without changing the FFN join
 or cache ownership. The [fusion experiment](../../../speed-bench/experiments/2026-11-04-post-simd-profile/README.md)
 owns its qualification; the path remains opt-in.
 
-The [accumulated package comparison](../../../speed-bench/experiments/2026-11-04-package-requalification/README.md)
-produced byte-identical logits to the earlier GPU candidate at all 3,371
-recorded decode positions. Against published CPU routing, its five-pair mean time was
-lower and less variable, but an unusually fast first baseline limits the speed
-conclusion. One fresh coding solution also missed integer-interval adjacency.
-These results support further optimization without establishing general agent
-quality or promoting the GPU policy into the fast presets.
+The latest [accumulated package comparison](../../../speed-bench/experiments/2026-11-05-long-session-qualification/README.md)
+keeps this GPU route experimental. Recorded-session inference took 1.7% less
+time on average than published CPU routing, with four of five pairs faster
+and a less variable candidate; an unusually fast first baseline remains in the
+comparison. All 3,371 candidate logit rows match the earlier GPU package, so
+the later scheduling changes added no measured drift on that fixed history.
+One fresh solution again missed integer-interval adjacency; both arms passed
+the separate long-background dependency-layer task. These two generated
+solutions per arm do not establish a task failure rate or general agent
+quality. The fast presets retain CPU routing.
 
 For this experimental GPU package, the
 [submission-cadence qualification](../../../speed-bench/experiments/2026-11-05-gpu-submit-cadence/README.md)

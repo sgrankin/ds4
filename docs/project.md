@@ -1,6 +1,6 @@
 # Project direction and current status
 
-Updated 2026-11-04. **The upstream port through `890898cf` is complete.**
+Updated 2026-11-05. **The upstream port through `890898cf` is complete.**
 The overnight decode session adopted five changes in `resident-fast` and
 `persistent-fast`: direct half-precision KV gathering, every-layer submission,
 earlier shared-expert down projection, query RoPE coefficient reuse and reuse
@@ -30,7 +30,11 @@ indexer-query matrix path. Their
 [CPU-routing qualification](../speed-bench/experiments/2026-11-04-prefill-preset-qualification/README.md)
 found consistent fresh-prefill gains with measured numerical drift and a small
 warm-decode regression in one configuration. The separate GPU resident-routing
-package remains experimental.
+package remains experimental. The latest
+[periodic qualification](../speed-bench/experiments/2026-11-05-long-session-qualification/README.md)
+found a modest recorded-session gain without additional measured drift since
+the earlier GPU package, but reproduced its interval-coding failure. Presets,
+installed frontends and published main remain unchanged by that qualification.
 The organized manuals and lab journal are available under the [documentation index](README.md).
 The initial adaptation omitted upstream functionality; the completion audit
 covered all 118 commits and integrated the missing paths. All upstream

@@ -245,6 +245,14 @@ a bounded follow-up; the selected latency package still uses serial CPU
 refreshes. The report separates five-pair latency evidence from the intrusive
 diagnostics and records the exact quality and cache-accounting checks.
 
+The [periodic session qualification](../speed-bench/experiments/2026-11-05-long-session-qualification/README.md)
+then compared the selected package with published CPU routing. Its modest
+five-pair mean saving and unchanged fixed-history logits relative to the earlier
+GPU candidate support continuing the experiment. A fresh interval task again
+missed adjacency, while both arms passed a separate long-background graph task.
+The package remains experimental; fixed replay speed and these limited behavior
+checks do not justify a general agent-speed claim or preset promotion.
+
 Detailed encoder profiling changes batching and adds host overhead; its gap reduction is not a
 predicted ordinary-runtime saving. The
 [Apple Silicon manual](../docs/models/deepseek/apple-silicon.md#resident-expert-substitution)
