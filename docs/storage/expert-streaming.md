@@ -133,6 +133,17 @@ whole-workload gain.
 Keep mode `2` as unselected groundwork; the experimental latency package retains
 queue mode `1`. These observations do not establish a driver-level cause.
 
+Command scope also limits how this policy interacts with shared-expert overlap.
+The next router can follow previous-layer expert work in the same buffer, so
+its event still belongs to an associated buffer. The
+[overlap comparison](../../speed-bench/experiments/2026-11-05-scoped-overlap/README.md)
+found large positive event-adjacent gaps in those mixed buffers and slower
+decode with the large cache. A smaller cache retained the same associations
+without comparable large gaps and benefited from overlap in warm decode;
+cache contents and misses differed too. Narrowing association alone therefore
+does not justify restoring overlap globally. The selected experimental package
+continues to disable it.
+
 This option remains off in ordinary runtime behavior and fast presets. Its cost
 depends on the refresh schedule. With the selected-ID shared-event overlap
 enabled, the [first comparison](../../speed-bench/experiments/2026-11-05-streaming-slab-residency/README.md)

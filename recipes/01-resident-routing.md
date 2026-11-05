@@ -271,6 +271,16 @@ Retain extended mode `2` as groundwork while the selected experimental package
 stays on queue mode `1`. This preserves a narrower resource association for a
 later scheduling test without claiming that initialization work became free.
 
+The [scoped-overlap test](../speed-bench/experiments/2026-11-05-scoped-overlap/README.md)
+then restored shared-expert overlap with command residency fixed. Large-cache
+decode regressed in every pair at both contexts. The trace concentrates the
+added event-adjacent gaps in buffers that also contain earlier expert work.
+Smaller-cache warm decode benefits, so this is not a general rejection of
+overlap; the whole-workload result there remains mixed. Keep the selected
+large-cache package unchanged. A separate submission at actual CPU-expert
+completion is the next bounded boundary question, with ordinary GPU cadence
+preserved.
+
 Detailed encoder profiling changes batching and adds host overhead; its gap reduction is not a
 predicted ordinary-runtime saving. The
 [Apple Silicon manual](../docs/models/deepseek/apple-silicon.md#resident-expert-substitution)

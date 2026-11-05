@@ -6,20 +6,14 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Completed question: include cache-seed writes in command-buffer residency.**
-The [seed-write comparison](../experiments/2026-11-05-seed-residency/README.md)
-uses runtime `d4c0d297`. The new helper call covers all 40 recorded seed buffers;
-the large historical first-compute gap is absent in this comparison. Five pairs
-at both contexts still show mixed phase costs without establishing an overall
-gain over queue residency. All 768 paired quality rows match, including a
-smaller-cache eviction case. Retain the extended mode as unselected groundwork.
-The experimental package stays on queue mode 1; presets leave slab residency
-off. Installed frontends and main remain unchanged.
-
-The narrowed association is now ready for a bounded test of shared-expert
-overlap. Select that next question and its budget before starting another job.
-Current evidence and scope limits belong to the report; local artifacts are in
-`.workspaces/hillclimb-20261104/30-seed-residency/`.
+**Last closed question: shared-expert overlap with scoped slab residency.**
+The November 5, 07:29–08:29 Eastern slice completed early. The
+[report](../experiments/2026-11-05-scoped-overlap/README.md) retains the five-pair
+large-cache regression, favorable smaller-cache decode, and matching quality
+checks. The selected package remains queue residency mode 1 with overlap off.
+The profiles localize large event-adjacent gaps to buffers that also contain
+prior expert work. A checked outgoing boundary after actual CPU-routed experts
+is the next candidate; it is not yet implemented or selected here.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. The current timed

@@ -579,3 +579,22 @@ confined to refresh tokens; that pair does not explain the comparative variation
 owns the timing, scope and causal limits. The narrower association is now ready
 for a scheduling follow-up; the selected package, presets, installed frontends
 and main remain unchanged.
+
+## Thirty-first question: restore overlap with scoped residency
+
+Restoring shared-expert overlap makes complete decode and total inference
+slower in every primary timing pair at both contexts. With the requested 64 GB cache, 32K fresh decode averages 3.80 to
+5.00 seconds and warm decode 3.85 to 5.02 seconds. With a requested 16 GB
+cache, warm decode instead improves in all five pairs, while total time remains
+mixed. All 768 paired quality rows match; the smaller-cache quality case repeats
+the 8K history.
+
+The large-cache trace concentrates positive event-adjacent gaps in 29 mixed
+expert/router buffers per refresh. The same associations remain in the matched
+smaller-cache trace without comparable large gaps; cache contents and misses
+also differ, so this does not isolate resource bytes as the cause. Preserve
+that favorable case and keep the selected large-cache package unchanged.
+The [report](../../../speed-bench/experiments/2026-11-05-scoped-overlap/README.md)
+owns the evidence and timing scopes. A narrow outgoing boundary after actual
+CPU-routed expert work is available for a follow-up; no new runtime code was
+added in this experiment.
