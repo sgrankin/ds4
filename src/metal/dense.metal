@@ -2627,6 +2627,7 @@ void kernel_mul_mv_f16_f32_pair_4_disp(
         ushort tiisg,
         ushort sgitg) {
     switch (args.nr0) {
+        case 1: kernel_mul_mv_f16_f32_pair_4_impl<1>(args, src0_a, src0_b, src1, dst_a, dst_b, shmem, tgpig, tiisg, sgitg); break;
         case 2: kernel_mul_mv_f16_f32_pair_4_impl<2>(args, src0_a, src0_b, src1, dst_a, dst_b, shmem, tgpig, tiisg, sgitg); break;
         case 4: kernel_mul_mv_f16_f32_pair_4_impl<4>(args, src0_a, src0_b, src1, dst_a, dst_b, shmem, tgpig, tiisg, sgitg); break;
     }

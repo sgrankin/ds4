@@ -84,9 +84,23 @@ pub const BatchAttention = struct {
         const first = start / ratio;
         const rows = (start + count) / ratio - first;
         if (ratio == 2) {
-            if (!self.projectRows(batch.pool_kv, knownWeight(layer.attn_compressor_kv), batch.norm, count, false) or
-                !self.projectRows(batch.pool_score, knownWeight(layer.attn_compressor_gate), batch.norm, count, false) or
-                c.ds4_gpu_dsv41_pool2(batch.latent, batch.pool_kv, batch.pool_score, graph.previous_kv[owner], graph.previous_score[owner], shape.n_head_dim, count, start) == 0) return false;
+            const kv = knownWeight(layer.attn_compressor_kv);
+            const score = knownWeight(layer.attn_compressor_gate);
+            const option = c.getenv("DS4_METAL_V41_PREFILL_COMPRESSOR_PAIR");
+            const paired = option != null and std.mem.eql(u8, std.mem.span(option), "1") and
+                count > 1 and count <= 8192 and graph.streaming and graph.tp_world == 1 and
+                !graph.quality and graph.imatrix == null and graph.image_count == 0 and !self.ops.exactDenseRows() and
+                kv.type == c.DS4_TENSOR_F16 and score.type == c.DS4_TENSOR_F16 and
+                kv.dim[0] == shape.n_embd and kv.dim[1] == shape.n_head_dim and
+                score.dim[0] == kv.dim[0] and score.dim[1] == kv.dim[1];
+            // Pair the same row-exact projections before pool/publication;
+            // published keys must not depend on the prefill sweep size.
+            const projected = if (paired)
+                c.ds4_gpu_matmul_f16_pair_tensor(batch.pool_kv, batch.pool_score, self.ops.model.map, self.ops.model.size, kv.abs_offset, score.abs_offset, kv.dim[0], kv.dim[1], batch.norm, count) != 0
+            else
+                self.projectRows(batch.pool_kv, kv, batch.norm, count, false) and
+                    self.projectRows(batch.pool_score, score, batch.norm, count, false);
+            if (!projected or c.ds4_gpu_dsv41_pool2(batch.latent, batch.pool_kv, batch.pool_score, graph.previous_kv[owner], graph.previous_score[owner], shape.n_head_dim, count, start) == 0) return false;
         } else if (!self.projectRows(batch.latent, knownWeight(layer.attn_compressor_kv), batch.norm, count, true)) return false;
         if (rows == 0) return true;
         // Bulk publication and suffix replay must produce the same keys.

@@ -418,8 +418,8 @@ fn q8RowsMode(request: Request, rounding: Rounding, scalar: bool) c_int {
 pub const Pair = struct { first: Request, out1: ?*Tensor, offset1: u64, outputs1: u64 };
 fn encodePair(command: *const Command, pair: Pair, w0: Weight, w1: Weight, pipeline: *const Pso, mode: Matvec, q8_kind: bool, concat: bool) bool {
     const request = pair.first;
-    const args0 = mvArgs(request.width, request.outputs, 1, q8_kind, mode.rows);
-    const args1 = mvArgs(request.width, pair.outputs1, 1, q8_kind, mode.rows);
+    const args0 = mvArgs(request.width, request.outputs, request.rows, q8_kind, mode.rows);
+    const args1 = mvArgs(request.width, pair.outputs1, request.rows, q8_kind, mode.rows);
     const maximum = if (concat) request.outputs + pair.outputs1 else @max(request.outputs, pair.outputs1);
     const nr: u64 = @intCast(mode.rows);
     const launch = c.ds4_metal_dense_pair_launch{ .args0 = args0, .args1 = args1, .two_args = q8_kind, .pipeline = pipeline, .weights0 = w0.buffer, .weights1 = w1.buffer, .weight_offset0 = w0.offset, .weight_offset1 = w1.offset, .x = request.x, .out0 = request.out, .out1 = pair.out1, .groups = (maximum + nr - 1) / nr, .simdgroups = @intCast(mode.nsg), .shared_bytes = if (q8_kind) 2 * mode.shared else mode.shared };
@@ -532,8 +532,8 @@ fn halfMode(request: Request, exact_rows: bool, bf16: bool) c_int {
 }
 pub fn halfPair(pair: Pair) c_int {
     const request = pair.first;
-    if (api.init() == 0 or !request.shapesFit() or request.rows != 1 or request.width & 3 != 0) return 0;
-    if (!request.activations(request.width * 4, request.outputs * 4, null) or api.tensorHasBuffer(pair.out1) == 0 or api.tensorBytes(pair.out1) < request.outputs * 4) return api.reportError("ds4: Metal F16 paired matvec received undersized activation buffers");
+    if (api.init() == 0 or !request.shapesFit() or request.rows == 0 or request.rows > 8192 or request.width & 3 != 0) return 0;
+    if (!request.activations(request.rows * request.width * 4, request.rows * request.outputs * 4, null) or api.tensorHasBuffer(pair.out1) == 0 or api.tensorBytes(pair.out1) < request.rows * request.outputs * 4) return api.reportError("ds4: Metal F16 paired matvec received undersized activation buffers");
     const bytes = request.width *% 2 *% request.outputs;
     if (request.offset > request.size or bytes > request.size - request.offset or pair.offset1 > request.size or bytes > request.size - pair.offset1) return api.reportError("ds4: Metal F16 paired matvec range is outside the mapped model");
     const first_weight = request.weight(bytes, null);
@@ -548,7 +548,20 @@ pub fn halfPair(pair: Pair) c_int {
     var command = Command.init() orelse return 0;
     defer command.deinit();
     var mode = halfDispatch(request.width);
-    if (c.ds4_metal_dense_facts(true) & c.DS4_DENSE_PAIR_NR4 != 0 and (request.outputs == 512 or request.outputs == 1024) and request.width >= 4096) {
+    if (request.rows > 1) {
+        // Published compressor rows retain the standalone exact projection's
+        // geometry and reduction; only their shared input load is paired.
+        const facts = c.ds4_metal_dense_facts(false);
+        if (facts & c.DS4_DENSE_QUALITY == 0 and (request.outputs == 512 or request.outputs == 1024) and request.width >= 4096) {
+            mode.rows = 4;
+            mode.shared = 512;
+        }
+        const forced = c.ds4_zig_metal_env_u64("DS4_METAL_PLAIN_MV_NR0", 0, 0, 2);
+        if ((forced != 0 and forced == 1) or (forced == 0 and request.outputs <= 1024 and facts & c.DS4_DENSE_M5 != 0)) {
+            mode.rows = 1;
+            mode.shared = 128;
+        }
+    } else if (c.ds4_metal_dense_facts(true) & c.DS4_DENSE_PAIR_NR4 != 0 and (request.outputs == 512 or request.outputs == 1024) and request.width >= 4096) {
         mode.rows = 4;
         mode.shared = 512;
     }

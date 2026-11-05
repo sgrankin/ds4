@@ -64,7 +64,7 @@ int ds4_metal_dense_pair_encode(void *command, const ds4_metal_dense_pair_launch
         [enc setBuffer:ds4_gpu_tensor_buffer(p->out0) offset:ds4_gpu_tensor_offset(p->out0) atIndex:first+3];
         [enc setBuffer:ds4_gpu_tensor_buffer(p->out1) offset:ds4_gpu_tensor_offset(p->out1) atIndex:first+4];
         if (p->shared_bytes) [enc setThreadgroupMemoryLength:p->shared_bytes atIndex:0];
-        [enc dispatchThreadgroups:MTLSizeMake(p->groups, 1, 1)
+        [enc dispatchThreadgroups:MTLSizeMake(p->groups, p->args0.ne11, 1)
              threadsPerThreadgroup:MTLSizeMake(32, p->simdgroups, 1)];
         ds4_gpu_end_compute_encoder(cb, enc);
         return 1;

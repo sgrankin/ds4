@@ -2500,6 +2500,111 @@ static int check_embedding(void) {
     return 1;
 }
 
+/* Compressor publication must be independent of the layer sweep's row count.
+ * Compare unrounded projections, so BF16 pooling cannot hide a changed dot. */
+static int check_compressor_pair(void) {
+    enum { WIDTH = 5120, OUTPUT = 512, ROWS = 513 };
+    const size_t bank_bytes = (size_t)WIDTH * OUTPUT * sizeof(uint16_t);
+    const size_t row_bytes = OUTPUT * sizeof(float);
+    const size_t out_bytes = (size_t)ROWS * row_bytes;
+    void *model = NULL;
+    CHECK(posix_memalign(&model, getpagesize(), 2 * bank_bytes) == 0);
+    uint16_t *weights = model;
+    for (size_t i = 0; i < 2 * bank_bytes / sizeof(*weights); i++) {
+        const int value = (int)(random_value() * 8192);
+        weights[i] = (uint16_t)(0x2000u | ((unsigned)abs(value) % 1024u) |
+                                (value < 0 ? 0x8000u : 0));
+    }
+    CHECK(ds4_gpu_set_model_map(model, 2 * bank_bytes));
+    ds4_gpu_tensor *input = upload(NULL, (size_t)ROWS * WIDTH * sizeof(float));
+    ds4_gpu_tensor *reference[2], *paired[2];
+    CHECK(input);
+    float *x = ds4_gpu_tensor_contents(input);
+    CHECK(x);
+    for (size_t i = 0; i < (size_t)ROWS * WIDTH; i++) x[i] = bf16(random_value());
+    for (unsigned arm = 0; arm < 2; arm++) {
+        reference[arm] = upload(NULL, out_bytes);
+        paired[arm] = upload(NULL, out_bytes + sizeof(float));
+        CHECK(reference[arm] && paired[arm]);
+    }
+    CHECK(ds4_gpu_begin_commands());
+    for (unsigned arm = 0; arm < 2; arm++)
+        CHECK(ds4_gpu_dsv41_projection_rows(reference[arm], model, 2 * bank_bytes,
+            arm * bank_bytes, WIDTH, OUTPUT, ROWS, input));
+    CHECK(ds4_gpu_end_commands() && ds4_gpu_synchronize());
+    const unsigned counts[] = {1, 2, 7, 8, 31, 32, 33, 129, ROWS};
+    const float marker = 12345;
+    for (unsigned ci = 0; ci < sizeof(counts) / sizeof(*counts); ci++) {
+        const unsigned rows = counts[ci];
+        for (unsigned arm = 0; arm < 2; arm++) {
+            CHECK(ds4_gpu_tensor_fill_f32(paired[arm], NAN, (size_t)rows * OUTPUT));
+            CHECK(ds4_gpu_tensor_write(paired[arm], (size_t)rows * row_bytes,
+                                      &marker, sizeof(marker)));
+        }
+        CHECK(ds4_gpu_begin_commands());
+        CHECK(ds4_gpu_matmul_f16_pair_tensor(paired[0], paired[1], model,
+            2 * bank_bytes, 0, bank_bytes, WIDTH, OUTPUT, input, rows));
+        CHECK(ds4_gpu_end_commands() && ds4_gpu_synchronize());
+        for (unsigned arm = 0; arm < 2; arm++) {
+            const float *actual = ds4_gpu_tensor_contents(paired[arm]);
+            const float *expected = ds4_gpu_tensor_contents(reference[arm]);
+            CHECK(actual && expected && actual[(size_t)rows * OUTPUT] == marker);
+            CHECK(!memcmp(actual, expected, (size_t)rows * row_bytes));
+            for (unsigned sample = 0; sample < 4; sample++) {
+                const unsigned row = sample * (rows - 1) / 3;
+                const unsigned column = sample * (OUTPUT - 1) / 3;
+                double sum = 0, magnitude = 0;
+                for (unsigned k = 0; k < WIDTH; k++) {
+                    const uint16_t bits = weights[(size_t)arm * WIDTH * OUTPUT +
+                                                  (size_t)column * WIDTH + k];
+                    const float weight = (1.0f + (bits & 1023) / 1024.0f) / 128.0f *
+                                         (bits & 0x8000 ? -1 : 1);
+                    const double term = (double)weight * x[(size_t)row * WIDTH + k];
+                    sum += term; magnitude += fabs(term);
+                }
+                CHECK(isfinite(actual[(size_t)row * OUTPUT + column]));
+                CHECK(fabs(actual[(size_t)row * OUTPUT + column] - sum) <
+                      0.000001 * fmax(magnitude, 1));
+            }
+        }
+        fprintf(stderr, "V4.1 compressor F16 pair 5120->512 rows=%u: exact standalone, guards and bounded dot oracle PASS\n", rows);
+    }
+    /* Mixed scalar/few-row/large partitions exercise nonzero view offsets and
+     * the same publication values when a suffix starts inside a sweep. */
+    const unsigned chunks[] = {1, 7, 31, 64, 129};
+    for (unsigned arm = 0; arm < 2; arm++) {
+        CHECK(ds4_gpu_tensor_fill_f32(paired[arm], NAN, (size_t)ROWS * OUTPUT));
+        CHECK(ds4_gpu_tensor_write(paired[arm], out_bytes, &marker, sizeof(marker)));
+    }
+    CHECK(ds4_gpu_begin_commands());
+    for (unsigned start = 0, chunk = 0; start < ROWS; chunk++) {
+        unsigned rows = chunks[chunk % (sizeof(chunks) / sizeof(*chunks))];
+        if (rows > ROWS - start) rows = ROWS - start;
+        ds4_gpu_tensor *in = ds4_gpu_tensor_view(input, (size_t)start * WIDTH * 4,
+                                               (size_t)rows * WIDTH * 4);
+        ds4_gpu_tensor *a = ds4_gpu_tensor_view(paired[0], (size_t)start * row_bytes,
+                                              (size_t)rows * row_bytes);
+        ds4_gpu_tensor *b = ds4_gpu_tensor_view(paired[1], (size_t)start * row_bytes,
+                                              (size_t)rows * row_bytes);
+        CHECK(in && a && b && ds4_gpu_matmul_f16_pair_tensor(a, b, model,
+            2 * bank_bytes, 0, bank_bytes, WIDTH, OUTPUT, in, rows));
+        ds4_gpu_tensor_free(b); ds4_gpu_tensor_free(a); ds4_gpu_tensor_free(in);
+        start += rows;
+    }
+    CHECK(ds4_gpu_end_commands() && ds4_gpu_synchronize());
+    for (unsigned arm = 0; arm < 2; arm++) {
+        const float *actual = ds4_gpu_tensor_contents(paired[arm]);
+        CHECK(actual && actual[(size_t)ROWS * OUTPUT] == marker);
+        CHECK(!memcmp(actual, ds4_gpu_tensor_contents(reference[arm]), out_bytes));
+        ds4_gpu_tensor_free(paired[arm]); ds4_gpu_tensor_free(reference[arm]);
+    }
+    ds4_gpu_tensor_free(input);
+    ds4_gpu_cleanup(); free(model);
+    CHECK(ds4_gpu_init());
+    fprintf(stderr, "V4.1 compressor F16 pair: exact mixed row partitions PASS\n");
+    return 1;
+}
+
 static int check_index_projection(void) {
     enum { MAX_ROWS = 4096 };
     const uint32_t widths[] = {1280, 5120, 5120, 512}, outputs[] = {4096, 32, 512, 128};
@@ -4154,6 +4259,11 @@ int main(int argc, char **argv) {
         ds4_gpu_cleanup();
         return ok ? 0 : 1;
     }
+    if (argc == 2 && !strcmp(argv[1], "--compressor-pair")) {
+        const int ok = ds4_gpu_init() && check_compressor_pair() && check_pool();
+        ds4_gpu_cleanup();
+        return ok ? 0 : 1;
+    }
     if (argc == 2 && !strcmp(argv[1], "--index-score-bf16")) {
         const int ok = ds4_gpu_init() && check_index_score_bf16();
         ds4_gpu_cleanup();
@@ -4202,6 +4312,7 @@ int main(int argc, char **argv) {
              check_topk_select() && check_causal_topk() && check_indexer_all() && check_compact_carry() &&
              check_attention_output(false) && check_tp_attention();
     ok = ok && check_dense_bf16_rows() && check_kslice_rows() && check_low_projection_rows();
+    ok = ok && check_compressor_pair();
     ok = ok && check_literal_shapes();
     ok = ok && check_e4m3_copies();
     ok = ok && check_rope_tab();
