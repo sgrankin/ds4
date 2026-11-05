@@ -6,18 +6,19 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Last closed question: separate CPU expert work from the next router event.**
-The November 5, 08:18–09:18 Eastern slice selected the combined experimental
-GPU decode package in
-[candidate-settings.json](../experiments/2026-11-05-cpu-expert-boundary/candidate-settings.json),
-runtime `b7e7af9d`. The [report](../experiments/2026-11-05-cpu-expert-boundary/README.md)
-records direct five-pair comparisons at 8K and 32K: about 2% faster fresh
-complete decode, mixed whole-workload time, and a 32K append cost. All checked
-outputs match. Ordinary presets, installed frontends and main are unchanged.
+**Last closed question: deduplicate active-batch residency association.**
+The November 5, 09:16–10:16 Eastern slice retained runtime `47e461b0` as an
+opt-in, unselected prototype. The [report](../experiments/2026-11-05-residency-once/README.md)
+records fewer actual calls with unchanged associated buffers and checked
+outputs, but mixed primary and frozen-build timings. No consistent net gain
+or newly exposed GPU stall was established.
 
-The next bounded target has not yet been selected. Inspect the remaining costs
-in the changed profile before choosing it; the current improvement does not
-establish a whole-task gain.
+The selected package remains
+[experiment 32](../experiments/2026-11-05-cpu-expert-boundary/candidate-settings.json).
+A bounded unretained-command comparison is the next candidate because that
+path also removes repeated completion captures. It has not yet been selected
+here; source lifetime checks must precede its model runs. Normal presets,
+installed frontends and main are unchanged.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. The current timed

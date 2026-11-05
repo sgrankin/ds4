@@ -289,6 +289,16 @@ pairs. The 32K append costs more and complete workload times remain mixed;
 this is a decode tradeoff. The report retains all samples and the unchanged
 fixed-history outputs. Normal presets and installed frontends are unchanged.
 
+The [residency-call deduplication](../speed-bench/experiments/2026-11-05-residency-once/README.md)
+prototype removes repeated association within an unchanged active batch. Its
+trace reduces calls from 4,361 to 863 while preserving the same 850 covered
+buffers. Ordinary retained-buffer timings remain mixed, including a small
+decrease in fresh steady throughput at 8K and a favorable smaller-cache case.
+Keep it unselected for a bounded
+unretained-buffer test: that path also removes repeated completion captures.
+This is a source-supported next question, not an established speedup or a newly
+exposed GPU stall. The selected boundary package remains unchanged.
+
 Detailed encoder profiling changes batching and adds host overhead; its gap reduction is not a
 predicted ordinary-runtime saving. The
 [Apple Silicon manual](../docs/models/deepseek/apple-silicon.md#resident-expert-substitution)

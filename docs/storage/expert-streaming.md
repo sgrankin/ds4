@@ -123,6 +123,18 @@ Both modes preserve the existing cache pins and resource declarations. For
 unretained command buffers, mode `2` keeps an extra reference to the set through
 completion. That reference preserves the set object, not a snapshot of its
 allocations, and does not replace the existing ownership of in-flight buffers.
+An unselected `DS4_METAL_STREAMING_EXPERT_SLAB_RESIDENCY_ONCE=1` prototype
+skips repeated association within the active batch. A byte in the cache state
+records the first actual use; batch creation, set membership commits and clear
+reset it. Standalone command buffers keep the ordinary behavior. The first use
+still captures the set through completion for unretained buffers. Apple's
+[set contract](https://developer.apple.com/documentation/metal/mtlresidencyset?language=objc)
+allows one association to cover a command buffer's encoders; the commit resets
+are conservative. The [deduplication experiment](../../speed-bench/experiments/2026-11-05-residency-once/README.md)
+confirms fewer calls with unchanged buffer coverage, but mixed retained-buffer
+latency. It remains opt-in for a bounded unretained-buffer follow-up, where
+repeated completion captures are also removed; that path has no timing result yet.
+
 The [first command-buffer comparison](../../speed-bench/experiments/2026-11-05-scoped-residency/README.md)
 covered only compute reads. It restored a large fresh-start gap, which motivated
 the [seed-write extension](../../speed-bench/experiments/2026-11-05-seed-residency/README.md).

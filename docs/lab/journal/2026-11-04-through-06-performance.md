@@ -615,3 +615,20 @@ and total inference remains mixed. The
 owns samples, variation, output checks and resource limits. This is a decode
 tradeoff rather than a whole-task speed claim. Fast presets, installed frontends
 and main remain unchanged.
+
+## Thirty-third question: avoid repeated residency association
+
+Deduplicating active-batch association removes most calls without changing the
+covered buffers, cache behavior or checked outputs. It does not establish a
+consistent retained-buffer latency gain: primary timings are mixed, and the
+comparison with the frozen pre-change binary is strongly influenced by its
+first pair. The changed profile preserves scheduling and reveals no new stall.
+
+Keep the small prototype opt-in and unselected for one bounded follow-up with
+unretained command buffers. That existing mode also incurs the repeated
+completion-handler captures removed by this change, whereas the current timing
+runs use retained buffers. This is a concrete source distinction to test, not
+proof of an unlocked performance gain. The
+[report](../../../speed-bench/experiments/2026-11-05-residency-once/README.md)
+owns the samples, variation, API evidence and limits. The selected package,
+normal presets, installed frontends and main remain unchanged.
