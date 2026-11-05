@@ -137,10 +137,80 @@ fn checkCase(shape: Case, compressed: bool) !void {
     }
 }
 
-pub fn main() !void {
+fn seconds() !f64 {
+    var now: std.c.timespec = undefined;
+    try require(std.c.clock_gettime(.MONOTONIC, &now) == 0, "read monotonic clock");
+    return @as(f64, @floatFromInt(now.sec)) + @as(f64, @floatFromInt(now.nsec)) * 1e-9;
+}
+
+fn benchmark(rows: u32) !void {
+    try require(rows == 512 or rows == 8192, "benchmark rows must be 512 or 8192");
+    const heads = 64;
+    const operations = 4;
+    const count = @as(usize, width) * heads * rows;
+    const input = try allocator.alloc(f32, count);
+    defer allocator.free(input);
+    for (input, 0..) |*value, i| {
+        const sample: i32 = @intCast((i *% 1664525 +% 1013904223) % 65537);
+        value.* = @as(f32, @floatFromInt(sample - 32768)) / 8192;
+    }
+    const baseline = try allocate(count);
+    defer c.ds4_gpu_tensor_free(baseline);
+    const fused = try allocate(count);
+    defer c.ds4_gpu_tensor_free(fused);
+    // Mapped Metal outputs are inspected only after end_commands has waited
+    // for GPU completion. No extra host-sized output allocation is needed.
+    const expected = @as([*]const u8, @ptrCast(c.ds4_gpu_tensor_contents(baseline) orelse return error.GpuContents))[0 .. count * 4];
+    const actual = @as([*]const u8, @ptrCast(c.ds4_gpu_tensor_contents(fused) orelse return error.GpuContents))[0 .. count * 4];
+    // One warmup pair, then five measured pairs. Reset outside the timer;
+    // four inverse rotations mutate the input identically in both arms.
+    for (0..6) |sample| {
+        for (0..2) |arm| {
+            const active = (sample + arm) % 2 == 1;
+            const tensor = if (active) fused else baseline;
+            try write(tensor, input);
+            const start = try seconds();
+            try require(c.ds4_gpu_begin_commands() != 0, "begin benchmark batch");
+            var queued = true;
+            for (0..operations) |_| {
+                queued = queued and if (active)
+                    c.ds4_gpu_dsv41_rope_bf16(tensor, width, heads, rows, 8192, true, true) != 0
+                else
+                    separate(tensor, heads, rows, 8192, true);
+            }
+            const finished = c.ds4_gpu_end_commands();
+            const elapsed_ms = ((try seconds()) - start) * 1000;
+            try require(queued and finished != 0, "execute benchmark batch");
+            // Retain sample zero as warmup evidence; exclude it from means.
+            std.debug.print("{d},{s},{d},{d},{d:.6},{d:.6}\n", .{
+                sample, if (active) "fused" else "separate", rows, operations, elapsed_ms, elapsed_ms / operations,
+            });
+        }
+        try require(std.mem.eql(u8, expected, actual), "four-call benchmark output parity");
+    }
+}
+
+pub fn main(init: std.process.Init.Minimal) !void {
+    var args = std.process.Args.Iterator.init(init.args);
+    defer args.deinit();
+    _ = args.next();
+    var bench = false;
+    var bench_rows: ?u32 = null;
+    if (args.next()) |option| {
+        try require(std.mem.eql(u8, option, "--bench"), "usage: test-metal-prefill-rope [--bench [512|8192]]");
+        bench = true;
+        if (args.next()) |value| bench_rows = try std.fmt.parseInt(u32, value, 10);
+        try require(args.next() == null, "unexpected benchmark arguments");
+    }
     try require(unsetenv("DS4_METAL_DISABLE_V41_LINEAR_BF16") == 0, "enable the ordinary linear BF16 path");
     try require(c.ds4_gpu_init() != 0, "initialize GPU");
     defer c.ds4_gpu_cleanup();
+    if (bench) {
+        std.debug.print("sample,arm,rows,operations,total_ms,ms_per_call\n", .{});
+        if (bench_rows) |rows| return benchmark(rows);
+        try benchmark(512);
+        return benchmark(8192);
+    }
     const cases = [_]Case{
         .{ .heads = 32, .rows = 1, .start = 0 },
         .{ .heads = 64, .rows = 2, .start = 8192 },

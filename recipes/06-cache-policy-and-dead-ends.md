@@ -133,6 +133,13 @@ bottleneck. The variant was removed. Check the changed dependency as well as
 total latency before discarding neutral results; here neither supplied evidence
 for a further improvement that required this geometry.
 
+The [prefill output-transform fusion](../speed-bench/experiments/2026-11-04-prefill-followup/README.md)
+reuses an existing kernel to combine BF16 rounding and inverse RoPE. In five
+isolated 8,192-row pairs, the fused operation was faster; tested outputs matched
+exactly. Full-model comparisons at 8K and 32K were inconclusive. Retain the small
+opt-in implementation for its local reduction; it has not earned preset promotion
+or established a whole-prefill saving.
+
 * Two-layer expert-prefetch lookahead ran 87–94 tokens/s versus 128–130 controls,
   despite exact logits. Lower explicit read wait was offset by later GPU drain;
   page-residency/contention was a hypothesis, not a measured cause (§3).

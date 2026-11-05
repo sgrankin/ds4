@@ -312,3 +312,21 @@ remain unchanged. The [report](../../../speed-bench/experiments/2026-11-04-post-
 owns all samples, profile limitations and the two microbenchmark series. The
 next slice returns to prefill: inspect its remaining work and dependencies, then
 select one bounded change rather than extrapolating isolated routing savings.
+
+## Seventeenth question: combine prefill rounding and inverse RoPE
+
+Batch attention separately rounded each output head to BF16 and rotated its
+last 64 columns. Reusing the existing fused helper removes the additional tail
+pass and one dispatch, without new kernels or workspace. Hardware checks and
+all 512 fixed-history logit rows matched. Five isolated large-chunk pairs
+consistently shortened this transform, while the smaller append shape was noisy.
+
+Retain the small opt-in implementation. Five-pair model comparisons at both
+8K and 32K did not establish a complete-prefill gain or regression. The diagnostic
+trace confirms that all 103 intended conversions disappear, with lower local
+transform spans and no added aggregate delay to the following projection; it
+does not predict a whole-model saving. The [report](../../../speed-bench/experiments/2026-11-04-prefill-followup/README.md)
+owns every sample, the corrected test-counter failure and scope limitations.
+Presets and installed binaries remain unchanged. The profile also identifies
+large batched F16 projections still using a matrix-vector kernel, a larger
+remaining prefill target for the next bounded slice.

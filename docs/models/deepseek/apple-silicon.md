@@ -533,6 +533,19 @@ The [isolated rescaling experiment](../../../speed-bench/experiments/2026-11-04-
 explains the operation-level gain. Stored KV formats and scalar decode kernels
 are unchanged; altered prefill state can still affect subsequent decode behavior.
 
+Batched attention rounds each output head to BF16 before applying inverse
+RoPE to its final 64 columns. `DS4_METAL_V41_PREFILL_ROPE_BF16=1` reuses the
+existing fused helper to perform both operations in one dispatch. It still
+rounds all 512 columns; it removes the additional read and write of the rotated
+tail, with no new workspace or cache state. Unset, zero and runtime quality mode
+keep the separate operations. Scalar decode is unchanged.
+
+The [prefill fusion experiment](../../../speed-bench/experiments/2026-11-04-prefill-followup/README.md)
+found exact outputs in its hardware fixtures and all 512 tested model-logit rows.
+Five isolated 8,192-row pairs consistently shortened the transform, while the
+512-row case was noisy and full-model comparisons at 8K and 32K did not establish a
+whole-prefill gain. The small fusion remains opt-in; presets are unchanged.
+
 ## Representing the history
 
 The existing publication boundary quantizes compressed rows before storing
