@@ -93,6 +93,9 @@ bool ds4_metal_expert_slab_residency_add(ds4_metal_expert_cache_state *state,
             [set commit];
             state->cache_slab_residency_used_batch = 0;
             if (!state->cache_slab_residency_set) {
+                const char *defer_release = getenv("DS4_METAL_STREAMING_EXPERT_DEFER_SET_RELEASE");
+                state->cache_slab_residency_defer_release =
+                    g_retired_slab_residency_sets && defer_release && !strcmp(defer_release, "1");
                 state->cache_slab_residency_set = set;
                 state->cache_slab_residency_uses = 0;
                 if (queue) {
@@ -101,10 +104,11 @@ bool ds4_metal_expert_slab_residency_add(ds4_metal_expert_cache_state *state,
                 }
             }
             if (profile)
-                fprintf(stderr, "ds4: streaming expert slab residency add allocations=%llu bytes=%.2f GiB mode=%s\n",
+                fprintf(stderr, "ds4: streaming expert slab residency add allocations=%llu bytes=%.2f GiB mode=%s defer_release=%u\n",
                         (unsigned long long)set.allocationCount,
                         (double)set.allocatedSize / 1073741824.0,
-                        state->cache_slab_residency_attached ? "queue" : "command");
+                        state->cache_slab_residency_attached ? "queue" : "command",
+                        (unsigned)state->cache_slab_residency_defer_release);
             return true;
         }
 #endif
@@ -135,10 +139,11 @@ void ds4_metal_expert_slab_residency_use(void *command) {
         }
         /* This covers the whole CB, including any earlier/later router work.
          * Cache pins and useResource still own actual reads and hazards. The
-         * extra reference only keeps this set object alive across pressure
-         * clear when the caller opted into unretained command buffers. */
+         * extra owner only keeps this set object alive across pressure clear.
+         * Deferred mode transfers the cache's owner to the full-drain list;
+         * otherwise an unretained CB needs its own completion capture. */
         [cb useResidencySet:set];
-        if (!cb.retainedReferences) {
+        if (!state->cache_slab_residency_defer_release && !cb.retainedReferences) {
             [cb addCompletedHandler:^(id<MTLCommandBuffer> completed) {
                 (void)completed;
                 __attribute__((objc_precise_lifetime)) id keepAlive = set;
@@ -174,14 +179,41 @@ void ds4_metal_expert_slab_residency_clear(ds4_metal_expert_cache_state *state,
                 [set endResidency];
                 [set removeAllAllocations];
                 [set commit];
+                // The selected event retires expert reads, not the whole CB.
+                // Keep this object through the existing full scheduler drain.
+                if (state->cache_slab_residency_defer_release)
+                    [g_retired_slab_residency_sets addObject:set];
             }
         }
 #endif
         state->cache_slab_residency_attached = 0;
         state->cache_slab_residency_set = nil;
         state->cache_slab_residency_used_batch = 0;
+        state->cache_slab_residency_defer_release = 0;
         state->cache_slab_residency_uses = 0;
     }
+}
+/* Existing SSD fixture only: clear the set after seed encoding, while the
+ * batch is still unsubmitted. Actual slab ownership and pins stay intact. */
+int ds4_metal_test_slab_residency_retirement(void) {
+    const uint32_t slabs = g_expert_cache.cache_slab_count;
+    const uint32_t entries = g_expert_cache.cache_entry_count;
+    const bool deferred = g_expert_cache.cache_slab_residency_defer_release;
+    const NSUInteger retired = g_retired_slab_residency_sets.count;
+    __weak id set = g_expert_cache.cache_slab_residency_set;
+    int ok = g_batch_cb && g_batch_cb.status == MTLCommandBufferStatusNotEnqueued;
+    ds4_metal_expert_slab_residency_clear(&g_expert_cache,
+        ds4_gpu_stream_expert_timing_summary_enabled(), "fixture before submission");
+    ok = ok && g_expert_cache.cache_slab_count == slabs &&
+        g_expert_cache.cache_entry_count == entries &&
+        g_retired_slab_residency_sets.count == retired + (deferred ? 1 : 0);
+    if (deferred)
+        ok = ok && set && [g_retired_slab_residency_sets containsObject:set];
+    const int drained = ds4_gpu_end_commands();
+    ok = ok && drained && g_retired_slab_residency_sets.count == 0;
+    fprintf(stderr, "Metal SSD early set clear/full-drain owner: %s (deferred=%u)\n",
+            ok ? "PASS" : "FAIL", (unsigned)deferred);
+    return ok;
 }
 void ds4_metal_expert_retire_slab(ds4_metal_expert_cache_state *state, uint32_t index) {
     @autoreleasepool {

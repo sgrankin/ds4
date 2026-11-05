@@ -52,15 +52,17 @@ bool ds4_metal_bootstrap_bookkeeping(void) {
     g_dsv4_completion_cache = [NSCache new];
     g_dsv4_completion_cache.countLimit = 256u;
     g_transient_buffers = [NSMutableArray array];
+    g_retired_slab_residency_sets = [NSMutableArray array];
     g_pending_cbs = [NSMutableArray array];
     if (
         !g_q4_expert_table_cache ||
         !g_q4_expert_layer_residency_cache ||
         !g_pipeline_cache || !g_dsv4_completion_cache ||
-        !g_transient_buffers || !g_pending_cbs) {
+        !g_transient_buffers || !g_retired_slab_residency_sets || !g_pending_cbs) {
         fprintf(stderr, "ds4: Metal bookkeeping allocation failed\n");
         g_pending_cbs = nil;
         g_transient_buffers = nil;
+        g_retired_slab_residency_sets = nil;
         g_dsv4_completion_cache = nil;
         g_pipeline_cache = nil;
         g_q4_expert_layer_residency_cache = nil;
@@ -2378,6 +2380,7 @@ void ds4_metal_bootstrap_retire_readback(void) {
     g_selected_readback_event = nil;
     g_selected_readback_event_value = 0;
     [g_transient_buffers removeAllObjects];
+    [g_retired_slab_residency_sets removeAllObjects];
 }
 
 void ds4_metal_bootstrap_retire_addresses(void) {
@@ -2708,6 +2711,8 @@ void ds4_metal_bootstrap_retire_bookkeeping(void) {
     g_q4_expert_table_cache = nil;
     ds4_metal_exact_cache_cleanup();
     g_transient_buffers = nil;
+    // Final cache clear follows retire_readback and can retire its last set.
+    g_retired_slab_residency_sets = nil;
     g_pending_cbs = nil;
     g_library = nil;
     g_queue = nil;

@@ -143,6 +143,7 @@ bool ds4_metal_tp_command_complete(void *command) {
 }
 void ds4_metal_tp_clear_transients(void) {
   [g_transient_buffers removeAllObjects];
+  [g_retired_slab_residency_sets removeAllObjects];
 }
 bool ds4_metal_tp_new_batch(void) {
   g_batch_cb = ds4_gpu_new_command_buffer();

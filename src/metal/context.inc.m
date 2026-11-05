@@ -416,6 +416,7 @@ static ds4_metal_thread_owners ds4_metal_thread_capture(void) {
     NSMutableDictionary<NSString *, DS4MetalQ4ExpertTable *> *q4_expert_table_cache;
     NSMutableDictionary<NSString *, id> *q4_expert_layer_residency_cache;
     NSMutableArray<id<MTLBuffer>> *transient_buffers;
+    NSMutableArray<id<MTLResidencySet>> *retired_slab_residency_sets;
     ds4_gpu_zero_prefix_prefill_mask_cache_entry
     zero_prefix_prefill_mask_cache[DS4_GPU_PREFILL_MASK_CACHE_SLOTS];
     id<MTLBuffer> flash_attn_mask_buffer;
@@ -892,6 +893,7 @@ static void ds4_metal_thread_leave(ds4_metal_thread_scope *scope) {
 #define g_q4_expert_table_cache (ds4_metal_context_current()->q4_expert_table_cache)
 #define g_q4_expert_layer_residency_cache (ds4_metal_context_current()->q4_expert_layer_residency_cache)
 #define g_transient_buffers (ds4_metal_context_current()->transient_buffers)
+#define g_retired_slab_residency_sets (ds4_metal_context_current()->retired_slab_residency_sets)
 #define g_zero_prefix_prefill_mask_cache (ds4_metal_context_current()->zero_prefix_prefill_mask_cache)
 #define g_flash_attn_mask_buffer (ds4_metal_context_current()->flash_attn_mask_buffer)
 #define g_flash_attn_zero_mask_buffer (ds4_metal_context_current()->flash_attn_zero_mask_buffer)

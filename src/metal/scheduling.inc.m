@@ -65,6 +65,7 @@ void ds4_metal_schedule_clear_transients(bool profile) {
                     (unsigned long)[g_transient_buffers count], bytes / 1048576.0);
         }
         [g_transient_buffers removeAllObjects];
+        [g_retired_slab_residency_sets removeAllObjects];
     }
 }
 void ds4_metal_schedule_evict(const char *label) { ds4_gpu_model_buffer_cache_maybe_evict(label); }

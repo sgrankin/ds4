@@ -19,6 +19,9 @@ typedef struct { uint8_t e, qs[16]; } mxfp4_block;
 static uint64_t block_bytes = sizeof(iq2_block);
 static uint32_t block_values = 256;
 
+/* Metal-only fixture leaf; no public engine/session interface. */
+extern int ds4_metal_test_slab_residency_retirement(void);
+
 static uint32_t rng = 1;
 static uint32_t random_u32(void) {
     rng ^= rng << 13;
@@ -191,7 +194,8 @@ static int check_seed_release(void *model, uint64_t bytes, uint64_t expert) {
         ds4_gpu_set_streaming_expert_cache_budget(E);
         if (!ds4_gpu_begin_commands() ||
             !ds4_gpu_stream_expert_cache_seed_experts_gpu_copy(&table, ids, NULL, E) ||
-            !ds4_gpu_end_commands() || ds4_gpu_stream_expert_cache_current_count() != (uint32_t)E)
+            !(pass == 0 ? ds4_metal_test_slab_residency_retirement() : ds4_gpu_end_commands()) ||
+            ds4_gpu_stream_expert_cache_current_count() != (uint32_t)E)
             return 0;
         ds4_gpu_set_streaming_expert_cache_budget(0);
         if (ds4_gpu_stream_expert_cache_current_count() != 0) return 0;
