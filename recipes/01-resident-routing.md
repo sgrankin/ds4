@@ -183,6 +183,15 @@ checked predictions matched. Warm results were mixed. The profile confirms fewer
 command buffers but does not show lower native host latency; retain the small
 measured gain without extrapolating it to every phase or promoting GPU routing.
 
+The [first-decode address-path screen](../speed-bench/experiments/2026-11-05-first-decode-admission/README.md)
+then forced existing address dispatch before the automatic four-token threshold.
+All 512 tested predictions matched. Small timing differences favor keeping this
+existing option in the experimental package, but results are mixed and do not
+establish a general gain. The intended kernel switch occurred while the large
+first-decode gaps remained. The cause of the delay remains unresolved; resource
+admission is a hypothesis for the next investigation. No new warm-up phase,
+kernel or cache representation was added.
+
 Detailed encoder profiling changes batching and adds host overhead; its gap reduction is not a
 predicted ordinary-runtime saving. The
 [Apple Silicon manual](../docs/models/deepseek/apple-silicon.md#resident-expert-substitution)

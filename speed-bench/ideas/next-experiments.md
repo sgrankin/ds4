@@ -6,30 +6,33 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: does GPU-resident decode benefit from fewer submissions?**
-One-hour slice: November 5, 00:02 through 01:02 Eastern. Use runtime
-`909faab5` at checkout `bdcf85a5`, the current benchmark binary and the full
-experimental GPU-resident package from the package-requalification settings.
-The previous every-layer submission choice was measured with CPU routing;
-removing those CPU handoffs changes the dependency graph. Its recent diagnostic
-still showed approximately forty command buffers per ordinary GPU-resident token.
+**Current question: can we remove the first-decode admission delay?**
+One-hour slice: November 5, 00:49 through 01:49 Eastern. Start from runtime
+`909faab5` at closure `0dff6c76`, holding the selected experimental GPU package
+(including four-layer submissions), model, 64 GB expert cache and 8K chunks fixed.
+The latest normal-grouping trace still spends about 0.8 seconds on the first
+scalar evaluation after fresh prefill. This is not request time to first token.
 
-Hold routing, refresh interval sixteen, parallel shared/routed FFN, cache size,
-packing and prefill settings fixed. Compare the existing
-`DS4_METAL_V41_DECODE_FLUSH_LAYERS=1` with `2` and `4`. No new runtime selector or
-kernel is needed. First check fixed-history logits, then take five alternating
-32K pairs for each candidate and five 8K pairs for a useful candidate. Inspect
-command-buffer counts and dependencies separately from profile-free timing.
-Keep first-token, steady and complete decode costs; preserve noisy or neutral
-results and check whether a removed submission exposes another useful target.
+First identify the exposed delay using existing command, expert-cache and read
+profiles. The earlier 4 GiB versus 512 MiB slab experiment already traded a
+shorter first step for slower later decode; do not repeat it. Prefill already
+seeds cache slots through GPU blits, so do not assume this is their first GPU use.
+Inspect compute resource admission, cache lifetimes and the difference between
+first, ordinary and refresh tokens. Keep timestamp-domain and profiler limits
+explicit. Then select one small intervention supported by the evidence.
 
-The outcome is a scheduling choice for the experimental GPU package, not its
-promotion into ordinary presets. A useful exact setting may be retained even
-when a noisy workload is neutral; regressions and changed logits need explanation.
-Use the existing driver and pressure guard, one model job at a time. Keep raw
-artifacts under `.workspaces/hillclimb-20261104/21-gpu-submit-cadence/` and one
-report under `2026-11-05-gpu-submit-cadence/`. Finish with the owning manual,
-recipe conclusion and one short journal entry. Do not advance main or push.
+Qualify any candidate with at least five alternating pairs, fresh and warm
+phases, fixed-history logits, total inference and process wall. An improvement
+must remove or overlap cost, not merely move it into startup, prefill or later
+steps. Neutral results can be useful if they remove a dependency that the changed
+profile exposes; record that evidence before retaining or rejecting the change.
+Keep runtime behavior opt-in and preserve expert-cache pins, the admission lock
+and pressure guard. One heavy model job, no unrelated build during timing.
+
+Keep raw artifacts under `.workspaces/hillclimb-20261104/22-first-decode-admission/`
+and one concise report under `2026-11-05-first-decode-admission/`. Update the
+owning manual, recipe conclusion and short journal entry. No main advancement
+or push is authorized.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. The current timed

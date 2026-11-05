@@ -32,6 +32,9 @@ fn maskedRequested(ready: bool) bool {
     return (present("DS4_METAL_ENABLE_STREAMING_EXPERT_MASKED_ADDR") or ready) and absent("DS4_METAL_DISABLE_STREAMING_EXPERT_MASKED_ADDR");
 }
 fn addrRequested(ready: bool) bool {
+    // Cache installation already publishes addresses before splitReady's
+    // four-token warm-up threshold. Explicit address dispatch can therefore
+    // bypass that threshold without enabling resident/missing overlap.
     return (present("DS4_METAL_ENABLE_STREAMING_EXPERT_ADDR_TABLE") or present("DS4_METAL_ENABLE_STREAMING_EXPERT_HIT_VALIDATOR") or present("DS4_METAL_ENABLE_STREAMING_EXPERT_MASKED_ADDR") or ready) and
         absent("DS4_METAL_DISABLE_STREAMING_EXPERT_ADDR_TABLE");
 }

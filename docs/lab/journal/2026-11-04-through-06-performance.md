@@ -410,3 +410,19 @@ grouping did not show lower host latency. This is a small measured scheduling
 gain, not proof that every removed submission reduces elapsed time. CPU-routing
 presets, installed binaries and published main remain unchanged. The large
 first-decode gap remains a separate candidate for investigation.
+
+## Twenty-second question: use address dispatch from the first decode step
+
+The slow first token used direct expert slots, while later steps used cached
+address tables. An existing flag bypasses the four-token dispatch threshold
+without changing the separate split-execution gate, selected experts or cache
+ownership. Five-pair comparisons at 8K and 32K found small, mixed benefits;
+all 512 checked predictions and hashes matched. Keep the existing flag in the
+experimental GPU settings, with ordinary presets and binaries unchanged.
+
+The [report](../../../speed-bench/experiments/2026-11-05-first-decode-admission/README.md)
+also records the more important negative result: the profile confirms all forty
+first-token expert kernels switched to addresses, yet large gaps before expert
+work remained. The roughly 0.8-second initial evaluation was not fixed. A bounded
+slab-residency experiment is the next candidate; any such change must preserve
+cache pressure relief and account for cost moved into prefill or startup.

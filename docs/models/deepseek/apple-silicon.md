@@ -407,6 +407,23 @@ did not establish lower host latency, so fewer submissions are not themselves a
 speed claim. The ordinary CPU-routing fast presets retain interval one. The
 report's settings file records the selected experimental combination.
 
+The first CPU-routed steps normally bind six expert-buffer slots directly.
+After four decode tokens and sufficient cache population, automatic dispatch
+uses an address table instead: the kernel reads cached weight addresses indexed
+by the selected expert IDs. Cache installation already publishes these addresses,
+so `DS4_METAL_ENABLE_STREAMING_EXPERT_ADDR_TABLE=1` can select the address path
+from the first step. It preserves selected IDs, weights, missing-expert loads
+and cache pins; the separate readiness gate for overlapping resident and missing
+experts remains in place.
+
+The [early-address experiment](../../../speed-bench/experiments/2026-11-05-first-decode-admission/README.md)
+keeps this option in the selected experimental GPU package after exact checks
+and small, mixed timing benefits. It does not fix the roughly 0.8-second first
+decode evaluation after fresh prefill: the profile confirms the kernel change,
+but long gaps before expert work remain. This is a presence-based flag; unset
+it to restore automatic selection, because `0` also enables it. Ordinary fast
+presets remain unchanged.
+
 ### Executing the selected experts
 
 Metal uses batched routed matrix multiplication to group rows by expert. The
