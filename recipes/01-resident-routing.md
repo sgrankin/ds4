@@ -301,9 +301,13 @@ exposed GPU stall. The [unretained follow-up](../speed-bench/experiments/2026-11
 repaired a scratch lifetime defect and restored exact checked outputs, but its
 five-pair timings do not justify selection: 32K decode and append cost more,
 while 8K total time remains mixed. Keep the correctness repair. Deduplication
-and unretained buffers remain unselected pending a bounded test of the extra
-completion-handler ownership work and direct qualification against the selected
-boundary package.
+and unretained buffers remain unselected. The
+[deferred-ownership follow-up](../speed-bench/experiments/2026-11-05-deferred-set-release/README.md)
+removes the extra set captures and passes early-clear lifetime checks, but direct
+five-pair comparisons still do not establish a consistent net benefit. The 8K
+total is modestly lower while decode remains mixed; 32K total does not improve.
+The profile exposes no new recurring stall, so the selected boundary package
+remains unchanged and no further callback experiment is selected.
 
 Detailed encoder profiling changes batching and adds host overhead; its gap reduction is not a
 predicted ordinary-runtime saving. The

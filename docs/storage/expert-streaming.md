@@ -123,6 +123,17 @@ Both modes preserve the existing cache pins and resource declarations. For
 unretained command buffers, mode `2` keeps an extra reference to the set through
 completion. That reference preserves the set object, not a snapshot of its
 allocations, and does not replace the existing ownership of in-flight buffers.
+An experimental `DS4_METAL_STREAMING_EXPERT_DEFER_SET_RELEASE=1` owner avoids
+per-command completion captures. The active cache keeps its set; when clear
+drops that owner, a separate list in the Metal context retains the retired set
+until the existing full completion drain. Successful flushes and router-event
+handoffs preserve the list because shared work can still be pending. Teardown
+also releases the final set retired by cache cleanup. The policy is fixed when
+the set is created, so a later environment change cannot change its retirement
+rule. The [deferred-release experiment](../../speed-bench/experiments/2026-11-05-deferred-set-release/README.md)
+validates the focused lifetime check and fixed-history outputs but leaves this
+path unselected after mixed performance comparisons against the selected package.
+
 An unselected `DS4_METAL_STREAMING_EXPERT_SLAB_RESIDENCY_ONCE=1` prototype
 skips repeated association within the active batch. A byte in the cache state
 records the first actual use; batch creation, set membership commits and clear

@@ -6,18 +6,21 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Experiment 34 closed: unretained command buffers.**
-The November 5, 10:16–11:16 Eastern slice retained the scratch lifetime repair
-in `d31275e9`. All 768 repaired quality rows match; five-pair 8K and 32K timing
-leaves the optional unretained/deduplication package unselected. The corrected
-profile shows nearly unchanged ordinary GPU windows and changed host scopes,
-without isolating callback cost. The [report](../experiments/2026-11-05-unretained-residency/README.md)
-owns the failed and repaired checks, timing, resource audit and unrun comparisons.
+**Experiment 35 closed: deferred residency-set ownership.**
+The November 5, 11:16–12:16 Eastern slice implemented and tested runtime
+`1e0e5841`. It removes per-command set captures while retaining cleared sets
+through the existing full drain. Focused fixtures and paired quality checks pass,
+but primary and direct five-pair comparisons do not establish a consistent net
+benefit. Leave the combined settings unselected and keep package 32 unchanged.
+The [report](../experiments/2026-11-05-deferred-set-release/README.md) owns the
+samples, outliers, profile and native diagnostic, lifetime evidence and limits.
+The scratch correctness repair from experiment 34 remains retained.
 
-The next bounded question is whether active cache ownership plus deferred
-retirement can remove the extra per-command residency-set completion handlers.
-No implementation of that follow-up has started. Main, installed frontends and
-normal presets remain unchanged.
+The next candidate is scalar decode's repeated four-float PRE publication:
+profiles show gaps around these tiny blits, and a direct consumer may avoid
+closing the compute encoder. Source review must preserve all consumers and
+first/final state publication before implementation. No new experiment or
+runtime edit has started yet. Main and installed frontends remain unchanged.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. The current timed

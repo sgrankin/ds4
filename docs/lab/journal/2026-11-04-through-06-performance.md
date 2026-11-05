@@ -651,3 +651,20 @@ supports one bounded ownership follow-up. The
 [report](../../../speed-bench/experiments/2026-11-05-unretained-residency/README.md)
 owns samples, failed and repaired output checks, profiling limits and unrun
 comparisons. Presets, installed frontends and main remain unchanged.
+
+## Thirty-fifth question: retire residency sets at the full drain
+
+The active cache can own its residency set during use and transfer it to a
+deferred list only when that owner is cleared. A focused fixture verifies early
+clear before submission and release after completion without destroying expert
+buffers. All 768 paired output rows match, as does a reused comparison with the
+selected package. The trace confirms removal of the extra set captures.
+
+Keep the combined settings unselected. Primary and direct five-pair comparisons
+do not establish a consistent net benefit: the direct 8K total is modestly lower,
+but decode remains mixed and 32K total time does not improve. The changed profile
+reveals no new recurring stall. A native diagnostic localizes some variation
+without explaining it. The [report](../../../speed-bench/experiments/2026-11-05-deferred-set-release/README.md)
+retains all samples, outliers, ownership checks and limits. This closes the
+callback investigation for now; the selected package, presets, installed
+frontends and main remain unchanged.
