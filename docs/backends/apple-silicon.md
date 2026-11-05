@@ -16,6 +16,23 @@ the driver owns the corresponding Apple objects. The resource-lifetime
 [qualification](../../speed-bench/experiments/zig-metal-resources-20261022/)
 records the tested boundary.
 
+Ordinary Metal command buffers retain the resources they reference. The
+experimental `DS4_METAL_UNRETAINED_COMMAND_BUFFERS` mode omits those retains,
+so the runtime must keep every referenced resource alive until completion
+through its graph, model-view, expert-cache and transient owners. This setting
+is enabled by presence, including a value
+of `0`; omit it to use ordinary retained buffers. A selected router event can
+complete before the rest of its command buffer, so that event does not release
+transients. The scheduling owner drains pending commands before clearing them.
+
+Scratch growth follows the same rule. A later attention piece can need a larger
+buffer while an earlier piece still references the old allocation in the same
+unfinished batch. The scratch helper now places the old allocation in the
+transient list before replacing it. This preserves the GPU's inputs without
+adding a wait; an allocation failure leaves the previous buffer and capacity
+intact. The [unretained-buffer investigation](../../speed-bench/experiments/2026-11-05-unretained-residency/README.md)
+records the concrete prefill defect and qualification of the repair.
+
 The same build selects hardware-specific paths automatically. Dense and routed
 matrix operations, attention, quantization and expert loading use shared host
 controllers and shaders; model-specific data layout, kernels and tradeoffs are

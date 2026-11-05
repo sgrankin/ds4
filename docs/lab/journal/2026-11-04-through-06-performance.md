@@ -632,3 +632,22 @@ proof of an unlocked performance gain. The
 [report](../../../speed-bench/experiments/2026-11-05-residency-once/README.md)
 owns the samples, variation, API evidence and limits. The selected package,
 normal presets, installed frontends and main remain unchanged.
+
+## Thirty-fourth question: unretained command buffers
+
+Unretained buffers exposed a real scratch lifetime defect: a later attention
+piece enlarged its workspace before the same command buffer finished using the
+old allocation. Keeping the old buffer through the existing completion drain
+restored exact output in all 768 checked rows, including the smaller-cache
+case. Retain this correctness repair; it adds no submission or wait.
+
+The optional unretained package remains unselected. Five pairs show slower fresh
+decode and append at 32K, while 8K total time is mixed. The repaired trace keeps
+the same recorded command structure and normalized kernel labels, with 34
+matching decode hashes. Ordinary GPU windows are nearly unchanged while host
+encoding and waiting time shift. The trace does not isolate the
+cost of the extra residency-set completion handlers. That concrete extra work
+supports one bounded ownership follow-up. The
+[report](../../../speed-bench/experiments/2026-11-05-unretained-residency/README.md)
+owns samples, failed and repaired output checks, profiling limits and unrun
+comparisons. Presets, installed frontends and main remain unchanged.

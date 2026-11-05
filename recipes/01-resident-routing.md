@@ -296,8 +296,14 @@ buffers. Ordinary retained-buffer timings remain mixed, including a small
 decrease in fresh steady throughput at 8K and a favorable smaller-cache case.
 Keep it unselected for a bounded
 unretained-buffer test: that path also removes repeated completion captures.
-This is a source-supported next question, not an established speedup or a newly
-exposed GPU stall. The selected boundary package remains unchanged.
+This was a source-supported next question, not an established speedup or a newly
+exposed GPU stall. The [unretained follow-up](../speed-bench/experiments/2026-11-05-unretained-residency/README.md)
+repaired a scratch lifetime defect and restored exact checked outputs, but its
+five-pair timings do not justify selection: 32K decode and append cost more,
+while 8K total time remains mixed. Keep the correctness repair. Deduplication
+and unretained buffers remain unselected pending a bounded test of the extra
+completion-handler ownership work and direct qualification against the selected
+boundary package.
 
 Detailed encoder profiling changes batching and adds host overhead; its gap reduction is not a
 predicted ordinary-runtime saving. The

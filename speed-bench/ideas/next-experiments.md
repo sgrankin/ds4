@@ -6,19 +6,18 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Last closed question: deduplicate active-batch residency association.**
-The November 5, 09:16–10:16 Eastern slice retained runtime `47e461b0` as an
-opt-in, unselected prototype. The [report](../experiments/2026-11-05-residency-once/README.md)
-records fewer actual calls with unchanged associated buffers and checked
-outputs, but mixed primary and frozen-build timings. No consistent net gain
-or newly exposed GPU stall was established.
+**Experiment 34 closed: unretained command buffers.**
+The November 5, 10:16–11:16 Eastern slice retained the scratch lifetime repair
+in `d31275e9`. All 768 repaired quality rows match; five-pair 8K and 32K timing
+leaves the optional unretained/deduplication package unselected. The corrected
+profile shows nearly unchanged ordinary GPU windows and changed host scopes,
+without isolating callback cost. The [report](../experiments/2026-11-05-unretained-residency/README.md)
+owns the failed and repaired checks, timing, resource audit and unrun comparisons.
 
-The selected package remains
-[experiment 32](../experiments/2026-11-05-cpu-expert-boundary/candidate-settings.json).
-A bounded unretained-command comparison is the next candidate because that
-path also removes repeated completion captures. It has not yet been selected
-here; source lifetime checks must precede its model runs. Normal presets,
-installed frontends and main are unchanged.
+The next bounded question is whether active cache ownership plus deferred
+retirement can remove the extra per-command residency-set completion handlers.
+No implementation of that follow-up has started. Main, installed frontends and
+normal presets remain unchanged.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. The current timed

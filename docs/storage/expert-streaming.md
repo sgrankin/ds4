@@ -132,8 +132,11 @@ still captures the set through completion for unretained buffers. Apple's
 allows one association to cover a command buffer's encoders; the commit resets
 are conservative. The [deduplication experiment](../../speed-bench/experiments/2026-11-05-residency-once/README.md)
 confirms fewer calls with unchanged buffer coverage, but mixed retained-buffer
-latency. It remains opt-in for a bounded unretained-buffer follow-up, where
-repeated completion captures are also removed; that path has no timing result yet.
+latency. The [unretained-buffer follow-up](../../speed-bench/experiments/2026-11-05-unretained-residency/README.md)
+repaired scratch ownership and then found mixed or slower timing, so neither
+option is selected. The set captures remain a source of extra host work to test;
+the profile does not isolate their cost. Shared scratch and transient ownership
+are explained in the [Metal manual](../backends/apple-silicon.md).
 
 The [first command-buffer comparison](../../speed-bench/experiments/2026-11-05-scoped-residency/README.md)
 covered only compute reads. It restored a large fresh-start gap, which motivated
