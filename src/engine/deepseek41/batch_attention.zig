@@ -282,7 +282,15 @@ pub const BatchAttention = struct {
             c.ds4_gpu_attention_decode_mixed_batch_heads_tensor(batch.heads, model.map, model.size, sinks, batch.q, graph.raw_prefill, graph.compressed[owner], (if (graph.compressed_kv_fp4) @as(u32, 2) else @intFromBool(graph.compressed_kv_f16)), null, 0, count, start, raw_rows, graph.prefill_cap + 128, 0, compressed, 128, ratio, heads, shape.n_head_dim) != 0
         else
             c.ds4_gpu_attention_indexed_mixed_batch_heads_tensor(batch.heads, model.map, model.size, sinks, batch.q, graph.raw_prefill, graph.compressed[owner], (if (graph.compressed_kv_fp4) @as(u32, 2) else @intFromBool(graph.compressed_kv_f16)), batch.selected_comp, count, start, raw_rows, graph.prefill_cap + 128, 0, compressed, shape.n_indexer_top_k, 128, ratio, heads, shape.n_head_dim) != 0;
-        if (!ok or c.ds4_gpu_dsv41_quantize(batch.heads, heads * shape.n_head_dim, count, c.DS4_V41_BF16) == 0 or
+        if (!ok) return false;
+        const rope_bf16_env = if (!graph.quality) c.getenv("DS4_METAL_V41_PREFILL_ROPE_BF16") else null;
+        const rope_bf16 = rope_bf16_env != null and c.atoi(rope_bf16_env) != 0;
+        // Round every head column before inverse RoPE, retaining its rounded
+        // inputs and output boundary. The existing fused helper folds the
+        // separate tail pass into this rounding without another workspace.
+        if (rope_bf16) {
+            if (c.ds4_gpu_dsv41_rope_bf16(batch.heads, shape.n_head_dim, heads, count, start, ratio != 0, true) == 0) return false;
+        } else if (c.ds4_gpu_dsv41_quantize(batch.heads, heads * shape.n_head_dim, count, c.DS4_V41_BF16) == 0 or
             c.ds4_gpu_dsv41_rope(batch.heads, shape.n_head_dim, heads, count, start, ratio != 0, true) == 0) return false;
         const kept: u32 = @min(raw_rows, 128);
         const slot = (start + count - kept) % 128;

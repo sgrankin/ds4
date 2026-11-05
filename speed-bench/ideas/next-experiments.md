@@ -13,11 +13,14 @@ cache. Keep the experimental GPU resident route, SIMD, address reuse, parallel
 FFN and refresh sixteen fixed; fusion remains enabled in this experimental
 package. None of those decode-only changes implies a prefill benefit.
 
-Inspect existing profiles first and use one bounded fresh diagnostic only if
-needed. By twenty minutes into the slice, select one prefill kernel or dependency
-change, informed by the earlier rejected RB16 and shared-overlap attempts. If
-no justified candidate emerges, retain the profile and a concrete next question.
-Do not grow a profiler or change sampling and routing policy in this slice.
+The selected change reuses the existing fused BF16/inverse-RoPE helper for
+batch attention outputs, behind `DS4_METAL_V41_PREFILL_ROPE_BF16=1`. It removes
+the separate rotation pass over the last 64 columns and one dispatch, while
+still rounding every column. No new kernel or workspace is needed. The source
+semantics match, but the fused helper's strided rounding can offset saved
+traffic; measure that tradeoff. Quality mode and explicit zero keep the control.
+The existing fresh-prefill trace identifies the separate operation and provides
+an activation/dependency baseline; do not infer speedup from logical bytes.
 
 For a candidate, check activation and fixed-history logits, then run at least
 five alternating profile-free pairs at 32K and 8K. Retain complete phases,

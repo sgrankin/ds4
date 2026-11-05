@@ -74,4 +74,3 @@ All nine guarded jobs completed at normal pressure level 1 without pressure inte
 ## Decision
 
 Keep the fusion opt-in for its exact tested behavior and reduced isolated work. The model comparisons do not establish an end-to-end benefit, and no further unlocked improvement has yet been identified. No preset or installed binary is promoted on this evidence.
-
