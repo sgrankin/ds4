@@ -1166,17 +1166,21 @@ static int ds4_gpu_ensure_scratch_buffer(
         options = MTLResourceStorageModePrivate;
     }
 
-    *buffer = [g_device newBufferWithLength:bytes options:options];
-    if (!*buffer && options != MTLResourceStorageModeShared) {
-        *buffer = [g_device newBufferWithLength:bytes options:MTLResourceStorageModeShared];
+    id<MTLBuffer> replacement = [g_device newBufferWithLength:bytes options:options];
+    if (!replacement && options != MTLResourceStorageModeShared) {
+        replacement = [g_device newBufferWithLength:bytes options:MTLResourceStorageModeShared];
     }
-    if (!*buffer) {
+    if (!replacement) {
         fprintf(stderr, "ds4: failed to allocate Metal scratch buffer %s (%llu bytes)\n",
                 label, (unsigned long long)bytes);
-        *capacity = 0;
         return 0;
     }
-    (*buffer).label = [NSString stringWithUTF8String:label];
+    replacement.label = [NSString stringWithUTF8String:label];
+    // Multiple 2048-row attention pieces can grow scratch in one unfinished
+    // batch. Keep the old allocation until the existing completion drain,
+    // including when the command buffer does not retain its resources.
+    if (*buffer) [g_transient_buffers addObject:*buffer];
+    *buffer = replacement;
     *capacity = bytes;
     return 1;
 }
