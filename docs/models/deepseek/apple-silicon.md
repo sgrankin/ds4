@@ -546,6 +546,24 @@ Five isolated 8,192-row pairs consistently shortened the transform, while the
 512-row case was noisy and full-model comparisons at 8K and 32K did not establish a
 whole-prefill gain. The small fusion remains opt-in; presets are unchanged.
 
+The indexer query is another temporary prefill value: a projection expands each
+1,280-value query representation to 32 heads of 128 values, which score the
+stored index keys. The ordinary implementation uses the row-exact F16 projection
+even for large batches. `DS4_METAL_V41_PREFILL_INDEX_Q_MPP=1` instead permits the
+existing matrix backend for this query when TensorOps is available, the batch
+has at least 32 rows and is aligned to 32, and the run uses one rank without
+quality mode or the exact-dense-rows override. The preferred MPP kernel reads
+F32 inputs directly; its generic matrix fallback converts inputs to F16.
+
+This is an approximation. Matrix reduction changes some values even after the
+existing BF16 rounding, and subsequent rotation, FP4 quantization and selection
+can propagate those changes. Published compressor and index-key projections
+remain row-exact so that their projection contract is independent of sweep
+size; changed queries can still influence later model state. No new workspace
+or cache representation is needed. The [query projection experiment](../../../speed-bench/experiments/2026-11-04-prefill-f16-projections/README.md)
+records the numerical and task-quality tradeoff and five-pair prefill results.
+The selector remains opt-in and is not enabled by the fast presets.
+
 ## Representing the history
 
 The existing publication boundary quantizes compressed rows before storing

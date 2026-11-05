@@ -330,3 +330,22 @@ owns every sample, the corrected test-counter failure and scope limitations.
 Presets and installed binaries remain unchanged. The profile also identifies
 large batched F16 projections still using a matrix-vector kernel, a larger
 remaining prefill target for the next bounded slice.
+
+## Eighteenth question: use matrix multiplication for indexer queries
+
+Large F16 projections still used independent row reductions. Source inspection
+showed why publication needs that consistency across sweep sizes, so this slice
+changed only the temporary indexer query. The existing matrix backend removes
+most of the targeted projection work in the diagnostic trace without allocating
+new workspace. It changes some rounded queries and subsequent model predictions;
+this is a measured approximation, not a lossless dispatch change.
+
+Keep the selector opt-in for combined qualification. Fresh prefill was faster in
+all five pairs at both 8K and 32K; measured phase totals and decode had narrower,
+noisier results. Both reasoning-enabled coding solutions passed 174 evaluations
+by an independent oracle, but this is only one generated task per arm. The
+[report](../../../speed-bench/experiments/2026-11-04-prefill-f16-projections/README.md)
+owns all samples, distribution drift and the retained tool-recovery trace.
+Presets, installed binaries and published main remain unchanged. The next slice
+compares the accumulated package against published `364ceeab` on recorded agent
+work, rather than adding isolated percentage gains.

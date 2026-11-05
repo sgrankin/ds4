@@ -140,6 +140,16 @@ exactly. Full-model comparisons at 8K and 32K were inconclusive. Retain the smal
 opt-in implementation for its local reduction; it has not earned preset promotion
 or established a whole-prefill saving.
 
+The [temporary indexer-query matrix projection](../speed-bench/experiments/2026-11-04-prefill-f16-projections/README.md)
+uses the existing matrix backend for a large F16 query projection that previously
+ran as independent rows. Fresh prefill was faster in every measured pair at
+8K and 32K, while append and decode remained noisy. The changed reduction is an
+approximation: fixed-history logits differ, and both generated coding solutions
+passed a limited independent oracle. Retain it as an opt-in candidate for the
+next combined qualification. Keep published-key projections row-exact; this
+result does not justify changing every F16 projection or enabling the fast preset
+before measuring the accumulated package.
+
 * Two-layer expert-prefetch lookahead ran 87–94 tokens/s versus 128–130 controls,
   despite exact logits. Lower explicit read wait was offset by later GPU drain;
   page-residency/contention was a hypothesis, not a measured cause (§3).
