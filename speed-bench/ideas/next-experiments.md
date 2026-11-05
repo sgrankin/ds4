@@ -6,41 +6,44 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Current question: can refreshes avoid a separate shared-expert submission?**
-One-hour slice: November 5, 03:26 through 04:26 Eastern. The
-[residency/schedule combination](../experiments/2026-11-05-slab-event-interaction/README.md)
-reduces fresh first-step and complete-workload time but adds a small recurring
-decode cost. A full-token diagnostic places most of the fresh phase's added
-time in the seven later CPU refreshes; ordinary-step variation remains too.
+**Current question: can exact cached CPU selections use parallel shared/routed FFN?**
+One-hour slice: November 5, 04:09 through 05:09 Eastern. The
+[submission-removal experiment](../experiments/2026-11-05-refresh-shared-flush/README.md)
+did not establish a speed gain and its standalone selector was removed. It did
+identify a real batch-boundary obstacle to parallel FFN. Removing that boundary
+alone is insufficient: the existing parallel path assumes a GPU-selected,
+resident-only set whose possible entries are already pinned.
 
-The overlap-off refresh path submits shared gate/up work before entering routed
-expert execution. Check the data and resource dependencies, then test skipping
-that flush behind one opt-in selector. Selected expert I/O already starts before
-shared encoding. Removing the flush may help cache hits while losing useful I/O
-overlap on misses, so retain a constrained-cache or other actual-miss check.
-Do not change selected experts, numerical boundaries, cache pins or pressure
-relief. Keep the old path as the control; do not change other model families.
+Implement one opt-in path for the normal CPU-selected six experts only when
+all selected weights are already cached. Preserve the CPU routing policy,
+selected-ID upload, native mixture weights, normal cache accounting and pins.
+Establish the exact-selected proof before consuming cached addresses; do not
+reuse the broader resident-only override or merely widen a Boolean. Misses,
+split/staged loads and unsupported modes must keep the existing serial path.
+Use the existing shared/routed two-stage join, without a separate flush that
+would reset its state. Document the changed shared-down/HC join boundary and
+qualify numerical behavior. Keep the interface narrow and the experiment small.
 
-Baseline runtime is `8bf87bbd`, closure `d0af7acc`, using the experiment 25
-candidate settings: queue residency on, shared-event overlap off, GPU resident
-routing, refresh interval 16, four-layer submissions, 64 GB cache, 4 GiB slabs
-and 8K chunks. Use the same new binary with the selector off/on. Inspect whether
-refresh command-buffer count falls from 91 toward 51 while ordinary steps stay
-at 11. The native per-token timer can distinguish refresh and ordinary cost
-without changing encoder grouping; it remains diagnostic.
+Baseline runtime source is `8bf87bbd`, restored by closure `b479686a`, with the
+experiment 25 candidate settings: queue residency on, shared-event overlap off,
+GPU resident routing, refresh interval 16, four-layer submissions, requested
+64 GB cache, 4 GiB slabs and 8K chunks. Use the same new binary with the new
+selector off/on. Prove activation and serial fallback in a bounded diagnostic;
+do not infer either from the environment flag alone.
 
 Use fixed-history quality and five alternating timing pairs at 8K and 32K,
 retaining first-step, complete decode, prefill/append, inference and wall scopes.
-If the main comparison is useful, include a bounded miss-heavy qualification;
-any performance conclusion there still needs five pairs. One guarded heavy
-job at a time, no builds during timing. Profile neutral results for shifted
-dependencies before deciding. Reuse existing drivers and stop at an answer.
+Include the requested 16 GB cache case, which previously admitted 958 experts
+and produced actual scalar reads. Verify miss fallback and pins there; any speed
+claim still requires five pairs. One guarded heavy job at a time, no builds
+during timing. Profile neutral results for shifted dependencies before deciding.
+Reuse existing drivers and stop at an answer or the slice boundary.
 
-Keep raw artifacts under `.workspaces/hillclimb-20261104/26-refresh-shared-flush/`
-and one concise report under `2026-11-05-refresh-shared-flush/`. Update the owning
-manual, recipe conclusion and one short journal entry at closure. The selected
-experimental package still needs a periodic long-session comparison against
-published `364ceeab`; reserve a subsequent slice for that qualification.
+Keep raw artifacts under `.workspaces/hillclimb-20261104/27-cached-refresh-parallel/`
+and one concise report under `2026-11-05-cached-refresh-parallel/`. Update the
+owning manual, recipe conclusion and one short journal entry at closure. The
+next slice is reserved for periodic long-session qualification against published
+`364ceeab`; do not keep adding experiments before that comparison.
 No main advancement or push is authorized.
 
 [Project direction and current status](../../docs/project.md) records the goals,

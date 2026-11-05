@@ -235,6 +235,16 @@ all-hit admission path for parallel shared/routed work, with preserved pins
 and serial miss fallback. The submission change alone does not establish that
 capability or explain the measured slowdown.
 
+The [cached-refresh follow-up](../speed-bench/experiments/2026-11-05-cached-refresh-parallel/README.md)
+implements that exact-selection proof and exercises the concurrent FFN schedule
+while preserving serial miss fallback. It remains an unselected, opt-in
+prototype. Its sampled FFN sub-envelopes are slightly shorter, but larger GPU
+inter-buffer gaps precede the FFN buffers and sampled refresh windows are longer.
+These observations do not identify a complete cause. Keep this finding for
+a bounded follow-up; the selected latency package still uses serial CPU
+refreshes. The report separates five-pair latency evidence from the intrusive
+diagnostics and records the exact quality and cache-accounting checks.
+
 Detailed encoder profiling changes batching and adds host overhead; its gap reduction is not a
 predicted ordinary-runtime saving. The
 [Apple Silicon manual](../docs/models/deepseek/apple-silicon.md#resident-expert-substitution)

@@ -503,3 +503,24 @@ only an exact cached selection, preserve its pins and use the serial path on
 misses. Neither fewer submissions nor neutral timing establishes that future
 gain. The prior queue-residency latency candidate remains available; presets,
 installed frontends and main are unchanged.
+
+## Twenty-seventh question: parallel FFN for an exact cached selection
+
+The follow-up implements a separate proof for the six CPU-selected experts:
+validate and pin their cached identities before entering the existing shared
+and routed concurrent schedule. Misses retain serial submission and loading.
+All 768 paired logit rows and post-evaluation hashes match across 8K, 32K and a
+smaller-cache case with scalar reads and evictions. The smaller-cache case
+repeats the 8K histories; these are not 768 independent positions or tasks.
+
+Do not select the new flag in the latency package. Five pairs per configuration
+show small or mixed whole-workload differences, with order effects; complete
+fresh decode is slower in eight of ten primary pairs. Retain the opt-in
+prototype as useful groundwork. The timeline confirms concurrent FFN groups
+and slightly shorter local sub-envelopes, alongside larger GPU gaps before
+those buffers and longer sampled refresh windows. The source suggests a
+tradeoff between early shared submission and later combined submission after
+CPU preparation, but the diagnostics do not establish a complete cause.
+The [report](../../../speed-bench/experiments/2026-11-05-cached-refresh-parallel/README.md)
+owns every sample and scope limit. The next slice qualifies the accumulated
+selected package against published `364ceeab` before another runtime change.

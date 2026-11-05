@@ -366,6 +366,26 @@ found decode benefits with matching measured logits against serial GPU routing;
 it does not remove the resident policy's quality tradeoff. Presets still leave
 this experimental route disabled.
 
+An additional prototype, `DS4_METAL_V41_CACHED_REFRESH_PARALLEL=1`, admits
+CPU refreshes to the same concurrent schedule when their exact six selected
+experts are already cached. It requires shared-event overlap to be off. Before
+starting parallel work, it validates every selected cache identity and pins
+those entries; ordinary preparation still accounts for hits, prunes safely and
+uploads the CPU-selected IDs. Misses retain the earlier serial submission and
+load path. This is an exact-selection proof, separate from the GPU resident
+path's proof covering every possible selection. Unsupported preparation modes,
+asynchronous loading, images, quality mode and tensor parallelism are excluded.
+
+The [cached-refresh experiment](../../../speed-bench/experiments/2026-11-05-cached-refresh-parallel/README.md)
+confirmed this schedule and matching tested logits, including miss fallback.
+It remains outside the selected experimental package. The sampled FFN work
+became slightly shorter in one intrusive timeline pair, while larger GPU
+inter-buffer gaps preceded the FFN buffers and sampled refresh windows became
+longer. These intervals do not provide an exact latency decomposition.
+The prototype preserves a concrete follow-up question:
+can CPU preparation and submission be shortened enough to preserve that local
+gain? Fewer command buffers alone do not answer that question.
+
 Within GPU routing, `DS4_METAL_V41_RESIDENT_GPU_SIMD=1` distributes the search
 for each missing expert across one 32-lane SIMD group. The slots are still
 repaired in order: every lane keeps the same six IDs, excluding both native

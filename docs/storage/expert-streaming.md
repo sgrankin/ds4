@@ -133,8 +133,14 @@ selected experts are cached. The
 [submission-removal experiment](../../speed-bench/experiments/2026-11-05-refresh-shared-flush/README.md)
 reduced refresh command buffers without establishing a whole-workload gain;
 the separate submission remains. Putting both sets of work in one batch does
-not itself enable parallel FFN: the current streaming parallel path also
-requires its resident-only selection and cache-pin proof.
+not itself enable parallel FFN: the ordinary streaming parallel path also
+requires its resident-only selection and cache-pin proof. A separate
+[cached-refresh prototype](../../speed-bench/experiments/2026-11-05-cached-refresh-parallel/README.md)
+adds a proof for the exact six CPU-selected entries and retains serial miss
+fallback. It makes the concurrent schedule possible, but has not earned
+selection in the latency package: shorter sampled FFN work coincided with larger
+GPU inter-buffer gaps before that work starts. The [model backend manual](../models/deepseek/apple-silicon.md#resident-expert-substitution)
+owns its admission conditions.
 
 ## M5 Max measurements
 
