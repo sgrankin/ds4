@@ -6,12 +6,17 @@ runtime is `364ceeab`, which includes the five adopted overnight decode changes.
 The outcome is lower decode and prefill time on this M5 Max, with measured
 quality tradeoffs and no unrelated architecture work.
 
+The user stopped the session on November 5 after the thirty-eighth experiment
+to review the results. No next experiment is selected, and the remaining time
+in the original allowance does not authorize automatic resumption.
+
 Each experiment gets an initial one-hour budget: profile, choose one target,
 implement, compare at least five alternating samples per side, and decide.
 Subagents prepare or review that same target; only one guarded heavy model
-job runs at a time. Periodic comparisons against the starting runtime will
-check the accumulated package. The final slice is reserved for combined
-qualification before the deadline. Raw artifacts stay ignored under
+job runs at a time. Periodic comparisons checked the accumulated package
+against the starting runtime. The latest combined replay covers package 25;
+later scheduling and compressor changes have incremental qualification only.
+Raw artifacts stay ignored under
 `.workspaces/hillclimb-20261104/`.
 
 ## First question: shared work during selected prefill
@@ -697,3 +702,16 @@ not a requirement for exact output. The
 [report](../../../speed-bench/experiments/2026-11-05-output-q8/README.md)
 preserves all samples, numerical tails and the tested revision. Package 32,
 presets, installed frontends and main remain unchanged.
+
+
+## Thirty-eighth question: pair batched compressor projections
+
+Retain the row-exact F16 compressor pair as an opt-in experimental setting.
+The diagnostic profile shows shorter local producer-to-pool windows and both
+8K and 32K comparisons favor fresh prefill on average, with substantial
+variation and no reliable whole-task conclusion. Fixed-history logits and
+hashes matched in three cases. The focused fixture does not establish full
+published-cache or suffix-relocation equivalence, and no new practical task was
+run. The [report](../../../speed-bench/experiments/2026-11-05-prefill-compressor-pair/README.md)
+owns the samples and coverage limits. Presets, installed frontends and main
+remain unchanged.

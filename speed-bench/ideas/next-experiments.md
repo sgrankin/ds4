@@ -1,34 +1,29 @@
 # Experiment queue
 
-The user authorized sequential decode and prefill experiments through
-2026-11-06 18:31 Eastern (23:31 UTC). Start from published `364ceeab` and
-preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceeab`.
-This authorization includes choosing the next target after each bounded result;
-it does not authorize unrelated features or another push to main.
+**Paused at the user's request on November 5, 2026.** The user asked to finish
+the current experiment and report what the session achieved because the target
+token window had been consumed. Do not resume automatically under the earlier
+November 6 time allowance. No next experiment is selected.
 
-**Completed question: two SIMD groups for scalar Q8 output projection.**
-The November 5, 13:10–14:10 Eastern budget closed early with no adoption.
-The [report](../experiments/2026-11-05-output-q8/README.md) preserves the verified
-activation, numerical drift, five-pair timing results and profiling limits.
-The selector was removed; source matches `f7549a01`, which restores `a31acf97`.
-Selected package 32 remains fixed, with deduplicated residency, unretained
-command buffers and deferred set release off. No model job is running.
+The final completed question was whether pairing the ratio-two compressor's
+F16 KV and score projections could shorten prefill without changing published
+keys. The [result report](../experiments/2026-11-05-prefill-compressor-pair/README.md)
+records the exact-output checks, five alternating pairs at 8K and 32K, profile,
+variation and limits. The implementation is retained behind
+`DS4_METAL_V41_PREFILL_COMPRESSOR_PAIR=1`; the report's candidate settings add it
+to the experimental GPU-routing package. It is not enabled in installed fast
+presets. Whole-workload improvement remains uncertain.
 
-Review the prior row-layout experiments before selecting the next bounded
-target. The timed authorization remains active; this closure does not pause it.
-Presets, installed frontends and main remain unchanged.
+Published `main` remains `364ceeab`. The installed frontends and CPU-routing
+fast presets retain the last qualified package; subsequent GPU-routing and
+compressor changes remain local and experimental. The
+[project page](../../docs/project.md) owns current goals and capability status,
+and the [session journal](../../docs/lab/journal/2026-11-04-through-06-performance.md)
+records adopted, unadopted and removed attempts. Historical reports and design
+ideas are evidence, not an execution queue.
 
-[Project direction and current status](../../docs/project.md) records the goals,
-implemented features and a few possible next milestones. The current timed
-authorization permits choosing the next bounded performance question; outside
-that authorization, choose an outcome with the user before starting new work.
-
-When work resumes, record only the selected question, fixed baseline, one-hour
-budget and decision criterion here. Keep results in one linked report and move
-the completed outcome into a short journal entry rather than growing this queue.
-Performance comparisons still require at least five alternating samples per
-side and the existing pressure guard.
-
-The [lab journal](../../docs/lab/README.md) records prior experiments and their
-outcomes. [Design ideas](../../docs/design/README.md) preserve unselected options;
-neither is an active queue.
+On an explicit resumption, choose one outcome, freeze its baseline and give it
+a one-hour budget. Performance comparisons require at least five alternating
+samples per side, all samples retained, and one heavy job under the existing
+pressure guard. If total timing is neutral, inspect whether the profile shows
+useful work reduction or an unlocked dependency before deciding what to keep.

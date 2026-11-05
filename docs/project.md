@@ -13,18 +13,21 @@ owns measurements, variation and qualification; the
 [session journal](lab/journal/2026-11-04-overnight-decode.md) explains the decisions.
 Final numerical and reasoning-enabled coding checks passed. The tested agent,
 server and benchmark binaries are installed locally. The user authorized a new
-decode and prefill optimization session through 2026-11-06 18:31 Eastern,
-starting from published revision `364ceeab`. The
-[experiment queue](../speed-bench/ideas/next-experiments.md) owns its current
-one-hour question; the [session journal](lab/journal/2026-11-04-through-06-performance.md)
+decode and prefill optimization session, starting from published revision
+`364ceeab`. At the user's request, the session is paused on November 5 after
+the [compressor-pair experiment](../speed-bench/experiments/2026-11-05-prefill-compressor-pair/README.md).
+The previous November 6 time allowance does not authorize automatic resumption.
+The [experiment queue](../speed-bench/ideas/next-experiments.md) records the
+handoff; the [session journal](lab/journal/2026-11-04-through-06-performance.md)
 records decisions. New changes remain local until another push request.
 The session has now adopted four-row indexed attention staging and an approximate
 unit-rescale shortcut in the local fast presets. Their
 [combined qualification](../speed-bench/experiments/2026-11-04-combined-prefill/README.md)
 shows a repeated 32K prefill benefit, inconclusive recorded-session timing and
 measured quality differences, including one extra coding edge-case failure.
-The qualified agent, server and benchmark binaries are installed locally;
-published main remains at `364ceeab`.
+The installed agent, server and benchmark binaries match the later CPU-routing
+qualification; the launcher uses current Metal shader sources. Later GPU-routing
+and compressor settings remain experimental. Published main remains at `364ceeab`.
 The fast presets also include fused prefill rounding/RoPE and the temporary
 indexer-query matrix path. Their
 [CPU-routing qualification](../speed-bench/experiments/2026-11-04-prefill-preset-qualification/README.md)
@@ -95,7 +98,8 @@ summarize, archive facts or run a compaction agent.
 ## Where we stand
 
 This describes our native serving stack, not a new upstream release.
-The completed work is installed locally.
+The qualified CPU-routing fast presets are installed locally. Later
+experimental settings remain separate, as described above.
 
 | Area | Current state | Detail |
 | --- | --- | --- |

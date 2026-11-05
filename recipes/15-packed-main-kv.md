@@ -15,6 +15,13 @@ Max with 128 GiB RAM, frozen revision `aee06ac9`. The
 and [the 32K follow-up](../speed-bench/experiments/main-fp4-20261028/RESULTS_32K.md)
 retain exact settings, failures, corrections and qualification boundaries.
 
+The experimental batched compressor-pair selector shares projection input
+loads before the existing pooling and key-publication path. It remains opt-in:
+fixed-history checks matched and fresh prefill favored the candidate, but
+append and decode varied and no reliable whole-task gain or full suffix
+relocation proof was established. See the [experiment report](../speed-bench/experiments/2026-11-05-prefill-compressor-pair/README.md)
+for activation conditions, samples and limits.
+
 ## Retain the format already produced by the quantizer
 
 The existing main compressed-cache publisher rounds its input to BF16, applies

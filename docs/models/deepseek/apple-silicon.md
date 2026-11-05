@@ -636,7 +636,21 @@ remain row-exact so that their projection contract is independent of sweep
 size; changed queries can still influence later model state. No new workspace
 or cache representation is needed. The [query projection experiment](../../../speed-bench/experiments/2026-11-04-prefill-f16-projections/README.md)
 records the numerical and task-quality tradeoff and five-pair prefill results.
-The `resident-fast` and `persistent-fast` presets enable both prefill options;
+
+The experimental `DS4_METAL_V41_PREFILL_COMPRESSOR_PAIR=1` path pairs the
+ratio-two compressor's F16 KV and score projections for 2–8192 prefill rows in
+streaming TP1 execution. It shares input loads while retaining independent
+row-exact reductions and separate F32 outputs before the existing pool and
+publication boundaries. Matching shapes are required; quality, imatrix, image
+and exact-dense-row modes and other ineligible cases use the original calls.
+An admitted pair failure propagates. Scalar pair behavior is unchanged. The
+focused projection fixture and fixed-history logits matched, but do not prove
+full suffix relocation; the [experiment report](../../../speed-bench/experiments/2026-11-05-prefill-compressor-pair/README.md)
+records coverage, timing variation and the opt-in decision. Presets do not enable
+this selector.
+
+The `resident-fast` and `persistent-fast` presets enable fused BF16/RoPE and
+the temporary indexer-query matrix path;
 explicit zero overrides select the original paths. Ordinary engine defaults and
 `context-fast` leave them off. The
 [preset qualification](../../../speed-bench/experiments/2026-11-04-prefill-preset-qualification/README.md)
