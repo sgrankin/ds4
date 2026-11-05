@@ -267,19 +267,27 @@ adds association to those existing initialization blits. The large historical
 first-compute gap is absent in this comparison, and all checked outputs match.
 Five pairs at both contexts still show mixed phase costs without establishing
 an overall gain.
-Retain extended mode `2` as groundwork while the selected experimental package
-stays on queue mode `1`. This preserves a narrower resource association for a
-later scheduling test without claiming that initialization work became free.
+That result retained extended mode `2` as groundwork while the selected package
+stayed on queue mode `1`. The narrower association enabled the later scheduling
+test below; initialization work did not become free.
 
 The [scoped-overlap test](../speed-bench/experiments/2026-11-05-scoped-overlap/README.md)
 then restored shared-expert overlap with command residency fixed. Large-cache
 decode regressed in every pair at both contexts. The trace concentrates the
 added event-adjacent gaps in buffers that also contain earlier expert work.
 Smaller-cache warm decode benefits, so this is not a general rejection of
-overlap; the whole-workload result there remains mixed. Keep the selected
-large-cache package unchanged. A separate submission at actual CPU-expert
-completion is the next bounded boundary question, with ordinary GPU cadence
-preserved.
+overlap; the whole-workload result there remained mixed. That test kept the
+selected large-cache package unchanged and identified a separate submission
+after CPU-expert work as the next question.
+
+The [CPU-expert boundary](../speed-bench/experiments/2026-11-05-cpu-expert-boundary/README.md)
+now separates those expert reads from the next router event without changing
+ordinary GPU cadence. Select its mode-2/overlap/flush combination for the
+experimental GPU package: direct five-pair comparisons show about 2% faster
+fresh complete decode at both frontiers, with warm decode faster in nine of ten
+pairs. The 32K append costs more and complete workload times remain mixed;
+this is a decode tradeoff. The report retains all samples and the unchanged
+fixed-history outputs. Normal presets and installed frontends are unchanged.
 
 Detailed encoder profiling changes batching and adds host overhead; its gap reduction is not a
 predicted ordinary-runtime saving. The

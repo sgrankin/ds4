@@ -6,14 +6,18 @@ preserve a baseline checkout at `.workspaces/hillclimb-20261104/starting-364ceea
 This authorization includes choosing the next target after each bounded result;
 it does not authorize unrelated features or another push to main.
 
-**Last closed question: shared-expert overlap with scoped slab residency.**
-The November 5, 07:29–08:29 Eastern slice completed early. The
-[report](../experiments/2026-11-05-scoped-overlap/README.md) retains the five-pair
-large-cache regression, favorable smaller-cache decode, and matching quality
-checks. The selected package remains queue residency mode 1 with overlap off.
-The profiles localize large event-adjacent gaps to buffers that also contain
-prior expert work. A checked outgoing boundary after actual CPU-routed experts
-is the next candidate; it is not yet implemented or selected here.
+**Last closed question: separate CPU expert work from the next router event.**
+The November 5, 08:18–09:18 Eastern slice selected the combined experimental
+GPU decode package in
+[candidate-settings.json](../experiments/2026-11-05-cpu-expert-boundary/candidate-settings.json),
+runtime `b7e7af9d`. The [report](../experiments/2026-11-05-cpu-expert-boundary/README.md)
+records direct five-pair comparisons at 8K and 32K: about 2% faster fresh
+complete decode, mixed whole-workload time, and a 32K append cost. All checked
+outputs match. Ordinary presets, installed frontends and main are unchanged.
+
+The next bounded target has not yet been selected. Inspect the remaining costs
+in the changed profile before choosing it; the current improvement does not
+establish a whole-task gain.
 
 [Project direction and current status](../../docs/project.md) records the goals,
 implemented features and a few possible next milestones. The current timed

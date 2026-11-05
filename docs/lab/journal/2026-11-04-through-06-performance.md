@@ -598,3 +598,20 @@ The [report](../../../speed-bench/experiments/2026-11-05-scoped-overlap/README.m
 owns the evidence and timing scopes. A narrow outgoing boundary after actual
 CPU-routed expert work is available for a follow-up; no new runtime code was
 added in this experiment.
+
+## Thirty-second question: separate expert work from the next router event
+
+A checked flush after actual CPU-routed expert work removed the large positive
+event-adjacent gaps in the sampled later refreshes. The trace confirms separate
+event and expert buffers on those refreshes; ordinary GPU cadence is unchanged.
+This turns the earlier neutral residency work into a useful combined schedule.
+
+Select scoped residency, shared overlap and the new boundary for the
+experimental GPU package. Direct five-pair comparisons against the prior package
+show about 2% faster fresh complete decode at 8K and 32K; warm decode improves
+in nine of ten pairs. A 32K append costs about 0.12 seconds more on average,
+and total inference remains mixed. The
+[report](../../../speed-bench/experiments/2026-11-05-cpu-expert-boundary/README.md)
+owns samples, variation, output checks and resource limits. This is a decode
+tradeoff rather than a whole-task speed claim. Fast presets, installed frontends
+and main remain unchanged.

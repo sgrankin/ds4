@@ -130,8 +130,9 @@ The extended mode confirms association on seed buffers and no longer shows
 that large gap in the tested comparison, with matching checked outputs. Five
 pairs per context still show mixed phase costs without establishing a
 whole-workload gain.
-Keep mode `2` as unselected groundwork; the experimental latency package retains
-queue mode `1`. These observations do not establish a driver-level cause.
+That comparison retained mode `2` as groundwork and kept queue mode `1`
+selected. The subsequent boundary experiment below qualifies a combined
+schedule; none of these observations establishes a driver-level cause.
 
 Command scope also limits how this policy interacts with shared-expert overlap.
 The next router can follow previous-layer expert work in the same buffer, so
@@ -141,8 +142,26 @@ found large positive event-adjacent gaps in those mixed buffers and slower
 decode with the large cache. A smaller cache retained the same associations
 without comparable large gaps and benefited from overlap in warm decode;
 cache contents and misses differed too. Narrowing association alone therefore
-does not justify restoring overlap globally. The selected experimental package
-continues to disable it.
+did not justify restoring overlap by itself. The outgoing boundary below
+addresses the remaining mixed buffers.
+
+An additional opt-in `DS4_METAL_V41_CPU_EXPERT_FLUSH=1` submits encoded
+CPU-routed expert work before the next router is encoded. It runs only on the
+actual shared-event overlap path, after routed work and any parallel join;
+flush failure propagates to the existing graph cleanup. Successful GPU routes
+keep their ordinary submission cadence. The next router can then occupy an
+unassociated buffer in mode `2`, while the submitted expert buffer retains its
+residency set and pins. An incoming GPU-to-CPU fallback can still begin with
+prior GPU expert work already in its buffer. The
+[boundary experiment](../../speed-bench/experiments/2026-11-05-cpu-expert-boundary/README.md)
+confirms that sampled refresh events occupy unassociated buffers while expert
+reads retain their associations. Its combined candidate selects mode `2`,
+shared overlap and this flush in the experimental GPU-routing package. Against
+the prior queue-mode-1/overlap-0 package, five pairs at both frontiers show about
+2% faster fresh complete decode; warm decode improves in nine of ten pairs.
+The 32K append is about 0.12 seconds slower on average, and whole-workload
+results remain mixed. This is a decode tradeoff, not a general request-speed
+claim. Ordinary defaults, fast presets and installed frontends are unchanged.
 
 This option remains off in ordinary runtime behavior and fast presets. Its cost
 depends on the refresh schedule. With the selected-ID shared-event overlap
@@ -152,8 +171,8 @@ shortened the fresh first step but slowed complete decode. A
 avoided the new refresh waits but retained the original first-step gaps; that
 policy is no longer the implementation behind this flag.
 
-The [combined scheduling comparison](../../speed-bench/experiments/2026-11-05-slab-event-interaction/README.md)
-pairs queue residency with `DS4_METAL_V41_ROUTE_SHARED_OVERLAP=0` in the
+The earlier [combined scheduling comparison](../../speed-bench/experiments/2026-11-05-slab-event-interaction/README.md)
+paired queue residency with `DS4_METAL_V41_ROUTE_SHARED_OVERLAP=0` in the
 experimental GPU-routing package. CPU refreshes then use full waits and the
 existing shared-down/HC-expansion fusion, while ordinary GPU-routing steps keep
 their existing kernels. Five pairs at each frontier show faster fresh
