@@ -426,3 +426,20 @@ first-token expert kernels switched to addresses, yet large gaps before expert
 work remained. The roughly 0.8-second initial evaluation was not fixed. A bounded
 slab-residency experiment is the next candidate; any such change must preserve
 cache pressure relief and account for cost moved into prefill or startup.
+
+## Twenty-third question: keep streaming expert slabs resident
+
+An engine-owned Metal residency set was attached to the command queue, covering
+only the cache's actual slab allocations. Five-pair comparisons at 8K and 32K
+consistently shortened the initial scalar evaluation after fresh prefill but
+slowed complete fresh and warm decode. Do not select this queue-attached form. All 512 checked
+predictions and hashes matched; cache clear/trim tests and a child-only forced
+`mlock` failure exercised the new residency teardown.
+
+The [report](../../../speed-bench/experiments/2026-11-05-streaming-slab-residency/README.md)
+preserves the useful dependency finding: large gaps between command buffers
+shrank, while repeated waits appeared within refresh buffers near the selected-ID
+shared event. This does not prove a driver cause, but supports a bounded follow-up
+that requests residency without attaching the whole slab set to every command
+buffer. Keep the implementation off by default for that follow-up; ordinary
+presets, installed binaries and published main remain unchanged.

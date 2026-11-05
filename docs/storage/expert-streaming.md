@@ -95,6 +95,27 @@ they did not reliably improve the complete measured workload or solve the slow
 append. The default remains 4,096 MiB. This is a measured latency tradeoff, not
 evidence that every operation benefits from smaller resources.
 
+An experimental `DS4_METAL_STREAMING_EXPERT_SLAB_RESIDENCY=1` registers the
+actual slab buffers in an engine-owned Metal residency set and attaches that
+set to the shared runtime queue. Metal then includes the whole set when
+executing command buffers on that queue. Existing resource declarations and
+expert-cache pins still govern accesses; the set does not replace hazard
+tracking or map the GGUF. It covers unused slots within those allocations too.
+The cache detaches and clears it before trimming, unlocking slots or responding
+to an `mlock` failure, and disables it until a full cache clear. Unsupported
+systems or set-creation failures retain ordinary resource declarations.
+
+This option remains off in presets and ordinary runtime behavior. The
+[residency experiment](../../speed-bench/experiments/2026-11-05-streaming-slab-residency/README.md)
+shortens the first scalar evaluation after fresh prefill but makes complete
+128-token decode slower in its five-pair comparisons at 8K and 32K. The profile
+shows a useful change in
+waiting: large gaps between command buffers shrink, while new gaps appear
+near shared-event boundaries within refresh buffers. That supports further
+investigation of residency policy; it does not establish a driver root cause
+or justify enabling this queue-attached form. Co-resident helper performance
+and older Apple hardware have not been qualified.
+
 ## M5 Max measurements
 
 On a 128 GB M5 Max, with automatic cache sizing and no speculative decoding:

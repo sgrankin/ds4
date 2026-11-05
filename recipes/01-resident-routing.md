@@ -192,6 +192,19 @@ first-decode gaps remained. The cause of the delay remains unresolved; resource
 admission is a hypothesis for the next investigation. No new warm-up phase,
 kernel or cache representation was added.
 
+The next [slab-residency screen](../speed-bench/experiments/2026-11-05-streaming-slab-residency/README.md)
+registered the actual streaming buffers with a Metal residency set attached to
+the command queue. It consistently shortened the first decode step after fresh
+prefill, yet made complete fresh and warm decode slower in all five pairs at
+both 8K and 32K.
+Do not enable this form. Its profile still supplies useful groundwork: gaps
+between command buffers largely disappear, while new waits appear near the
+router's shared-event boundary. Preserve that evidence for a bounded test of
+residency policy instead of concluding that residency itself cannot help.
+All 512 checked predictions matched, and existing cache-pressure relief remains
+in force. The [storage manual](../docs/storage/expert-streaming.md#how-metal-stores-cached-experts)
+owns the resource-lifetime explanation.
+
 Detailed encoder profiling changes batching and adds host overhead; its gap reduction is not a
 predicted ordinary-runtime saving. The
 [Apple Silicon manual](../docs/models/deepseek/apple-silicon.md#resident-expert-substitution)
