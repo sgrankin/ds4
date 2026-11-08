@@ -10,6 +10,7 @@
 typedef struct {
     ds4_qwen4_gpu_graph graph;
     bool ready;
+    uint64_t reserved_graph_bytes;
     int slot; /* -1: private recurrence, otherwise an engine pool slot. */
     bool rewound;
     float *verify_logits;

@@ -62,6 +62,7 @@ enum {
     DS4_METAL_INDEX_ROWS4, DS4_METAL_INDEX_WIDE,
     DS4_METAL_INDEX_MERGE_STAGED, DS4_METAL_INDEX_MERGE_FUSED,
     DS4_METAL_INDEX_V41_MMA,
+    DS4_METAL_INDEX_CANDIDATE_BLOCKS, DS4_METAL_INDEX_MERGE_NONCAUSAL_PREFIX,
 };
 ds4_metal_index_pipeline ds4_metal_index_get_pipeline(uint32_t kind);
 ds4_metal_index_facts ds4_metal_index_get_facts(void);

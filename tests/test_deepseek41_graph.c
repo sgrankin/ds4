@@ -311,6 +311,52 @@ done:
     return rc;
 }
 
+static int check_stream_decode_queue(const char *path) {
+    ds4_engine *engine = NULL;
+    ds4_session *control = NULL, *queued = NULL;
+    ds4_tokens tokens = {0};
+    ds4_session_snapshot snap = {0};
+    char err[256] = {0};
+    int rc = 1;
+    ds4_engine_options opt = {.model_path = path, .backend = DS4_BACKEND_METAL,
+        .context_size = 256, .power_percent = 100, .ssd_streaming = true,
+        .ssd_streaming_cache_experts = 512};
+    unsetenv("DS4_METAL_DISABLE_V41_STREAM_DECODE_QUEUE");
+    REQUIRE(ds4_engine_open(&engine, &opt) == 0);
+    REQUIRE(ds4_session_create(&control, engine, 256) == 0);
+    REQUIRE(ds4_session_create(&queued, engine, 256) == 0);
+    for (int i = 0; i < 120; i++) ds4_tokens_push(&tokens, 100 + i);
+    REQUIRE(ds4_session_sync(control, &tokens, err, sizeof(err)) == 0);
+    REQUIRE(ds4_session_save_snapshot(control, &snap, err, sizeof(err)) == 0);
+    REQUIRE(ds4_session_load_snapshot(queued, &snap, err, sizeof(err)) == 0);
+    for (int i = 0; i < 24; i++) {
+        setenv("DS4_METAL_DISABLE_V41_STREAM_DECODE_QUEUE", "1", 1);
+        REQUIRE(ds4_session_eval(control, 500 + i, err, sizeof(err)) == 0);
+        unsetenv("DS4_METAL_DISABLE_V41_STREAM_DECODE_QUEUE");
+        REQUIRE(ds4_session_eval(queued, 500 + i, err, sizeof(err)) == 0);
+        REQUIRE(memcmp(control->frontier.logits, queued->frontier.logits, DS4_N_VOCAB * sizeof(float)) == 0);
+        for (uint32_t j = 0; j < DS4_N_VOCAB; j++) REQUIRE(isfinite(queued->frontier.logits[j]));
+        REQUIRE(memcmp(&control->ds41.graph.history, &queued->ds41.graph.history,
+                       sizeof(control->ds41.graph.history)) == 0);
+        ds41_state_span a[64], b[64];
+        const uint32_t n = ds41_state_spans(&control->ds41.graph, 121 + i, a);
+        REQUIRE(n == ds41_state_spans(&queued->ds41.graph, 121 + i, b));
+        for (uint32_t j = 0; j < n; j++) {
+            REQUIRE(a[j].bytes == b[j].bytes);
+            REQUIRE(memcmp(ds4_gpu_tensor_contents(a[j].tensor),
+                           ds4_gpu_tensor_contents(b[j].tensor), a[j].bytes) == 0);
+        }
+    }
+    puts("V4.1 stream decode queue under cache eviction: exact logits/history/cache spans across positions 121-144: PASS");
+    rc = 0;
+done:
+    unsetenv("DS4_METAL_DISABLE_V41_STREAM_DECODE_QUEUE");
+    ds4_session_snapshot_free(&snap);
+    ds4_tokens_free(&tokens);
+    ds4_session_free(control); ds4_session_free(queued); ds4_engine_close(engine);
+    return rc;
+}
+
 static int check_sessions(const char *path) {
     int cwd_fd = open(".", O_RDONLY);
     ds4_engine *engine = NULL;
@@ -1222,8 +1268,12 @@ done:
     return rc;
 }
 
-static int check_decoder_suffix(const char *path, const char *prompt_path) {
+static int check_decoder_suffix(const char *path, const char *prompt_path, bool medium) {
     ds4_engine *engine = NULL;
+#ifdef __APPLE__
+    ds4_engine_entry_scope scope = {0};
+    bool scoped = false;
+#endif
     ds4_session *control = NULL, *candidate = NULL;
     ds4_tokens tokens = {0};
     char *prompt = NULL;
@@ -1232,18 +1282,27 @@ static int check_decoder_suffix(const char *path, const char *prompt_path) {
     ds4_engine_options opt = {.model_path = path, .backend = DS4_BACKEND_METAL,
         .context_size = 18432, .power_percent = 100, .ssd_streaming = true,
         .ssd_streaming_cache_bytes = UINT64_C(64) << 30};
-    /* Hold arithmetic fixed to isolate dependency pruning from GEMM tiling. */
-    setenv("DS4_METAL_DISABLE_V41_BATCH_MOE", "1", 1);
-    setenv("DS4_METAL_DISABLE_V41_BATCH_ATTN", "1", 1);
+    /* The medium case exercises the shipped matrix partitions. */
+    if (!medium) {
+        setenv("DS4_METAL_DISABLE_V41_BATCH_MOE", "1", 1);
+        setenv("DS4_METAL_DISABLE_V41_BATCH_ATTN", "1", 1);
+    }
     REQUIRE(imatrix_read_text_file(prompt_path, &prompt, &prompt_bytes));
     REQUIRE(ds4_engine_open(&engine, &opt) == 0);
+#ifdef __APPLE__
+    /* Private graph helpers need the engine's shape and Metal context. Keep
+     * them selected through failure draining, including every goto done. */
+    scope = ds4_engine_entry_enter(&engine->core);
+    scoped = true;
+#endif
     ds4_encode_chat_prompt(engine, NULL, prompt, DS4_THINK_NONE, &tokens);
     REQUIRE(tokens.len > 16386);
     REQUIRE(ds4_session_create(&control, engine, 18432) == 0);
     REQUIRE(ds4_session_create(&candidate, engine, 18432) == 0);
     ds41_gpu_graph *a = &control->ds41.graph, *b = &candidate->ds41.graph;
-    for (uint32_t pass = 0; pass < 2; pass++) {
-        const uint32_t start = a->pos, count = 8192;
+    const uint32_t medium_sizes[] = {4096, 6144, 4353};
+    for (uint32_t pass = 0; pass < (medium ? 3u : 2u); pass++) {
+        const uint32_t start = a->pos, count = medium ? medium_sizes[pass] : 8192;
         setenv("DS4_METAL_DISABLE_V41_DECODER_SUFFIX", "1", 1);
         double t0 = now_sec();
         REQUIRE(ds41_graph_prefill(a, &engine->core.model, &engine->core.weights,
@@ -1271,6 +1330,8 @@ static int check_decoder_suffix(const char *path, const char *prompt_path) {
         REQUIRE(!memcmp(control->frontier.logits, candidate->frontier.logits, DS4_N_VOCAB * sizeof(float)));
         fprintf(stderr, "V4.1 decoder suffix start=%u count=%u: exact state/logits, %.2f -> %.2f t/s\n",
                 start, count, count / reference, count / candidate_time);
+        /* The next medium append begins exactly at the 4096 frontier. */
+        if (medium && pass == 0) continue;
         REQUIRE(ds41_graph_step(a, &engine->core.model, &engine->core.weights, tokens.v[a->pos], control->frontier.logits));
         REQUIRE(ds41_graph_step(b, &engine->core.model, &engine->core.weights, tokens.v[b->pos], candidate->frontier.logits));
         REQUIRE(!memcmp(control->frontier.logits, candidate->frontier.logits, DS4_N_VOCAB * sizeof(float)));
@@ -1282,6 +1343,9 @@ done:
     unsetenv("DS4_METAL_DISABLE_V41_BATCH_ATTN");
     unsetenv("DS4_METAL_DISABLE_V41_DECODER_SUFFIX");
     if (ds4_gpu_commands_active()) ds4_gpu_end_commands();
+#ifdef __APPLE__
+    if (scoped) ds4_engine_entry_leave(&scope);
+#endif
     ds4_tokens_free(&tokens);
     free(prompt);
     ds4_session_free(candidate); ds4_session_free(control); ds4_engine_close(engine);
@@ -1984,7 +2048,9 @@ int main(int argc, char **argv) {
     if (argc == 4 && !strcmp(argv[2], "--chunk-prefill"))
         return check_wide_prefill(argv[1], argv[3], false, false, "DS4_METAL_DISABLE_V41_WIDE_CHUNK");
     if (argc == 4 && !strcmp(argv[2], "--decoder-suffix"))
-        return check_decoder_suffix(argv[1], argv[3]);
+        return check_decoder_suffix(argv[1], argv[3], false);
+    if (argc == 4 && !strcmp(argv[2], "--medium-decoder-suffix"))
+        return check_decoder_suffix(argv[1], argv[3], true);
     if (argc == 4 && !strcmp(argv[2], "--sweep-partitions"))
         return check_sweep_partitions(argv[1], argv[3]);
     if (argc == 4 && !strcmp(argv[2], "--deferred-decoder"))
@@ -1993,6 +2059,8 @@ int main(int argc, char **argv) {
         return check_chat(argv[2], argv[3], argv[4], argv[5]);
     if (argc == 3 && strcmp(argv[1], "--rope-reference") == 0)
         return check_rope_reference(argv[2]);
+    if (argc == 3 && strcmp(argv[2], "--stream-decode-queue-parity") == 0)
+        return check_stream_decode_queue(argv[1]);
     if (argc == 3 && strcmp(argv[2], "--session-fixture") == 0)
         return check_sessions(argv[1]);
     if (argc < 3 || argc > 4 ||
@@ -2017,6 +2085,7 @@ int main(int argc, char **argv) {
                         "--prefill-alias-fallback PROMPT_FILE | "
                         "--sweep-partitions PROMPT_FILE | "
                         "--deferred-decoder PROMPT_FILE | "
+                        "--stream-decode-queue-parity | --medium-decoder-suffix PROMPT_FILE | "
                         "--decoder-suffix PROMPT_FILE | --session-accounting | --memory-plan | "
                         "RENDERED_PROMPT [GENERATE])\n", argv[0]);
         return 2;

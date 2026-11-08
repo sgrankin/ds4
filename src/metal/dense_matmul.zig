@@ -256,10 +256,10 @@ fn matvec(command: *const Command, request: Request, weights: Weight, mode: Matv
 /// quant dispatcher. Aligned TensorOps prefix + boundary-safe tail preserve the
 /// original schedule; quality mode deliberately keeps one generic dispatch.
 pub fn q8Legacy(request: Request, prefer_decode_mpp: bool, prefill_default: bool) c_int {
-    return q8LegacyMode(request, prefer_decode_mpp, prefill_default, .none);
+    return q8LegacyMode(request, prefer_decode_mpp, prefill_default, .none, false);
 }
 
-fn q8LegacyMode(request: Request, prefer_decode_mpp: bool, prefill_default: bool, rounding: Rounding) c_int {
+fn q8LegacyMode(request: Request, prefer_decode_mpp: bool, prefill_default: bool, rounding: Rounding, qwen_rows4: bool) c_int {
     if (api.init() == 0 or request.width & 31 != 0 or !request.shapesFit()) return 0;
     if (!request.activations(request.rows *% request.width *% 4, request.rows *% request.outputs *% 4, "ds4: Metal Q8_0 tensor matmul received undersized activation buffers")) return 0;
     const row_bytes = (request.width / 32) * 34;
@@ -278,6 +278,17 @@ fn q8LegacyMode(request: Request, prefer_decode_mpp: bool, prefill_default: bool
             c.ds4_metal_dense_warn_mpp();
         }
         var mode = q8Dispatch(request.outputs, facts);
+        // Reuse each activation load across four complete Qwen output rows.
+        // The lane walk and reduction stay unchanged; other shapes keep NR2.
+        const wide_qwen = (request.width == 2560 and (request.outputs == 6144 or request.outputs == 10240 or request.outputs == 12288)) or
+            (request.width == 6144 and request.outputs == 2560);
+        if (qwen_rows4 and rounding == .none and wide_qwen and mode.nsg == 4 and
+            facts & c.DS4_DENSE_TP_TWO == 0 and facts & c.DS4_DENSE_QWEN_LEGACY != 0)
+        {
+            mode.name = "kernel_mul_mv_q8_0_f32_nr4";
+            mode.rows = 4;
+            mode.shared = 32 * 4 * @sizeOf(f32);
+        }
         mode.name = switch (rounding) {
             .none => mode.name,
             .output => "kernel_mul_mv_q8_0_f32_bf16",
@@ -318,8 +329,10 @@ fn q8LegacyMode(request: Request, prefer_decode_mpp: bool, prefill_default: bool
     var matrix = weights;
     var matrix_row = row_bytes;
     var name: [*:0]const u8 = "kernel_mul_mm_q8_0_f32";
-    if (unpack and fits) {
-        scratch = c.ds4_metal_dense_retain_scratch(request.width * request.outputs * 2) orelse return 0;
+    if (unpack and fits) scratch = c.ds4_metal_dense_retain_scratch(request.width * request.outputs * 2);
+    // Unpacking is optional: allocation failure keeps the direct tiled GEMM.
+    // The shared allocator retains replaced buffers through command completion.
+    if (scratch != null) {
         const pipeline = c.ds4_metal_dense_unpack_pipeline() orelse return 0;
         const blocks: u32 = @intCast(request.width * request.outputs / 32);
         if (c.ds4_metal_dense_unpack(command.token.?, pipeline, weights.buffer, weights.offset, scratch.?, blocks, (@as(u64, blocks) * 8 + 255) / 256) == 0) return 0;
@@ -348,8 +361,10 @@ pub fn projectQ8(request: Request, qwen: bool) c_int {
         split_batch = true;
     }
     const start = if (profile) c.ds4_metal_dense_now_ms() else 0;
-    const default_unpack = qwen and c.ds4_metal_dense_facts(false) & c.DS4_DENSE_M3_ULTRA != 0;
-    var result = q8Legacy(request, false, default_unpack);
+    const facts = c.ds4_metal_dense_facts(false);
+    const default_unpack = qwen and (facts & c.DS4_DENSE_M3_ULTRA != 0 or
+        (facts & c.DS4_DENSE_STREAMING != 0 and request.rows >= 8192 and facts & c.DS4_DENSE_QWEN_LEGACY != 0));
+    var result = q8LegacyMode(request, false, default_unpack, .none, qwen);
     if (profile) {
         if (split_batch and c.ds4_gpu_end_commands() == 0) result = 0;
         const elapsed = c.ds4_metal_dense_now_ms() - start;
@@ -373,7 +388,7 @@ pub fn q8Bf16(request: Request, round_input: bool) c_int {
     if (request.rows >= 2 and request.rows <= 8 and q8RowsMode(request, rounding, false) != 0) return 1;
     if (round_input and request.rows != 1 and c.ds4_gpu_dsv41_quantize(@constCast(request.x), @intCast(request.width), @intCast(request.rows), c.DS4_V41_BF16) == 0) return 0;
     const prefill_default = c.ds4_metal_dense_facts(false) & c.DS4_DENSE_M3_ULTRA != 0;
-    if (q8LegacyMode(request, false, prefill_default, if (request.rows == 1) rounding else .none) == 0) return 0;
+    if (q8LegacyMode(request, false, prefill_default, if (request.rows == 1) rounding else .none, false) == 0) return 0;
     return if (request.rows == 1) 1 else c.ds4_gpu_dsv41_quantize(request.out, @intCast(request.outputs), @intCast(request.rows), c.DS4_V41_BF16);
 }
 
@@ -526,8 +541,13 @@ fn halfMode(request: Request, exact_rows: bool, bf16: bool) c_int {
         }
         c.ds4_metal_dense_warn_mpp();
     }
-    const bc_out = request.outputs % 64 != 0 or request.rows % 32 != 0;
-    if (!dispatch(&command, request, weights, .{ .kind = c.DS4_DENSE_MM, .name = "kernel_mul_mm_f16_f32", .bc_in = request.width % 32 != 0, .bc_out = bc_out }, .{ .mm = mmArgs(request, request.rows, row_bytes) }, .{ .x = (request.rows + 31) / 32, .y = (request.outputs + 63) / 64, .threads_x = 128, .shared = if (bc_out) 8192 else 6144 })) return 0;
+    // Narrow HC-down tiles expose more independent groups on older Macs,
+    // with the same K32 accumulation order as the ordinary F16 matrix kernel.
+    const hc_down = request.width == 10240 and request.outputs == 320 and request.rows > 8 and request.rows <= 128 and facts & c.DS4_DENSE_QWEN_LEGACY != 0;
+    const tile_rows: u64 = if (hc_down) 32 else 64;
+    const tile_tokens: u64 = if (hc_down) 16 else 32;
+    const bc_out = request.outputs % tile_rows != 0 or request.rows % tile_tokens != 0;
+    if (!dispatch(&command, request, weights, .{ .kind = c.DS4_DENSE_MM, .name = if (hc_down) "kernel_qwen4_hc_down_mm_f16" else "kernel_mul_mm_f16_f32", .bc_in = request.width % 32 != 0, .bc_out = bc_out }, .{ .mm = mmArgs(request, request.rows, row_bytes) }, .{ .x = (request.rows + tile_tokens - 1) / tile_tokens, .y = (request.outputs + tile_rows - 1) / tile_rows, .threads_x = if (hc_down) 64 else 128, .shared = if (hc_down) 3072 else if (bc_out) 8192 else 6144 })) return 0;
     return command.finish("F16 tensor matmul");
 }
 pub fn halfPair(pair: Pair) c_int {

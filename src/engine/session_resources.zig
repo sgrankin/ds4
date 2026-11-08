@@ -29,12 +29,11 @@ fn initQwen(view: *View, pool: *Pool, inputs: *const Inputs, context: u32) bool 
     const core = view.core;
     const state = view.qwen;
     const config = inputs.qwen_config;
-    const capacity = if (core.*.prefill_chunk != 0 and core.*.prefill_chunk < context)
-        core.*.prefill_chunk
-    else
-        c.ds4_native_qwen4_prefill_chunk(context);
+    const capacity = c.ds4_native_qwen4_prefill_chunk_resolve(context, core.*.prefill_chunk);
+    const reserved = c.ds4_native_qwen4_context_memory(config, context, capacity).total_bytes;
+    if (!c.ds4_native_qwen4_memory_admit(core, config, core.*.memory.qwen4_session_bytes +| reserved, false)) return false;
     const block_capacity = context / 4 + 1;
-    const share = core.*.share_session_prefill_workspace;
+    const share = core.*.share_session_prefill_workspace and !core.*.ssd_streaming;
     const arena_fits = pool.qwen4_shared_workspace != null and
         pool.qwen4_shared_workspace.*.cap_tokens >= capacity and
         pool.qwen4_shared_workspace.*.n_block_cap >= block_capacity;
@@ -66,6 +65,9 @@ fn initQwen(view: *View, pool: *Pool, inputs: *const Inputs, context: u32) bool 
         c.ds4_native_qwen4_graph_free(&state.*.graph);
         return false;
     }
+    state.*.graph.ssd_streaming = core.*.ssd_streaming;
+    state.*.reserved_graph_bytes = reserved;
+    core.*.memory.qwen4_session_bytes += reserved;
     state.*.ready = true;
     if (!state.*.graph.owns_scratch) pool.qwen4_arena_users += 1;
     view.frontier.*.prefill_cap = context;
@@ -275,6 +277,8 @@ pub fn deinit(view: *View, pool: *Pool) void {
         },
         c.DS4_SESSION_QWEN => {
             const state = view.qwen;
+            view.core.*.memory.qwen4_session_bytes -= state.*.reserved_graph_bytes;
+            state.*.reserved_graph_bytes = 0;
             if (view.core.*.glm_mtp_timing and state.*.spec_cycles != 0)
                 _ = c.fprintf(c.__stderrp, "ds4: Qwen3.8 mtp: %llu verify cycles, %llu drafts accepted (%.1f%%)\n", @as(c_ulonglong, state.*.spec_cycles), @as(c_ulonglong, state.*.spec_accepted), 100 * @as(f64, @floatFromInt(state.*.spec_accepted)) / @as(f64, @floatFromInt(state.*.spec_cycles)));
             c.free(state.*.verify_logits);

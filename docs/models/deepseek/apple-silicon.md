@@ -107,6 +107,16 @@ policy. The dependency calculation preserves the rows needed for the result;
 changing execution shapes can still change floating-point rounding. This
 pruning is distinct from importing cached activations after an edit.
 
+The medium 4,096–8,191-row single-host text schedule can skip complete decoder
+chunks at the encoder's actual chunk boundary, retaining the existing resident
+inside-tile policy where applicable. It keeps all 128 terminal raw window rows
+in the dependency calculation; DSpark's existing pruning route
+also keeps that complete terminal window. Keeping only the last row can leave
+stale early window keys after an aligned append even when compressed caches
+match. `DS4_METAL_DISABLE_V41_DECODER_SUFFIX` disables dependency pruning,
+including the resident inside-tile policy. Checkpoint capture still evaluates
+every row, and the new medium schedule excludes images, DSpark and TP.
+
 Decode advances a session one token at a time, leaving less opportunity to
 amortize a weight read across its rows. A cache miss can therefore lie on the
 path to the next token. The server can batch work from multiple sessions and
@@ -157,6 +167,27 @@ this per-router dependency. The optional asynchronous load path has different
 synchronization; see [MoE dispatch](../../../src/engine/deepseek41/moe.zig).
 On failure, the executor joins
 outstanding readers before their borrowed token IDs and output rows leave scope.
+
+Small session batches use the same submission interval and separate Engram
+inputs. The second input is sized for the bounded session batch, rather than
+duplicating the full prefill allocation. Consecutive verifier or short-prefill
+rows from one session use a strided read operation per table, with table-major
+host staging; independent sessions and mixed batches keep their own reads.
+`DS4_METAL_DISABLE_V41_BATCH_DECODE_PIPELINE` disables those submissions and
+`DS4_METAL_DISABLE_V41_STEP_ENGRAM_BATCH` restores individual reads. TP retains
+its layer-13 drain. The scalar controls
+`DS4_METAL_DISABLE_V41_DECODE_PIPELINE` and
+`DS4_METAL_DISABLE_V41_STREAM_DECODE_QUEUE` select resident and streaming
+serialization respectively; the existing general queue controls still apply.
+
+The retained V4 Pro controller also overlaps callback-driven resident text
+prefill of at most 512 rows, keeping at most two layers submitted before a
+drain. Progress callbacks report completed layers after that drain. Streaming,
+TP, images, profiling and throttled execution retain their existing schedules.
+Shared attention-output code allocates transient host-filled group IDs while
+any command buffer remains pending, so a later dispatch cannot overwrite IDs
+that an earlier GPU dispatch still reads. The transient allocation is retained
+until the pending work completes.
 
 An opt-in scalar streaming path with resident routing can move the shared
 expert's gate/up projections and activation across that host wait. They use
@@ -703,6 +734,23 @@ representable in BF16. A failed check keeps that scorer on F32 until reset.
 Packed index storage uses its existing 68-byte rows without this extra view.
 Candidate-only and explicitly selected SIMD scorers use their own readers;
 the view does not determine which scoring algorithm runs.
+
+The expanded fallback can score only layer 20's selected eight-key blocks on
+later refresh layers. It writes each score at its original cache index, then
+uses the ordinary mask and full-width top-k comparison network. Compacting a
+bitonic sort can change the ordered IDs of equal scores, even with sorted
+candidate IDs. This fallback's block selection belongs only to the active
+single-token sweep; prefill and verifier rows cannot inherit it. Existing
+native compact selection and explicit packed/SIMD experiments keep their own
+dispatches. `DS4_V41_DISABLE_CANDIDATE_SCORING` disables the new fallback.
+
+The shared 32-head direct scorer alternates two partial-sum banks to remove a
+barrier while retaining head accumulation order. The retained V4 Pro 64-head
+scorer stores individual head contributions and sums them in order; its
+four-key reuse requires at least 2,048 keys, single-host execution and fast
+math. Short inputs and strict math use one key, and TP retains its previous
+four-head schedule. These conditions protect both rounding and the distinct
+TP scheduling behavior.
 
 SIMD scoring is a separate dispatch choice from packing: it has both F32 and
 FP4 readers. In decode, when SIMD is enabled and at least 1,024 **index rows**

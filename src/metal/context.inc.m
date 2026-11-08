@@ -54,6 +54,7 @@ enum {
     QWEN4_K_HC_NORM_REUSE_Q8,
     QWEN4_K_HC_GATE_MIX_F16,
     QWEN4_K_HC_GATE_MIX_F16_PF,
+    QWEN4_K_HC_GATE_MIX_F16_REUSE,
     QWEN4_K_HC_GATE_MIX_F32,
     QWEN4_K_HC_GATE_MIX_Q8,
     QWEN4_K_HC_GATE_MIX_PAIR_F16,
@@ -71,6 +72,7 @@ enum {
     QWEN4_K_PLE_CONV,
     QWEN4_K_ROUTER,
     QWEN4_K_ATTN_PREP,
+    QWEN4_K_ATTN_CACHE_PREP,
     QWEN4_K_IDX_BLOCK_KEY,
     QWEN4_K_IDX_SCORE,
     QWEN4_K_IDX_SCORE_VEC,
@@ -88,10 +90,15 @@ enum {
     QWEN4_K_ATTN_MERGE_WIDE_NPT4,
     QWEN4_K_ATTN_MM,
     QWEN4_K_MOE_MID,
+    QWEN4_K_MOE_MID_IQ2XXS,
+    QWEN4_K_MOE_MID_IQ2,
+    QWEN4_K_MOE_MID_IQ2_NR1,
     QWEN4_K_MOE_MID_Q4K,
     QWEN4_K_MOE_MID_Q4K_NR1,
     QWEN4_K_MOE_DOWN,
+    QWEN4_K_MOE_DOWN_Q2K,
     QWEN4_K_MOE_DOWN_MXFP4_PF,
+    QWEN4_K_MOE_DOWN_REDUCE,
     QWEN4_K_MOE_MID_Q4K_GROUPED,
     QWEN4_K_MOE_DOWN_MXFP4_GROUPED,
     QWEN4_K_MOE_REDUCE,
@@ -109,6 +116,18 @@ enum {
     QWEN4_K_MOE_MM_DOWN_NT2,
     QWEN4_K_MOE_MM_DOWN_NT8,
     QWEN4_K_MOE_MM_MID_NT8,
+    QWEN4_K_MOE_MM_MID_F16_NT1,
+    QWEN4_K_MOE_MM_MID_F16_NT2,
+    QWEN4_K_MOE_MM_MID_F16_NT4,
+    QWEN4_K_MOE_MM_MID_F16_NT8,
+    QWEN4_K_MOE_MM_DOWN_F16_NT1,
+    QWEN4_K_MOE_MM_DOWN_F16_NT2,
+    QWEN4_K_MOE_MM_DOWN_F16_NT4,
+    QWEN4_K_MOE_MM_DOWN_F16_NT8,
+    QWEN4_K_MOE_MM_MID_K32_NT4,
+    QWEN4_K_MOE_MM_MID_F16_K32_NT4,
+    QWEN4_K_MOE_MM_DOWN_K32_NT4,
+    QWEN4_K_MOE_MM_DOWN_F16_K32_NT4,
     QWEN4_K_MOE_MM_MID_NAX,
     QWEN4_K_MOE_MM_DOWN_NAX,
     QWEN4_K_MOE_MM_MID_NAX64,
@@ -166,6 +185,7 @@ static ds4_metal_thread_owners ds4_metal_thread_capture(void) {
     id<MTLComputePipelineState> heads_reduce_pipeline;
     uint32_t heads_reduce_width, heads_reduce_groups;
     bool model_untracked_default;
+    bool metal_math_safe;
     id weight_residency_set;
     bool weight_residency_added;
     bool v41_off_read;
@@ -325,6 +345,8 @@ static ds4_metal_thread_owners ds4_metal_thread_capture(void) {
     id<MTLComputePipelineState> dsv4_topk_mask_scatter_pipeline;
     id<MTLComputePipelineState> dsv4_indexer_weighted_sum_pipeline;
     id<MTLComputePipelineState> dsv4_indexer_score_one_direct_pipeline;
+    id<MTLComputePipelineState> dsv4_indexer_score_one_heads_pipeline;
+    bool dsv4_indexer_fast_math;
     id<MTLComputePipelineState> dsv4_compressor_store_one_pipeline;
     id<MTLComputePipelineState> dsv4_sort_i32_rows_asc_pipeline;
     id<MTLComputePipelineState> dsv4_indexed_attention_heads8_pipeline;
@@ -383,6 +405,7 @@ static ds4_metal_thread_owners ds4_metal_thread_capture(void) {
     id<MTLComputePipelineState> glm_attention_indexed_batch_q2_group4_pipeline;
     id<MTLComputePipelineState> glm_attention_indexed_batch_group8_pipeline;
     id<MTLComputePipelineState> glm_attention_indexed_batch_lora_group8_vec_pipeline;
+    id<MTLComputePipelineState> glm_attention_indexed_batch_lora_group8_vec_prefix_fullheads_pipeline;
     id<MTLComputePipelineState> glm_attention_indexed_batch_lora_group8_vec_valid_pipeline;
     id<MTLComputePipelineState> glm_attention_indexed_batch_lora_group8_vec_valid_fullheads_pipeline;
     id<MTLComputePipelineState> glm_attention_indexed_batch_lora_group8_vec_causal_pipeline;
@@ -426,6 +449,8 @@ static ds4_metal_thread_owners ds4_metal_thread_capture(void) {
     id<MTLBuffer> flash_attn_blk_buffer;
     id<MTLBuffer> flash_attn_ring_buffer;
     id<MTLBuffer> flash_attn_kv_buffer;
+    id<MTLBuffer> glm_indexed_rope_buffer;
+    NSUInteger glm_indexed_rope_bytes;
     id<MTLBuffer> glm_flash_attn_mask_buffer;
     id<MTLBuffer> compressor_pool_kv_buffer;
     id<MTLBuffer> compressor_pool_score_buffer;
@@ -559,6 +584,9 @@ static ds4_metal_thread_owners ds4_metal_thread_capture(void) {
     pthread_t tp_keepalive_thread;
     int tp_keepalive_running;
     volatile int tp_keepalive_paused;
+    struct qwen4_stream_weights *qwen4_stream_weights; /* borrowed only for one synchronous streamed call */
+    ds4_gpu_tensor *qwen4_half_x, *qwen4_half_mid;
+    uint64_t qwen4_half_x_bytes, qwen4_half_mid_bytes;
     id<MTLComputePipelineState> qwen4_pipelines[QWEN4_K_COUNT];
     ds4_gpu_tensor *qwen4_gdn_slots;
     float qwen4_rope_freq[32];
@@ -803,6 +831,8 @@ static void ds4_metal_thread_leave(ds4_metal_thread_scope *scope) {
 #define g_dsv4_topk_mask_scatter_pipeline (ds4_metal_context_current()->dsv4_topk_mask_scatter_pipeline)
 #define g_dsv4_indexer_weighted_sum_pipeline (ds4_metal_context_current()->dsv4_indexer_weighted_sum_pipeline)
 #define g_dsv4_indexer_score_one_direct_pipeline (ds4_metal_context_current()->dsv4_indexer_score_one_direct_pipeline)
+#define g_dsv4_indexer_score_one_heads_pipeline (ds4_metal_context_current()->dsv4_indexer_score_one_heads_pipeline)
+#define g_dsv4_indexer_fast_math (ds4_metal_context_current()->dsv4_indexer_fast_math)
 #define g_dsv4_compressor_store_one_pipeline (ds4_metal_context_current()->dsv4_compressor_store_one_pipeline)
 #define g_dsv4_sort_i32_rows_asc_pipeline (ds4_metal_context_current()->dsv4_sort_i32_rows_asc_pipeline)
 #define g_dsv4_indexed_attention_heads8_pipeline (ds4_metal_context_current()->dsv4_indexed_attention_heads8_pipeline)
@@ -1048,3 +1078,17 @@ static void ds4_metal_thread_leave(ds4_metal_thread_scope *scope) {
 #define g_qwen4_nax_half_mid_count (ds4_metal_context_current()->qwen4_nax_half_mid_count)
 #define g_qwen4_dense_mm_partials (ds4_metal_context_current()->qwen4_dense_mm_partials)
 #define g_qwen4_dense_mm_partials_bytes (ds4_metal_context_current()->qwen4_dense_mm_partials_bytes)
+
+#define g_glm_attention_indexed_batch_lora_group8_vec_prefix_fullheads_pipeline (ds4_metal_context_current()->glm_attention_indexed_batch_lora_group8_vec_prefix_fullheads_pipeline)
+
+#define g_glm_indexed_rope_buffer (ds4_metal_context_current()->glm_indexed_rope_buffer)
+
+#define g_glm_indexed_rope_bytes (ds4_metal_context_current()->glm_indexed_rope_bytes)
+
+#define g_metal_math_safe (ds4_metal_context_current()->metal_math_safe)
+
+#define g_qwen4_stream_weights (ds4_metal_context_current()->qwen4_stream_weights)
+#define g_qwen4_half_x (ds4_metal_context_current()->qwen4_half_x)
+#define g_qwen4_half_mid (ds4_metal_context_current()->qwen4_half_mid)
+#define g_qwen4_half_x_bytes (ds4_metal_context_current()->qwen4_half_x_bytes)
+#define g_qwen4_half_mid_bytes (ds4_metal_context_current()->qwen4_half_mid_bytes)

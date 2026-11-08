@@ -187,7 +187,8 @@ bool ds4_metal_routed_cache_prepare(ds4_metal_routed_resources *opaque, uint32_t
             q->model, q->model_bytes, q->layer, q->selected, q->rows, q->total_experts,
             q->used_experts, q->gate_offset, q->up_offset, q->down_offset, q->gate_expert_bytes,
             q->down_expert_bytes, &gateAddress, &upAddress, &downAddress, r->entries,
-            &r->entryCount, unique, &overflowGate, &overflowUp, &overflowDown);
+            &r->entryCount, unique, &overflowGate, &overflowUp, &overflowDown,
+            true, NULL, NULL, NULL);
         r->gateAddress = gateAddress;
         r->upAddress = upAddress;
         r->downAddress = downAddress;

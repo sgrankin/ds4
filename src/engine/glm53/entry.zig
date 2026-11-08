@@ -87,7 +87,7 @@ export fn ds4_native_glm_spec_state_copy(graph: *Graph, save: bool) bool {
 export fn ds4_native_glm_mtp_ensure(graph: *Graph) bool {
     return Speculation.ensure(graph);
 }
-export fn ds4_native_glm_mtp_step(graph: *Graph, model: *const Model, weights: *const c.ds4_weights, next_token: c_int, position: u32, min_position: u32, draft: *c_int) bool {
+export fn ds4_native_glm_mtp_step(graph: *Graph, model: *const Model, weights: *const c.ds4_weights, next_token: c_int, position: u32, min_position: u32, draft: ?*c_int) bool {
     return Mtp.step(graph, model, weights, next_token, position, min_position, draft);
 }
 export fn ds4_native_glm_ffn_decode(graph: *Graph, model: *const Model, weights: *const c.ds4_layer_weights, layer: u32, position: u32, ablate_mask: u32) bool {

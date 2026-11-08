@@ -78,7 +78,7 @@ pub const Policy = struct {
 
     pub fn suffixAll(self: *const Policy, count: u32) bool {
         const graph = self.graph;
-        return !present("DS4_METAL_DISABLE_V41_SUFFIX_ALL") and !graph.quality and
+        return !present("DS4_METAL_DISABLE_V41_SUFFIX_ALL") and !present("DS4_METAL_DISABLE_V41_DECODER_SUFFIX") and !graph.quality and
             graph.tp_world == 1 and !graph.streaming and graph.image_count == 0 and
             count >= 512 and count < 8192 and count <= graph.carry_cap;
     }

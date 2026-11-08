@@ -7606,6 +7606,11 @@ static void test_run_entry(const ds4_test_entry *entry) {
     int before = test_failures;
     fprintf(stderr, "%s:\n", entry->name);
     entry->fn();
+#ifndef DS4_NO_GPU
+    /* Later entries can open differently configured engines directly. Release
+     * this entry's cached engine before another claims the admission lock. */
+    test_close_engines();
+#endif
     fprintf(stderr, "%s: ", entry->name);
     ds4_log(stderr,
             test_failures == before ? DS4_LOG_OK : DS4_LOG_ERROR,

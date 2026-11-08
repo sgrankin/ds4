@@ -204,7 +204,9 @@ const Profile = struct {
 };
 fn idsBuffer(rows: u32, groups: u32, q4: bool) ?Buffer {
     const bytes = @as(u64, rows) *% groups *% 4;
-    const view = c.ds4_metal_output_scratch(c.DS4_OUT_IDS_SCRATCH, bytes, present("DS4_METAL_DISABLE_ATTN_OUT_IDS_CACHE"), if (q4) "attention output Q4 group ids" else "attention output group ids");
+    // CPU-filled IDs cannot reuse storage still read by a submitted layer.
+    // The transient buffer is retained through the final command drain.
+    const view = c.ds4_metal_output_scratch(c.DS4_OUT_IDS_SCRATCH, bytes, present("DS4_METAL_DISABLE_ATTN_OUT_IDS_CACHE") or c.ds4_metal_schedule_pending_count() != 0, if (q4) "attention output Q4 group ids" else "attention output group ids");
     if (view.buffer == null) return null;
     const ids: [*]i32 = @ptrCast(@alignCast(c.ds4_metal_attention_contents(view).?));
     for (0..rows) |row| for (0..groups) |group| {

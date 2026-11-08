@@ -89,30 +89,48 @@ pub fn stage(graph: *Graph, model: *const Model, weights: *const Weights, tokens
 /// Prefetched rows replace only disk I/O. Live n-gram and image history still
 /// advance here in order, including speculative rollback snapshots.
 pub fn stageWithPle(graph: *Graph, model: *const Model, weights: *const Weights, tokens: []const c_int, prefetched: ?[]const f32) bool {
+    return stageEmbeddings(graph, model, weights, tokens) and stagePle(graph, model, tokens, prefetched);
+}
+
+pub fn stageEmbeddings(graph: *Graph, model: *const Model, weights: *const Weights, tokens: []const c_int) bool {
     // Validate the complete chunk before even its first embedding read or any
     // mutation. The caller may stage before entering the forward executor.
     if (!validTokens(tokens, graph.config.shape.n_vocab)) return false;
+    if (!@import("mtp.zig").boundary(graph, model, weights, tokens[0])) return false;
     const config = &graph.config;
     const shape = &config.shape;
     const width: usize = shape.n_embd;
     const hc_width = width * shape.n_hc;
     const spans = if (graph.vis_spans != null) graph.vis_spans[0..graph.vis_span_count] else fakeSpans(config);
     const rows = graph.host_row[0 .. tokens.len * hc_width];
+    const device_rows = tokens.len >= 128 and spans.len == 0 and weights.token_embd.*.type == c.DS4_TENSOR_BF16;
+    if (device_rows and (c.ds4_gpu_tensor_write(graph.selected, 0, tokens.ptr, tokens.len * @sizeOf(i32)) == 0 or
+        c.ds4_gpu_glm53_embedding_bf16(graph.blk, model.map, model.size, weights.token_embd.*.abs_offset, graph.selected, @intCast(tokens.len), shape.n_embd, shape.n_vocab) == 0 or
+        c.ds4_gpu_repeat_hc_rows_tensor(graph.R, graph.blk, @intCast(tokens.len), shape.n_embd, shape.n_hc) == 0)) return false;
     for (tokens, 0..) |token, index| {
         const destination = rows[index * hc_width ..][0..hc_width];
         const position = graph.pos + @as(u32, @intCast(index));
-        if (imageRow(spans, position, shape.n_embd)) |image| {
-            @memcpy(destination[0..width], image);
-        } else if (!embedding.row(model, weights.token_embd, @intCast(token), destination[0..width])) return false;
-        for (1..shape.n_hc) |stream| @memcpy(destination[stream * width ..][0..width], destination[0..width]);
+        if (!device_rows) {
+            if (imageRow(spans, position, shape.n_embd)) |image| {
+                @memcpy(destination[0..width], image);
+            } else if (!embedding.row(model, weights.token_embd, @intCast(token), destination[0..width])) return false;
+            for (1..shape.n_hc) |stream| @memcpy(destination[stream * width ..][0..width], destination[0..width]);
+        }
         const position3 = ropePosition(spans, position, &graph.mrope_delta);
         @memcpy(graph.host_pos3[index * 4 ..][0..3], &position3);
         graph.host_pos3[index * 4 + 3] = 0;
         if (index == 0 and graph.snap_after_first) graph.snap_mrope_delta = graph.mrope_delta;
         if (index == 1 and graph.snap_after_second) graph.snap2_mrope_delta = graph.mrope_delta;
     }
-    if (c.ds4_gpu_tensor_write(graph.R, 0, rows.ptr, tokens.len * hc_width * @sizeOf(f32)) == 0 or
+    if ((!device_rows and c.ds4_gpu_tensor_write(graph.R, 0, rows.ptr, tokens.len * hc_width * @sizeOf(f32)) == 0) or
         c.ds4_gpu_tensor_write(graph.pos3, @as(u64, graph.pos) * 16, graph.host_pos3, tokens.len * 16) == 0) return false;
+    return true;
+}
+
+pub fn stagePle(graph: *Graph, model: *const Model, tokens: []const c_int, prefetched: ?[]const f32) bool {
+    const config = &graph.config;
+    const width: usize = config.shape.n_embd;
+    const rows = graph.host_row[0 .. tokens.len * width];
     var ids: [256 * c.DS4_MAX_PLE_HEADS]u32 = undefined;
     const heads = config.ple.n_heads;
     for (tokens, 0..) |token, index| {

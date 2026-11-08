@@ -187,7 +187,7 @@ pub const Layout = struct {
             .block_scores => 32 * ((@as(u64, self.context) + 7) / 8),
             .block_selected => 32 * 2048,
             .block_list => 2048,
-            .engram_rows_b => c.DS4_ENGRAM_COLS * c.DS4_ENGRAM_DIM,
+            .engram_rows_b => c.DS4_TP_BATCH_MAX_ROWS * c.DS4_ENGRAM_COLS * c.DS4_ENGRAM_DIM,
             .engram_prefetch => @as(u64, if (self.carry != 0) self.carry else self.prefill) * c.DS4_ENGRAM_COLS * c.DS4_ENGRAM_DIM,
             .logits => self.shape.n_vocab,
             else => self.rowWidth(@field(RowField, @tagName(field))),

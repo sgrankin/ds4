@@ -34,15 +34,18 @@ pub fn linear(graph: *Graph, model: *const Model, layer: *const Layer, index: u3
         ops.dense(graph.blk, model, layer.lin_out, graph.lin_o, tokens);
 }
 
+pub fn dispatch(graph: *Graph, index: u32, output: ?*Tensor, queries: ?*Tensor, gates: ?*Tensor, rows: u32, position: u32, selected: bool, parent_rows: u32) bool {
+    const shape = &graph.config.shape;
+    const scale: f32 = 1 / @sqrt(@as(f32, @floatFromInt(shape.n_head_dim)));
+    return c.ds4_gpu_qwen4_attn_decode_tensor(output, queries, gates, graph.layer_k_cache[index], graph.layer_v_cache[index], graph.sel_tokens, graph.n_sel, if (parent_rows <= 2) graph.attn_part else null, rows, shape.n_head, shape.n_head_kv, shape.n_head_dim, position, selected, graph.sel_stride, scale) != 0;
+}
+
 pub fn core(graph: *Graph, index: u32, queries: ?*Tensor, gates: ?*Tensor, index_queries: ?*Tensor, output: ?*Tensor, blocks_after: u32, position: u32, tokens: u32) bool {
     const shape = &graph.config.shape;
     const query_width = @as(u64, shape.n_head) * shape.n_head_dim;
     const index_width = @as(u64, shape.n_indexer_head) * shape.n_indexer_head_dim;
-    const scale: f32 = 1 / @sqrt(@as(f32, @floatFromInt(shape.n_head_dim)));
-    const sparse_start = (graph.k_blocks + 1) * 4 - 1;
-    const last = position + tokens - 1;
-    const dense: u32 = if (last < sparse_start) tokens else sparse_start -| position;
-    if (dense > 0 and c.ds4_gpu_qwen4_attn_decode_tensor(output, queries, gates, graph.layer_k_cache[index], graph.layer_v_cache[index], graph.sel_tokens, graph.n_sel, if (tokens <= 2) graph.attn_part else null, dense, shape.n_head, shape.n_head_kv, shape.n_head_dim, position, false, graph.sel_stride, scale) == 0) return false;
+    const dense = denseRows(position, tokens, graph.k_blocks);
+    if (dense > 0 and !dispatch(graph, index, output, queries, gates, dense, position, false, tokens)) return false;
     if (dense >= tokens) return true;
     const sparse = tokens - dense;
     const first = position + dense;
@@ -58,15 +61,23 @@ pub fn core(graph: *Graph, index: u32, queries: ?*Tensor, gates: ?*Tensor, index
     return c.ds4_gpu_qwen4_idx_score_tensor(graph.score, maxima, iq, graph.layer_block_key[index], sparse, blocks_after, shape.n_indexer_head, shape.n_indexer_head_dim, first, 4) != 0 and
         ops.selectBlocks(graph.sel_blocks, graph.score, maxima, blocks_after, sparse, graph.k_blocks) and
         c.ds4_gpu_qwen4_idx_expand_tensor(graph.sel_tokens, graph.n_sel, graph.sel_blocks, sparse, graph.k_blocks, 4, first, graph.sel_stride) != 0 and
-        c.ds4_gpu_qwen4_attn_decode_tensor(out, q, gate, graph.layer_k_cache[index], graph.layer_v_cache[index], graph.sel_tokens, graph.n_sel, if (tokens <= 2) graph.attn_part else null, sparse, shape.n_head, shape.n_head_kv, shape.n_head_dim, first, true, graph.sel_stride, scale) != 0;
+        dispatch(graph, index, out, q, gate, sparse, first, true, tokens);
 }
 
-pub fn tail(graph: *Graph, model: *const Model, layer: *const Layer, index: u32, position: u32, tokens: u32) bool {
+fn prepare(graph: *Graph, model: *const Model, layer: *const Layer, index: u32, position: u32, tokens: u32, cache_only: bool, need_iq: bool) bool {
     const shape = &graph.config.shape;
-    if (c.ds4_gpu_qwen4_attn_prep_tensor(graph.q, graph.gate, graph.layer_k_cache[index], graph.layer_v_cache[index], graph.iqn, graph.layer_ik_cache[index], graph.qg, graph.kp, graph.vp, graph.iq, graph.ik, graph.pos3, model.map, model.size, layer.attn_q_norm.*.abs_offset, layer.attn_k_norm.*.abs_offset, layer.indexer_q_norm.*.abs_offset, tokens, shape.n_head, shape.n_head_kv, shape.n_head_dim, shape.n_rot, shape.n_indexer_head, shape.n_indexer_head_dim, position, graph.ctx_cap, shape.rope_freq_base, shape.rms_eps) == 0) return false;
+    if (cache_only) {
+        if (c.ds4_gpu_qwen4_attn_cache_prep_tensor(graph.layer_k_cache[index], graph.layer_v_cache[index], graph.layer_ik_cache[index], graph.kp, graph.vp, graph.ik, graph.pos3, model.map, model.size, layer.attn_k_norm.*.abs_offset, tokens, shape.n_head_kv, shape.n_head_dim, shape.n_rot, shape.n_indexer_head_dim, position, graph.ctx_cap, shape.rope_freq_base, shape.rms_eps) == 0) return false;
+    } else if (c.ds4_gpu_qwen4_attn_prep_tensor(graph.q, graph.gate, graph.layer_k_cache[index], graph.layer_v_cache[index], graph.iqn, graph.layer_ik_cache[index], graph.qg, graph.kp, graph.vp, graph.iq, graph.ik, graph.pos3, model.map, model.size, layer.attn_q_norm.*.abs_offset, layer.attn_k_norm.*.abs_offset, layer.indexer_q_norm.*.abs_offset, tokens, shape.n_head, shape.n_head_kv, shape.n_head_dim, shape.n_rot, if (need_iq) shape.n_indexer_head else 0, shape.n_indexer_head_dim, position, graph.ctx_cap, shape.rope_freq_base, shape.rms_eps) == 0) return false;
     const first_block = position / 4;
     const blocks_after = (position + tokens) / 4;
     if (blocks_after > first_block and c.ds4_gpu_qwen4_idx_block_key_tensor(graph.layer_block_key[index], graph.layer_ik_cache[index], graph.pos3, model.map, model.size, layer.indexer_k_norm.*.abs_offset, first_block, blocks_after - first_block, 4, shape.n_indexer_head_dim, shape.n_rot, shape.rope_freq_base, shape.rms_eps) == 0) return false;
+    return true;
+}
+
+fn coreRows(graph: *Graph, index: u32, position: u32, tokens: u32) bool {
+    const shape = &graph.config.shape;
+    const blocks_after = (position + tokens) / 4;
     if (tokens != 3 or !graph.verify_rows_exact)
         return core(graph, index, graph.q, graph.gate, graph.iqn, graph.attn_o, blocks_after, position, tokens);
     const query_width = @as(u64, shape.n_head) * shape.n_head_dim;
@@ -92,11 +103,28 @@ pub fn tail(graph: *Graph, model: *const Model, layer: *const Layer, index: u32,
     return true;
 }
 
-pub fn run(graph: *Graph, model: *const Model, layer: *const Layer, index: u32, position: u32, tokens: u32) bool {
-    if (!ops.dense(graph.qg, model, layer.attn_q, graph.mixed, tokens)) return false;
+pub fn tail(graph: *Graph, model: *const Model, layer: *const Layer, index: u32, position: u32, tokens: u32) bool {
+    return prepare(graph, model, layer, index, position, tokens, false, true) and coreRows(graph, index, position, tokens);
+}
+
+/// Dense prefixes do not consume indexer queries, but all keys must still be
+/// projected and pooled for the first later sparse row. Crossing chunks keep
+/// their original projection shape and rounding.
+pub fn denseRows(position: u32, tokens: u32, blocks: u32) u32 {
+    const sparse_start = (@as(u64, blocks) + 1) * 4 - 1;
+    return @intCast(@min(tokens, sparse_start -| position));
+}
+
+pub fn needsIndexQuery(position: u32, tokens: u32, blocks: u32, predictor: bool, cache_only: bool) bool {
+    return tokens != 0 and !cache_only and (predictor or @as(u64, position) + tokens >= (@as(u64, blocks) + 1) * 4);
+}
+
+pub fn cache(graph: *Graph, model: *const Model, layer: *const Layer, index: u32, position: u32, tokens: u32, cache_only: bool) bool {
+    const need_iq = needsIndexQuery(position, tokens, graph.k_blocks, graph.mtp_R != null, cache_only);
+    if (!cache_only and !ops.dense(graph.qg, model, layer.attn_q, graph.mixed, tokens)) return false;
     if (ops.fused(graph, tokens)) {
-        var outputs = [_]?*Tensor{ graph.kp, graph.vp, graph.iq, graph.ik };
-        const projections = .{ layer.attn_k, layer.attn_v, layer.indexer_q_proj, layer.indexer_k_proj };
+        var outputs = [_]?*Tensor{ graph.kp, graph.vp, if (need_iq) graph.iq else graph.ik, graph.ik };
+        const projections = .{ layer.attn_k, layer.attn_v, if (need_iq) layer.indexer_q_proj else layer.indexer_k_proj, layer.indexer_k_proj };
         var offsets: [4]u64 = undefined;
         var kinds: [4]u32 = undefined;
         var rows: [4]u32 = undefined;
@@ -105,10 +133,14 @@ pub fn run(graph: *Graph, model: *const Model, layer: *const Layer, index: u32, 
             kinds[part] = weight.*.type;
             rows[part] = @intCast(weight.*.dim[1]);
         }
-        if (c.ds4_gpu_qwen4_multi_gemv_tensor(graph.mixed, tokens, graph.config.shape.n_embd, 4, &outputs, model.map, model.size, &offsets, &kinds, &rows) == 0) return false;
+        if (c.ds4_gpu_qwen4_multi_gemv_tensor(graph.mixed, tokens, graph.config.shape.n_embd, if (need_iq) 4 else 3, &outputs, model.map, model.size, &offsets, &kinds, &rows) == 0) return false;
     } else if (!(ops.dense(graph.kp, model, layer.attn_k, graph.mixed, tokens) and
         ops.dense(graph.vp, model, layer.attn_v, graph.mixed, tokens) and
-        ops.dense(graph.iq, model, layer.indexer_q_proj, graph.mixed, tokens) and
+        (!need_iq or ops.dense(graph.iq, model, layer.indexer_q_proj, graph.mixed, tokens)) and
         ops.dense(graph.ik, model, layer.indexer_k_proj, graph.mixed, tokens))) return false;
-    return tail(graph, model, layer, index, position, tokens) and ops.dense(graph.blk, model, layer.attn_output, graph.attn_o, tokens);
+    return prepare(graph, model, layer, index, position, tokens, cache_only, need_iq);
+}
+
+pub fn run(graph: *Graph, model: *const Model, layer: *const Layer, index: u32, position: u32, tokens: u32) bool {
+    return cache(graph, model, layer, index, position, tokens, false) and coreRows(graph, index, position, tokens) and ops.dense(graph.blk, model, layer.attn_output, graph.attn_o, tokens);
 }

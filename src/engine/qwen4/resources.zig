@@ -140,8 +140,9 @@ pub fn free(graph: *Graph) void {
     c.free(graph.draft_ids);
     c.free(graph.host_logits);
     inline for (.{
-        "ple_hist",      "logits",         "mtp_e",          "mtp_cat", "mtp_proj",   "mtp_R",      "mtp_argmax", "mtp_argmax_tmp",
-        "snap_ple_hist", "snap2_ple_hist", "snap0_ple_hist", "pos3",    "draft_head", "steer_dirs",
+        "ple_hist",      "logits",         "mtp_e",          "mtp_cat",    "mtp_proj",    "mtp_R",        "mtp_argmax",   "mtp_argmax_tmp",
+        "snap_ple_hist", "snap2_ple_hist", "snap0_ple_hist", "mtp_tail_R", "snap_tail_R", "snap2_tail_R", "snap0_tail_R", "pos3",
+        "draft_head",    "steer_dirs",
     }) |name| c.ds4_gpu_tensor_free(@field(graph.*, name));
     inline for (layer_fields) |name| for (@field(graph.*, name)) |tensor| c.ds4_gpu_tensor_free(tensor);
     graph.* = std.mem.zeroes(Graph);
@@ -250,7 +251,9 @@ pub fn allocate(graph: *Graph, weights: *const Weights, context: u32, capacity: 
     // PLE history and logit rows belong to this session even with shared scratch.
     graph.ple_hist = try allocateFloats(dimensions.pleHistoryFloats(shape));
     graph.logits = try allocateFloats(@as(u64, graph.n_logit_rows) * shape.n_vocab);
+    if (shape.n_nextn_predict != 0) graph.mtp_tail_R = try allocateFloats(hc_width);
     if (mtp) {
+        graph.snap_tail_R = try allocateFloats(hc_width);
         graph.mtp_e = try allocateFloats(3 * embd);
         graph.mtp_cat = try allocateFloats(3 * (hc + 1) * 2 * embd);
         graph.mtp_proj = try allocateFloats(3 * (hc + 1) * embd);
@@ -297,6 +300,8 @@ pub fn reset(graph: *Graph) void {
     @memset(&graph.ple_prev, @intCast(shape.ple_eos_id));
     graph.pos = 0;
     graph.mtp_pos = 0;
+    graph.mtp_tail_valid = false;
+    graph.mtp_tail_cached = false;
     graph.mtp_last_rows = 0;
     graph.mrope_delta = 0;
     graph.snap_valid = false;

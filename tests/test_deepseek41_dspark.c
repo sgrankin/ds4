@@ -76,6 +76,10 @@ done:
 static int check_runtime(const char *target, const char *draft, const ds4_tp_options *tp_opt) {
     int rc = 1;
     ds4_engine *engine = NULL;
+#ifdef __APPLE__
+    ds4_engine_entry_scope scope = {0};
+    bool scoped = false;
+#endif
     ds4_tp *tp = NULL;
     ds4_session *a = NULL, *b = NULL;
     ds4_tokens prompt = {0};
@@ -91,6 +95,12 @@ static int check_runtime(const char *target, const char *draft, const ds4_tp_opt
         .ssd_streaming_cache_bytes = UINT64_C(40) << 30, .dspark = true};
     if (tp_opt) { opt.tp = *tp_opt; opt.ssd_streaming = false; }
     REQUIRE(!ds4_engine_open(&engine, &opt));
+#ifdef __APPLE__
+    /* Public session calls restore their caller's context. The private
+     * verifier and shape-sized checks below must retain the engine's owner. */
+    scope = ds4_engine_entry_enter(&engine->core);
+    scoped = true;
+#endif
     if (tp_opt) {
         ds4_tp_identity id = {.gguf_bytes = ds4_engine_model_bytes(engine),
             .model_id = ds4_engine_model_id(engine), .n_layer = DS4_N_LAYER,
@@ -108,6 +118,41 @@ static int check_runtime(const char *target, const char *draft, const ds4_tp_opt
     snapshot = tmpfile();
     REQUIRE(snapshot && !ds4_session_save_payload(a, snapshot, err, sizeof(err)));
     const uint64_t bytes = ds4_session_payload_bytes(a);
+    /* Same-session verifier rows exercise the native SessionBatch owner.
+     * Compare queue-only and queue+batched-read changes to the serialized
+     * schedule, including every logit row and committed continuation state. */
+    if (!tp) {
+        const unsigned sizes[] = {2, 6};
+        for (unsigned si = 0; si < 2; si++) for (unsigned batched_read = 0; batched_read < 2; batched_read++) {
+            const unsigned count = sizes[si];
+            rewind(snapshot);
+            REQUIRE(!ds4_session_load_payload(a, snapshot, bytes, err, sizeof(err)));
+            rewind(snapshot);
+            REQUIRE(!ds4_session_load_payload(b, snapshot, bytes, err, sizeof(err)));
+            int teacher[] = {700, 701, 702, 703, 704, 705};
+            setenv("DS4_METAL_DISABLE_V41_BATCH_DECODE_PIPELINE", "1", 1);
+            setenv("DS4_METAL_DISABLE_V41_STEP_ENGRAM_BATCH", "1", 1);
+            REQUIRE(ds41_session_verify(a, teacher, count));
+            unsetenv("DS4_METAL_DISABLE_V41_BATCH_DECODE_PIPELINE");
+            if (batched_read) unsetenv("DS4_METAL_DISABLE_V41_STEP_ENGRAM_BATCH");
+            REQUIRE(ds41_session_verify(b, teacher, count));
+            REQUIRE(!memcmp(a->ds41.graph.dspark->host_verified,
+                b->ds41.graph.dspark->host_verified, (size_t)count * DS4_N_VOCAB * sizeof(float)));
+            REQUIRE(ds41_session_commit(a, teacher, count, count));
+            REQUIRE(ds41_session_commit(b, teacher, count, count));
+            ds4_session_snapshot expected = {0}, actual = {0};
+            const bool saved = !ds4_session_save_snapshot(a, &expected, err, sizeof(err)) &&
+                !ds4_session_save_snapshot(b, &actual, err, sizeof(err));
+            const bool same = saved && expected.len == actual.len &&
+                !memcmp(expected.ptr, actual.ptr, expected.len);
+            ds4_session_snapshot_free(&expected);
+            ds4_session_snapshot_free(&actual);
+            REQUIRE(same);
+            unsetenv("DS4_METAL_DISABLE_V41_STEP_ENGRAM_BATCH");
+            fprintf(stderr, "native verifier rows=%u queued batched_engram=%u: exact logits/state PASS\n",
+                count, batched_read);
+        }
+    }
     for (unsigned keep = 0; keep <= 6; keep++) {
         if (tp) {
             ds4_session_invalidate(a); ds4_session_invalidate(b);
@@ -218,6 +263,12 @@ static int check_runtime(const char *target, const char *draft, const ds4_tp_opt
     }
     rc = 0;
 done:
+    unsetenv("DS4_METAL_DISABLE_V41_BATCH_DECODE_PIPELINE");
+    unsetenv("DS4_METAL_DISABLE_V41_STEP_ENGRAM_BATCH");
+    if (ds4_gpu_commands_active()) (void)ds4_gpu_end_commands();
+#ifdef __APPLE__
+    if (scoped) ds4_engine_entry_leave(&scope);
+#endif
     if (err[0]) fprintf(stderr, "%s\n", err);
     if (snapshot) fclose(snapshot);
     ds4_tokens_free(&prompt);

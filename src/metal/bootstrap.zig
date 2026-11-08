@@ -30,12 +30,12 @@ fn detect(s: *c.ds4_metal_bootstrap_state) void {
     s.family_supported = @intFromBool(capabilities.family);
     s.queue_supported = @intFromBool(capabilities.queue);
     const text = std.mem.sliceTo(&s.device_name, 0);
-    if (capabilities.family and std.mem.find(u8, text, "M5") != null) s.neural_accelerators_hint = 1;
+    if (capabilities.family and m5OrM6(text)) s.neural_accelerators_hint = 1;
     if (!capabilities.family) return;
     // Metal exposes no independent Neural Accelerator bit. Only generations
     // expected to benefit select TensorOps automatically; earlier chips retain
     // established kernels even though they can compile the portable source.
-    const automatic = std.mem.find(u8, text, "M5") != null or std.mem.find(u8, text, "M6") != null or
+    const automatic = m5OrM6(text) or
         std.mem.find(u8, text, "A19") != null or std.mem.find(u8, text, "A20") != null;
     if (automatic) {
         s.tensor_compile_supported = c.ds4_metal_bootstrap_tensor_probe();
@@ -44,6 +44,10 @@ fn detect(s: *c.ds4_metal_bootstrap_state) void {
     } else {
         _ = c.fprintf(c.__stderrp, "ds4: Metal 4 tensor API disabled for pre-M5/pre-A19 devices\n");
     }
+}
+fn m5OrM6(name: []const u8) bool {
+    return name.len >= 8 and std.mem.startsWith(u8, name, "Apple M") and
+        (name[7] == '5' or name[7] == '6') and (name.len == 8 or name[8] == ' ');
 }
 fn preM5(name: []const u8) bool {
     return name.len >= 8 and std.mem.startsWith(u8, name, "Apple M") and

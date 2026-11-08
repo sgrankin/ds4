@@ -19,7 +19,7 @@ fn end() bool {
     return c.ds4_gpu_commands_active() == 0 or c.ds4_gpu_end_commands() != 0;
 }
 
-fn encode(graph: *Graph, model: *const Model, weights: *const Weights, next_token: i32, position: u32, capacity: u32, selected_count: u32, stage: *[*:0]const u8) bool {
+fn encode(graph: *Graph, model: *const Model, weights: *const Weights, next_token: i32, position: u32, capacity: u32, selected_count: u32, need_output: bool, stage: *[*:0]const u8) bool {
     const shape = &graph.config.shape;
     const layer = shape.n_layer - shape.n_nextn_predict;
     const draft = &weights.layer[layer];
@@ -65,8 +65,11 @@ fn encode(graph: *Graph, model: *const Model, weights: *const Weights, next_toke
         !Ops.matmul(graph.kv_raw, model, draft.attn_kv_a_mqa, shape.n_embd, kv_width, graph.attn_norm, 1) or
         c.ds4_gpu_glm_kv_lora_rms_norm_tensor(graph.kv_norm, graph.kv_raw, model.map, model.size, draft.attn_kv_a_norm.*.abs_offset, 1, kv_width, shape.n_kv_lora, shape.rms_eps) == 0) return false;
     stage.* = "draft cache and attention";
-    if (c.ds4_gpu_glm_store_compact_kv_tensor(graph.mtp_kv_lora_cache, graph.mtp_k_rope_cache, graph.kv_norm, graph.kv_raw, position, 1, capacity, kv_width, shape.n_kv_lora, shape.n_rot, true) == 0 or
-        c.ds4_gpu_glm_qk_lowrank_typed_tensor(graph.qk_low, graph.q, model.map, model.size, draft.attn_k_b.*.abs_offset, draft.attn_k_b.*.type, shape.n_head, shape.n_kv_lora, @intCast(graph.q_nope), shape.n_key_mla) == 0 or
+    if (c.ds4_gpu_glm_store_compact_kv_tensor(graph.mtp_kv_lora_cache, graph.mtp_k_rope_cache, graph.kv_norm, graph.kv_raw, position, 1, capacity, kv_width, shape.n_kv_lora, shape.n_rot, true) == 0) return false;
+    // Accepted-token catch-up publishes only this draft KV row. Nothing after
+    // the store persists; the next real draft consumes it with its target row.
+    if (!need_output) return end();
+    if (c.ds4_gpu_glm_qk_lowrank_typed_tensor(graph.qk_low, graph.q, model.map, model.size, draft.attn_k_b.*.abs_offset, draft.attn_k_b.*.type, shape.n_head, shape.n_kv_lora, @intCast(graph.q_nope), shape.n_key_mla) == 0 or
         c.ds4_gpu_glm_attention_indexed_decode_typed_tensor(
             graph.heads,
             graph.q,
@@ -117,7 +120,7 @@ fn encode(graph: *Graph, model: *const Model, weights: *const Weights, next_toke
         c.ds4_gpu_tensor_read(graph.logits, 0, graph.mtp_logits_host, @as(u64, shape.n_vocab) * @sizeOf(f32)) != 0;
 }
 
-pub fn step(graph: *Graph, model: *const Model, weights: *const Weights, next_token: i32, position: u32, min_position: u32, output: *i32) bool {
+pub fn step(graph: *Graph, model: *const Model, weights: *const Weights, next_token: i32, position: u32, min_position: u32, output: ?*i32) bool {
     const shape = &graph.config.shape;
     if (!graph.glm53 or graph.placement != null or graph.tp_world > 1 or shape.n_nextn_predict == 0 or shape.n_rot != 0) return false;
     const capacity = if (graph.compact_cache_cap != 0) graph.compact_cache_cap else graph.ctx_size;
@@ -131,15 +134,16 @@ pub fn step(graph: *Graph, model: *const Model, weights: *const Weights, next_to
     for (selected, 0..) |*id, index| id.* = @intCast(min_position + index);
     if (c.ds4_gpu_tensor_write(graph.mtp_selected, 0, selected.ptr, @as(u64, count) * @sizeOf(i32)) == 0) return false;
     var stage: [*:0]const u8 = "concat views";
-    if (!encode(graph, model, weights, next_token, position, capacity, count, &stage)) {
+    if (!encode(graph, model, weights, next_token, position, capacity, count, output != null, &stage)) {
         _ = c.ds4_gpu_synchronize();
         _ = c.fprintf(c.__stderrp, "ds4: GLM-5.3 MTP step failed at stage '%s' (pos %u)\n", stage, position);
         return false;
     }
+    const draft_out = output orelse return true;
     var best: u32 = 0;
     for (1..shape.n_vocab) |index| {
         if (graph.mtp_logits_host[index] > graph.mtp_logits_host[best]) best = @intCast(index);
     }
-    output.* = @intCast(best);
+    draft_out.* = @intCast(best);
     return true;
 }

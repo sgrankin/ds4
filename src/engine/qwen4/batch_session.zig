@@ -98,6 +98,10 @@ pub fn speculate(runtimes: []Runtime, tokens: []const c_int, arena: *c.ds4_qwen4
             @memcpy(frontier.*.logits[0..vocab], output[0..vocab]);
             graph.pos = positions[index] + 1;
         }
+        graph.mtp_tail_pos = graph.pos - 1;
+        graph.mtp_tail_valid = graph.mtp_tail_R != null;
+        graph.mtp_tail_cached = false;
+        graph.mtp_last_rows = 0;
         frontier.*.checkpoint_valid = true;
         frontier.*.mtp_draft_valid = false;
         state.*.rewound = false;
@@ -113,6 +117,25 @@ pub fn speculate(runtimes: []Runtime, tokens: []const c_int, arena: *c.ds4_qwen4
     for (runtimes) |*runtime| {
         const graph = &runtime.state.*.graph;
         if (graph.pos + 2 > graph.ctx_cap) room = false;
+    }
+    if (!room) {
+        // A two-row acceptance leaves one known successor even when the
+        // schedule skips the next draft. Repair that history before scratch
+        // is reused, leaving only the current tail pending.
+        for (runtimes, members[0..count], committed[0..count], positions[0..count]) |*runtime, member, accepted_count, position| {
+            if (accepted_count < 2) continue;
+            const graph = &runtime.state.*.graph;
+            const saved = graph.R;
+            const row = ops.rowsView(arena.R, member.row0, 1, @as(u64, arena.config.shape.n_embd) * arena.config.shape.n_hc);
+            graph.R = row;
+            const cached = row != null and @import("mtp.zig").cacheSteps(graph, runtime.model, runtime.weights, 0, member.tokens[1..2], position);
+            graph.R = saved;
+            c.ds4_gpu_tensor_free(row);
+            if (!cached) {
+                _ = c.ds4_gpu_end_commands();
+                return session.fail(errors, "metal speculative batch: cache catch-up failed");
+            }
+        }
     }
     if (room) {
         if (!batch.drafts(members[0..count], committed[0..count], parents[0..count], positions[0..count], rows, arena, runtimes[0].model, runtimes[0].weights, drafts[0..count])) {

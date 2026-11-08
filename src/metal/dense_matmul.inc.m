@@ -8,6 +8,8 @@ uint32_t ds4_metal_dense_facts(bool paired) {
             (g_qwen4_verify_rows_exact ? DS4_DENSE_VERIFY_EXACT : 0u) |
             (ds4_gpu_tp_world_is_two() ? DS4_DENSE_TP_TWO : 0u) |
             (ds4_gpu_device_name_contains("M3 Ultra") ? DS4_DENSE_M3_ULTRA : 0u) |
+            (ds4_metal_device_name_uses_qwen_legacy_tuning(g_metal_device_name) ? DS4_DENSE_QWEN_LEGACY : 0u) |
+            (g_ssd_streaming_mode ? DS4_DENSE_STREAMING : 0u) |
             (paired && ds4_gpu_use_compressor_pair_nr4() ? DS4_DENSE_PAIR_NR4 : 0u);
     }
 }

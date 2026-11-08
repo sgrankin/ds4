@@ -54,9 +54,25 @@ export fn ds4_native_expert_prepare_batch(
     resource_count: *u32,
     unique: *u32,
     overflow: *Reuse,
+    allow_mapped_overflow: bool,
+    before_read: c.ds4_gpu_stream_expert_before_read_fn,
+    callback_context: ?*anyopaque,
+    gate_up_ready: c.ds4_gpu_stream_expert_gate_up_ready_fn,
 ) c_int {
     var context = Core.Context.current();
-    return @intFromBool(Prefill.prepare(&context, table, selected, tokens, used, addresses, resources, resource_count, unique, overflow));
+    return @intFromBool(Prefill.prepare(&context, table, selected, tokens, used, addresses, resources, resource_count, unique, overflow, .{
+        .allow_mapped_overflow = allow_mapped_overflow,
+        .before_read = before_read,
+        .callback_context = callback_context,
+        .gate_up_ready = gate_up_ready,
+    }));
+}
+export fn ds4_native_expert_pread_tasks(tasks: [*c]Core.Task, count: u32, bytes: [*c]u64, elapsed: [*c]f64) c_int {
+    const context = Core.Context.current();
+    return @intFromBool(IO.readTasks(&context.load.pool, tasks, count, bytes, elapsed));
+}
+export fn ds4_native_expert_note_pread(layer: u32, bytes: u64, elapsed: f64) void {
+    IO.noteRead(Core.Context.current().cache.state, layer, bytes, elapsed);
 }
 export fn ds4_gpu_stream_expert_cache_begin_selected_load(table: ?*const Table, ids: [*c]const i32, count: u32) c_int {
     var context = Core.Context.current();

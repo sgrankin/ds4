@@ -77,7 +77,27 @@ fn cubic(input: f64) f64 {
 // Antialiased bicubic filtering keeps double accumulators and rounds each
 // channel to an integer before storing float pixels, as the original C does.
 // The support bounds deliberately truncate toward zero, rather than floor.
-fn resizeRgb(source: []const u8, source_width: u32, source_height: u32, destination: []f32, width: u32, height: u32, stride: u32) void {
+const ResizeRows = struct {
+    source: []const u8,
+    source_width: u32,
+    source_height: u32,
+    destination: []f32,
+    width: u32,
+    height: u32,
+    stride: u32,
+    first_y: u32,
+    end_y: u32,
+};
+
+fn resizeRows(context: ?*anyopaque) callconv(.c) ?*anyopaque {
+    const rows: *const ResizeRows = @ptrCast(@alignCast(context.?));
+    const source = rows.source;
+    const source_width = rows.source_width;
+    const source_height = rows.source_height;
+    const destination = rows.destination;
+    const width = rows.width;
+    const height = rows.height;
+    const stride = rows.stride;
     @setFloatMode(.optimized);
     const scale_x = @as(f64, @floatFromInt(source_width)) / @as(f64, @floatFromInt(width));
     const scale_y = @as(f64, @floatFromInt(source_height)) / @as(f64, @floatFromInt(height));
@@ -87,7 +107,7 @@ fn resizeRgb(source: []const u8, source_width: u32, source_height: u32, destinat
     const support_y = if (scale_y >= 1.0) 2.0 * scale_y else 2.0;
     const source_rows: i32 = @intCast(source_height);
     const source_columns: i32 = @intCast(source_width);
-    for (0..height) |dy| {
+    for (rows.first_y..rows.end_y) |dy| {
         const y: f64 = @floatFromInt(dy);
         const center_y = scale_y * (y + 0.5);
         const first_y: i32 = @intFromFloat(center_y - support_y + 0.5);
@@ -126,6 +146,32 @@ fn resizeRgb(source: []const u8, source_width: u32, source_height: u32, destinat
             }
         }
     }
+    return null;
+}
+
+fn resizeRgb(source: []const u8, source_width: u32, source_height: u32, destination: []f32, width: u32, height: u32, stride: u32) void {
+    const max_workers = 8;
+    const work = @as(u64, @max(source_width, width)) * @max(source_height, height);
+    const workers: u32 = @intCast(@min(work / 65536, max_workers, height));
+    var whole = ResizeRows{ .source = source, .source_width = source_width, .source_height = source_height, .destination = destination, .width = width, .height = height, .stride = stride, .first_y = 0, .end_y = height };
+    if (workers < 2) {
+        _ = resizeRows(&whole);
+        return;
+    }
+    var rows: [max_workers]ResizeRows = undefined;
+    var threads: [max_workers - 1]c.pthread_t = undefined;
+    var started: u32 = 0;
+    while (started + 1 < workers) : (started += 1) {
+        rows[started] = whole;
+        rows[started].first_y = @intCast(@as(u64, height) * started / workers);
+        rows[started].end_y = @intCast(@as(u64, height) * (started + 1) / workers);
+        if (c.pthread_create(&threads[started], null, resizeRows, &rows[started]) != 0) break;
+    }
+    // Every worker uses the original image coordinates and canvas stride.
+    // Thread creation failure leaves all remaining output rows to this caller.
+    whole.first_y = @intCast(@as(u64, height) * started / workers);
+    _ = resizeRows(&whole);
+    for (threads[0..started]) |thread| if (c.pthread_join(thread, null) != 0) c.abort();
 }
 
 // Both GLM and Qwen group neighbouring 2x2 patches before channel-major
@@ -658,4 +704,29 @@ pub export fn ds4_deepseek4_attention_bounds(tokens: [*c]const c_int, count: u32
         }
     }
     return 1;
+}
+
+test "parallel resize preserves serial pixels and padded stride" {
+    const cases = [_][6]u32{
+        .{ 613, 409, 512, 384, 521, 3 },
+        .{ 90, 70, 120, 99, 128, 2 },
+        .{ 1900, 137, 512, 128, 530, 1 },
+        .{ 1200, 800, 256, 192, 270, 4 },
+    };
+    for (cases) |shape| {
+        const source = try std.testing.allocator.alloc(u8, @as(usize, shape[0]) * shape[1] * 3);
+        defer std.testing.allocator.free(source);
+        for (source, 0..) |*value, index| value.* = @truncate(index *% 17 +% index / 43);
+        const count = @as(usize, shape[4]) * (shape[3] + shape[5]) * 3;
+        const expected = try std.testing.allocator.alloc(f32, count);
+        defer std.testing.allocator.free(expected);
+        const actual = try std.testing.allocator.alloc(f32, count);
+        defer std.testing.allocator.free(actual);
+        @memset(expected, 12345);
+        @memset(actual, 12345);
+        var serial = ResizeRows{ .source = source, .source_width = shape[0], .source_height = shape[1], .destination = expected, .width = shape[2], .height = shape[3], .stride = shape[4], .first_y = 0, .end_y = shape[3] };
+        _ = resizeRows(&serial);
+        resizeRgb(source, shape[0], shape[1], actual, shape[2], shape[3], shape[4]);
+        try std.testing.expectEqualSlices(u8, std.mem.sliceAsBytes(expected), std.mem.sliceAsBytes(actual));
+    }
 }

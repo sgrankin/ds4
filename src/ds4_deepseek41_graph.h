@@ -125,6 +125,7 @@ typedef struct {
     ds4_gpu_tensor *previous_kv[4], *previous_score[4];
     ds4_gpu_tensor *verify_previous_kv[4], *verify_previous_score[4];
     bool verify_prefix;
+    bool score_selected_blocks; /* Only the active scalar sweep owns layer 20 block IDs. */
     ds4_gpu_tensor *engram_q_norm[2], *engram_k_norm[2];
     ds41_prefill_row batch, *rows_view;
     ds41_prefill_row carry;

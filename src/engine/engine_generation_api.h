@@ -14,4 +14,5 @@ int ds4_native_engine_generate_argmax(ds4_engine *, const ds4_engine_core *,
     const ds4_qwen4_config *, const ds4_tokens *, int count, int context,
     ds4_token_emit_fn, ds4_generation_done_fn, void *,
     ds4_session_progress_fn, void *);
+bool ds4_native_qwen4_memory_admit(ds4_engine_core *, const ds4_qwen4_config *, uint64_t graph_bytes, bool fit_cache);
 #endif

@@ -9,6 +9,10 @@ export fn ds4_gpu_dsv41_indexer_score_candidates(scores: ?*Tensor, q: ?*const Te
     return Index.scoreCandidates(scores, q, weights, keys, blocks, rows, block_count);
 }
 
+export fn ds4_gpu_dsv41_indexer_score_blocks(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, keys: ?*const Tensor, blocks: ?*const Tensor, rows: u32, block_count: u32) c_int {
+    return Index.scoreBlocks(scores, q, weights, keys, blocks, rows, block_count);
+}
+
 export fn ds4_gpu_dsv41_indexer_pack_fp4(packed_tensor: ?*Tensor, original: ?*const Tensor, rows: u32) c_int {
     return Index.packIndexFp4(packed_tensor, original, rows);
 }

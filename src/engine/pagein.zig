@@ -176,7 +176,12 @@ pub fn layerStart(model: [*c]const Model, weights: [*c]const Weights, index: u32
     var spans = std.mem.zeroes(c.ds4_model_map_span_vec);
     defer c.free(spans.v);
     const decode = flags & c.DS4_STREAM_PREPARE_DECODE != 0;
-    if (!ModelSpans.build(weights, shape, policy, index, index, !decode and index == 0, false, if (decode) .runtime else .full, &spans)) return false;
+    if (model.*.non_routed_weights_locked and job.pread_only and !decode and shape.family == c.DS4_MODEL_FAMILY_GLM_DSA) {
+        // Only a successful lock of the complete static set removes these
+        // reads. A partial lock must leave the ordinary page-in path intact.
+        if (!ModelSpans.routedOnly(&weights.*.layer[index], &spans)) return false;
+        if (spans.len == 0) return true;
+    } else if (!ModelSpans.build(weights, shape, policy, index, index, !decode and index == 0, false, if (decode) .runtime else .full, &spans)) return false;
     const ranges = alloc(Range, @as(usize, spans.len) * threads);
     var count: u32 = 0;
     const page: u64 = @intCast(c.sysconf(c._SC_PAGESIZE));

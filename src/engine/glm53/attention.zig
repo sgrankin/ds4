@@ -176,6 +176,37 @@ fn indexedAttention(graph: *Graph, model: *const Model, weights: *const Layer, l
     if (ablate & Ablate.core != 0)
         return c.ds4_gpu_tensor_fill_f32(graph.heads, 0, graph.heads_dim) != 0;
 
+    // Four phases retain the generic arithmetic while sharing each selected
+    // cache row across heads. Scoring consumes qk_low before accumulation
+    // reuses it; the existing split-attention buffers own scores and sums.
+    if (graph.tp_world != 2 and shape.n_rot == 0 and shape.n_kv_lora == 512 and shape.n_head <= 64 and
+        weights.attn_v_b.*.type == c.DS4_TENSOR_Q8_0 and selection.count >= 128 and
+        @as(u64, selection.count) * shape.n_head * @sizeOf(f32) <= c.ds4_gpu_tensor_bytes(graph.attn_partial_lora) and
+        c.getenv("DS4_METAL_DISABLE_GLM53_DSA_EXACT") == null)
+    {
+        return c.ds4_gpu_glm_attention_indexed_decode_exact_typed_tensor(
+            graph.heads,
+            graph.attn_partial_lora,
+            graph.qk_low,
+            graph.attn_partial_ms,
+            graph.qk_low,
+            graph.layer_kv_lora_cache[layer],
+            model.map,
+            model.size,
+            weights.attn_v_b.*.abs_offset,
+            weights.attn_v_b.*.type,
+            selection.selected,
+            selection.count,
+            graph.compact_cache_cap,
+            true,
+            shape.n_head,
+            shape.n_kv_lora,
+            @intCast(graph.q_nope),
+            shape.n_rot,
+            shape.n_value_mla,
+        ) != 0;
+    }
+
     // GLM-5.3 has no rotary tail. The old split-group8 specialization requires
     // 64 rotary dimensions, so the typed absorbed kernel is its Metal path.
     return c.ds4_gpu_glm_attention_indexed_decode_typed_tensor(

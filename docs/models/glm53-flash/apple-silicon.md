@@ -26,6 +26,23 @@ DSA uses absorbed multi-head latent attention: the compact latent is stored once
 
 The indexer's scores and top-k selection produce addresses, not attention values. Attention follows those addresses into compact history, computes causal attention and projects the result. Prefill can use a dense compact causal kernel for sufficiently large early slices; smaller early slices use a causal indexed kernel, and later slices use checked sparse gathers. Its score workspace is bounded independently of the whole chunk. Decode performs the corresponding single-position work. The [Metal GLM kernels](../../../src/metal/dsv4_misc.metal) and [row dispatcher](../../../src/engine/glm53/attention_rows.zig) show the separate scoring, selection and attention stages.
 
+Eligible single-host Flash decode divides indexed attention into score, softmax,
+latent-sum and value-projection kernels. Sharing staged cache rows across heads
+exposes more parallel work without changing the generic arithmetic order. The
+score kernel finishes reading the low-rank query before the latent-sum kernel
+reuses that buffer; existing split-attention buffers hold scores and denominators.
+The path requires a 512-wide FP16 compact cache, Q8 value weights, no rotary tail,
+at most 64 heads and at least 128 selected rows with enough scratch. Other shapes
+retain generic attention; `DS4_METAL_DISABLE_GLM53_DSA_EXACT` selects that fallback.
+
+Sparse prefill can prove a valid selection prefix on the GPU before using
+unchecked gathers. It removes only invalid trailing slots and preserves the
+physical row stride and selection order. Interior holes retain guarded loads;
+empty selections produce zero output. The specialization requires complete
+eight-head groups outside tensor parallelism. `DS4_METAL_DISABLE_GLM_PREFILL_PREFIX`
+restores the fully guarded kernel. This does not change the indexer's selected
+positions or allow padding to become attention data.
+
 Hyperconnection operations read four streams into each sublayer and expand its output back to them. Fused Metal operations reduce intermediate dispatches, with a reference path available through `DS4_METAL_DISABLE_HC_FUSION`; both attention and feed-forward boundaries are represented. Steering scales and residual capture act at those expansion boundaries in scalar and prefill execution, not inside the KDA recurrence or DSA indexer. See [operations](../../../src/engine/glm53/ops.zig), [scalar executor](../../../src/engine/glm53/executor.zig) and [prefill](../../../src/engine/glm53/prefill.zig).
 
 ## Experts and weight movement
@@ -33,6 +50,11 @@ Hyperconnection operations read four streams into each sublayer and expand its o
 The first three layers have dense feed-forward networks. Later layers route each row to eight of 288 experts and also evaluate a shared expert. Gate and up projections produce the gated intermediate; down projections produce expert outputs, which are weighted and combined. Quantized expert weights stay in their stored format for the relevant kernels. For multiple rows, the routed batch machinery can group work by expert and use tiled matrix multiplication, reusing an expert's weights across assigned rows; dispatch depends on tensor format, row count, device and available pipelines. A grouped tile is a computation strategy, not a guarantee that every row chooses the same expert. See [Flash MoE](../../../src/engine/glm53/moe.zig) and [Metal routed batch](../../../src/metal/routed_batch.zig).
 
 With resident weights the model mapping supplies expert weights. With SSD streaming, the runtime maps the required nonexpert and expert spans and may use a bounded selected-expert cache when layout and capacity permit. The router's selected IDs drive cache lookup and loading; prefill can choose a different mapping or seed policy from decode, and the MTP block has its own mapping decision. The cache is a weight resource, not a conversation checkpoint. Mapped bytes and logical accesses do not establish physical SSD traffic. [Storage policy](../../../src/engine/glm53/storage.zig), [cache seeding](../../../src/engine/glm53/cache_seed.zig) and [MoE dispatch](../../../src/engine/glm53/moe.zig) define these choices.
+
+When all static weights were successfully wired, full-layer SSD read-ahead
+fetches only routed gate, up and down tensors; dense layers need no read worker.
+The engine records completion of the whole lock operation. A partial lock or
+failure preserves ordinary reads, so residency is never inferred from an attempt.
 
 A persistent all-layer decode mapping is implemented: when eligible, the runtime installs and can reuse the mapping across decode calls. `DS4_METAL_DISABLE_STREAMING_STATIC_DECODE_MAP=1` instead selects bounded per-layer mapping. The historical bounded-SSD qualification used that fallback and a 24 GB expert cache after the global-map attempt was pressure-stopped; this is a configuration distinction, not missing native code. See the [qualification history](../../lab/journal/2026-10-24-native-models-and-steering.md) and [mapping implementation](../../../src/engine/glm53/storage.zig).
 
@@ -57,3 +79,26 @@ Checkpoint serialization converts Metal FP16 compact KV and index rows to FP32 w
 ## Evidence and limits
 
 The [native runtime report](../../../speed-bench/experiments/native-runtime-20261024/README.md) records historical frozen/native regression screens, and the [model retirement report](../../../speed-bench/experiments/model-retirement-20261024/README.md) records functional qualification. Their hardware, model, settings and sample counts bound their conclusions. The historical low bounded-SSD GLM rate was left uninvestigated; the evidence does not identify its cause. Those screens are not five-sample-per-side alternating optimization comparisons, nor a basis to transfer DeepSeek results to GLM. For a new performance claim, follow the current [measurement methodology](../../lab/methodology.md), including workload, cache conditions, variation and practical quality.
+
+## Retained full GLM 5.3
+
+The full `glm-dsa` checkpoint retains its separate C graph; it is not Flash's
+hybrid KDA/DSA graph. Its compact IQ2 SSD prefill can cross the dense/sparse seam
+within one layer sweep when both portions contain multiples of 256 rows. The
+attention slices choose their respective regimes and only the sparse suffix
+computes explicit index scores. Partial tiles, verification pairs, TP, quality,
+imatrix and partial-layer graphs keep the split. This avoids loading every layer
+twice for an eligible crossing; `DS4_METAL_DISABLE_GLM_MIXED_PREFILL` restores it.
+
+For eligible sparse prefill slices, full GLM rotates the live FP16 compact key
+tails once and shares FP32 results across queries and heads. Scratch is bounded
+to 16 MiB and allocation failure retains the original fused rotations; checkpoint
+bytes are unchanged. Small slices, TP, concurrent encoders and unsupported RoPE
+settings use the existing path. `DS4_METAL_DISABLE_GLM_PREFILL_ROPE_REUSE` selects
+that reference path.
+
+A two-row MTP verification exactly across the full-model dense/sparse seam uses
+one ordinary target step and seeds the next draft. This avoids invalidating the
+session when the chunker can admit only one row. Flash already supports mixed
+verification and does not need that bridge. Both models' accepted-token draft
+catch-up stops after publishing its KV row when its logits will be discarded.

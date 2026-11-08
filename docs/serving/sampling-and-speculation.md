@@ -81,6 +81,34 @@ Ordinary decode uses the same file with `--mtp` omitted. For non-zero
 temperature, add `--mtp-exact-sampling` to preserve the target sampling
 distribution. See [Qwen setup](../models/qwen38-flash-next/usage.md) for Metal and CUDA.
 
+Metal SSD streaming supports MTP with the built-in predictor weights. Prompt
+prefill prepares its K/V and indexer history from trunk activations and the next
+prompt token, without running its attention output, experts or vocabulary head.
+The last activation waits until the actual next token is known. Rollback and
+checkpoint snapshots retain that pending row. The
+[native predictor](../../src/engine/qwen4/mtp.zig) owns this preparation.
+
+`DS4_QWEN4_MTP_PREFILL` controls preparation of newly prefilled history:
+
+| Value | Predictor history |
+| --- | --- |
+| `auto` (default) | Prepare it with SSD streaming; initialize historical cache rows to zero with resident weights |
+| `on` or `1` | Prepare it with either weight placement |
+| `off` or `0` | Initialize historical cache rows to zero |
+
+All three settings keep drafts and target verification enabled when `--mtp` is
+set. Zero history can change drafts and acceptance; preparing history costs
+prefill time, so compare complete request time for the intended workload.
+Decode prepares real predictor rows, and each prompt chunk retains its final
+activation for preparation at the next boundary. Reused checkpoints retain
+their saved history. Without `--mtp`, this setting has no effect.
+
+Qwen payload version 3 stores the initialized predictor prefix and pending row.
+Version 2 and plain checkpoints restore target state directly; when MTP needs
+missing predictor history, the session replays the saved tokens once before
+continuing. [Payload ownership](../../src/engine/qwen4/payload.zig) and
+[session restore](../../src/engine/qwen4/session.zig) define those boundaries.
+
 The cycle drafts one token ahead by default and engages a **second, chained
 draft** (one extra nextn-layer step conditioned on the predictor's own
 stream, verified in a 3-row pass) while recent first-draft acceptance is
@@ -115,8 +143,9 @@ target-only path, use `--quality` or `--dspark-strict`; these disable the
 speculative acceptance path. They do not promise identical output across
 different hardware or execution configurations.
 
-Native session batches generally use ordinary target decoding. Qwen3.8 on
-Metal has a batched MTP path, and DS41 constrained requests can take bounded
+Native session batches generally use ordinary target decoding. Resident
+Qwen3.8 on Metal has a batched MTP path; SSD streaming uses ordered speculative
+cycles. DS41 constrained requests can take bounded
 exclusive speculative turns. See [serving](overview.md#multiple-sessions) for
 eligibility, exact-sampling behavior and fallbacks.
 

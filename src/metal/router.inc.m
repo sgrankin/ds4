@@ -4,7 +4,7 @@
 uint32_t ds4_metal_router_facts(void) {
     return (g_quality_mode ? DS4_ROUTER_QUALITY : 0) |
         (ds4_gpu_device_is_pre_m5_apple_silicon() ? DS4_ROUTER_PRE_M5 : 0) |
-        (ds4_gpu_device_name_contains("M5") ? DS4_ROUTER_M5 : 0) |
+        (ds4_gpu_device_is_m5_apple_silicon() ? DS4_ROUTER_M5 : 0) |
         (ds4_gpu_device_name_contains("M3") ? DS4_ROUTER_M3 : 0) |
         (g_ssd_streaming_mode ? DS4_ROUTER_SSD : 0);
 }

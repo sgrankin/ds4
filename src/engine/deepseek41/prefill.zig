@@ -226,6 +226,10 @@ pub const Prefill = struct {
         const batch_core = !exact_short and batch_attention and !present("DS4_METAL_DISABLE_V41_BATCH_CORE");
         const batch_hc = batch_attention and (batch_moe or (exact_short and
             (selected_small or present("DS4_METAL_V41_EXACT_BATCH_HC")))) and !present("DS4_METAL_DISABLE_V41_BATCH_HC");
+        // Keep matrix partitions unchanged while discarding whole medium
+        // decoder chunks. DSpark/images/TP retain their established route.
+        const medium_suffix = total_count >= 4096 and total_count < 8192 and
+            graph.tp_world == 1 and graph.dspark == null and graph.image_count == 0 and encoder_chunk >= 128;
         const suffix_rows = 1 + (shape.n_layer - 20) * 127;
         const decoder_suffix = self.checkpoints == null and (suffix_all or
             (wide and total_count >= suffix_rows and !present("DS4_METAL_DISABLE_V41_DECODER_SUFFIX")));
@@ -310,7 +314,11 @@ pub const Prefill = struct {
                 if (replay_rows != 0) {
                     first = total_count - replay_rows;
                 } else {
-                    const needed = 1 + (shape.n_layer - 1 - index) * 127;
+                    // Continuation consumes the complete final raw ring. A
+                    // single terminal row leaves stale early keys on aligned
+                    // appends even when every compressed cache row matches.
+                    const final_rows: u32 = if (medium_suffix or graph.dspark != null) 128 else 1;
+                    const needed = final_rows + (shape.n_layer - 1 - index) * 127;
                     first = total_count -| needed;
                     if (suffix_all) {
                         // Prune at a compressor block boundary, retaining at
@@ -323,7 +331,7 @@ pub const Prefill = struct {
                         first = if (first - chunk_start >= over) first - over else chunk_start;
                     }
                     const short_sweep = total_count < 8192 and policy.shortSweepEnabled() and !suffix_all;
-                    if (short_sweep) first -= first % 2048;
+                    if (short_sweep) first -= first % (if (medium_suffix) chunk else 2048);
                     const warm: u32 = @min(first, if (short_sweep) @as(u32, 128) else 127);
                     if (ok and first != 0) ok = decoderPrepare(executor, layer, index, initial_start, first - warm, warm, false, batch_hc, batch_attention, callbacks);
                 }

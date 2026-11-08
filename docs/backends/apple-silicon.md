@@ -42,6 +42,32 @@ explained in the [DeepSeek](../models/deepseek/apple-silicon.md),
 [Flint](../models/flint/apple-silicon.md) and
 [Clef](../models/clef/apple-silicon.md) backend manuals.
 
+## Dense arithmetic and device policy
+
+The plain Q8 matrix-vector kernel shares activation loads and reduces partials
+with fewer barriers, while retaining the original eight-term dot and two-stage
+SIMD sum, including zero padding. Reassociating those sums can amplify small
+projection changes during recurrent decode. Qwen's eligible older-device shapes
+reuse each activation across four complete output rows; other models retain
+their own dispatch. Optional prefill weight unpacking falls back to the direct
+tiled GEMM if its scratch allocation fails. Scratch replacements retain the
+completion lifetime described above.
+
+Qwen's M1 Max tuning extends to M2–M4, with M3 Ultra's dedicated MoE choices
+preserved. Selected Qwen defaults and shared Metal capability detection include
+M6, while DeepSeek/GLM's M5-only decisions remain separate. Names match bounded
+generation tokens, so a name such as M50 does not silently inherit M5 policy.
+Runtime capability and pipeline checks still apply.
+
+## Image preparation
+
+The native antialiased bicubic resizer partitions independent destination rows
+among up to eight pthread workers for larger images. Each worker retains the
+original coordinates, double-precision accumulation, integer channel rounding
+and padded-canvas stride. A failed thread creation leaves the remaining rows to
+the caller; all started workers join before patches consume the resized image.
+The shared preprocessing path serves DeepSeek, GLM and Qwen image layouts.
+
 ## Capacity and startup
 
 Install Apple's command-line tools and follow [build and test](../development/build-and-test.md).

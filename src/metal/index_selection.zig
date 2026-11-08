@@ -58,7 +58,7 @@ pub fn scoreOne(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, ke
         .groups_y = 1,
         .threads_x = threads,
         .threads_y = if (direct and !wide) 4 else 1,
-        .shared_bytes = if (wide) (4096 + 32) * 4 else if (rows4) 0 else if (direct) (128 + 4) * 4 else threads * 4,
+        .shared_bytes = if (wide) (4096 + 32) * 4 else if (rows4) 0 else if (direct) (128 + 8) * 4 else threads * 4,
     };
     return scoreDispatch(&launch, if (direct) "GLM indexer direct score" else "GLM indexer score");
 }
@@ -66,12 +66,21 @@ pub fn scoreOne(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, ke
 /// Write layer20's inherited blocks in the global score/index space. The caller
 /// filters untouched rows before top-k. Keep the dense scalar reduction order.
 pub fn scoreCandidates(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, keys: ?*const Tensor, blocks: ?*const Tensor, rows: u32, block_count: u32) c_int {
+    return scoreCandidateRows(scores, q, weights, keys, blocks, rows, block_count, false);
+}
+
+/// Score four keys per SIMD group but keep their original global score slots.
+/// The caller applies the original mask/top-k network, including equal scores.
+pub fn scoreBlocks(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, keys: ?*const Tensor, blocks: ?*const Tensor, rows: u32, block_count: u32) c_int {
+    return scoreCandidateRows(scores, q, weights, keys, blocks, rows, block_count, true);
+}
+fn scoreCandidateRows(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Tensor, keys: ?*const Tensor, blocks: ?*const Tensor, rows: u32, block_count: u32, grouped: bool) c_int {
     if (api.init() == 0 or rows == 0 or block_count == 0 or block_count > (@as(u64, rows) + 7) / 8) return 0;
     if (!fits(scores, @as(u64, rows) * 4) or !fits(q, 32 * 128 * 4) or
         !fits(weights, 32 * 4) or !fits(keys, @as(u64, rows) * 128 * 4) or
         !fits(blocks, @as(u64, block_count) * 4))
         return api.reportError("ds4: Metal candidate indexer score received undersized buffers");
-    const pipeline = c.ds4_metal_index_get_pipeline(c.DS4_METAL_INDEX_CANDIDATE_DIRECT);
+    const pipeline = c.ds4_metal_index_get_pipeline(if (grouped) c.DS4_METAL_INDEX_CANDIDATE_BLOCKS else c.DS4_METAL_INDEX_CANDIDATE_DIRECT);
     if (pipeline.handle == null) return 0;
     var args = std.mem.zeroes(c.ds4_metal_index_score_packet);
     args.one = .{ .n_rows = rows, .n_head = 32, .head_dim = 128, .cache_f16 = 0, .scale = 1.0 / 64.0 };
@@ -84,11 +93,11 @@ pub fn scoreCandidates(scores: ?*Tensor, q: ?*const Tensor, weights: ?*const Ten
         .keys = keys,
         .candidate_blocks = blocks,
         .scores = scores,
-        .groups_x = @as(u64, block_count) * 8,
+        .groups_x = @as(u64, block_count) * @as(u64, if (grouped) 1 else 8),
         .groups_y = 1,
         .threads_x = 32,
-        .threads_y = 4,
-        .shared_bytes = (128 + 4) * 4,
+        .threads_y = if (grouped) 2 else 4,
+        .shared_bytes = if (grouped) 0 else (128 + 4) * 4,
     };
     return scoreDispatch(&launch, "V4.1 candidate indexer score");
 }
@@ -433,7 +442,12 @@ pub fn topkDecode(selected: ?*Tensor, scores: ?*const Tensor, width: u32, rows: 
     const decode512 = decode and ratio == 0 and rows == 1 and k == 512 and c.ds4_metal_v41_on(c.DS4_GPU_V41_DECODE_TOPK) != 0;
     if (api.init() == 0 or selected == null or scores == null or width == 0 or rows == 0 or k == 0 or k > width) return 0;
     const sort_kind: u32 = if (ratio == 0) c.DS4_METAL_INDEX_SORT else if (api.envPresent("DS4_METAL_DISABLE_V41_TOPK_SHUFFLE") != 0) c.DS4_METAL_INDEX_SORT_CAUSAL else c.DS4_METAL_INDEX_SORT_SHUFFLE;
-    const merge_kind: u32 = if (decode512) c.DS4_METAL_INDEX_MERGE_STAGED else if (ratio == 0) c.DS4_METAL_INDEX_MERGE else if (k == 512 and api.envPresent("DS4_METAL_DISABLE_V41_TOPK_PREFIX") == 0) c.DS4_METAL_INDEX_MERGE_PREFIX else c.DS4_METAL_INDEX_MERGE_CAUSAL;
+    // Each run contributes only its best k entries to the global top-k.
+    // Preserve the comparison network while avoiding reads of rejected tails.
+    const prefix_merge = k == 512 and api.envPresent("DS4_METAL_DISABLE_V41_TOPK_PREFIX") == 0;
+    const merge_kind: u32 = if (decode512) c.DS4_METAL_INDEX_MERGE_STAGED else if (ratio == 0)
+        (if (prefix_merge) c.DS4_METAL_INDEX_MERGE_NONCAUSAL_PREFIX else c.DS4_METAL_INDEX_MERGE)
+    else if (prefix_merge) c.DS4_METAL_INDEX_MERGE_PREFIX else c.DS4_METAL_INDEX_MERGE_CAUSAL;
     const sort = c.ds4_metal_index_get_pipeline(sort_kind);
     const merge = c.ds4_metal_index_get_pipeline(merge_kind);
     if (sort.handle == null or merge.handle == null) return 0;

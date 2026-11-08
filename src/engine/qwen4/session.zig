@@ -65,10 +65,12 @@ pub fn sync(runtime: *Runtime, prompt: *const c.ds4_tokens, errors: []u8) c_int 
     const state = runtime.state;
     const graph = &state.*.graph;
     const frontier = runtime.frontier;
+    const prepare_mtp = if (graph.mtp_R == null) false else mtp.prepareHistory(graph.ssd_streaming) orelse return fail(errors, "DS4_QWEN4_MTP_PREFILL must be on, off, or auto");
     runtime.pending.*.have = 0;
     runtime.pending.*.have2 = false;
     var start: c_int = 0;
     if (frontier.*.checkpoint_valid and graph.pos == frontier.*.checkpoint.len and
+        (graph.mtp_R == null or frontier.*.checkpoint.len == 0 or (graph.mtp_tail_valid and graph.mtp_pos + 1 >= frontier.*.checkpoint.len)) and
         (!state.*.rewound or prompt.len > frontier.*.checkpoint.len) and
         prompt.len >= frontier.*.checkpoint.len and c.ds4_tokens_starts_with(prompt, &frontier.*.checkpoint))
     {
@@ -126,6 +128,21 @@ pub fn sync(runtime: *Runtime, prompt: *const c.ds4_tokens, errors: []u8) c_int 
             if (errors.len != 0) _ = c.snprintf(errors.ptr, errors.len, "Qwen3.8 prefill failed at token %d", index);
             return 1;
         }
+        if (graph.mtp_R != null) {
+            // Cold chunks leave a real pending boundary, exactly like restored
+            // checkpoints. Prepared chunks can use known cross-chunk lookahead.
+            const known = if (!prepare_mtp or index + @as(c_int, @intCast(count)) == prompt.len) count - 1 else count;
+            if (!prepare_mtp and known != 0 and !mtp.cold(graph, runtime.model, runtime.weights, @intCast(index), known))
+                return fail(errors, "Qwen3.8 cold predictor cache prefill failed");
+            var row: u32 = 0;
+            while (prepare_mtp and row < known) {
+                const n = @min(3, known - row);
+                const next = @as(usize, @intCast(index)) + row + 1;
+                if (!mtp.cacheSteps(graph, runtime.model, runtime.weights, row, prompt.v[next..][0..n], @as(u32, @intCast(index)) + row))
+                    return fail(errors, "Qwen3.8 predictor cache prefill failed");
+                row += n;
+            }
+        }
         for (tokens) |token| append(frontier, token);
         index += @intCast(count);
         frontier.*.checkpoint_valid = true;
@@ -143,7 +160,9 @@ pub fn sync(runtime: *Runtime, prompt: *const c.ds4_tokens, errors: []u8) c_int 
 pub fn replay(runtime: *Runtime, errors: []u8) c_int {
     const state = runtime.state;
     const frontier = runtime.frontier;
-    if (!state.*.ready or state.*.graph.pos == frontier.*.checkpoint.len) return 0;
+    const graph = &state.*.graph;
+    if (!state.*.ready or (graph.pos == frontier.*.checkpoint.len and
+        (graph.mtp_R == null or frontier.*.checkpoint.len == 0 or (graph.mtp_tail_valid and graph.mtp_pos + 1 >= frontier.*.checkpoint.len)))) return 0;
     if (frontier.*.checkpoint_image_count != 0) {
         frontier.*.checkpoint_valid = false;
         _ = fail(errors, "Qwen3.8 image rewind requires multimodal sync");
@@ -252,7 +271,20 @@ pub fn speculate(runtime: *Runtime, first: c_int, temperature: f32, top_k: c_int
     const position = graph.pos;
     const vocab = graph.config.shape.n_vocab;
     const target_depth: u32 = if ((exact and temperature > 0) or c.getenv("DS4_QWEN4_NO_MTP_BATCH") != null) 2 else depth(state);
-    if (pending.*.have != 0 and first != pending.*.parent) pending.*.have = 0;
+    if (pending.*.have != 0 and first != pending.*.parent) {
+        pending.*.have = 0;
+        pending.*.have2 = false;
+    }
+    if (pending.*.have == 0 and accepted.len >= 2 and position + 2 <= graph.ctx_cap and graph.cap_tokens >= 2 and
+        ops.fused(graph, 2) and position != 0 and graph.mtp_R != null and graph.mtp_tail_valid and
+        graph.mtp_tail_pos + 1 == position and graph.mtp_pos + 1 >= position)
+    {
+        const residual = graph.R;
+        graph.R = graph.mtp_tail_R;
+        draft(runtime, 0, first, position - 1);
+        graph.R = residual;
+        pending.*.have2 = false;
+    }
     if (target_depth == 3 and pending.*.have != 0 and pending.*.have2 and graph.snap2_ple_hist == null and accepted.len >= 3 and position + 3 <= graph.ctx_cap and graph.cap_tokens >= 3) _ = snapshots.ensure(graph, .second);
     const deep = target_depth == 3 and pending.*.have != 0 and pending.*.have2 and accepted.len >= 3 and position + 3 <= graph.ctx_cap and graph.cap_tokens >= 3 and graph.mtp_R != null and graph.snap2_ple_hist != null;
     if (pending.*.have == 0 or accepted.len < 2 or position + 2 > graph.ctx_cap or graph.cap_tokens < 2 or graph.mtp_R == null or !ops.fused(graph, 2)) {

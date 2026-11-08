@@ -130,6 +130,23 @@ test "page-in real I/O, range partitioning, selected coalescing and slot joins" 
     try expect(job.started and job.n_threads == 1);
     try expect(pagein.join(&job, false));
 
+    // Full locking suppresses dense reads and leaves only routed tensors;
+    // clearing the fact (including a partial lock) restores all static spans.
+    shape.family = c.DS4_MODEL_FAMILY_GLM_DSA;
+    model.non_routed_weights_locked = true;
+    try expect(pagein.layerStart(&model, &weights, 0, 7, c.DS4_STREAM_PREPARE_PREAD, false, false, &shape, &policy, &job));
+    try expect(!job.started and job.bytes == 0);
+    weights.layer[0].ffn_gate_exps = &first_weight;
+    try expect(pagein.layerStart(&model, &weights, 0, 7, c.DS4_STREAM_PREPARE_PREAD, false, false, &shape, &policy, &job));
+    try expect(job.started and job.unique == 1 and job.bytes == first_weight.bytes);
+    try expect(pagein.join(&job, false));
+    weights.layer[0].ffn_gate_exps = null;
+    model.non_routed_weights_locked = false;
+    try expect(pagein.layerStart(&model, &weights, 0, 7, c.DS4_STREAM_PREPARE_PREAD, false, false, &shape, &policy, &job));
+    try expect(job.started and job.unique == 2);
+    try expect(pagein.join(&job, false));
+    shape.family = 0;
+
     var slots: [2]pagein.Slot = @splat(std.mem.zeroes(pagein.Slot));
     const flags = c.DS4_STREAM_PREPARE_PREAD;
     try expect(pagein.prepareStart(&model, &weights, 0, 1, flags, false, false, &shape, &policy, &slots));

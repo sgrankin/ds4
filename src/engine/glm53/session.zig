@@ -345,10 +345,9 @@ pub fn speculate(runtime: *Runtime, first: c_int, eos: c_int, temperature: f32, 
         // Advance both predictor positions so the next proposal is conditioned
         // on the verified continuation, without changing target recurrence.
         const next = argmax(runtime, frontier.*.logits);
-        var ignored: c_int = -1;
         var next_draft: c_int = -1;
         if (c.ds4_gpu_tensor_write(graph.hc_cur, 0, pending.*.hc, hidden_bytes) != 0 and
-            Mtp.step(graph, model, weights, draft, position, pending.*.min_pos, &ignored) and
+            Mtp.step(graph, model, weights, draft, position, pending.*.min_pos, null) and
             c.ds4_gpu_tensor_write(graph.hc_cur, 0, pending.*.hc + @as(usize, @intCast(hidden_values)), hidden_bytes) != 0 and
             Mtp.step(graph, model, weights, next, position + 1, pending.*.min_pos, &next_draft))
         {

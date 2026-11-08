@@ -94,7 +94,8 @@ class Server:
                 DS4_METAL_V41_RESIDENT_ROUTE_GAP="0", DS4_METAL_V41_RESIDENT_PREFILL_GAP="0",
                 DS4_METAL_V41_RESIDENT_ROUTE_NATIVE_WEIGHTS="0")
         elif self.family == "qwen":
-            # Native BF16 n-grams stay disk-only; no Qwen expert SSD path.
+            # Native BF16 n-grams stay disk-only. Exercise the ordered SSD
+            # expert path with several independent live conversations.
             env.update(DS4_METAL_NO_RESIDENCY="1", DS4_METAL_NO_MODEL_WARMUP="1")
         elif self.family == "glm":
             # Qualify the bounded per-layer mapping on this 128 GiB host.
@@ -115,7 +116,8 @@ class Server:
             command += ["--prefill-chunk", "512", "--ssd-streaming", "--ssd-streaming-cache-experts", "32GB",
                         "--mixed-prefill-quantum", "512"]
         elif self.family == "qwen":
-            command += ["--prefill-chunk", "512", "--mixed-prefill-quantum", "512"]
+            command += ["--prefill-chunk", "512", "--mixed-prefill-quantum", "512",
+                        "--ssd-streaming", "--ssd-streaming-cache-experts", "32GB"]
         elif self.family == "glm":
             command += ["--ssd-streaming", "--ssd-streaming-cache-experts", "24GB"]
         if flint_profile is not None:

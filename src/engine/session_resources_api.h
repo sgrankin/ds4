@@ -32,4 +32,5 @@ bool ds4_native_session_resources_init(ds4_session_view *,
 void ds4_native_session_resources_free(ds4_session_view *,
     ds4_session_resource_pool *);
 
+bool ds4_native_qwen4_memory_admit(ds4_engine_core *, const ds4_qwen4_config *, uint64_t graph_bytes, bool fit_cache);
 #endif

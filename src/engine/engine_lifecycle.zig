@@ -28,6 +28,16 @@ fn mapModel(model: *const c.ds4_model) bool {
     return c.ds4_gpu_set_model_map_range(model.map, model.size, model.tensor_data_pos, model.size - model.tensor_data_pos, model.max_tensor_bytes) != 0;
 }
 
+pub fn initialStreamingSpans(weights: *const c.ds4_weights, shape: *const c.ds4_shape, spans: *c.ds4_model_map_span_vec) bool {
+    // Qwen streams only routed experts. Its dense, HC, shared and predictor
+    // weights use these persistent views throughout prefill and decode;
+    // unlike the legacy paged executor, its forward never remaps a layer.
+    return if (shape.family == c.DS4_MODEL_FAMILY_QWEN4_EXP)
+        c.ds4_native_model_spans_static(weights, shape, 0, std.math.maxInt(u32), true, true, spans)
+    else
+        c.ds4_native_model_spans_token(weights, spans);
+}
+
 pub const Lifecycle = struct {
     core: *c.ds4_engine_core,
     configuration: *c.ds4_engine_configuration,
@@ -143,8 +153,8 @@ pub const Lifecycle = struct {
         if (request.inspect_only) return true;
         const core = self.core;
         if (self.shape().family == c.DS4_MODEL_FAMILY_QWEN4_EXP) {
-            if (request.load_slice or core.ssd_streaming or request.dspark or core.power_percent != 100 or hasText(request.mtp_path))
-                return fail("ds4: Qwen3.8 requires Metal or single-GPU CUDA (or --cpu --first-token-test); tensor parallelism, pipeline execution, SSD streaming, DSpark, external MTP models and power throttling are not supported\n");
+            if (request.load_slice or request.dspark or core.power_percent != 100 or hasText(request.mtp_path))
+                return fail("ds4: Qwen3.8 requires Metal or single-GPU CUDA (or --cpu --first-token-test); tensor parallelism, pipeline execution, DSpark, external MTP models and power throttling are not supported\n");
             return true;
         }
         if (core.power_percent < 100) return fail("ds4: --power is not supported for GLM 5.3 Flash yet\n");
@@ -230,7 +240,10 @@ pub const Lifecycle = struct {
         const core = self.core;
         if (!core.ssd_streaming or c.getenv("DS4_METAL_DISABLE_STREAMING_STATIC_LOCK") != null) return;
         var static_bytes: u64 = 0;
-        const budget = c.ds4_native_engine_manual_safe_bytes(core, self.shape(), request.context_size, core.prefill_chunk);
+        const budget = if (self.shape().family == c.DS4_MODEL_FAMILY_QWEN4_EXP)
+            c.ds4_gpu_recommended_working_set_size()
+        else
+            c.ds4_native_engine_manual_safe_bytes(core, self.shape(), request.context_size, core.prefill_chunk);
         const experts = c.ds4_native_cache_dynamic_bytes(&core.memory, true, self.shape(), &core.weights) +| core.memory.ssd_streaming_prefill_headroom_bytes +| core.memory.ssd_streaming_full_layer_bytes;
         if (!c.ds4_native_model_spans_static_bytes(&core.weights, self.shape(), true, true, &static_bytes) or static_bytes > budget or experts > budget - static_bytes) {
             _ = c.fputs("ds4: Metal SSD static weights remain pageable to preserve runtime headroom\n", c.__stderrp);
@@ -257,6 +270,7 @@ pub const Lifecycle = struct {
                 offset += bytes;
             }
         }
+        core.model.non_routed_weights_locked = locked != 0 and failed == 0;
         _ = c.fprintf(c.__stderrp, "ds4: Metal SSD static weights locked %.2f GiB; pageable %.2f GiB\n", @as(f64, @floatFromInt(locked)) / (1024 * 1024 * 1024), @as(f64, @floatFromInt(failed)) / (1024 * 1024 * 1024));
     }
 
@@ -274,7 +288,7 @@ pub const Lifecycle = struct {
         }
         _ = c.ds4_native_cacheable_count(self.shape(), &core.weights, &cacheable, &uniform);
         const boosted = routed - uniform;
-        if (boosted > 0) _ = c.fprintf(c.__stderrp, "ds4: SSD streaming mixed-precision model: %u/%u routed layers off the slab size class will bypass the expert cache and read experts via mapped model views\n", boosted, routed);
+        if (boosted > 0) _ = c.fprintf(c.__stderrp, "ds4: SSD streaming mixed-precision model: %u/%u routed layers off the slab size class will bypass the slab cache and use compact owned staging\n", boosted, routed);
         if (boosted * 2 > routed) _ = c.fprintf(c.__stderrp, "ds4: WARNING: the majority of routed layers (%u/%u) are off the slab size class (is the FIRST routed layer itself boosted?); expert-cache hit rate will be catastrophic\n", boosted, routed);
         const minimum = @as(u64, uniform) * self.shape().n_expert_used;
         if (minimum != 0 and core.memory.ssd_streaming_cache_experts != 0 and core.memory.ssd_streaming_cache_experts < 2 * minimum)
@@ -288,7 +302,7 @@ pub const Lifecycle = struct {
             return mapModel(&core.model);
         }
         var spans: c.ds4_model_map_span_vec = undefined;
-        if (!c.ds4_native_model_spans_token(&core.weights, &spans)) return fail("ds4: invalid SSD streaming initial token embedding map\n");
+        if (!initialStreamingSpans(&core.weights, self.shape(), &spans)) return fail("ds4: invalid SSD streaming initial model map\n");
         defer c.free(spans.v);
         const allocator = std.heap.c_allocator;
         const offsets = allocator.alloc(u64, spans.len) catch c.ds4_engine_model_die("out of memory");
@@ -313,7 +327,12 @@ pub const Lifecycle = struct {
         c.ds4_gpu_set_quality(core.quality);
         c.ds4_gpu_set_glm_model(self.shape().family == c.DS4_MODEL_FAMILY_GLM_DSA);
         c.ds4_gpu_set_ssd_streaming(core.ssd_streaming);
-        if (!c.ds4_native_engine_auto_cache(core, self.shape(), request.context_size, core.prefill_chunk) or
+        if (self.shape().family == c.DS4_MODEL_FAMILY_QWEN4_EXP and core.ssd_streaming) {
+            const context: u32 = if (request.context_size > 0) @intCast(request.context_size) else 4096;
+            const estimate = @import("qwen4/memory.zig").estimate(&self.configuration.qwen, context, core.prefill_chunk);
+            const sessions: u64 = @intCast(@max(request.placement_session_count_hint, 1));
+            if (!@import("qwen4/admission.zig").admit(core, &self.configuration.qwen, estimate.total_bytes *| sessions, true)) return false;
+        } else if (!c.ds4_native_engine_auto_cache(core, self.shape(), request.context_size, core.prefill_chunk) or
             !c.ds4_native_engine_reserve_cache(core, self.shape(), self.streaming)) return false;
         const residency = self.placement(request);
         if (self.shape().family == c.DS4_MODEL_FAMILY_GLM_DSA) {

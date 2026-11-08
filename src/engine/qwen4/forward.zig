@@ -66,7 +66,9 @@ fn runImpl(graph: *Graph, model: *const Model, weights: *const Weights, tokens: 
         if (end != raw_flush and end[0] == 0 and layer < trunk) flush_layer = @intCast(layer);
     }
     const started = if (timing != 0) (if (inputs_staged) stage_started else ops.now()) else 0;
-    if (!inputs_staged and !input.stage(graph, model, weights, tokens)) return false;
+    const ple_overlap = !inputs_staged and count == 1 and !ops.present("DS4_QWEN4_NO_PLE_OVERLAP");
+    if (!inputs_staged and (!input.stageEmbeddings(graph, model, weights, tokens) or
+        (!ple_overlap and !input.stagePle(graph, model, tokens, null)))) return false;
     const staged = if (timing != 0) ops.now() else 0;
     if (!ops.beginCommands()) return false;
     var profile = Profile{ .enabled = timing == 2 and count > 1, .last = if (timing == 2 and count > 1) ops.now() else 0 };
@@ -76,7 +78,11 @@ fn runImpl(graph: *Graph, model: *const Model, weights: *const Weights, tokens: 
         const index: u32 = @intCast(offset);
         const layer = &weights.layer[index];
         if (dimensions.isPle(&graph.config, index)) {
-            ok = ops.dense(graph.ple_key, model, layer.ple_key, graph.ple_emb, count) and
+            if (ple_overlap) {
+                if (index > 0) ok = c.ds4_gpu_flush_commands() != 0;
+                ok = ok and input.stagePle(graph, model, tokens, null);
+            }
+            ok = ok and ops.dense(graph.ple_key, model, layer.ple_key, graph.ple_emb, count) and
                 ops.dense(graph.ple_val, model, layer.ple_value, graph.ple_emb, count) and
                 c.ds4_gpu_qwen4_ple_gate_tensor(graph.ple_gated, graph.ple_normed, graph.R, graph.ple_key, graph.ple_val, model.map, model.size, layer.ple_norm_key.*.abs_offset, layer.ple_norm_query.*.abs_offset, layer.ple_norm_conv.*.abs_offset, count, shape.n_embd, shape.n_hc, shape.rms_eps) != 0 and
                 c.ds4_gpu_qwen4_ple_conv_tensor(graph.R, graph.ple_gated, graph.ple_normed, graph.ple_hist, model.map, model.size, layer.ple_conv.*.abs_offset, layer.ple_conv.*.type, count, @intCast(hc_width), shape.n_ple_conv, shape.n_ple_ngram, if (graph.snap_after_first) graph.snap_ple_hist else null, 0, if (graph.snap_after_second) graph.snap2_ple_hist else null, 1) != 0;
@@ -109,10 +115,16 @@ fn runImpl(graph: *Graph, model: *const Model, weights: *const Weights, tokens: 
             ok = dumps.lastFfn(graph, index, count);
         }
         profile.mark(5);
-        if (ok and index + 1 == flush_layer) ok = c.ds4_gpu_flush_commands() != 0;
+        if (ok and flush_layer != 0 and (index + 1 == flush_layer or (ple_overlap and index + 1 == 2 * flush_layer))) ok = c.ds4_gpu_flush_commands() != 0;
     }
     if (profile.enabled) _ = c.fprintf(c.__stderrp, "ds4: Qwen3.8 prefill stage ms/chunk (pos=%u T=%u ok=%d): ple %.1f hc_attn %.1f gdn %.1f attn %.1f hc_ffn %.1f moe %.1f\n", position, count, @as(c_int, @intFromBool(ok)), profile.elapsed[0] * 1e3, profile.elapsed[1] * 1e3, profile.elapsed[2] * 1e3, profile.elapsed[3] * 1e3, profile.elapsed[4] * 1e3, profile.elapsed[5] * 1e3);
     if (ok and output != null) ok = projectLogits(graph, model, weights, count, all_rows);
+    if (ok and graph.mtp_R != null) {
+        const bytes = hc_width * @sizeOf(f32);
+        ok = c.ds4_gpu_tensor_copy(graph.mtp_tail_R, 0, graph.R, (count - 1) * bytes, bytes) != 0;
+        if (ok and graph.snap_after_first) ok = c.ds4_gpu_tensor_copy(graph.snap_tail_R, 0, graph.R, 0, bytes) != 0;
+        if (ok and graph.snap_after_second) ok = c.ds4_gpu_tensor_copy(graph.snap2_tail_R, 0, graph.R, bytes, bytes) != 0;
+    }
     const encoded = if (timing != 0) ops.now() else 0;
     if (c.ds4_gpu_end_commands() == 0) ok = false;
     const finished = if (timing != 0) ops.now() else 0;
@@ -131,7 +143,14 @@ fn runImpl(graph: *Graph, model: *const Model, weights: *const Weights, tokens: 
             timing_accumulated = @splat(0);
         }
     }
-    if (ok) graph.pos += count;
+    if (ok) {
+        graph.pos += count;
+        if (graph.mtp_R != null) {
+            graph.mtp_tail_pos = graph.pos - 1;
+            graph.mtp_tail_valid = true;
+            graph.mtp_tail_cached = false;
+        }
+    }
     if (graph.snap_after_first) {
         graph.snap_valid = ok;
         graph.snap_after_first = false;

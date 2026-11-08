@@ -31,11 +31,11 @@ fn sharedMid(graph: *Graph, model: *const Model, layer: *const Layer, tokens: u3
 }
 
 pub fn run(graph: *Graph, model: *const Model, layer: *const Layer, tokens: u32) bool {
-    return runLayer(graph, model, layer, null, tokens);
+    return runLayer(graph, model, layer, null, tokens, false);
 }
 
 pub fn runSteered(graph: *Graph, model: *const Model, layer: *const Layer, index: u32, tokens: u32) bool {
-    return runLayer(graph, model, layer, index, tokens);
+    return runLayer(graph, model, layer, index, tokens, false);
 }
 
 fn reduce(graph: *Graph, shared: ?*const c.ds4_gpu_tensor, index: ?u32, tokens: u32, stride: u32) bool {
@@ -45,18 +45,67 @@ fn reduce(graph: *Graph, shared: ?*const c.ds4_gpu_tensor, index: ?u32, tokens: 
     return c.ds4_gpu_qwen4_moe_reduce_tensor(graph.blk, graph.part, graph.weights, graph.sh_gate_logit, shared, graph.R, graph.inj, tokens, shape.n_expert_used, stride, shape.n_embd, shape.n_hc) != 0;
 }
 
-fn runLayer(graph: *Graph, model: *const Model, layer: *const Layer, index: ?u32, tokens: u32) bool {
+pub fn last(graph: *Graph, model: *const Model, layer: *const Layer, tokens: u32) bool {
+    return tokens >= 1 and tokens <= 3 and runLayer(graph, model, layer, null, tokens, true);
+}
+
+fn runLayer(graph: *Graph, model: *const Model, layer: *const Layer, index: ?u32, row_count: u32, last_only: bool) bool {
+    var tokens = row_count;
     const shape = &graph.config.shape;
-    var profile = Profile{ .enabled = tokens > 8 and ops.present("DS4_QWEN4_MOE_PROFILE") };
+    var profile = Profile{ .enabled = !graph.ssd_streaming and tokens > 8 and ops.present("DS4_QWEN4_MOE_PROFILE") };
     if (!profile.mark(0)) return false;
     var ok = ops.dense(graph.router, model, layer.ffn_gate_inp, graph.mixed, tokens) and
         c.ds4_gpu_qwen4_router_topk_tensor(graph.selected, graph.weights, graph.router, graph.mixed, model.map, model.size, layer.ffn_gate_inp_shexp.*.abs_offset, layer.ffn_gate_inp_shexp.*.type, shape.n_embd, graph.sh_gate_logit, tokens, shape.n_expert, shape.n_expert_used) != 0 and profile.mark(0);
+    // Router geometry is unchanged. Only the final predictor residual feeds
+    // the head, so earlier independent expert rows are unnecessary. Defer
+    // restores every borrowed view, including the fused reduction return.
+    const fields = .{ &graph.mixed, &graph.selected, &graph.weights, &graph.sh_gate_logit, &graph.R, &graph.inj };
+    var saved: [6]?*c.ds4_gpu_tensor = @splat(null);
+    var views: [6]?*c.ds4_gpu_tensor = @splat(null);
+    var bound = false;
+    defer {
+        inline for (fields, 0..) |field, i| {
+            if (bound) field.* = saved[i];
+            c.ds4_gpu_tensor_free(views[i]);
+        }
+    }
+    if (ok and last_only and tokens > 1) {
+        const widths = [_]u64{ shape.n_embd, shape.n_expert_used, shape.n_expert_used, 1, @as(u64, shape.n_hc) * shape.n_embd, @as(u64, shape.n_hc) * c.DS4_QWEN4_HC_CHUNKS * shape.n_hc };
+        inline for (fields, 0..) |field, i| {
+            saved[i] = field.*;
+            views[i] = ops.rowsView(field.*, tokens - 1, 1, widths[i]) orelse return false;
+        }
+        inline for (fields, 0..) |field, i| field.* = views[i];
+        bound = true;
+        tokens = 1;
+    }
     // With512 experts a16-row batch leaves almost every expert tile empty.
     // Preserve Metal's64-row crossover rather than CUDA's lower threshold.
     const matrix = tokens > 64 and shape.n_embd % 64 == 0 and shape.n_ff_exp % 64 == 0 and
         resources.expertHasMatrixKernel(layer.ffn_gate_exps.*.type) and
         layer.ffn_up_exps.*.type == layer.ffn_gate_exps.*.type and resources.expertHasMatrixKernel(layer.ffn_down_exps.*.type) and
         resources.denseSupported(layer.ffn_gate_shexp) and resources.denseSupported(layer.ffn_up_shexp) and resources.denseSupported(layer.ffn_down_shexp);
+    const shared_dense = tokens > 8 and resources.denseSupported(layer.ffn_gate_shexp) and
+        resources.denseSupported(layer.ffn_up_shexp) and resources.denseSupported(layer.ffn_down_shexp);
+    if (graph.ssd_streaming) {
+        if (layer.ffn_gate_exps.*.type != layer.ffn_up_exps.*.type or layer.ffn_gate_exps.*.bytes != layer.ffn_up_exps.*.bytes or
+            layer.ffn_gate_exps.*.bytes % shape.n_expert != 0 or layer.ffn_down_exps.*.bytes % shape.n_expert != 0) return false;
+        const table = c.ds4_gpu_stream_expert_table{
+            .model_map = model.map,
+            .model_size = model.size,
+            .layer = index orelse (shape.n_layer - 1),
+            .n_total_expert = shape.n_expert,
+            .gate_offset = layer.ffn_gate_exps.*.abs_offset,
+            .up_offset = layer.ffn_up_exps.*.abs_offset,
+            .down_offset = layer.ffn_down_exps.*.abs_offset,
+            .gate_expert_bytes = layer.ffn_gate_exps.*.bytes / shape.n_expert,
+            .down_expert_bytes = layer.ffn_down_exps.*.bytes / shape.n_expert,
+        };
+        if (matrix) ok = ok and c.ds4_gpu_qwen4_moe_build_lists_tensor(graph.moe_lists, graph.moe_counts, graph.selected, tokens, shape.n_expert_used, shape.n_expert, graph.cap_tokens) != 0;
+        ok = ok and c.ds4_gpu_qwen4_moe_stream_tensor(graph.mid, graph.part, graph.mixed, graph.selected, if (matrix) graph.moe_lists else null, if (matrix) graph.moe_counts else null, &table, layer.ffn_gate_exps.*.type, layer.ffn_down_exps.*.type, tokens, shape.n_expert_used, shape.n_embd, shape.n_ff_exp, graph.cap_tokens, layer.ffn_gate_shexp.*.abs_offset, layer.ffn_up_shexp.*.abs_offset, layer.ffn_down_shexp.*.abs_offset, if (shared_dense) std.math.maxInt(u32) else layer.ffn_gate_shexp.*.type, if (shared_dense) std.math.maxInt(u32) else layer.ffn_down_shexp.*.type) != 0;
+        if (shared_dense) ok = ok and sharedMid(graph, model, layer, tokens) and ops.dense(graph.sh_out, model, layer.ffn_down_shexp, graph.sh_mid, tokens);
+        return ok and reduce(graph, if (shared_dense) graph.sh_out else null, index, tokens, shape.n_expert_used + @as(u32, if (shared_dense) 0 else 1));
+    }
     if (matrix) {
         ok = ok and c.ds4_gpu_qwen4_moe_build_lists_tensor(graph.moe_lists, graph.moe_counts, graph.selected, tokens, shape.n_expert_used, shape.n_expert, graph.cap_tokens) != 0 and
             profile.mark(1) and
@@ -70,8 +119,6 @@ fn runLayer(graph: *Graph, model: *const Model, layer: *const Layer, index: ?u32
     }
     // A shared dense product avoids reading the same shared expert once per
     // row. Single tokens and two/three-row verifies keep it as an extra slot.
-    const shared_dense = tokens > 8 and resources.denseSupported(layer.ffn_gate_shexp) and
-        resources.denseSupported(layer.ffn_up_shexp) and resources.denseSupported(layer.ffn_down_shexp);
     if (shared_dense) ok = ok and sharedMid(graph, model, layer, tokens) and ops.dense(graph.sh_out, model, layer.ffn_down_shexp, graph.sh_mid, tokens);
     const grouped = shared_dense and layer.ffn_gate_exps.*.type == c.DS4_TENSOR_Q4_K and
         layer.ffn_up_exps.*.type == c.DS4_TENSOR_Q4_K and layer.ffn_down_exps.*.type == c.DS4_TENSOR_MXFP4 and !ops.present("DS4_QWEN4_MOE_NO_GROUP");
@@ -82,8 +129,11 @@ fn runLayer(graph: *Graph, model: *const Model, layer: *const Layer, index: ?u32
     } else {
         const shared_kind: u32 = if (shared_dense) std.math.maxInt(u32) else layer.ffn_gate_shexp.*.type;
         const down_kind: u32 = if (shared_dense) std.math.maxInt(u32) else layer.ffn_down_shexp.*.type;
-        ok = ok and c.ds4_gpu_qwen4_moe_mid_tensor(graph.mid, graph.mixed, graph.selected, model.map, model.size, layer.ffn_gate_exps.*.abs_offset, layer.ffn_up_exps.*.abs_offset, layer.ffn_gate_exps.*.type, shape.n_expert, tokens, shape.n_expert_used, shape.n_embd, shape.n_ff_exp, if (shared_dense) 0 else layer.ffn_gate_shexp.*.abs_offset, if (shared_dense) 0 else layer.ffn_up_shexp.*.abs_offset, shared_kind) != 0 and
-            c.ds4_gpu_qwen4_moe_down_tensor(graph.part, graph.mid, graph.selected, model.map, model.size, layer.ffn_down_exps.*.abs_offset, layer.ffn_down_exps.*.type, shape.n_expert, tokens, shape.n_expert_used, shape.n_ff_exp, shape.n_embd, if (shared_dense) 0 else layer.ffn_down_shexp.*.abs_offset, down_kind) != 0;
+        ok = ok and c.ds4_gpu_qwen4_moe_mid_tensor(graph.mid, graph.mixed, graph.selected, model.map, model.size, layer.ffn_gate_exps.*.abs_offset, layer.ffn_up_exps.*.abs_offset, layer.ffn_gate_exps.*.type, shape.n_expert, tokens, shape.n_expert_used, shape.n_embd, shape.n_ff_exp, if (shared_dense) 0 else layer.ffn_gate_shexp.*.abs_offset, if (shared_dense) 0 else layer.ffn_up_shexp.*.abs_offset, shared_kind) != 0;
+        if (ok and tokens == 1 and !shared_dense and layer.ffn_down_exps.*.type == c.DS4_TENSOR_Q2_K and
+            !(index != null and graph.steer_ffn_scale != 0) and !ops.present("DS4_QWEN4_NO_DOWN_REDUCE"))
+            return c.ds4_gpu_qwen4_moe_down_reduce_tensor(graph.blk, graph.mid, graph.selected, graph.weights, graph.sh_gate_logit, graph.R, graph.inj, model.map, model.size, layer.ffn_down_exps.*.abs_offset, layer.ffn_down_exps.*.type, shape.n_expert, shape.n_expert_used, shape.n_ff_exp, shape.n_embd, layer.ffn_down_shexp.*.abs_offset, layer.ffn_down_shexp.*.type, shape.n_hc) != 0;
+        ok = ok and c.ds4_gpu_qwen4_moe_down_tensor(graph.part, graph.mid, graph.selected, model.map, model.size, layer.ffn_down_exps.*.abs_offset, layer.ffn_down_exps.*.type, shape.n_expert, tokens, shape.n_expert_used, shape.n_ff_exp, shape.n_embd, if (shared_dense) 0 else layer.ffn_down_shexp.*.abs_offset, down_kind) != 0;
     }
     return ok and reduce(graph, if (shared_dense) graph.sh_out else null, index, tokens, shape.n_expert_used + @as(u32, if (shared_dense) 0 else 1));
 }

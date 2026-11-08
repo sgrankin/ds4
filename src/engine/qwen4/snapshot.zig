@@ -15,6 +15,7 @@ const View = struct {
     state: *[c.DS4_MAX_LAYER]?*Tensor,
     history: *[c.DS4_MAX_LAYER]?*Tensor,
     ple: *?*Tensor,
+    tail: *?*Tensor,
     previous: *[c.DS4_MAX_PLE_NGRAM]c_int,
     position: *u32,
     mrope: *i32,
@@ -23,15 +24,15 @@ const View = struct {
 
 fn view(graph: *Graph, which: Set) View {
     return switch (which) {
-        .first => .{ .state = &graph.snap_lin_state, .history = &graph.snap_lin_hist, .ple = &graph.snap_ple_hist, .previous = &graph.snap_ple_prev, .position = &graph.snap_pos, .mrope = &graph.snap_mrope_delta, .valid = &graph.snap_valid },
-        .second => .{ .state = &graph.snap2_lin_state, .history = &graph.snap2_lin_hist, .ple = &graph.snap2_ple_hist, .previous = &graph.snap2_ple_prev, .position = &graph.snap2_pos, .mrope = &graph.snap2_mrope_delta, .valid = &graph.snap2_valid },
-        .boundary => .{ .state = &graph.snap0_lin_state, .history = &graph.snap0_lin_hist, .ple = &graph.snap0_ple_hist, .previous = &graph.snap0_ple_prev, .position = &graph.snap0_pos, .mrope = &graph.snap0_mrope_delta, .valid = &graph.snap0_valid },
+        .first => .{ .state = &graph.snap_lin_state, .history = &graph.snap_lin_hist, .ple = &graph.snap_ple_hist, .tail = &graph.snap_tail_R, .previous = &graph.snap_ple_prev, .position = &graph.snap_pos, .mrope = &graph.snap_mrope_delta, .valid = &graph.snap_valid },
+        .second => .{ .state = &graph.snap2_lin_state, .history = &graph.snap2_lin_hist, .ple = &graph.snap2_ple_hist, .tail = &graph.snap2_tail_R, .previous = &graph.snap2_ple_prev, .position = &graph.snap2_pos, .mrope = &graph.snap2_mrope_delta, .valid = &graph.snap2_valid },
+        .boundary => .{ .state = &graph.snap0_lin_state, .history = &graph.snap0_lin_hist, .ple = &graph.snap0_ple_hist, .tail = &graph.snap0_tail_R, .previous = &graph.snap0_ple_prev, .position = &graph.snap0_pos, .mrope = &graph.snap0_mrope_delta, .valid = &graph.snap0_valid },
     };
 }
 
 pub fn copy(graph: *Graph, save: bool, which: Set) bool {
     const target = view(graph, which);
-    if (target.ple.* == null) return false;
+    if (target.ple.* == null or target.tail.* == null) return false;
     const shape = &graph.config.shape;
     const state_bytes = dimensions.stateFloats(shape) * @sizeOf(f32);
     const history_bytes = dimensions.historyFloats(shape) * @sizeOf(f32);
@@ -48,6 +49,7 @@ pub fn copy(graph: *Graph, save: bool, which: Set) bool {
             c.ds4_gpu_tensor_copy(if (save) snapshot_history else live_history, 0, if (save) live_history else snapshot_history, 0, history_bytes) != 0;
     }
     if (ok) ok = c.ds4_gpu_tensor_copy(if (save) target.ple.* else graph.ple_hist, 0, if (save) graph.ple_hist else target.ple.*, 0, ple_bytes) != 0;
+    if (ok) ok = c.ds4_gpu_tensor_copy(if (save) target.tail.* else graph.mtp_tail_R, 0, if (save) graph.mtp_tail_R else target.tail.*, 0, @as(u64, shape.n_embd) * shape.n_hc * @sizeOf(f32)) != 0;
     if (c.ds4_gpu_end_commands() == 0) ok = false;
     if (save) {
         target.previous.* = graph.ple_prev;
@@ -57,6 +59,7 @@ pub fn copy(graph: *Graph, save: bool, which: Set) bool {
         graph.ple_prev = target.previous.*;
         graph.pos = target.position.*;
         graph.mrope_delta = target.mrope.*;
+        restoreTail(graph, ok);
     }
     return ok;
 }
@@ -65,7 +68,7 @@ pub fn copy(graph: *Graph, save: bool, which: Set) bool {
 /// them fully before publication, so swap restores avoid copying36 GDN layers.
 pub fn swap(graph: *Graph, which: Set) bool {
     const target = view(graph, which);
-    if (target.ple.* == null) return false;
+    if (target.ple.* == null or target.tail.* == null) return false;
     if (which == .first) {
         const raw = c.getenv("DS4_QWEN4_MTP_SWAP_RESTORE");
         if (raw != null and raw[0] != 0 and c.strcmp(raw, "0") == 0) return copy(graph, false, which);
@@ -79,6 +82,8 @@ pub fn swap(graph: *Graph, which: Set) bool {
     graph.ple_prev = target.previous.*;
     graph.pos = target.position.*;
     graph.mrope_delta = target.mrope.*;
+    std.mem.swap(?*Tensor, &graph.mtp_tail_R, target.tail);
+    restoreTail(graph, true);
     target.valid.* = false;
     return true;
 }
@@ -90,6 +95,9 @@ pub fn ensure(graph: *Graph, which: Set) bool {
     if (target.ple.* != null) return true;
     if (graph.snap_ple_hist == null) return false;
     const shape = &graph.config.shape;
+    const tail = resources.allocateFloats(@as(u64, shape.n_embd) * shape.n_hc) catch return false;
+    var tail_owned = true;
+    defer if (tail_owned) c.ds4_gpu_tensor_free(tail);
     const ple = resources.allocateFloats(dimensions.pleHistoryFloats(shape)) catch return false;
     var complete = false;
     defer if (!complete) {
@@ -107,6 +115,16 @@ pub fn ensure(graph: *Graph, which: Set) bool {
         target.history[layer] = resources.allocateFloats(dimensions.historyFloats(shape)) catch return false;
     }
     target.ple.* = ple;
+    target.tail.* = tail;
+    tail_owned = false;
     complete = true;
     return true;
+}
+
+fn restoreTail(graph: *Graph, ok: bool) void {
+    graph.mtp_tail_valid = ok and graph.pos != 0;
+    graph.mtp_tail_cached = false;
+    graph.mtp_tail_pos = graph.pos -| 1;
+    graph.mtp_last_rows = 0;
+    if (graph.mtp_pos >= graph.pos) graph.mtp_pos = graph.pos -| 1;
 }

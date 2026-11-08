@@ -102,6 +102,7 @@ typedef struct ds4_model {
     const uint8_t *map;
     uint64_t size;       /* Addressable weights, excluding disk-only n-grams. */
     uint64_t file_size;
+    bool non_routed_weights_locked;
 
     uint32_t version;
     uint64_t n_kv;

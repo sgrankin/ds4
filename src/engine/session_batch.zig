@@ -116,6 +116,10 @@ fn encoded(views: []View, tokens: []const c_int, pool: *Pool, errors: []u8) ?c_i
             c.ds4_gpu_tensor_read(view.glm.*.graph.logits, 0, view.frontier.*.logits, bytes) != 0;
         if (ok and qwen) {
             view.qwen.*.graph.pos += 1;
+            view.qwen.*.graph.mtp_tail_pos = view.qwen.*.graph.pos - 1;
+            view.qwen.*.graph.mtp_tail_valid = view.qwen.*.graph.mtp_tail_R != null;
+            view.qwen.*.graph.mtp_tail_cached = false;
+            view.qwen.*.graph.mtp_last_rows = 0;
             view.qwen.*.rewound = false;
             view.pending.*.have = 0;
             view.pending.*.have2 = false;

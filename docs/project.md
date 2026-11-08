@@ -1,6 +1,17 @@
 # Project direction and current status
 
-Updated 2026-11-05. **The upstream port through `890898cf` is complete.**
+Updated 2026-11-08. **The upstream adaptation through `b3f50180` is complete.**
+All surviving functionality since `890898cf` is ported or verified equivalent;
+older Macs, retained Pro/full GLM and physical two-Mac execution remain hardware
+qualification limits, not implementation omissions. The
+[catch-up report](../speed-bench/experiments/2026-11-08-upstream-catchup/README.md)
+owns the complete validation and five-pair results; the
+[journal](lab/journal/2026-11-08-upstream-catchup.md) records the integration decisions.
+The matching local frontends are installed. Published main remains at `364ceeab`;
+the adaptation is a local merge on top of the existing stack. This maintenance
+task does not resume the paused performance campaign or include the separate
+Kimi branch.
+
 The overnight decode session adopted five changes in `resident-fast` and
 `persistent-fast`: direct half-precision KV gathering, every-layer submission,
 earlier shared-expert down projection, query RoPE coefficient reuse and reuse
@@ -11,8 +22,7 @@ workloads, not a general autonomous-agent speed claim. The
 [combined report](../speed-bench/experiments/2026-11-04-decode-pass/combined.md)
 owns measurements, variation and qualification; the
 [session journal](lab/journal/2026-11-04-overnight-decode.md) explains the decisions.
-Final numerical and reasoning-enabled coding checks passed. The tested agent,
-server and benchmark binaries are installed locally. The user authorized a new
+Final numerical and reasoning-enabled coding checks passed. Those tested binaries were installed at the end of that session. The user authorized a new
 decode and prefill optimization session, starting from published revision
 `364ceeab`. At the user's request, the session is paused on November 5 after
 the [compressor-pair experiment](../speed-bench/experiments/2026-11-05-prefill-compressor-pair/README.md).
@@ -25,8 +35,8 @@ unit-rescale shortcut in the local fast presets. Their
 [combined qualification](../speed-bench/experiments/2026-11-04-combined-prefill/README.md)
 shows a repeated 32K prefill benefit, inconclusive recorded-session timing and
 measured quality differences, including one extra coding edge-case failure.
-The installed agent, server and benchmark binaries match the later CPU-routing
-qualification; the launcher uses current Metal shader sources. Later GPU-routing
+The CPU-routing qualification supplied the installed binaries at that point;
+the November 8 catch-up supersedes them, retaining those preset settings. Later GPU-routing
 and compressor settings remain experimental. Published main remains at `364ceeab`.
 The fast presets also include fused prefill rounding/RoPE and the temporary
 indexer-query matrix path. Their
@@ -108,7 +118,7 @@ experimental settings remain separate, as described above.
 | Model interaction | Official-reference prompt/tool handling, client sampling overrides, explicit cache breakpoints and native constrained decoding for DeepSeek and Flint. Typed partial tool calls survive generation limits. | [Interaction qualification](../speed-bench/experiments/interaction-catchup-20261027/README.md), [DSML limits](../speed-bench/experiments/dsml-length-20261028/README.md) |
 | Persistent inference state | RAM/SSD checkpoint storage, suffix relocation from immutable pre-RoPE originals, packed index/main KV, and useful drafter-history persistence. Packed KV and DSP1 are selected through DeepSeek fast presets; ordinary engine defaults differ. | [Recipe index](../recipes/README.md), especially chapters 02, 03, 14 and 15 |
 | Context edits | Semantic endpoints, bounded hot retention, anchor selection and capture during ordinary prefill are complete. Server `persistent-fast` enables this package; the direct agent and other presets do not gain these new boundary defaults. | [Current checkpoint recipe](../recipes/16-semantic-context-checkpoints.md) |
-| Upstream maintenance | Complete through `890898cf`, including ordinary graph fusions, tiny-batch expert reuse, pre-M5 selectors, negotiated replicated TP and inline gates. Host, GPU and installed-model checks pass; physical two-Mac/RDMA and older-device performance remain unmeasured. | [Catch-up journal](lab/journal/2026-11-02-upstream-catchup.md), [upstream mechanisms](models/deepseek/upstream-performance.md) |
+| Upstream maintenance | Complete through `b3f50180`, including Qwen SSD execution and predictor state, DeepSeek scheduling/indexer/pruning changes, and GLM/shared kernels. Host, GPU, installed-model and Responses checks pass; five-pair timing is reported separately. Older GPUs, physical two-Mac execution and unavailable Pro/full GLM weights remain qualification limits. | [Catch-up journal](lab/journal/2026-11-08-upstream-catchup.md), [results](../speed-bench/experiments/2026-11-08-upstream-catchup/README.md), [earlier mechanisms](models/deepseek/upstream-performance.md) |
 | Experimental leftovers | Candidate-only scoring and block-only look-back recovery retain narrower or diagnostic status. The earlier opt-in HC collapse/norm experiment is separate from the integrated upstream graph fusions. Slower integer/packed-activation prefill hooks were removed. | [DeepInfer comparison](models/deepseek/deepinfer/comparison.md), [not-adopted lessons](../recipes/not-adopted/README.md) |
 
 The earlier sequence—DSML truncation, drafter-history persistence,

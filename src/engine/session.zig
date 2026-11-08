@@ -178,7 +178,7 @@ pub fn payloadBytes(view: *View) u64 {
         if (!state.*.ready or state.*.rewound or state.*.graph.pos != frontier.*.checkpoint.len) return 0;
         const rows: u32 = @intCast(frontier.*.checkpoint.len);
         return (@as(u64, c.DS4_SESSION_PAYLOAD_U32_FIELDS) + rows + state.*.graph.config.shape.n_vocab) * @sizeOf(u32) +
-            QwenPayload.tensorBytes(&state.*.graph.config, rows, @min(state.*.graph.mtp_pos, rows));
+            QwenPayload.tensorBytesWithTail(&state.*.graph.config, rows, if (QwenPayload.hasTail(&state.*.graph, rows)) rows - 1 else 0, QwenPayload.hasTail(&state.*.graph, rows));
     }
     if (view.kind == c.DS4_SESSION_GLM53 and view.glm.*.ready) return GlmPayload.bytes(&view.glm.*.graph, frontier, view.glm.*.dense_cache_len);
     return 0;

@@ -11,7 +11,7 @@ const buffers = @import("prefill_buffers.zig");
 const Graph = c.ds41_gpu_graph;
 const Tensor = c.ds4_gpu_tensor;
 const max_rows = c.DS4_TP_BATCH_MAX_ROWS;
-const DiskRows = [2][c.DS4_ENGRAM_COLS * c.DS4_ENGRAM_DIM]f32;
+const DiskRow = [c.DS4_ENGRAM_COLS * c.DS4_ENGRAM_DIM]f32;
 
 pub const SessionBatch = struct {
     executor: Executor,
@@ -37,13 +37,17 @@ pub const SessionBatch = struct {
         const weights = executor.weights;
         const shape = &executor.ops.config.shape;
         const prefill_only = prefill_rows == rows and !graph.verify_prefix;
+        const batch_queue = graph.tp_world != 2 and c.getenv("DS4_METAL_DISABLE_V41_BATCH_DECODE_PIPELINE") == null;
+        const flush_layers = Executor.decodeFlushLayers();
         const shared_owner = graph.tp_world == 2 and c.getenv("DS4_METAL_DISABLE_V41_TP_SHARED_OWNER") == null;
         var history: [max_rows]c.ds4_engram_history = undefined;
         var positions: [max_rows]u32 = undefined;
-        // Only leading prefill rows share a session. Keep their sparse reads
-        // and hash histories distinct until the final row is published.
+        // Consecutive prompt/verifier rows share a session. Table-major host
+        // staging lets one strided read deduplicate IDs across all those rows;
+        // independent and mixed batches keep each session's own reads.
         const allocator = std.heap.c_allocator;
-        const engram: ?[]DiskRows = if (prefill_rows > 1) allocator.alloc(DiskRows, prefill_rows) catch null else null;
+        const engram: ?[]DiskRow = if (prefill_rows > 1) allocator.alloc(DiskRow, 2 * prefill_rows) catch null else null;
+        const batch_read = prefill_rows == rows and c.getenv("DS4_METAL_DISABLE_V41_STEP_ENGRAM_BATCH") == null;
         defer if (engram) |memory| allocator.free(memory);
         var active = buffers.Views{};
         defer active.deinit();
@@ -81,15 +85,20 @@ pub const SessionBatch = struct {
             positions[index] = session.pos + if (continued) @as(u32, @intCast(index)) else 0;
             history[index] = if (continued) history[index - 1] else session.history;
             ok = c.ds4_engram_hash(&session.engram, &history[index], &token, null, 1, @ptrCast(ids));
-            const disk_rows: *DiskRows = if (engram != null and index < prefill_rows) &engram.?[index] else &session.rows;
             for (0..2) |table| {
-                if (!ok) break;
-                reads[index][table] = c.ds4_engram_read_batch_start(&session.table[table], &ids[table], 1, c.DS4_ENGRAM_COLS, &disk_rows[table]);
+                if (!ok or batch_read) break;
+                const destination = if (engram != null and index < prefill_rows) &engram.?[table * prefill_rows + index] else &session.rows[table];
+                reads[index][table] = c.ds4_engram_read_batch_start(&session.table[table], &ids[table], 1, c.DS4_ENGRAM_COLS, destination);
                 ok = reads[index][table] != null;
             }
             if (ok) ok = c.ds4_gpu_tensor_write(graph.rows_view[index].pre, 0, &initial_pre, @sizeOf(@TypeOf(initial_pre))) != 0 and
                 c.ds4_gpu_embed_token_hc_tensor(graph.rows_view[index].residual, model.map, model.size, weights.token_embd.*.abs_offset, shape.n_vocab, @bitCast(token), shape.n_embd, shape.n_hc) != 0;
         }
+        if (batch_read) for (0..2) |table| {
+            if (!ok) break;
+            reads[0][table] = c.ds4_engram_read_batch_start(&graph.table[table], &engram_ids[0][table], rows, 2 * c.DS4_ENGRAM_COLS, &engram.?[table * rows]);
+            ok = reads[0][table] != null;
+        };
         if (ok) ok = c.ds4_gpu_tensor_write(graph.prefill_tokens, 0, tokens.ptr, @as(u64, rows) * @sizeOf(c_int)) != 0;
         var layer_index: u32 = 0;
         while (ok and layer_index < shape.n_layer) : (layer_index += 1) {
@@ -104,8 +113,12 @@ pub const SessionBatch = struct {
                 }
                 for (graphs, 0..) |session, index| {
                     if (!ok) break;
-                    const source = if (engram != null and index < prefill_rows) &engram.?[index][table] else &session.rows[table];
-                    ok = c.ds4_gpu_tensor_write(graph.rows_view[index].engram_rows, 0, source, @sizeOf(@TypeOf(session.rows[table]))) != 0;
+                    const source = if (engram != null and index < prefill_rows) &engram.?[table * prefill_rows + index] else &session.rows[table];
+                    // The second table's bounded scratch survives all queued
+                    // readers of the first. Full prefill storage is not doubled.
+                    const destination = if (table == 0) graph.rows_view[index].engram_rows else graph.engram_rows_b;
+                    const offset = if (table == 0) 0 else @as(u64, index) * @sizeOf(DiskRow);
+                    ok = c.ds4_gpu_tensor_write(destination, offset, source, @sizeOf(DiskRow)) != 0;
                 }
             }
             for (graphs, 0..) |session, index| {
@@ -115,7 +128,13 @@ pub const SessionBatch = struct {
                 ok = local.capture(layer_index, positions[index], graph.rows_view[index].residual, 1);
             }
             const batch = BatchAttention{ .ops = executor.ops, .graph = graph };
-            if (ok) ok = Prefill.beforeBatch(executor, &active.row, layer, layer_index, rows) and batch.project(layer, rows);
+            if (ok) {
+                const first_input = active.row.engram_rows;
+                if (layer_index == 14) active.row.engram_rows = graph.engram_rows_b;
+                ok = Prefill.beforeBatch(executor, &active.row, layer, layer_index, rows);
+                active.row.engram_rows = first_input;
+                if (ok) ok = batch.project(layer, rows);
+            }
             // Consecutive rows of one prefill share causal publication and
             // selection. Independent sessions keep their private cache path.
             if (ok and prefill_only) ok = batch.run(layer, layer_index, rows);
@@ -154,8 +173,12 @@ pub const SessionBatch = struct {
                 c.ds4_gpu_add_tensor(active.row.block, active.row.routed, active.row.shared, rows * shape.n_embd)) != 0 and
                 c.ds4_gpu_dsv41_quantize(active.row.block, shape.n_embd, rows, c.DS4_V41_BF16) != 0 and
                 executor.expand(active.row.residual, active.row.block, active.row.after_attn, active.row.ffn_split, layer_index, rows, true);
-            // The second Engram upload reuses the first one's input storage.
-            if (ok and layer_index == 13) ok = c.ds4_gpu_end_commands() != 0 and c.ds4_gpu_begin_commands() != 0;
+            // Keep TP's established handoff. Single-host tables own separate
+            // inputs, so bounded submissions can continue across layer 13.
+            if (ok and layer_index == 13 and graph.tp_world == 2) {
+                ok = c.ds4_gpu_end_commands() != 0 and c.ds4_gpu_begin_commands() != 0;
+            } else if (ok and batch_queue and layer_index + 1 < shape.n_layer and flush_layers != 0 and
+                (layer_index == 0 or (layer_index + 1) % flush_layers == 0)) ok = c.ds4_gpu_flush_commands() != 0;
         }
         const logits_bytes = @as(u64, shape.n_vocab) * 4 / @as(u64, if (graph.tp_logits_half != null) 2 else 1);
         var batch_logits: ?*Tensor = null;

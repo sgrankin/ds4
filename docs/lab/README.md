@@ -38,6 +38,7 @@ command or speed is evidence at its recorded revision, not a current-build claim
 | [Short Q8 query projection](journal/2026-11-03-short-q8-query.md) | Sharing input loads and keeping a rotated output pair within one SIMD group preserves measured logits. Adopted in resident fast presets despite uncertainty about the size of the speed benefit. |
 | [Overnight decode optimization](journal/2026-11-04-overnight-decode.md) | Five adopted changes raise measured 32K steady decode by about 7–8%; recorded coding replay inference takes 4.2% less time. Three other candidates remain unadopted. |
 | [Decode and prefill hill climbing](journal/2026-11-04-through-06-performance.md) | Paused November 5 after the compressor-pair experiment; four-row staging and approximate rescaling were adopted locally after combined prefill, replay and quality checks. |
+| [Upstream catch-up through b3f50180](journal/2026-11-08-upstream-catchup.md) | Complete native adaptation, Qwen SSD and predictor state, exact continuation checks, and five-pair gains for Qwen/GLM with inconclusive DeepSeek timing. |
 
 The [design folder](../design/README.md) preserves unselected ideas separately from
 measured conclusions. Original concise reports under `speed-bench/` own complete

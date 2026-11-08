@@ -212,6 +212,15 @@ pub fn build(weights: *const Weights, shape: *const Shape, policy: *const Policy
     if (output) spans.includeOutput(weights);
     return spans.take(out);
 }
+/// A fully wired GLM layer only needs disk reads for its routed matrices.
+/// Dense layers succeed with no spans and therefore need no worker.
+pub fn routedOnly(layer: *const Layer, out: *Vec) bool {
+    out.* = std.mem.zeroes(Vec);
+    var spans = Spans{};
+    defer spans.deinit();
+    spans.includeExperts(layer);
+    return if (spans.items.items.len == 0) true else spans.take(out);
+}
 pub fn tokenOnly(weights: *const Weights, out: *Vec) bool {
     out.* = std.mem.zeroes(Vec);
     var spans = Spans{};

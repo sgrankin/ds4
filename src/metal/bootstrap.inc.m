@@ -107,6 +107,8 @@ bool ds4_metal_bootstrap_library(const ds4_metal_shader_resources *resources,
     MTLCompileOptions *options = (__bridge MTLCompileOptions *)resources->options;
     NSMutableDictionary *macros = (__bridge NSMutableDictionary *)resources->macros;
     NSError *error = nil;
+    g_metal_math_safe = flags->math_safe;
+    g_dsv4_indexer_fast_math = !flags->math_safe;
     if (flags->math_safe) {
         // MTLCompileOptions.fastMathEnabled defaults to YES and Apple's
         // headers explicitly say this "may violate the IEEE 754 standard".
@@ -2112,6 +2114,8 @@ bool ds4_metal_bootstrap_remaining_pipelines(void) {
 
     g_dsv4_indexer_score_one_direct_pipeline =
         ds4_gpu_get_pipeline("kernel_dsv4_indexer_score_one_direct");
+    g_dsv4_indexer_score_one_heads_pipeline =
+        ds4_gpu_get_pipeline("kernel_dsv4_indexer_score_one_heads");
     g_dsv4_compressor_store_one_pipeline =
         ds4_gpu_get_pipeline("kernel_dsv4_compressor_store_one");
     g_dsv4_compressor_pack_ratio4_pipeline =
@@ -2236,6 +2240,8 @@ bool ds4_metal_bootstrap_remaining_pipelines(void) {
         ds4_gpu_get_pipeline("kernel_glm_attention_indexed_batch_group8");
     g_glm_attention_indexed_batch_lora_group8_vec_pipeline =
         ds4_gpu_get_pipeline("kernel_glm_attention_indexed_batch_lora_group8_vec");
+    g_glm_attention_indexed_batch_lora_group8_vec_prefix_fullheads_pipeline =
+        ds4_gpu_get_pipeline("kernel_glm_attention_indexed_batch_lora_group8_vec_prefix_fullheads");
     g_glm_attention_indexed_batch_lora_group8_vec_valid_pipeline =
         ds4_gpu_get_pipeline("kernel_glm_attention_indexed_batch_lora_group8_vec_valid");
     g_glm_attention_indexed_batch_lora_group8_vec_valid_fullheads_pipeline =
@@ -2286,7 +2292,7 @@ bool ds4_metal_bootstrap_remaining_pipelines(void) {
         ds4_gpu_get_pipeline("kernel_dsv4_router_weights_batch");
     g_dsv4_hc_expand4_pipeline =
         ds4_gpu_get_pipeline("kernel_dsv4_hc_expand4");
-    if (!g_dsv4_indexer_score_one_direct_pipeline ||
+    if (!g_dsv4_indexer_score_one_direct_pipeline || !g_dsv4_indexer_score_one_heads_pipeline ||
         !g_dsv4_compressor_store_one_pipeline ||
         !g_dsv4_sort_i32_rows_asc_pipeline ||
         !g_dsv4_indexed_attention_heads8_pipeline ||
@@ -2338,6 +2344,7 @@ bool ds4_metal_bootstrap_remaining_pipelines(void) {
         !g_glm_attention_indexed_batch_q2_group4_pipeline ||
         !g_glm_attention_indexed_batch_group8_pipeline ||
         !g_glm_attention_indexed_batch_lora_group8_vec_pipeline ||
+        !g_glm_attention_indexed_batch_lora_group8_vec_prefix_fullheads_pipeline ||
         !g_glm_attention_indexed_batch_lora_group8_vec_valid_pipeline ||
         !g_glm_attention_indexed_batch_lora_group8_vec_valid_fullheads_pipeline ||
         !g_glm_attention_indexed_batch_lora_group8_vec_causal_pipeline ||
@@ -2523,6 +2530,8 @@ void ds4_metal_bootstrap_retire_pipelines(void) {
     g_dsv4_topk_mask_scatter_pipeline = nil;
     g_dsv4_indexer_weighted_sum_pipeline = nil;
     g_dsv4_indexer_score_one_direct_pipeline = nil;
+    g_dsv4_indexer_score_one_heads_pipeline = nil;
+    g_dsv4_indexer_fast_math = false;
     g_dsv4_compressor_store_one_pipeline = nil;
     g_dsv4_sort_i32_rows_asc_pipeline = nil;
     g_dsv4_indexed_attention_heads8_pipeline = nil;
@@ -2582,6 +2591,7 @@ void ds4_metal_bootstrap_retire_pipelines(void) {
     g_glm_attention_indexed_batch_q2_group4_pipeline = nil;
     g_glm_attention_indexed_batch_group8_pipeline = nil;
     g_glm_attention_indexed_batch_lora_group8_vec_pipeline = nil;
+    g_glm_attention_indexed_batch_lora_group8_vec_prefix_fullheads_pipeline = nil;
     g_glm_attention_indexed_batch_lora_group8_vec_valid_pipeline = nil;
     g_glm_attention_indexed_batch_lora_group8_vec_valid_fullheads_pipeline = nil;
     g_glm_attention_indexed_batch_lora_group8_vec_causal_pipeline = nil;
@@ -2618,6 +2628,8 @@ void ds4_metal_bootstrap_retire_scratch(void) {
     ds4_gpu_clear_zero_prefix_prefill_mask_cache();
     g_flash_attn_ring_buffer = nil;
     g_flash_attn_kv_buffer = nil;
+    g_glm_indexed_rope_buffer = nil;
+    g_glm_indexed_rope_bytes = 0;
     g_glm_flash_attn_mask_buffer = nil;
     g_compressor_pool_kv_buffer = nil;
     g_compressor_pool_score_buffer = nil;

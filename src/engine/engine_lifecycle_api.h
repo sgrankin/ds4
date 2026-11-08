@@ -7,6 +7,7 @@
 #include "ds4_streaming_policy.h"
 #include "models/flint/engine.h"
 #include <sys/mman.h>
+#include <sys/sysctl.h>
 #include <unistd.h>
 
 enum {
@@ -35,4 +36,5 @@ void ds4_core_native_admission_acquire(void);
 void ds4_core_native_admission_release(void);
 void ds4_core_publish_configuration(const ds4_engine_configuration *);
 
+bool ds4_native_qwen4_memory_admit(ds4_engine_core *, const ds4_qwen4_config *, uint64_t graph_bytes, bool fit_cache);
 #endif

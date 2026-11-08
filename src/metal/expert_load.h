@@ -110,6 +110,23 @@ typedef struct {
     ds4_gpu_glm_stream_selected_prefetch prefetch;
     ds4_metal_expert_pread_pool pool;
 } ds4_metal_expert_load_state;
+/* Optional GPU work after every selected entry is protected, before I/O. */
+typedef int (*ds4_gpu_stream_expert_before_read_fn)(void *context,
+    const int32_t *unique_ids, ds4_gpu_stream_expert_cache_entry *const *entries,
+    uint32_t n_unique);
+/* Gate/up payloads are borrowed while the loader still owns all three buffers.
+ * The entry is installed only after its down read completes successfully. */
+typedef struct {
+    uint32_t expert;
+#ifdef __OBJC__
+    __unsafe_unretained ds4_metal_expert_buffer_ref gate, up;
+#else
+    ds4_metal_expert_buffer_ref gate, up;
+#endif
+    uintptr_t gate_inner, up_inner;
+} ds4_gpu_stream_expert_gate_up;
+typedef int (*ds4_gpu_stream_expert_gate_up_ready_fn)(void *context,
+    const ds4_gpu_stream_expert_gate_up *pairs, uint32_t n_pairs);
 typedef struct {
     ds4_metal_expert_cache_state *cache;
     ds4_metal_expert_load_state *load;
@@ -163,7 +180,12 @@ int ds4_native_expert_prefetch_take(const ds4_gpu_stream_expert_table *, uint32_
 int ds4_native_expert_prepare_batch(const ds4_gpu_stream_expert_table *, const ds4_gpu_tensor *,
                                     uint32_t, uint32_t, ds4_gpu_stream_expert_reusable_buffers *,
                                     ds4_gpu_stream_expert_cache_entry **, uint32_t *, uint32_t *,
-                                    ds4_gpu_stream_expert_reusable_buffers *);
+                                    ds4_gpu_stream_expert_reusable_buffers *, bool,
+                                    ds4_gpu_stream_expert_before_read_fn, void *,
+                                    ds4_gpu_stream_expert_gate_up_ready_fn);
+int ds4_native_expert_pread_tasks(ds4_gpu_stream_expert_pread_task *, uint32_t,
+                                 uint64_t *, double *);
+void ds4_native_expert_note_pread(uint32_t, uint64_t, double);
 int ds4_native_expert_address_requested(void);
 int ds4_native_expert_prefill_enabled(uint32_t, uint32_t, uint32_t, uint32_t, uint32_t);
 #endif

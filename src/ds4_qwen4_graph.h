@@ -58,6 +58,7 @@ typedef struct ds4_qwen4_gpu_graph {
     uint32_t sel_stride;
     /* false when the scratch above is borrowed from the engine's arena */
     bool owns_scratch;
+    bool ssd_streaming;
     ds4_gpu_tensor *R, *xn, *lo, *inj, *mixed, *blk;
     ds4_gpu_tensor *qkv, *z, *ga, *gb, *lin_o;
     ds4_gpu_tensor *ple_emb, *ple_key, *ple_val, *ple_gated, *ple_normed, *ple_hist;
@@ -83,6 +84,12 @@ typedef struct ds4_qwen4_gpu_graph {
     /* MTP: staged predictor input, its residual, and the recurrent-state
      * snapshot that verify rollback restores */
     ds4_gpu_tensor *mtp_e, *mtp_cat, *mtp_proj, *mtp_R, *mtp_argmax, *mtp_argmax_tmp;
+    /* Predictor history needs the actual successor token; retain the final
+     * trunk row until append/decode supplies it, including verifier rollback. */
+    ds4_gpu_tensor *mtp_tail_R, *snap_tail_R, *snap2_tail_R, *snap0_tail_R;
+    uint32_t mtp_tail_pos;
+    int mtp_tail_next_token;
+    bool mtp_tail_valid, mtp_tail_cached;
     /* MTP draft head over a ranked vocabulary subset: gathered Q8 rows, their
      * token ids, and whether the lazy load was attempted */
     ds4_gpu_tensor *draft_head;
@@ -207,6 +214,7 @@ bool ds4_native_qwen4_batch_encode(const ds4_qwen4_batch_member *members,
     const ds4_weights *weights);
 
 uint32_t ds4_native_qwen4_prefill_chunk(uint32_t context);
+uint32_t ds4_native_qwen4_prefill_chunk_resolve(uint32_t context, uint32_t requested);
 ds4_context_memory ds4_native_qwen4_context_memory(
     const ds4_qwen4_config *config, uint32_t context, uint32_t prefill_chunk);
 

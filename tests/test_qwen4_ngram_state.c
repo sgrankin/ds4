@@ -45,6 +45,11 @@ static void check_batch(ds4_engine *engine, const ds4_tokens *prompt, bool specu
         assert(ds4_session_sync(sessions[i], prompt, error, sizeof(error)) == 0);
     }
     for (int step = 0; step < 12; step++) {
+        /* Draft scheduling can skip work after an accepted two-row verify;
+         * the known historical row still must be repaired before scratch is
+         * reused by the following plain/batched cycle. */
+        if (speculative && step == 4) assert(setenv("DS4_QWEN4_NO_BATCH_DRAFT", "1", 1) == 0);
+        if (speculative && step == 7) assert(unsetenv("DS4_QWEN4_NO_BATCH_DRAFT") == 0);
         if (step == 8) {
             assert(ds4_session_load_snapshot(sessions[0], &snapshot, error, sizeof(error)) == 0);
             assert(!memcmp(sessions[0]->frontier.logits, saved_logits, DS4_N_VOCAB * sizeof(float)));
@@ -177,8 +182,10 @@ static void check_arena_resize(ds4_engine *engine, const ds4_tokens *prompt) {
 /* A failed disk lookup must invalidate the recurrent frontier, including
  * speculative snapshots. Retrying must rebuild from the retained tokens. */
 int main(int argc, char **argv) {
-    if (argc != 2 && !(argc == 3 && !strcmp(argv[2], "--argmax-only"))) {
-        fprintf(stderr, "usage: %s QWEN_GGUF [--argmax-only]\n", argv[0]);
+    const bool streaming = argc == 3 && !strcmp(argv[2], "--ssd-streaming");
+    const bool argmax_only = argc == 3 && !strcmp(argv[2], "--argmax-only");
+    if (argc != 2 && !streaming && !argmax_only) {
+        fprintf(stderr, "usage: %s QWEN_GGUF [--argmax-only|--ssd-streaming]\n", argv[0]);
         return 2;
     }
     ds4_engine *engine = NULL;
@@ -188,8 +195,13 @@ int main(int argc, char **argv) {
 #else
         .backend = DS4_BACKEND_CUDA,
 #endif
-        .glm_mtp = true, .prefill_chunk = 32,
+        .glm_mtp = true, .prefill_chunk = streaming ? 8 : 32,
         .share_session_prefill_workspace = true, .placement_session_count_hint = 4};
+    if (streaming) {
+        opt.context_size = 256;
+        opt.ssd_streaming = true;
+        opt.ssd_streaming_cache_experts = 1024;
+    }
     assert(ds4_engine_open(&engine, &opt) == 0);
     assert(ds4_engine_is_qwen4(engine) && engine->core.model.ngram_tensor);
     /* An option error before ownership must leave an existing engine's GPU,
@@ -204,7 +216,7 @@ int main(int argc, char **argv) {
     ds4_tokens prompt = {0};
     ds4_encode_chat_prompt(engine, NULL, "Count from one to ten.", DS4_THINK_NONE, &prompt);
     check_public_eval_argmax(engine, &prompt);
-    if (argc == 3) {
+    if (argmax_only) {
         ds4_tokens_free(&prompt);
         ds4_engine_close(engine);
         return 0;
@@ -219,8 +231,16 @@ int main(int argc, char **argv) {
         assert(ds4_session_sync(live, &prompt, error, sizeof(error)) == 0);
         int accepted[3];
         if (mode == 2) {
-            assert(ds4_session_eval_speculative_argmax(live, ds4_session_argmax(live),
-                3, -1, accepted, 3, error, sizeof(error)) == 1);
+            /* Prefix preparation may already seed a proposal. Otherwise run
+             * a cycle, checking its committed frontier rather than assuming
+             * the first call always consumes exactly one token. */
+            for (int attempt = 0; !live->model_mtp.have && attempt < 3; attempt++) {
+                const int before = ds4_session_pos(live);
+                const int n = ds4_session_eval_speculative_argmax(live, ds4_session_argmax(live),
+                    3, -1, accepted, 3, error, sizeof(error));
+                assert(n >= 1 && n <= 3);
+                assert(ds4_session_pos(live) == before + n);
+            }
             assert(live->model_mtp.have);
         }
         const ds4_tokens *current = ds4_session_tokens(live);
@@ -251,14 +271,44 @@ int main(int argc, char **argv) {
         assert(ds4_session_eval(live, token, error, sizeof(error)) == 0);
         assert(ds4_session_eval(control, token, error, sizeof(error)) == 0);
         assert(!memcmp(live->frontier.logits, control->frontier.logits, DS4_N_VOCAB * sizeof(float)));
+        if (streaming) {
+            ds4_decode_item items[2] = {
+                {live, ds4_session_argmax(live)},
+                {control, ds4_session_argmax(control)}
+            };
+#if DS4_HAS_QWEN4_METAL
+            /* SSD graphs retain their own scratch and must not enter the
+             * resident batch arena or its resident-only MoE dispatch. */
+            assert(!ds4_sessions_eval_batch_metal_supported(items, 2, engine));
+            assert(!qwen4_graph_native_session_batch_check(items, 2, engine, false));
+            assert(!qwen4_graph_native_session_batch_check(items, 2, engine, true));
+#endif
+            assert(ds4_sessions_eval_batch(items, 2, error, sizeof(error)) == 0);
+            assert(live->frontier.checkpoint.len == control->frontier.checkpoint.len);
+            assert(!memcmp(live->frontier.logits, control->frontier.logits, DS4_N_VOCAB * sizeof(float)));
+            if (mode == 2) {
+                int batch_tokens[2][2], batch_counts[2];
+                items[0].token = ds4_session_argmax(live);
+                items[1].token = ds4_session_argmax(control);
+                assert(ds4_sessions_eval_batch_speculative_argmax(items, 2,
+                    batch_tokens, batch_counts, error, sizeof(error)) == 0);
+                assert(batch_counts[0] >= 1 && batch_counts[0] <= 2);
+                assert(batch_counts[0] == batch_counts[1]);
+                assert(!memcmp(batch_tokens[0], batch_tokens[1], batch_counts[0] * sizeof(int)));
+                assert(live->frontier.checkpoint.len == control->frontier.checkpoint.len);
+                assert(!memcmp(live->frontier.logits, control->frontier.logits, DS4_N_VOCAB * sizeof(float)));
+            }
+        }
         ds4_tokens_free(&frontier);
         ds4_session_free(control);
         ds4_session_free(live);
         printf("Qwen n-gram failure/recovery mode %d: exact logits OK\n", mode);
     }
-    check_batch(engine, &prompt, false);
-    check_batch(engine, &prompt, true);
-    check_arena_resize(engine, &prompt);
+    if (!streaming) {
+        check_batch(engine, &prompt, false);
+        check_batch(engine, &prompt, true);
+        check_arena_resize(engine, &prompt);
+    }
     ds4_tokens_free(&prompt);
     ds4_engine_close(engine);
     return 0;

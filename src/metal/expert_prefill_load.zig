@@ -12,6 +12,26 @@ const Entry = Core.Entry;
 const maximum = Core.experts_max;
 const max = std.math.maxInt(u64);
 const present = Core.present;
+pub const Options = struct {
+    allow_mapped_overflow: bool = true,
+    before_read: c.ds4_gpu_stream_expert_before_read_fn = null,
+    callback_context: ?*anyopaque = null,
+    gate_up_ready: c.ds4_gpu_stream_expert_gate_up_ready_fn = null,
+};
+
+fn releaseReservations(cache: Cache.Cache, buffers: []const Reuse) void {
+    for (buffers) |group| {
+        if (group.gate_buffer == group.up_buffer and group.gate_buffer == group.down_buffer) {
+            if (cache.slotForBuffer(group.gate_buffer, group.gate_inner)) |slot| {
+                cache.recycle(slot);
+                continue;
+            }
+        }
+        cache.unlockExplicit(group.gate_buffer);
+        if (group.up_buffer != group.gate_buffer) cache.unlockExplicit(group.up_buffer);
+        if (group.down_buffer != group.gate_buffer and group.down_buffer != group.up_buffer) cache.unlockExplicit(group.down_buffer);
+    }
+}
 pub fn prepare(
     ctx: *Context,
     table: *const Table,
@@ -23,6 +43,7 @@ pub fn prepare(
     resource_count: *u32,
     unique: *u32,
     overflow: *Reuse,
+    options: Options,
 ) bool {
     c.ds4_metal_expert_reuse_reset(overflow);
     if (!ctx.cache.streaming or
@@ -82,6 +103,9 @@ pub fn prepare(
     defer if (task_storage) |pointer| c.free(pointer);
     var tasks: [*c]Core.Task = null;
     var loads: u32 = 0;
+    var reservations: u32 = 0;
+    var installed: u32 = 0;
+    var submitted = false;
     var task_count: u32 = 0;
     var prepare_ms: f64 = 0;
     var timed = if (Cache.timingSummary()) IO.now() else 0;
@@ -93,6 +117,9 @@ pub fn prepare(
     if (ok) {
         const budget = ctx.cache.budget();
         var reserved = ctx.cache.state.cache_entry_count;
+        var plan: Cache.ReusePlan = .{};
+        var plan_attempted = false;
+        var plan_ready = false;
         for (0..selected_count) |index| {
             const expert: u32 = @intCast(selected_ids[index]);
             points[index] = Core.offsets(table, expert) orelse {
@@ -106,12 +133,28 @@ pub fn prepare(
             // A serial read-ahead here would wait for the same pages before
             // the worker pool gets to issue the complete parallel batch.
             const before = if (timing) IO.now() else 0;
-            const prepared = ctx.storage().prepare(table.layer, expert, table.layer, selected_ids[0..selected_count], table.gate_expert_bytes, table.down_expert_bytes, force, &buffers[loads]);
+            var prepared = false;
+            // Qwen's owned-buffer batch may need 512 victims. Plan once, but
+            // retain scalar replacement and wait recovery for live targets.
+            if (!options.allow_mapped_overflow and force and ctx.cache.state.entries[table.layer][expert].valid == 0) {
+                if (!plan_attempted) {
+                    plan_attempted = true;
+                    plan_ready = ctx.cache.planReuse(&plan, selected_count - @as(u32, @intCast(index)), table.layer, selected_ids[0..selected_count], table.gate_expert_bytes, table.down_expert_bytes);
+                }
+                if (plan_ready) prepared = ctx.cache.takePlanned(&plan, table.layer, selected_ids[0..selected_count], table.gate_expert_bytes, table.down_expert_bytes, &buffers[loads]);
+            }
+            if (!prepared) {
+                // A wait or allocation-pressure eviction can change the
+                // ordered victim set. Never consume an old plan afterward.
+                plan_ready = false;
+                prepared = ctx.storage().prepare(table.layer, expert, table.layer, selected_ids[0..selected_count], table.gate_expert_bytes, table.down_expert_bytes, force, &buffers[loads]);
+            }
             if (timing) ctx.timingBuffer(IO.now() - before);
             if (!prepared) {
                 ok = false;
                 break;
             }
+            reservations = loads + 1;
             if (!force) reserved +|= 1;
             if (!Core.ready(&buffers[loads])) {
                 ok = false;
@@ -123,11 +166,24 @@ pub fn prepare(
             };
             load_unique[loads] = @intCast(index);
             const before_tasks = if (timing) IO.now() else 0;
-            Core.appendTasks(tasks[0 .. @as(usize, selected_count) * 3], &task_count, targets, points[index], table.gate_expert_bytes, table.down_expert_bytes);
+            if (options.gate_up_ready != null) {
+                var group: [3]Core.Task = undefined;
+                var group_count: u32 = 0;
+                Core.appendTasks(&group, &group_count, targets, points[index], table.gate_expert_bytes, table.down_expert_bytes);
+                tasks[2 * loads] = group[0];
+                tasks[2 * loads + 1] = group[1];
+                tasks[2 * selected_count + loads] = group[2];
+                task_count += 3;
+            } else Core.appendTasks(tasks[0 .. @as(usize, selected_count) * 3], &task_count, targets, points[index], table.gate_expert_bytes, table.down_expert_bytes);
             if (timing) ctx.timingTasks(1, IO.now() - before_tasks);
             loads += 1;
         }
     }
+    if (ok and loads != 0) if (options.before_read) |callback| {
+        // A failed callback may already have submitted a command prefix.
+        submitted = true;
+        ok = callback(options.callback_context, &selected_ids, @ptrCast(&entries), selected_count) != 0;
+    };
     if (ok and loads != 0) {
         if (timed != 0) {
             const next = IO.now();
@@ -136,15 +192,49 @@ pub fn prepare(
         }
         var bytes: u64 = 0;
         var elapsed: f64 = 0;
-        ok = IO.readTasks(&ctx.load.pool, tasks, task_count, &bytes, &elapsed);
-        if (ok) IO.noteRead(ctx.cache.state, table.layer, bytes, elapsed);
+        if (options.gate_up_ready) |callback| {
+            ok = IO.readTasks(&ctx.load.pool, tasks, 2 * loads, &bytes, &elapsed);
+            if (ok) {
+                var pairs: [maximum]c.ds4_gpu_stream_expert_gate_up = undefined;
+                for (0..loads) |index| pairs[index] = .{
+                    .expert = @intCast(selected_ids[load_unique[index]]),
+                    .gate = buffers[index].gate_buffer,
+                    .up = buffers[index].up_buffer,
+                    .gate_inner = buffers[index].gate_inner,
+                    .up_inner = buffers[index].up_inner,
+                };
+                submitted = true;
+                ok = callback(options.callback_context, &pairs, loads) != 0;
+            }
+            if (ok) {
+                var down_bytes: u64 = 0;
+                var down_ms: f64 = 0;
+                ok = IO.readTasks(&ctx.load.pool, tasks + 2 * selected_count, loads, &down_bytes, &down_ms);
+                bytes += down_bytes;
+                elapsed += down_ms;
+            }
+            // Partial reads remain real I/O even if the second phase fails.
+            IO.noteRead(ctx.cache.state, table.layer, bytes, elapsed);
+        } else {
+            ok = IO.readTasks(&ctx.load.pool, tasks, task_count, &bytes, &elapsed);
+            if (ok) IO.noteRead(ctx.cache.state, table.layer, bytes, elapsed);
+        }
         if (timed != 0) timed = IO.now();
-        if (ok and present("DS4_METAL_STREAMING_EXPERT_PREAD_PROFILE")) _ = c.fprintf(c.__stderrp, "ds4: Metal streaming batch expert parallel pread layer=%u experts=%u tensors=%u threads=%u bytes=%.2f GiB wall=%.3f ms\n", table.layer, loads, task_count, IO.threadCount(task_count), @as(f64, @floatFromInt(bytes)) / 1073741824, elapsed);
+        if (ok and present("DS4_METAL_STREAMING_EXPERT_PREAD_PROFILE")) {
+            _ = c.fprintf(c.__stderrp, "ds4: Metal streaming batch expert parallel pread layer=%u experts=%u tensors=%u threads=%u bytes=%.2f GiB wall=%.3f ms\n", table.layer, loads, task_count, IO.threadCount(if (options.gate_up_ready != null) 2 * loads else task_count), @as(f64, @floatFromInt(bytes)) / 1073741824, elapsed);
+            if (options.gate_up_ready != null) _ = c.fprintf(c.__stderrp, "ds4: Metal streaming batch expert pipeline layer=%u down_threads=%u\n", table.layer, IO.threadCount(loads));
+        }
         if (ok) for (0..loads) |index| {
             const slot = load_unique[index];
             const group = &buffers[index];
             entries[slot] = ctx.cache.install(Core.identity(table, points[slot]), table.layer, @intCast(selected_ids[slot]), group.gate_buffer, group.up_buffer, group.down_buffer, group.gate_inner, group.up_inner, group.down_inner);
             if (entries[slot] == null) {
+                ok = false;
+                break;
+            }
+            installed += 1;
+            // The gate/up callback may still be using these same buffers.
+            if (options.gate_up_ready != null and !ctx.cache.mark(entries[slot])) {
                 ok = false;
                 break;
             }
@@ -157,6 +247,10 @@ pub fn prepare(
     if (ok) for (0..selected_count) |index| {
         const expert: u32 = @intCast(selected_ids[index]);
         if (entries[index] == null) {
+            if (!options.allow_mapped_overflow) {
+                ok = false;
+                break;
+            }
             const gate_rel = points[index].gate -% table.gate_offset;
             const down_rel = points[index].down -% table.down_offset;
             if (overflow.gate_buffer == null) {
@@ -193,10 +287,15 @@ pub fn prepare(
     c.free(allocation);
     ids_storage = null;
     if (!ok or (resource_count.* == 0 and view_served == 0)) {
+        // Join callbacks before releasing either installed entries or pending
+        // reservations. Only installed entries are owned by clearLayer.
+        if (submitted) _ = c.ds4_gpu_synchronize();
+        releaseReservations(ctx.cache, buffers[installed..reservations]);
         ctx.cache.clearLayer(table.layer);
         return false;
     }
     if (!c.ds4_metal_expert_load_addresses(table.layer, addresses)) {
+        if (submitted) _ = c.ds4_gpu_synchronize();
         ctx.cache.clearLayer(table.layer);
         return false;
     }

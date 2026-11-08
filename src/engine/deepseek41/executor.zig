@@ -189,6 +189,13 @@ pub const Executor = struct {
         return ok and c.ds4_gpu_tensor_read(graph.logits, 0, output, @as(u64, self.ops.config.shape.n_vocab) * 4) != 0;
     }
 
+    pub fn decodeFlushLayers() u32 {
+        return if (c.getenv("DS4_METAL_V41_DECODE_FLUSH_LAYERS")) |value|
+            @intCast(@max(c.atoi(value), 0))
+        else
+            2;
+    }
+
     pub fn step(self: *const Executor, token: c_int, output: [*c]f32) bool {
         const graph = self.graph;
         const model = self.ops.model;
@@ -241,20 +248,24 @@ pub const Executor = struct {
             if (c.ds4_gpu_end_commands() == 0) ok = false;
         }
         const queue = graph.imatrix == null and !layer_resident and
+            (graph.tp_world == 2 or c.getenv(if (graph.streaming) "DS4_METAL_DISABLE_V41_STREAM_DECODE_QUEUE" else "DS4_METAL_DISABLE_V41_DECODE_PIPELINE") == null) and
             c.getenv(if (graph.tp_world == 2) "DS4_METAL_DISABLE_V41_TP_DECODE_QUEUE" else "DS4_METAL_DISABLE_V41_DECODE_QUEUE") == null and
             c.getenv("DS4_METAL_DISABLE_V41_SCALAR_QUEUE") == null;
         const queued_head = queue and output != null and graph.tp_world == 1 and
             c.getenv("DS4_METAL_DISABLE_V41_QUEUED_HEAD") == null;
-        const flush_layers: u32 = if (c.getenv("DS4_METAL_V41_DECODE_FLUSH_LAYERS")) |value|
-            @intCast(@max(c.atoi(value), 0))
-        else
-            2;
+        const flush_layers = decodeFlushLayers();
+        // Layer 20's selected blocks are private to this token's complete
+        // layer sweep. Copied prefill/verifier rows must never inherit them.
+        graph.score_selected_blocks = graph.tp_world == 1 and
+            c.getenv("DS4_V41_DISABLE_CANDIDATE_SCORING") == null and
+            c.getenv("DS4_METAL_DISABLE_V41_SCORE_ROWS4") == null;
         graph.scalar_decode = true;
         graph.shared_done = false;
         graph.tp_gate_fused = !c.ds4_native_graph_trace_active() and graph.tp_world == 2 and graph.steering_attn_scale == 0 and graph.steering_ffn_scale == 0 and
             c.getenv("DS4_METAL_DISABLE_V41_TP_GATE_EXPAND") == null and c.getenv("DS4_METAL_DISABLE_V41_TP_SHARED_OWNER") == null;
         defer {
             graph.scalar_decode = false;
+            graph.score_selected_blocks = false;
             graph.tp_gate_fused = false;
         }
         graph.rope_tab_pos = 0;

@@ -1,4 +1,4 @@
-//! Canonical Qwen state, preserving the existing DSV4v2/QW8v2 wire layout.
+//! Canonical Qwen state, preserving the DSV4v2 envelope and QW8v3 predictor prefix.
 //! Common bounded I/O leaves handle files/tensor transfers; this owner decides
 //! model spans, metadata and when a restored frontier becomes reusable.
 const std = @import("std");
@@ -9,7 +9,8 @@ const Config = dimensions.Config;
 const Graph = c.ds4_qwen4_gpu_graph;
 const Frontier = c.ds4_session_frontier;
 const Tensor = c.ds4_gpu_tensor;
-pub const tag: u32 = 0x51573802;
+pub const tag: u32 = 0x51573803;
+pub const legacy_tag: u32 = 0x51573802;
 const chunk = 8 * 1024 * 1024;
 const Header = [c.DS4_SESSION_PAYLOAD_U32_FIELDS]u32;
 
@@ -57,8 +58,17 @@ fn layerSpans(graph: *Graph, layer: u32, rows: u32, mtp_rows: u32) LayerSpans {
 }
 
 pub fn tensorBytes(config: *const Config, rows: u32, mtp_rows: u32) u64 {
+    return tensorBytesWithTail(config, rows, mtp_rows, false);
+}
+
+pub fn hasTail(graph: *const Graph, rows: u32) bool {
+    return graph.mtp_R != null and rows != 0 and graph.mtp_tail_valid and graph.mtp_tail_pos == rows - 1 and graph.mtp_pos >= rows - 1;
+}
+
+pub fn tensorBytesWithTail(config: *const Config, rows: u32, mtp_rows: u32, tail: bool) u64 {
     const shape = &config.shape;
-    var bytes: u64 = @sizeOf(u32); // Predictor's valid row count precedes tensors.
+    var bytes: u64 = 2 * @sizeOf(u32); // Initialized prefix and pending-row presence.
+    if (tail) bytes += @as(u64, shape.n_embd) * shape.n_hc * 4;
     for (0..shape.n_layer) |layer| {
         if (dimensions.isLinear(config, @intCast(layer))) {
             bytes += (dimensions.stateFloats(shape) + dimensions.historyFloats(shape)) * @sizeOf(f32);
@@ -112,8 +122,11 @@ pub fn save(graph: *Graph, state: *const Frontier, ready: bool, rewound: bool, f
     if (c.ds4_native_payload_write_bytes(file, state.logits, @as(u64, shape.n_vocab) * @sizeOf(f32), io.errorPointer(), errors.len) != 0) return 1;
     const buffer = std.heap.c_allocator.alloc(u8, chunk) catch c.ds4_engine_model_die("out of memory");
     defer std.heap.c_allocator.free(buffer);
-    const mtp_rows = @min(graph.mtp_pos, rows);
-    if (!io.writeU32(mtp_rows)) return 1;
+    const tail = hasTail(graph, rows);
+    const mtp_rows = if (tail) rows - 1 else 0;
+    if (graph.mtp_R != null and rows != 0 and !tail) return fail(errors, "Qwen3.8 predictor prefix requires replay before snapshot");
+    if (!io.writeU32(mtp_rows) or !io.writeU32(@intFromBool(tail))) return 1;
+    if (tail and !io.writeSpan(.{ .tensor = graph.mtp_tail_R, .bytes = @as(u64, shape.n_embd) * shape.n_hc * 4 }, buffer)) return 1;
     for (0..shape.n_layer) |layer| {
         const spans = layerSpans(graph, @intCast(layer), rows, mtp_rows);
         for (spans.items[0..spans.count]) |span| if (!io.writeSpan(span, buffer)) return 1;
@@ -129,7 +142,8 @@ pub fn load(graph: *Graph, state: *Frontier, ready: bool, file: *c.FILE, header:
     if (!ready) return fail(errors, "Qwen3.8 graph is not ready for restore");
     const shape = &graph.config.shape;
     const rows = header[7];
-    if (header[12] != tag or header[8] != shape.n_layer or header[9] != shape.n_head_dim or
+    const legacy = header[12] == legacy_tag;
+    if ((!legacy and header[12] != tag) or header[8] != shape.n_layer or header[9] != shape.n_head_dim or
         header[10] != shape.n_indexer_head_dim or header[11] != shape.n_vocab or header[6] != shape.n_embd * shape.n_hc)
         return fail(errors, "KV checkpoint was written by a different model family or shape");
     if (rows > graph.ctx_cap or rows > state.ctx_size) return fail(errors, "KV checkpoint is longer than this session's context");
@@ -150,6 +164,9 @@ pub fn load(graph: *Graph, state: *Frontier, ready: bool, file: *c.FILE, header:
     graph.snap_valid = false;
     graph.snap2_valid = false;
     graph.snap0_valid = false;
+    graph.mtp_tail_valid = false;
+    graph.mtp_tail_cached = false;
+    graph.mtp_last_rows = 0;
     if (c.ds4_native_payload_read_bytes(file, state.logits, @as(u64, shape.n_vocab) * @sizeOf(f32), remaining, io.errorPointer(), errors.len) != 0) return 1;
     if (c.ds4_gpu_synchronize() == 0) return fail(errors, "failed to synchronize accelerator before Qwen3.8 restore");
     // Preserve the established distinction: failures while loading the tensor
@@ -162,9 +179,15 @@ pub fn load(graph: *Graph, state: *Frontier, ready: bool, file: *c.FILE, header:
     };
     var mtp_rows: u32 = undefined;
     if (!io.readU32(&mtp_rows, remaining)) return 1;
-    if (mtp_rows > rows) return fail(errors, "KV checkpoint MTP rows exceed the token count");
+    var tail: u32 = 0;
+    if (!legacy and !io.readU32(&tail, remaining)) return 1;
+    if (mtp_rows > rows or tail > 1 or (tail != 0 and (rows == 0 or mtp_rows != rows - 1 or graph.mtp_tail_R == null)) or
+        (tail == 0 and !legacy and mtp_rows != 0)) return fail(errors, "KV checkpoint predictor prefix or pending row is invalid");
+    if (remaining.* != tensorBytesWithTail(&graph.config, rows, mtp_rows, tail != 0) - 8)
+        return fail(errors, "Qwen3.8 checkpoint tensor lengths do not match its layout");
     const buffer = std.heap.c_allocator.alloc(u8, chunk) catch c.ds4_engine_model_die("out of memory");
     defer std.heap.c_allocator.free(buffer);
+    if (tail != 0 and !io.readSpan(.{ .tensor = graph.mtp_tail_R, .bytes = @as(u64, shape.n_embd) * shape.n_hc * 4 }, buffer, remaining)) return 1;
     for (0..shape.n_layer) |layer| {
         const spans = layerSpans(graph, @intCast(layer), rows, mtp_rows);
         for (spans.items[0..spans.count]) |span| if (!io.readSpan(span, buffer, remaining)) return 1;
@@ -181,7 +204,10 @@ pub fn load(graph: *Graph, state: *Frontier, ready: bool, file: *c.FILE, header:
     graph.mrope_delta = @bitCast(delta);
     if (!io.readSpan(.{ .tensor = graph.pos3, .bytes = @as(u64, rows) * 16 }, buffer, remaining)) return 1;
     graph.pos = rows;
-    graph.mtp_pos = mtp_rows;
+    graph.mtp_pos = if (legacy) 0 else mtp_rows;
+    graph.mtp_tail_valid = tail != 0;
+    graph.mtp_tail_pos = rows -| 1;
+    graph.mtp_tail_cached = false;
     c.ds4_tokens_free(&state.checkpoint);
     state.checkpoint = checkpoint;
     checkpoint = std.mem.zeroes(c.ds4_tokens);

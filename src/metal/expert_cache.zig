@@ -66,6 +66,48 @@ pub fn matches(entry: *const Entry, key: Identity) bool {
         entry.gate_buffer != null and entry.up_buffer != null and entry.down_buffer != null;
 }
 const Victim = struct { layer: u32 = invalid, expert: u32 = invalid, hotness: u32 = invalid, used: u64 = std.math.maxInt(u64) };
+// A batch owns no buffers until it consumes a victim. An aborted read therefore
+// cannot evict the rest of this plan. The ID tie-break matches the scalar scan.
+pub const ReusePlan = struct {
+    candidates: [experts]Victim = undefined,
+    count: u32 = 0,
+    next: u32 = 0,
+
+    fn less(_: void, a: Victim, b: Victim) bool {
+        if (a.hotness != b.hotness) return a.hotness < b.hotness;
+        if (a.used != b.used) return a.used < b.used;
+        if (a.layer != b.layer) return a.layer < b.layer;
+        return a.expert < b.expert;
+    }
+    fn heapDown(self: *ReusePlan, initial: u32) void {
+        var root = initial;
+        while (true) {
+            var child = root * 2 + 1;
+            if (child >= self.count) return;
+            if (child + 1 < self.count and less({}, self.candidates[child], self.candidates[child + 1])) child += 1;
+            if (!less({}, self.candidates[root], self.candidates[child])) return;
+            std.mem.swap(Victim, &self.candidates[root], &self.candidates[child]);
+            root = child;
+        }
+    }
+    fn consider(self: *ReusePlan, needed: u32, candidate: Victim) void {
+        if (self.count < needed) {
+            var at = self.count;
+            self.count += 1;
+            self.candidates[at] = candidate;
+            while (at != 0) {
+                const parent = (at - 1) / 2;
+                if (!less({}, self.candidates[parent], candidate)) break;
+                self.candidates[at] = self.candidates[parent];
+                self.candidates[parent] = candidate;
+                at = parent;
+            }
+        } else if (less({}, candidate, self.candidates[0])) {
+            self.candidates[0] = candidate;
+            self.heapDown(0);
+        }
+    }
+};
 fn preferable(hotness: u32, used: u64, previous: Victim) bool {
     return hotness < previous.hotness or (hotness == previous.hotness and used < previous.used);
 }
@@ -493,6 +535,53 @@ pub const Cache = struct {
             self.state.cache_buffer_reuses +%= objectCount(target.gate_buffer, target.up_buffer, target.down_buffer);
             return true;
         }
+    }
+    /// Bound the victim scan to one pass for a large owned-buffer batch. If
+    /// work is in flight, completion could expose an older victim: retain the
+    /// scalar wait/retry path rather than changing its eviction decisions.
+    pub fn planReuse(self: Cache, plan: *ReusePlan, needed: u32, protect_layer: u32, protect: []const i32, gate_bytes: u64, down_bytes: u64) bool {
+        plan.count = 0;
+        plan.next = 0;
+        if (needed == 0 or needed > experts or c.ds4_metal_expert_on_service_thread()) return false;
+        const timing = timingSummary();
+        const start = if (timing) c.ds4_metal_expert_now_ms() else 0;
+        var saw_inflight = false;
+        for (0..layers) |layer| for (0..experts) |expert| {
+            const entry = &self.state.entries[layer][expert];
+            if (!reusable(entry, gate_bytes, down_bytes)) continue;
+            if (self.inflight(entry)) {
+                saw_inflight = true;
+                continue;
+            }
+            if (self.protected(@intCast(layer), @intCast(expert), protect_layer, protect)) continue;
+            const victim = Victim{ .layer = @intCast(layer), .expert = @intCast(expert), .hotness = self.state.cache_route_hotness[layer][expert], .used = entry.last_used };
+            if (victim.hotness == invalid and victim.used == std.math.maxInt(u64)) continue;
+            plan.consider(needed, victim);
+        };
+        if (saw_inflight) plan.count = 0 else std.mem.sort(Victim, plan.candidates[0..plan.count], {}, ReusePlan.less);
+        if (timing) self.scanTiming(layers * experts, start);
+        return plan.count != 0;
+    }
+    pub fn takePlanned(self: Cache, plan: *ReusePlan, protect_layer: u32, protect: []const i32, gate_bytes: u64, down_bytes: u64, target: *Reuse) bool {
+        c.ds4_metal_expert_reuse_reset(target);
+        if (plan.next >= plan.count) return false;
+        const victim = plan.candidates[plan.next];
+        const entry = &self.state.entries[victim.layer][victim.expert];
+        if (!reusable(entry, gate_bytes, down_bytes) or entry.last_used != victim.used or
+            self.state.cache_route_hotness[victim.layer][victim.expert] != victim.hotness or
+            self.protected(victim.layer, victim.expert, protect_layer, protect))
+        {
+            plan.count = plan.next;
+            return false;
+        }
+        const timing = timingSummary();
+        const start = if (timing) c.ds4_metal_expert_now_ms() else 0;
+        self.clear(victim.layer, victim.expert, true, true, target);
+        if (timing) self.clearTiming(start);
+        plan.next += 1;
+        if (!buffersReady(target)) return false;
+        self.state.cache_buffer_reuses +%= objectCount(target.gate_buffer, target.up_buffer, target.down_buffer);
+        return true;
     }
     /// Preserve the original bounded candidate array order, including strict
     /// hotness/LRU ties. It is not sorted before buffers are returned.

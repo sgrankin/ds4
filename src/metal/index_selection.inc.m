@@ -4,6 +4,8 @@ ds4_metal_index_pipeline ds4_metal_index_get_pipeline(uint32_t kind) {
     @autoreleasepool {
         id<MTLComputePipelineState> pipeline = nil;
         switch (kind) {
+            case DS4_METAL_INDEX_CANDIDATE_BLOCKS: pipeline = ds4_gpu_get_pipeline("kernel_dsv41_indexer_score_blocks"); break;
+            case DS4_METAL_INDEX_MERGE_NONCAUSAL_PREFIX: pipeline = ds4_gpu_get_pipeline("kernel_argsort_merge_f32_i32_desc_prefix"); break;
             case DS4_METAL_INDEX_MERGE_STAGED: pipeline = ds4_gpu_get_pipeline("kernel_argsort_merge_f32_i32_desc_prefix_staged"); break;
             case DS4_METAL_INDEX_MERGE_FUSED: pipeline = ds4_gpu_get_pipeline("kernel_argsort_merge_f32_i32_desc_prefix_fused"); break;
             case DS4_METAL_INDEX_ROWS4: pipeline = ds4_gpu_get_pipeline("kernel_glm_indexer_score_one_rows4"); break;

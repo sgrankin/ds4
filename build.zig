@@ -490,6 +490,15 @@ pub fn build(b: *std.Build) void {
     }
     {
         const metal_c = generatedApi(b, target, sdk, optimize, "src/metal/bridge.h");
+        const reuse_module = module(b, target, sdk, .debug);
+        reuse_module.root_source_file = b.path("src/metal/expert_cache.zig");
+        reuse_module.addImport("metal_c", metal_c);
+        const reuse_test_module = module(b, target, sdk, .debug);
+        reuse_test_module.root_source_file = b.path("tests/test_expert_reuse.zig");
+        reuse_test_module.addImport("metal_c", metal_c);
+        reuse_test_module.addImport("expert_cache", reuse_module);
+        const reuse_test = b.addTest(.{ .name = "test-expert-reuse", .root_module = reuse_test_module });
+        b.step("expert-reuse-test", "Build native expert eviction planning fixture").dependOn(&b.addInstallArtifact(reuse_test, .{}).step);
         core_module.addObjectFile(nativeObject(b, target, sdk, optimize, "src/metal/f16_publication.zig", "metal_c", metal_c));
         const hc_object = nativeObject(b, target, sdk, optimize, "src/metal/hc_projection.zig", "metal_c", metal_c);
         core_module.addObjectFile(hc_object);
@@ -546,6 +555,11 @@ pub fn build(b: *std.Build) void {
     }
     {
         const image_c = generatedApi(b, target, sdk, optimize, "src/image_api.h");
+        const resize_test_module = module(b, target, sdk, optimize);
+        resize_test_module.root_source_file = b.path("src/image_preprocess.zig");
+        resize_test_module.addImport("image_c", image_c);
+        const resize_test = b.addTest(.{ .name = "test-image-resize", .root_module = resize_test_module });
+        b.step("image-resize-test", "Build exact serial/threaded image resize fixture").dependOn(&b.addInstallArtifact(resize_test, .{}).step);
         const decode_object = nativeObject(b, target, sdk, optimize, "src/image.zig", "image_c", image_c);
         const preprocess_object = nativeObject(b, target, sdk, optimize, "src/image_preprocess.zig", "image_c", image_c);
         core_module.addObjectFile(decode_object);
@@ -766,11 +780,38 @@ pub fn build(b: *std.Build) void {
         .{ "indexer-score-test", "test-v41-indexer-score", "tests/test_v41_indexer_score.c" },
         .{ "qwen-kernels-test", "test-qwen4-kernels", "tests/test_qwen4_kernels.c" },
         .{ "glm53-kda-test", "test-glm53-kda", "tests/test_glm53_kda.c" },
+        .{ "glm-attention-test", "test-glm-attention", "tests/test_glm_attention.c" },
+        .{ "q8-prefill-variants-test", "test-q8-prefill-variants", "tests/test_q8_prefill_variants.c" },
         .{ "glm53-vision-prompt-test", "test-glm53-vision-prompt", "tests/test_glm53_vision_prompt.c" },
     }) |fixture| {
         const frontend = object(b, target, sdk, clang, fixture[2], fixture[1], optimize, test_flags);
         const test_exe = executable(b, target, sdk, core, null, null, fixture[1], frontend, optimize);
         b.step(fixture[0], "Build the existing production-linked GPU fixture (run separately)").dependOn(&b.addInstallArtifact(test_exe, .{}).step);
+    }
+    // These self-contained oracles compile the production Metal source and a
+    // frozen reference. Strict host arithmetic preserves their bit checks.
+    inline for (.{
+        .{ "metal-q8-reduction-test", "test-metal-q8-reduction", "tests/test_metal_q8_reduction.m" },
+        .{ "metal-q8-gemv-reference-test", "test-metal-q8-gemv-reference", "tests/test_metal_q8_gemv_reference.m" },
+        .{ "metal-qwen-hc-test", "test-metal-qwen4-hc", "tests/test_metal_qwen4_hc.m" },
+        .{ "metal-qwen-moe-half-test", "test-metal-qwen4-moe-half", "tests/test_metal_qwen4_moe_half.m" },
+        .{ "metal-qwen-moe-mid-test", "test-metal-qwen4-moe-mid", "tests/test_metal_qwen4_moe_mid.m" },
+        .{ "metal-qwen-moe-down-test", "test-metal-qwen4-moe-down", "tests/test_metal_qwen4_moe_down.m" },
+        .{ "metal-qwen-mxfp4-stage-test", "test-metal-qwen4-mxfp4-stage", "tests/test_metal_qwen4_mxfp4_stage.m" },
+    }) |fixture| {
+        const flags = std.mem.concat(b.allocator, []const u8, &.{ strict_flags, &.{"-fobjc-arc"} }) catch @panic("OOM");
+        const root = module(b, target, sdk, optimize);
+        root.addObjectFile(object(b, target, sdk, clang, fixture[2], fixture[1], optimize, flags));
+        root.linkFramework("Foundation", .{});
+        root.linkFramework("Metal", .{});
+        const test_exe = b.addExecutable(.{ .name = fixture[1], .root_module = root });
+        b.step(fixture[0], "Build standalone production Metal/reference arithmetic oracle").dependOn(&b.addInstallArtifact(test_exe, .{}).step);
+    }
+    {
+        const root = module(b, target, sdk, optimize);
+        root.addObjectFile(object(b, target, sdk, clang, "tests/test_metal_device_policy.c", "test-metal-device-policy", optimize, strict_flags));
+        const test_exe = b.addExecutable(.{ .name = "test-metal-device-policy", .root_module = root });
+        b.step("metal-device-policy-test", "Build model-specific Metal device selection fixture").dependOn(&b.addInstallArtifact(test_exe, .{}).step);
     }
     inline for (.{
         .{ "steering-hc-test", "test-metal-steering-hc", "tests/test_metal_steering_hc.zig", "tests/steering_gpu_api.h", "steering_gpu_c" },
@@ -815,6 +856,40 @@ pub fn build(b: *std.Build) void {
     // included engine retains unreachable alternate-backend references that
     // Metal does not implement. Native graph objects still honor Debug mode.
     const graph_test_base = std.mem.concat(b.allocator, []const u8, &.{ strict_flags, &.{"-Wno-unused-function"} }) catch @panic("OOM");
+    {
+        // Only dispatch observation is injected into this test's driver. The
+        // executable interposes pread from both native and Objective-C owners.
+        const flags = std.mem.concat(b.allocator, []const u8, &.{ objc_flags, &.{ "-include", "tests/qwen4_ssd_pread_probe.h" } }) catch @panic("OOM");
+        const driver = object(b, target, sdk, clang, "src/metal/ds4_metal.m", "qwen-ssd-metal", optimize, flags);
+        const frontend = object(b, target, sdk, clang, "tests/test_qwen4_ssd_experts.c", "test-qwen4-ssd-experts", optimize, strict_flags);
+        const exe = executable(b, target, sdk, core, null, null, "test-qwen4-ssd-experts", frontend, optimize);
+        exe.root_module.addObjectFile(driver);
+        b.step("qwen-ssd-experts-test", "Build native SSD read/error/overlap qualification with test-only I/O observation").dependOn(&b.addInstallArtifact(exe, .{}).step);
+    }
+    {
+        const api = generatedApi(b, target, sdk, optimize, "src/engine/deepseek41/graph_api.h");
+        const policy = module(b, target, sdk, .debug);
+        policy.root_source_file = b.path("src/engine/qwen4_policy_test.zig");
+        policy.addImport("gguf_c", api);
+        policy.linkLibrary(core);
+        policy.linkFramework("Foundation", .{});
+        policy.linkFramework("Metal", .{});
+        policy.linkFramework("Accelerate", .{});
+        policy.linkSystemLibrary("icucore", .{});
+        const policy_test = b.addTest(.{ .name = "test-qwen4-policy", .root_module = policy });
+        b.step("qwen4-policy-test", "Build native Qwen memory, history and boundary policy checks").dependOn(&b.addInstallArtifact(policy_test, .{}).step);
+        const test_entry = nativeObject(b, target, sdk, optimize, "src/engine/qwen4_test_entry.zig", "gguf_c", api);
+        inline for (.{
+            .{ "qwen-mtp-prefill-test", "test-qwen4-mtp-prefill", "tests/test_qwen4_mtp_prefill.c" },
+            .{ "qwen-generation-test", "test-qwen4-generation", "tests/test_qwen4_generation.c" },
+            .{ "qwen-resident-arithmetic-test", "test-qwen4-resident-arithmetic", "tests/test_qwen4_resident_arithmetic.c" },
+        }) |fixture| {
+            const frontend = object(b, target, sdk, clang, fixture[2], fixture[1], optimize, graph_test_base);
+            const exe = executable(b, target, sdk, core, null, null, fixture[1], frontend, optimize);
+            exe.root_module.addObjectFile(test_entry);
+            b.step(fixture[0], "Build Qwen qualification against actual native model owners").dependOn(&b.addInstallArtifact(exe, .{}).step);
+        }
+    }
     // The same bookkeeping assertions also exercise native frontier actions
     // with GPU support selected, plus the existing pooled-indexer rollback.
     const session_gpu_frontend = object(b, target, sdk, clang, "tests/test_session_state.c", "test-session-state-gpu-main", optimize, graph_test_base);

@@ -1,5 +1,11 @@
 # Models Larger Than RAM
 
+Metal expert streaming supports DeepSeek V4.1 Flash and retained V4 Pro,
+GLM 5.3, and Qwen3.8 Flash Next. Qwen streams routed weights through prefill,
+decode and its embedded predictor; its separate
+[storage and admission policy](../models/qwen38-flash-next/implementation.md#ssd-storage-and-admission)
+reserves predictor staging and uses ordered session execution.
+
 [Serving](../serving/overview.md)
 
 Use resident inference when the model and runtime fit: it is faster.
@@ -7,7 +13,7 @@ SSD streaming keeps a bounded cache of routed experts and reads missing
 experts from the GGUF. It trades speed for capacity; it does not remove the
 memory needed for other weights, activations, scratch, and the context.
 
-Metal supports streaming for DeepSeek and GLM. CUDA and ROCm retain streaming paths in source; they are not newly qualified by this manual. Do not infer support for every model
+Historical CUDA and ROCm paths are retired in this fork. Do not infer support for every model
 and tensor layout from the existence of the flag.
 
 ## Start with the automatic budget
@@ -68,9 +74,45 @@ includes planned and already resident sessions; a request can still be refused
 when its mandatory allocations cannot fit. Disabling the memory guard is not
 a remedy for insufficient RAM.
 
-Leave expert preloading enabled for normal use. `--ssd-streaming-cold` and
+For DeepSeek and GLM, leave expert preloading enabled for normal use. `--ssd-streaming-cold` and
 `--ssd-streaming-preload-experts N` are mainly useful for controlled measurements.
+Qwen populates its cache on demand and does not use popularity preloading;
+its [storage and admission policy](../models/qwen38-flash-next/implementation.md#ssd-storage-and-admission)
+describes its staging requirements and session limits.
 See [benchmarking](../development/benchmarking.md) and the [release QA guide](../development/qualification/README.md).
+
+## Replacing cached experts and overlapping reads
+
+When a batch needs many missing experts, choosing each replacement separately
+would repeatedly scan the cache. The native [cache planner](../../src/metal/expert_cache.zig)
+can instead scan once and keep at most 512 victim records. It orders them by
+lower routing frequency, older last use, then layer and expert ID. Those final
+tie-breaks reproduce the scalar scan's choice. The planner excludes selected
+experts and entries still used by submitted GPU work. If it encounters reusable
+entries whose work has not completed, it keeps the scalar wait-and-retry path:
+completion could make a different victim eligible.
+
+Planning records metadata; it neither removes entries nor takes their buffers.
+As each missing expert needs storage, the loader rechecks the next candidate's
+sizes, routing frequency, last use and protection. Only then does it retire that
+entry, update cache accounting and transfer its buffers for the new read. An
+abandoned plan leaves its unconsumed entries cached. A changed candidate or a
+fallback that can wait or evict invalidates the remaining plan, preserving the
+ordinary replacement policy. The [prefill loader](../../src/metal/expert_prefill_load.zig)
+uses this path for owned-buffer batches; the existing scalar path remains its
+fallback. [The native fixture](../../tests/test_expert_reuse.zig) compares their
+victim order and accounting, including protected and partially consumed plans.
+
+The same loader lets Qwen overlap computation with its two read phases. Cached
+experts can run while missing weights load. Once the missing gate and up weights
+are ready, a callback submits their projections; workers can then read the down
+weights while that GPU work runs. These buffers remain reservations until all
+three matrices are loaded, so the cache never publishes an incomplete expert.
+Separate address tables and retained payload buffers keep submitted work valid
+while cache tables change. A read failure drains submitted work before releasing
+its reservations. The [Qwen backend](../models/qwen38-flash-next/apple-silicon.md#expert-weights-and-matrix-work)
+owns the model's row lists, kernels and arithmetic choices; the shared loader
+owns replacement and read lifetimes.
 
 ## How Metal stores cached experts
 

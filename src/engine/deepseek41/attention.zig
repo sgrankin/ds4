@@ -233,6 +233,8 @@ pub const Attention = struct {
                 c.ds4_gpu_dsv41_indexer_score_fp4(graph.index_scores, graph.index_q, graph.index_weights, graph.index_cache[cacheOwner(index)], if (candidate_only) graph.block_selected else null, count, if (candidate_only) 2048 else 0)
             else if (candidate_only)
                 c.ds4_gpu_dsv41_indexer_score_candidates(graph.index_scores, graph.index_q, graph.index_weights, graph.index_cache[cacheOwner(index)], graph.block_selected, count, 2048)
+            else if (index > 20 and count > 2048 * 8 and graph.score_selected_blocks)
+                c.ds4_gpu_dsv41_indexer_score_blocks(graph.index_scores, graph.index_q, graph.index_weights, graph.index_cache[cacheOwner(index)], graph.block_selected, count, 2048)
             else
                 c.ds4_gpu_dsv41_indexer_score_row(graph.index_scores, graph.index_q, graph.index_weights, graph.index_cache[cacheOwner(index)], if (graph.index_bf16_ok) graph.index_bf16[cacheOwner(index)] else null, count);
             if (scored == 0) return false;

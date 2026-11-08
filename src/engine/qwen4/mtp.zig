@@ -101,7 +101,11 @@ fn stageResidual(graph: *Graph, model: *const Model, layer: *const Layer, source
         defer c.ds4_gpu_tensor_free(cat);
         if (c.ds4_gpu_qwen4_mtp_stage_tensor(cat, e, residual, model.map, model.size, layer.nextn_enorm.*.abs_offset, layer.nextn_hnorm.*.abs_offset, shape.n_embd, shape.n_hc, shape.rms_eps) == 0) return false;
     }
-    if (!ops.dense(graph.mtp_proj, model, layer.nextn_eh_proj, graph.mtp_cat, count * (shape.n_hc + 1))) return false;
+    const projected = if (layer.nextn_eh_proj.*.type == c.DS4_TENSOR_Q8_0)
+        c.ds4_gpu_qwen4_mtp_project_tensor(graph.mtp_proj, graph.mtp_cat, model.map, model.size, layer.nextn_eh_proj.*.abs_offset, shape.n_embd, shape.n_hc, count) != 0
+    else
+        ops.dense(graph.mtp_proj, model, layer.nextn_eh_proj, graph.mtp_cat, count * (shape.n_hc + 1));
+    if (!projected) return false;
     for (0..count) |row| {
         const projection = ops.rowsView(graph.mtp_proj, @intCast(row), 1, (streams + 1) * embd) orelse return false;
         defer c.ds4_gpu_tensor_free(projection);
@@ -118,12 +122,12 @@ fn predictor(graph: *Graph, model: *const Model, layer: *const Layer, position: 
         attention.run(graph, model, layer, shape.n_layer - 1, position, count) and
         c.ds4_gpu_qwen4_hc_combine_tensor(graph.R, graph.blk, graph.inj, count, shape.n_embd, shape.n_hc) != 0 and
         ops.hcMix(graph, model, layer.hc_ffn_norm, layer.hc_ffn_down, layer.hc_ffn_up, layer.hc_ffn_inject, count) and
-        moe.run(graph, model, layer, count);
+        moe.last(graph, model, layer, count);
 }
 
 pub fn steps(graph: *Graph, model: *const Model, weights: *const Weights, row: u32, tokens: []const c_int, position: u32, want_logits: bool, output: [*c]f32, draft: [*c]c_int) bool {
     const count: u32 = @intCast(tokens.len);
-    if (graph.mtp_R == null or count == 0 or count > 3 or position > graph.ctx_cap or count > graph.ctx_cap - position or
+    if (graph.mtp_R == null or count == 0 or count > 3 or position > graph.mtp_pos or position > graph.ctx_cap or count > graph.ctx_cap - position or
         row > graph.cap_tokens or count > graph.cap_tokens - row) return false;
     if (!stageEmbedding(graph, model, weights, tokens)) return false;
     const layer = &weights.layer[graph.config.shape.n_layer - 1];
@@ -167,6 +171,10 @@ pub fn steps(graph: *Graph, model: *const Model, weights: *const Weights, row: u
     if (ok) {
         graph.mtp_pos = position + count;
         graph.mtp_last_rows = count;
+        if (graph.mtp_tail_valid and position + count - 1 == graph.mtp_tail_pos) {
+            graph.mtp_tail_cached = true;
+            graph.mtp_tail_next_token = tokens[count - 1];
+        }
     }
     return ok;
 }
@@ -174,9 +182,13 @@ pub fn steps(graph: *Graph, model: *const Model, weights: *const Weights, row: u
 /// Recursive draft: use the predictor's own last stream before overwriting it
 /// with this proposal. Target verification remains the only commit authority.
 pub fn chain(graph: *Graph, model: *const Model, weights: *const Weights, token: c_int, position: u32, draft: *c_int) bool {
-    if (graph.mtp_R == null or graph.mtp_last_rows == 0 or graph.mtp_last_rows > 3 or position >= graph.ctx_cap or
+    if (graph.mtp_R == null or graph.mtp_last_rows == 0 or graph.mtp_last_rows > 3 or position > graph.mtp_pos or position >= graph.ctx_cap or
         token < 0 or token >= graph.config.shape.n_vocab) return false;
-    if (!stageEmbedding(graph, model, weights, &.{token})) return false;
+    var delta = graph.mrope_delta;
+    const position3 = @import("input.zig").ropePosition(&.{}, position, &delta);
+    const position4 = [4]u32{ position3[0], position3[1], position3[2], 0 };
+    if (c.ds4_gpu_tensor_write(graph.pos3, @as(u64, position) * 16, &position4, 16) == 0 or
+        !stageEmbedding(graph, model, weights, &.{token})) return false;
     const layer = &weights.layer[graph.config.shape.n_layer - 1];
     const residual = graph.R;
     var ok = stageResidual(graph, model, layer, graph.mtp_R, graph.mtp_last_rows - 1, 1);
@@ -204,5 +216,90 @@ pub fn chain(graph: *Graph, model: *const Model, weights: *const Weights, token:
         graph.mtp_pos = position + 1;
         graph.mtp_last_rows = 1;
     }
+    return ok;
+}
+
+/// Auto prepares SSD predictor history, where expert I/O dominates; resident
+/// auto uses a cold zero prefix. This affects proposals only, never target KV.
+pub fn historyPolicy(enabled: bool, streaming: bool, value: ?[]const u8) ?bool {
+    if (!enabled) return false;
+    const raw = value orelse return streaming;
+    if (raw.len == 0 or std.mem.eql(u8, raw, "auto")) return streaming;
+    if (std.mem.eql(u8, raw, "on") or std.mem.eql(u8, raw, "1")) return true;
+    if (std.mem.eql(u8, raw, "off") or std.mem.eql(u8, raw, "0")) return false;
+    return null;
+}
+
+pub fn prepareHistory(streaming: bool) ?bool {
+    const raw = c.getenv("DS4_QWEN4_MTP_PREFILL");
+    return historyPolicy(true, streaming, if (raw == null) null else std.mem.span(raw));
+}
+
+/// Finish the previous trunk row only once its true successor is known.
+/// Any recursive draft cache after this boundary remains provisional.
+pub fn boundary(graph: *Graph, model: *const Model, weights: *const Weights, next: c_int) bool {
+    if (graph.mtp_R == null or graph.pos == 0) return true;
+    if (!graph.mtp_tail_valid or graph.mtp_tail_pos + 1 != graph.pos or graph.mtp_pos + 1 < graph.pos) return false;
+    if (!graph.mtp_tail_cached or graph.mtp_tail_next_token != next or graph.mtp_pos < graph.pos) {
+        const residual = graph.R;
+        graph.R = graph.mtp_tail_R;
+        const ok = cacheSteps(graph, model, weights, 0, &.{next}, graph.pos - 1);
+        graph.R = residual;
+        if (!ok) return false;
+    }
+    graph.mtp_pos = graph.pos;
+    return true;
+}
+
+/// Historical predictor rows require input projections and KV, but no output
+/// attention, routed FFN or head. Up to three rows reuse existing draft scratch.
+pub fn cacheSteps(graph: *Graph, model: *const Model, weights: *const Weights, row: u32, tokens: []const c_int, position: u32) bool {
+    const count: u32 = @intCast(tokens.len);
+    if (graph.mtp_R == null or count == 0 or count > 3 or position > graph.mtp_pos or position > graph.ctx_cap or
+        count > graph.ctx_cap - position or row > graph.cap_tokens or count > graph.cap_tokens - row) return false;
+    if (!stageEmbedding(graph, model, weights, tokens)) return false;
+    const layer = &weights.layer[graph.config.shape.n_layer - 1];
+    const residual = graph.R;
+    var ok = stageResidual(graph, model, layer, residual, row, count);
+    graph.R = graph.mtp_R;
+    ok = ok and ops.hcMix(graph, model, layer.hc_attn_norm, layer.hc_attn_down, layer.hc_attn_up, layer.hc_attn_inject, count) and
+        attention.cache(graph, model, layer, graph.config.shape.n_layer - 1, position, count, true);
+    graph.R = residual;
+    if (c.ds4_gpu_commands_active() != 0 and c.ds4_gpu_end_commands() == 0) ok = false;
+    graph.mtp_last_rows = 0;
+    if (ok) {
+        graph.mtp_pos = position + count;
+        if (graph.mtp_tail_valid and position + count - 1 == graph.mtp_tail_pos) {
+            graph.mtp_tail_cached = true;
+            graph.mtp_tail_next_token = tokens[count - 1];
+        }
+    }
+    return ok;
+}
+
+/// Zero keys participate in predictor softmax: a cold prefix is an approximate
+/// proposal policy. Drain host-visible fills and re-pool partial blocks so
+/// retained real keys are never erased by a later cold append.
+pub fn cold(graph: *Graph, model: *const Model, weights: *const Weights, position: u32, count: u32) bool {
+    if (graph.mtp_R == null or count == 0 or position > graph.mtp_pos or position > graph.ctx_cap or count > graph.ctx_cap - position or c.ds4_gpu_synchronize() == 0) return false;
+    const shape = &graph.config.shape;
+    const index = shape.n_layer - 1;
+    const caches = [_]?*Tensor{ graph.layer_k_cache[index], graph.layer_v_cache[index], graph.layer_ik_cache[index] };
+    const bytes = [_]u64{ @as(u64, shape.n_head_kv) * shape.n_head_dim * 2, @as(u64, shape.n_head_kv) * shape.n_head_dim * 2, @as(u64, shape.n_indexer_head_dim) * 4 };
+    var ok = true;
+    for (caches, bytes) |tensor, row_bytes| {
+        const view = c.ds4_gpu_tensor_view(tensor, @as(u64, position) * row_bytes, @as(u64, count) * row_bytes);
+        defer c.ds4_gpu_tensor_free(view);
+        if (view == null or row_bytes % 4 != 0 or c.ds4_gpu_tensor_fill_f32(view, 0, @as(u64, count) * row_bytes / 4) == 0) {
+            ok = false;
+            break;
+        }
+    }
+    const first = position / 4;
+    const after = (position + count) / 4;
+    if (ok and after > first) ok = ops.beginCommands() and c.ds4_gpu_qwen4_idx_block_key_tensor(graph.layer_block_key[index], graph.layer_ik_cache[index], graph.pos3, model.map, model.size, weights.layer[index].indexer_k_norm.*.abs_offset, first, after - first, 4, shape.n_indexer_head_dim, shape.n_rot, shape.rope_freq_base, shape.rms_eps) != 0;
+    if (c.ds4_gpu_commands_active() != 0 and c.ds4_gpu_end_commands() == 0) ok = false;
+    graph.mtp_last_rows = 0;
+    if (ok) graph.mtp_pos = position + count;
     return ok;
 }

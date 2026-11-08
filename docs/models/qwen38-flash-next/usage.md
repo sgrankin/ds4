@@ -21,6 +21,22 @@ The Zig build places programs in `zig-out/bin`; `make` builds and copies the mai
 
 Each file includes the original 95.37 GiB BF16 n-gram table, read on demand from disk without a sidecar or preload. Keep it on a fast local SSD. Weight sizes are not total process memory: context, session state and runtime buffers need additional space. The 8K context and 1024-token chunk above are a conservative starting point for Q2 on a 64 GB Mac; Q4 needs more memory. Q2 uses calibrated IQ2_XXS gate/up and Q2_K down experts, while Q4 uses calibrated Q4_K gate/up and MXFP4 down experts.
 
+Metal SSD mode is available for prefill, decode and the embedded predictor.
+For a bounded cache of routed experts and a smaller prompt chunk:
+
+```sh
+./zig-out/bin/ds4-server --model gguf/Qwen3.8-Flash-Next-Q2.gguf \
+  --ssd-streaming --ctx 4096 --prefill-chunk 128 --mtp
+```
+
+Leave the cache budget automatic initially: admission reserves graph and staging
+memory before fitting the expert cache. An explicit
+`--ssd-streaming-cache-experts N` controls slots, while a byte budget also
+includes staging. SSD sessions execute in order and retain private scratch.
+`--mtp` enables the embedded predictor and can be omitted for ordinary decoding.
+See [storage and admission](implementation.md#ssd-storage-and-admission) for
+lifetimes and memory accounting.
+
 The old DGX Spark instructions used `make cuda-spark` and an 8192-token default prefill chunk. They describe upstream CUDA work, not a maintained or locally qualified CUDA build in this Metal-focused tree. The [historical Spark results](../../../gguf-tools/quality-testing/README.md#7-qwen38-spark-baseline) and [checkpoint benchmark](../../../speed-bench/qwen38-checkpoints/README.md) record their specific workloads; older two-run throughput figures are not a current performance comparison.
 
 ## Send a request and continue
@@ -45,7 +61,9 @@ The server exposes `qwen3.8-flash-next`, `qwen3.8-flash-next-chat` and `qwen3.8-
 
 The embedded multi-token predictor proposes drafts that the target model verifies before committing tokens. Add `--mtp` to use it. Without it, ordinary decoding remains available; `ds4-bench` measures ordinary decoding and does not accept `--mtp`. Default MTP accepts matching greedy drafts even at nonzero temperature, so it does not promise ordinary sampling's distribution. With `--mtp-exact-sampling`, a sampled single session uses exact speculative sampling; sampled batched requests instead use ordinary batched decode, while temperature-zero requests can still speculate. See [sampling semantics](../../serving/sampling-and-speculation.md).
 
-On Metal, independent conversations can share GPU weight work while retaining separate session state. Use `ds4-server --batched-session N` to group eligible sessions. Floating-point reduction order can change replies, and a seed need not reproduce a reply across batching schedules. The native selector admits at most 64 ordinary or 32 speculative members, subject to workspace and compatible checkpoint and steering state. The speculative executor has a separate 16-member limit, so the selector ceiling alone does not establish an executable 32-session speculative batch. Images and other unsupported combinations use ordered fallback; the [runtime manual](implementation.md) describes eligibility and state. Disk checkpoints include recurrent state; an older rewind replays the retained prefix on the next evaluation. Image identity and embeddings are not stored in the session payload, so do not assume an image session can be restored from that payload alone.
+With resident Metal weights, independent conversations can share GPU weight work while retaining separate session state. Use `ds4-server --batched-session N` to group eligible sessions. Floating-point reduction order can change replies, and a seed need not reproduce a reply across batching schedules. The native selector admits at most 64 ordinary or 32 speculative members, subject to workspace and compatible checkpoint and steering state. The speculative executor has a separate 16-member limit, so the selector ceiling alone does not establish an executable 32-session speculative batch. Images and other unsupported combinations use ordered fallback; the [runtime manual](implementation.md) describes eligibility and state. Disk checkpoints include recurrent state; an older rewind replays the retained prefix on the next evaluation. Image identity and embeddings are not stored in the session payload, so do not assume an image session can be restored from that payload alone.
+
+`DS4_QWEN4_MTP_PREFILL=auto` prepares predictor history in SSD mode and uses cold zero history in resident mode. `on` prepares either mode; `off` selects cold history. The setting changes drafts and prefill cost, while the target still verifies committed tokens. Checkpoints save the actual initialized prefix and pending trunk row; older v2/plain checkpoints rebuild missing predictor history when needed.
 
 The native context is 262,144 tokens. Set `DS4_QWEN4_YARN_FACTOR=2` or `DS4_QWEN4_YARN_FACTOR=4` to enable static YaRN for longer contexts; this can reduce quality on shorter prompts. Context allocation still requires sufficient memory.
 
@@ -96,7 +114,8 @@ DS4_TEST_MODEL=/path/to/main-with-mtp.gguf \
   ./ds4_test --qwen4-prefill-checkpoints --qwen4-restore-reuse \
     --session-snapshot --session-rewind --session-rewind-resample
 python3 tests/test_qwen4_checkpoint_replay.py --model /path/to/main-with-mtp.gguf
-python3 tests/test_qwen4_mtp_limits.py --model /path/to/main-with-mtp.gguf
+nu tests/test_qwen4_mtp_limits.nu --model /path/to/main-with-mtp.gguf
+nu tests/test_qwen4_mtp_limits.nu --model /path/to/main-with-mtp.gguf --ssd-streaming
 python3 tests/test_qwen4_logit_dump.py --model /path/to/main-with-mtp.gguf
 ```
 

@@ -10,3 +10,7 @@ export fn ds4_native_engine_lifecycle_open(core: *c.ds4_engine_core, configurati
 export fn ds4_native_engine_lifecycle_close(core: *c.ds4_engine_core, pool: *c.ds4_session_resource_pool, flint: *?*c.flint_engine) void {
     owner.closeOwners(core, pool, flint);
 }
+
+export fn ds4_native_qwen4_memory_admit(core: *c.ds4_engine_core, config: *const c.ds4_qwen4_config, bytes: u64, fit: bool) bool {
+    return @import("qwen4/admission.zig").admit(core, config, bytes, fit);
+}

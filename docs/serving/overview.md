@@ -91,9 +91,10 @@ four times. Idle slots can be cached before reuse; active requests are not evict
 
 Where the model supports it, the slots share one prefill workspace instead of
 each keeping its own, so an extra slot costs only its caches. That matters most
-for Qwen3.8 Flash Next, whose transients are sized by the prefill chunk rather
+for resident Qwen3.8 Flash Next, whose transients are sized by the prefill chunk rather
 than by the context: at the default chunk they run to several GiB per session.
-The startup line reports both figures.
+Qwen SSD streaming keeps a separate workspace for each session. The startup
+line reports both figures.
 
 | Backend/model | Decode execution |
 | --- | --- |
@@ -101,7 +102,8 @@ The startup line reports both figures.
 | Metal RDMA TP, V4.1 Flash | Native decoding for 3-8 sessions; ordered fallback for two |
 | Metal SSD streaming, V4.1 Flash | Ordered fallback |
 | Metal, GLM 5.3 | Native batching through 2051 visible tokens; ordered fallback afterward |
-| Metal, Qwen3.8 Flash Next | Native batching of shared work; recurrent state, caches and PLE history stay per session. See [Qwen eligibility](../models/qwen38-flash-next/usage.md#reasoning-tools-and-sampling) for limits and fallback conditions |
+| Metal, resident Qwen3.8 Flash Next | Native batching of shared work; recurrent state, caches and PLE history stay per session. See [Qwen eligibility](../models/qwen38-flash-next/usage.md#reasoning-tools-and-sampling) for limits and fallback conditions |
+| Metal SSD streaming, Qwen3.8 Flash Next | Ordered fallback with a separate streaming workspace for each session |
 | Retained CUDA paths | Model-specific historical behavior; see the [CUDA serving account](../backends/cuda.md#larger-models-and-serving). This native serving matrix does not qualify them. |
 
 Fallback executes the rows separately. It provides concurrency and scheduling
@@ -113,7 +115,8 @@ When no request is generating, DeepSeek V4.1 uses its configured prefill
 capacity for each scheduler turn (at least 2048 tokens). Long prefills yield
 to active decoders in bounded intervals, normally 128 tokens. `--mixed-prefill-quantum N` changes that interval for testing.
 Session-batched serving uses ordinary target decoding, except Qwen3.8 on
-Metal, where `--mtp` also batches speculative decoding. Its
+Metal, where `--mtp` batches speculative decoding with resident weights and
+runs ordered speculative cycles with SSD streaming. Its
 `--mtp-exact-sampling` mode uses ordinary batches for nonzero-temperature
 requests. DS41 constrained requests can instead take bounded exclusive
 speculative turns between other sessions' model work. Other ordinary native
